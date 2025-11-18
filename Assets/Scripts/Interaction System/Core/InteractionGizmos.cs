@@ -1,19 +1,35 @@
+using InteractionSystem.Core;
 using UnityEngine;
 
-public class InteractionGizmos : MonoBehaviour
+namespace InteractionSystem.Core
 {
-
-    void OnDrawGizmos()
+    public class InteractionGizmos : MonoBehaviour
     {
-        var interactor = GetComponent<PlayerInteractor>();
-        if (interactor != null)
+        void OnDrawGizmos()
         {
-            Transform origin = interactor.RayOrigin != null ? interactor.RayOrigin : interactor.transform;
-            Gizmos.color = Color.yellow;
-            Vector3 start = origin.position;
-            Vector3 end = start + origin.forward * interactor.InteractionDistance;
-            Gizmos.DrawLine(start, end);
-            Gizmos.DrawSphere(end, 0.1f);
+            var interactor = GetComponent<PlayerInteractor>();
+
+            if (interactor == null)
+                return;
+
+            Transform[] origins = interactor.RayOrigins;
+            int rayCount = origins.Length;
+
+            for (int i = 0; i < rayCount; i++)
+            {
+                Transform origin = origins[i] != null ? origins[i] : transform;
+
+                // Genera un color único usando HSV
+                Color gizmoColor = Color.HSVToRGB((float)i / Mathf.Max(rayCount, 1), 0.8f, 1f);
+
+                Gizmos.color = gizmoColor;
+
+                Vector3 start = origin.position;
+                Vector3 end = start + origin.forward * interactor.InteractionDistance;
+
+                Gizmos.DrawLine(start, end);
+                Gizmos.DrawSphere(end, 0.05f);
+            }
         }
     }
 }

@@ -1,7 +1,11 @@
 using UnityEngine;
 
-public interface IInteractable
+namespace InteractionSystem.Interfaces
 {
-    void Interact();
-    bool IsInteractable();
+    public interface IInteractable
+    {
+        void Interact();
+
+        bool IsInteractable();
+    }
 }
