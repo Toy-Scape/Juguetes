@@ -34,6 +34,8 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
+        Cursor.lockState = CursorLockMode.Locked;
+
         controller = GetComponent<CharacterController>();
         input = GetComponent<PlayerInputHandler>();
 
