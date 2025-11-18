@@ -7,5 +7,6 @@
     Swimming,
     Diving,
     Jumping,
-    Falling
+    Falling,
+    LedgeGrabbing
 }
