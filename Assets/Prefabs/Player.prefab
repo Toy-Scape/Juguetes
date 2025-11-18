@@ -731,17 +731,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39ff30d99363aa149bb02a2016f931e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerControls
+  config:
+    walkSpeed: 4
+    sprintSpeed: 8
+    crouchSpeed: 2
+    swimSpeed: 3
+    diveSpeed: 2
+    jumpHeight: 2
+    gravity: -9.81
+    standingHeight: 2
+    crouchingHeight: 1
+    ledgeDetectionDistance: 0.5
+    ledgeGrabHeight: 1
+    ledgeClimbUpSpeed: 5
+    ledgeSnapOffsetY: 0.5
+    ledgeForwardOffset: 0.5
+    ledgeGrabCooldown: 0.5
   cameraTransform: {fileID: 0}
   TMPPlayerState: {fileID: 0}
-  walkSpeed: 5
-  sprintSpeed: 7
-  crouchSpeed: 2
-  swimSpeed: 3
-  diveSpeed: 2
-  jumpHeight: 2
-  gravity: -9.81
-  standingHeight: 2
-  crouchingHeight: 1
+  playerInteractor: {fileID: 0}
 --- !u!114 &1027606019295327273
 MonoBehaviour:
   m_ObjectHideFlags: 0

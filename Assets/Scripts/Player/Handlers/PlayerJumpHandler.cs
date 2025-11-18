@@ -2,30 +2,26 @@
 
 public class PlayerJumpHandler
 {
-    private PlayerController player;
-    private CharacterController controller;
+    private readonly JumpConfig config;
 
-    public PlayerJumpHandler(PlayerController player, CharacterController controller)
+    public PlayerJumpHandler(JumpConfig config)
     {
-        Debug.Log("PlayerJumpHandler initialized.");
-        this.player = player;
-        this.controller = controller;
+        this.config = config;
     }
 
-    public void HandleJump(PlayerState state, bool isJumping)
+    public Vector3 HandleJump(PlayerState state, bool isJumping, Vector3 velocity, bool isInWater, bool isGrounded)
     {
-        if (isJumping && controller.isGrounded && !player.IsInWater)
+        if (isJumping && isGrounded && !isInWater)
         {
-            player.Velocity = new Vector3(player.Velocity.x,
-                Mathf.Sqrt(player.jumpHeight * -2f * player.gravity),
-                player.Velocity.z);
+            velocity.y = Mathf.Sqrt(config.jumpHeight * -2f * config.gravity);
         }
-        else if (isJumping && player.IsInWater)
+        else if (isJumping && isInWater)
         {
             if (state == PlayerState.Swimming)
-                player.Velocity = new Vector3(player.Velocity.x, player.swimSpeed, player.Velocity.z);
+                velocity.y = config.swimSpeed;
             else if (state == PlayerState.Diving)
-                player.Velocity = new Vector3(player.Velocity.x, -player.diveSpeed, player.Velocity.z);
+                velocity.y = -config.diveSpeed;
         }
+        return velocity;
     }
 }

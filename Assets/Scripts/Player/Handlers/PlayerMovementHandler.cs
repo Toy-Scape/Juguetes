@@ -2,22 +2,21 @@ using UnityEngine;
 
 public class PlayerMovementHandler
 {
-    private PlayerController player;
-    private CharacterController controller;
-    private Transform cameraTransform;
+    private readonly MovementConfig config;
+    private readonly Transform cameraTransform;
 
     private Vector3 moveDirection;
     private float currentSpeed;
+    private float lastGroundSpeed; 
 
-    public PlayerMovementHandler(PlayerController player, CharacterController controller, Transform cameraTransform)
+    public PlayerMovementHandler(MovementConfig config, Transform cameraTransform)
     {
-        Debug.Log("PlayerMovementHandler initialized.");
-        this.player = player;
-        this.controller = controller;
+        this.config = config;
         this.cameraTransform = cameraTransform;
+        lastGroundSpeed = config.walkSpeed; 
     }
 
-    public void HandleMovement(PlayerState state, Vector2 inputDir, bool isSprinting)
+    public void HandleMovement(PlayerState state, Vector2 inputDir, Transform playerTransform)
     {
         Vector3 forward = cameraTransform.forward;
         Vector3 right = cameraTransform.right;
@@ -26,35 +25,43 @@ public class PlayerMovementHandler
 
         moveDirection = (forward * inputDir.y + right * inputDir.x).normalized;
 
-        currentSpeed = state switch
+        switch (state)
         {
-            PlayerState.Walking => player.walkSpeed,
-            PlayerState.Sprinting => player.sprintSpeed,
-            PlayerState.Crouching => player.crouchSpeed,
-            PlayerState.Swimming => player.swimSpeed,
-            PlayerState.Diving => player.diveSpeed,
-            _ => player.walkSpeed
-        };
+            case PlayerState.Walking:
+                currentSpeed = config.walkSpeed;
+                break;
+            case PlayerState.Sprinting:
+                currentSpeed = config.sprintSpeed;
+                break;
+            case PlayerState.Crouching:
+                currentSpeed = config.crouchSpeed;
+                break;
+            case PlayerState.Swimming:
+                currentSpeed = config.swimSpeed;
+                break;
+            case PlayerState.Diving:
+                currentSpeed = config.diveSpeed;
+                break;
+            case PlayerState.Jumping:
+            case PlayerState.Falling:
+                currentSpeed = lastGroundSpeed;
+                break;
+            default:
+                currentSpeed = config.walkSpeed;
+                break;
+        }
+
+        if (state == PlayerState.Walking || state == PlayerState.Sprinting || state == PlayerState.Crouching)
+            lastGroundSpeed = currentSpeed;
 
         if (moveDirection.magnitude > 0.1f)
         {
             Quaternion targetRotation = Quaternion.LookRotation(moveDirection);
-            player.transform.rotation = Quaternion.RotateTowards(player.transform.rotation, targetRotation, 720f * Time.deltaTime);
-        }
-    }
-
-    public void ApplyGravity(PlayerState state)
-    {
-        if (state == PlayerState.Swimming || state == PlayerState.Diving)
-        {
-            player.Velocity = new Vector3(player.Velocity.x, 0, player.Velocity.z);
-        }
-        else
-        {
-            if (controller.isGrounded && player.Velocity.y < 0)
-                player.Velocity = new Vector3(player.Velocity.x, -2f, player.Velocity.z);
-            else
-                player.Velocity += Vector3.up * player.gravity * Time.deltaTime;
+            playerTransform.rotation = Quaternion.RotateTowards(
+                playerTransform.rotation,
+                targetRotation,
+                config.rotationSpeed * Time.deltaTime
+            );
         }
     }
 

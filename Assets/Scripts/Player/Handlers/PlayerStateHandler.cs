@@ -2,25 +2,21 @@
 
 public class PlayerStateHandler
 {
-    private PlayerController player;
-    private CharacterController controller;
-    private PlayerInputHandler input;
+    private readonly StateConfig config;
+    private readonly PlayerInputHandler input;
 
-    public PlayerStateHandler(PlayerController player, CharacterController controller, PlayerInputHandler input)
+    public PlayerStateHandler(StateConfig config, PlayerInputHandler input)
     {
-        Debug.Log("PlayerStateHandler initialized.");
-
-        this.player = player;
-        this.controller = controller;
+        this.config = config;
         this.input = input;
     }
 
-    public PlayerState EvaluateState(Vector3 velocity)
+    public PlayerState EvaluateState(Vector3 velocity, bool isInWater, bool isGrounded)
     {
-        if (player.IsInWater)
+        if (isInWater)
             return input.IsCrouching ? PlayerState.Diving : PlayerState.Swimming;
 
-        if (!controller.isGrounded && !input.IsCrouching)
+        if (!isGrounded && !input.IsCrouching)
         {
             if (velocity.y > 0) return PlayerState.Jumping;
             else if (velocity.y < 0) return PlayerState.Falling;
@@ -28,9 +24,8 @@ public class PlayerStateHandler
 
         if (input.IsCrouching) return PlayerState.Crouching;
         if (input.IsSprinting) return PlayerState.Sprinting;
-        if (input.MoveInput.magnitude > 0.1f) return PlayerState.Walking;
+        if (input.MoveInput.magnitude > config.minMoveThreshold) return PlayerState.Walking;
 
         return PlayerState.Idle;
     }
-
 }

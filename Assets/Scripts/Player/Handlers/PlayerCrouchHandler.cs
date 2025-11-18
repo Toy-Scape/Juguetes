@@ -2,19 +2,16 @@
 
 public class PlayerCrouchHandler
 {
-    private PlayerController player;
-    private CharacterController controller;
+    private readonly CrouchConfig config;
 
-    public PlayerCrouchHandler(PlayerController player, CharacterController controller)
+    public PlayerCrouchHandler(CrouchConfig config)
     {
-        Debug.Log("PlayerCrouchHandler initialized.");
-        this.player = player;
-        this.controller = controller;
+        this.config = config;
     }
 
-    public void HandleCrouch(PlayerState state)
+    public float GetTargetHeight(PlayerState state, float currentHeight)
     {
-        float targetHeight = state == PlayerState.Crouching ? player.crouchingHeight : player.standingHeight;
-        controller.height = Mathf.Lerp(controller.height, targetHeight, Time.deltaTime * 10f);
+        float targetHeight = state == PlayerState.Crouching ? config.crouchingHeight : config.standingHeight;
+        return Mathf.Lerp(currentHeight, targetHeight, Time.deltaTime * config.transitionSpeed);
     }
 }

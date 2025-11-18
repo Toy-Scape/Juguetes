@@ -1,36 +1,31 @@
 using TMPro;
 using UnityEngine;
+using InteractionSystem.Core; 
 
 [RequireComponent(typeof(CharacterController))]
 [RequireComponent(typeof(PlayerInputHandler))]
 public class PlayerController : MonoBehaviour
 {
-    private PlayerInputHandler input;
+    [SerializeField] private PlayerConfig config;
     [SerializeField] private Transform cameraTransform;
     [SerializeField] private TMP_Text TMPPlayerState;
+    [SerializeField] private PlayerInteractor playerInteractor;
 
     private CharacterController controller;
+    private PlayerInputHandler input;
+
     private PlayerMovementHandler movementHandler;
     private PlayerJumpHandler jumpHandler;
     private PlayerCrouchHandler crouchHandler;
     private PlayerStateHandler stateHandler;
+    private PlayerPhysicsHandler physicsHandler;
+    private PlayerLedgeGrabHandler ledgeGrabHandler;
 
-    [Header("Movement Settings")]
-    [SerializeField] public float walkSpeed = 4f;
-    [SerializeField] public float sprintSpeed = 8f;
-    [SerializeField] public float crouchSpeed = 2f;
-    [SerializeField] public float swimSpeed = 3f;
-    [SerializeField] public float diveSpeed = 2f;
-    [SerializeField] public float jumpHeight = 2f;
-    [SerializeField] public float gravity = -9.81f;
-
-    [Header("Crouch Settings")]
-    [SerializeField] public float standingHeight = 2f;
-    [SerializeField] public float crouchingHeight = 1f;
+    private float ledgeGrabCooldownTimer = 0f;
 
     public PlayerState CurrentState { get; private set; } = PlayerState.Idle;
-    public Vector3 Velocity { get; set; }
-    public bool IsInWater { get; set; }
+    public Vector3 Velocity { get; private set; }
+    public bool IsInWater { get; private set; }
 
     void Start()
     {
@@ -39,26 +34,70 @@ public class PlayerController : MonoBehaviour
         controller = GetComponent<CharacterController>();
         input = GetComponent<PlayerInputHandler>();
 
-        movementHandler = new PlayerMovementHandler(this, controller, cameraTransform);
-        jumpHandler = new PlayerJumpHandler(this, controller);
-        crouchHandler = new PlayerCrouchHandler(this, controller);
-        stateHandler = new PlayerStateHandler(this, controller, input);
+        var crouchConfig = new CrouchConfig(config.standingHeight, config.crouchingHeight);
+        var movementConfig = new MovementConfig(config.walkSpeed, config.sprintSpeed, config.crouchSpeed,
+                                                config.swimSpeed, config.diveSpeed);
+        var jumpConfig = new JumpConfig(config.jumpHeight, config.gravity, config.swimSpeed, config.diveSpeed);
+        var stateConfig = new StateConfig();
+        var physicsConfig = new PhysicsConfig(config.gravity);
+
+        crouchHandler = new PlayerCrouchHandler(crouchConfig);
+        movementHandler = new PlayerMovementHandler(movementConfig, cameraTransform);
+        jumpHandler = new PlayerJumpHandler(jumpConfig);
+        stateHandler = new PlayerStateHandler(stateConfig, input);
+        physicsHandler = new PlayerPhysicsHandler(physicsConfig);
+        ledgeGrabHandler = new PlayerLedgeGrabHandler(config, transform);
     }
 
     void Update()
     {
-        CurrentState = stateHandler.EvaluateState(
-            Velocity
-        );
+        if (ledgeGrabCooldownTimer > 0f)
+            ledgeGrabCooldownTimer -= Time.deltaTime;
 
-        movementHandler.HandleMovement(CurrentState, input.MoveInput, input.IsSprinting);
-        jumpHandler.HandleJump(CurrentState, input.IsJumping);
-        crouchHandler.HandleCrouch(CurrentState);
+        if (CurrentState == PlayerState.LedgeGrabbing)
+        {
+            Velocity = Vector3.zero;
 
+            if (input.IsJumping && !ledgeGrabHandler.IsClimbing)
+            {
+                ledgeGrabHandler.StartClimb();
+            }
 
-        movementHandler.ApplyGravity(CurrentState);
+            if (ledgeGrabHandler.UpdateClimb())
+            {
+                CurrentState = PlayerState.Walking;
+            }
+            else if (input.IsCrouching)
+            {
+                CurrentState = PlayerState.Falling;
+                ledgeGrabCooldownTimer = config.ledgeGrabCooldown;
+            }
+        }
+        else if (ledgeGrabCooldownTimer <= 0f && ledgeGrabHandler.CheckForLedge(Velocity, controller.isGrounded))
+        {
+            CurrentState = PlayerState.LedgeGrabbing;
+            Velocity = Vector3.zero;
+            ledgeGrabHandler.SnapToLedge();
+        }
+        else
+        {
+            CurrentState = stateHandler.EvaluateState(Velocity, IsInWater, controller.isGrounded);
 
-        controller.Move(movementHandler.GetFinalMove(Velocity) * Time.deltaTime);
+            movementHandler.HandleMovement(CurrentState, input.MoveInput, transform);
+
+            Velocity = jumpHandler.HandleJump(CurrentState, input.IsJumping, Velocity, IsInWater, controller.isGrounded);
+
+            controller.height = crouchHandler.GetTargetHeight(CurrentState, controller.height);
+
+            Velocity = physicsHandler.ApplyGravity(CurrentState, Velocity, controller.isGrounded);
+
+            controller.Move(movementHandler.GetFinalMove(Velocity) * Time.deltaTime);
+        }
+
+        if (input.IsInteracting && playerInteractor != null)
+        {
+            playerInteractor.OnInteract();
+        }
 
         if (TMPPlayerState != null)
             TMPPlayerState.text = "Current State: " + CurrentState.ToString();
