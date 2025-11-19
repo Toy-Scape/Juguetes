@@ -16,7 +16,7 @@ public class ItemPickup : MonoBehaviour, IInteractable
             var item = new Item(itemId, itemName);
             if (player.Service.PickUp(item))
             {
-                Destroy(gameObject);
+                this.gameObject.SetActive(false);
             }
         }
     }
