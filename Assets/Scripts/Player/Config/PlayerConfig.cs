@@ -9,6 +9,7 @@ public class PlayerConfig
     public float crouchSpeed = 2f;
     public float swimSpeed = 3f;
     public float diveSpeed = 2f;
+    public float lookSensitivity = 1f;
 
     [Header("Jump & Physics")]
     public float jumpHeight = 2f;

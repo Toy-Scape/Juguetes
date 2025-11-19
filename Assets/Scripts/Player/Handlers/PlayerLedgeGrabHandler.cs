@@ -24,7 +24,6 @@ public class PlayerLedgeGrabHandler
         if (isGrounded || velocity.y >= 0) return false;
 
         Vector3 origin = playerTransform.position + Vector3.up * config.ledgeGrabHeight;
-        Debug.DrawRay(origin, playerTransform.forward * config.ledgeDetectionDistance, Color.red);
 
         if (Physics.Raycast(origin, playerTransform.forward, out RaycastHit hit, config.ledgeDetectionDistance))
         {

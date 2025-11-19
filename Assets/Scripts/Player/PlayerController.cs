@@ -1,9 +1,10 @@
+using InteractionSystem.Core;
 using TMPro;
 using UnityEngine;
-using InteractionSystem.Core; 
+using UnityEngine.InputSystem; // Necesario para los callbacks
+using UnityEngine.Windows;
 
 [RequireComponent(typeof(CharacterController))]
-[RequireComponent(typeof(PlayerInputHandler))]
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] private PlayerConfig config;
@@ -12,7 +13,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private PlayerInteractor playerInteractor;
 
     private CharacterController controller;
-    private PlayerInputHandler input;
 
     private PlayerMovementHandler movementHandler;
     private PlayerJumpHandler jumpHandler;
@@ -21,18 +21,17 @@ public class PlayerController : MonoBehaviour
     private PlayerPhysicsHandler physicsHandler;
     private PlayerLedgeGrabHandler ledgeGrabHandler;
 
+    private PlayerContext playerContext = new PlayerContext();
+
     private float ledgeGrabCooldownTimer = 0f;
 
     public PlayerState CurrentState { get; private set; } = PlayerState.Idle;
-    public Vector3 Velocity { get; private set; }
-    public bool IsInWater { get; private set; }
 
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
-
+ 
         controller = GetComponent<CharacterController>();
-        input = GetComponent<PlayerInputHandler>();
 
         var crouchConfig = new CrouchConfig(config.standingHeight, config.crouchingHeight);
         var movementConfig = new MovementConfig(config.walkSpeed, config.sprintSpeed, config.crouchSpeed,
@@ -44,7 +43,7 @@ public class PlayerController : MonoBehaviour
         crouchHandler = new PlayerCrouchHandler(crouchConfig);
         movementHandler = new PlayerMovementHandler(movementConfig, cameraTransform);
         jumpHandler = new PlayerJumpHandler(jumpConfig);
-        stateHandler = new PlayerStateHandler(stateConfig, input);
+        stateHandler = new PlayerStateHandler(stateConfig); 
         physicsHandler = new PlayerPhysicsHandler(physicsConfig);
         ledgeGrabHandler = new PlayerLedgeGrabHandler(config, transform);
     }
@@ -56,9 +55,9 @@ public class PlayerController : MonoBehaviour
 
         if (CurrentState == PlayerState.LedgeGrabbing)
         {
-            Velocity = Vector3.zero;
+            playerContext.Velocity = Vector3.zero;
 
-            if (input.IsJumping && !ledgeGrabHandler.IsClimbing)
+            if (playerContext.IsJumping && !ledgeGrabHandler.IsClimbing)
             {
                 ledgeGrabHandler.StartClimb();
             }
@@ -67,51 +66,123 @@ public class PlayerController : MonoBehaviour
             {
                 CurrentState = PlayerState.Walking;
             }
-            else if (input.IsCrouching)
+            else if (playerContext.IsCrouching)
             {
                 CurrentState = PlayerState.Falling;
                 ledgeGrabCooldownTimer = config.ledgeGrabCooldown;
             }
         }
-        else if (ledgeGrabCooldownTimer <= 0f && ledgeGrabHandler.CheckForLedge(Velocity, controller.isGrounded))
+        else if (ledgeGrabCooldownTimer <= 0f && ledgeGrabHandler.CheckForLedge(playerContext.Velocity, controller.isGrounded))
         {
             CurrentState = PlayerState.LedgeGrabbing;
-            Velocity = Vector3.zero;
+            playerContext.Velocity = Vector3.zero;
             ledgeGrabHandler.SnapToLedge();
         }
         else
         {
-            CurrentState = stateHandler.EvaluateState(Velocity, IsInWater, controller.isGrounded);
+            playerContext.IsGrounded = controller.isGrounded;
 
-            movementHandler.HandleMovement(CurrentState, input.MoveInput, transform);
+            CurrentState = stateHandler.EvaluateState(playerContext);
 
-            Velocity = jumpHandler.HandleJump(CurrentState, input.IsJumping, Velocity, IsInWater, controller.isGrounded);
-
+            movementHandler.HandleMovement(CurrentState, playerContext.MoveInput, transform);
             controller.height = crouchHandler.GetTargetHeight(CurrentState, controller.height);
+            playerContext.Velocity = jumpHandler.HandleJump(CurrentState, playerContext.IsJumping, playerContext.Velocity, playerContext.IsInWater, playerContext.IsGrounded);
+            playerContext.Velocity = physicsHandler.ApplyGravity(CurrentState, playerContext.Velocity, playerContext.IsGrounded);
 
-            Velocity = physicsHandler.ApplyGravity(CurrentState, Velocity, controller.isGrounded);
+            controller.Move(movementHandler.GetFinalMove(playerContext.Velocity) * Time.deltaTime);
 
-            controller.Move(movementHandler.GetFinalMove(Velocity) * Time.deltaTime);
+            //if (playerContext.IsInteracting && playerInteractor != null)
+            //{
+            //    playerInteractor.OnInteract();
+            //    playerContext.IsInteracting = false; // consumir input
+            //}
+
+            if (playerContext.IsAttacking)
+            {
+                // TODO:: Lógica del gancho/lanzar objetos, etc.
+                this.playerContext.IsAttacking = false;
+            }
         }
-
-        if (input.IsInteracting && playerInteractor != null)
-        {
-            playerInteractor.OnInteract();
-        }
-
+        
         if (TMPPlayerState != null)
             TMPPlayerState.text = "Current State: " + CurrentState.ToString();
+
+    }
+    void LateUpdate()
+    {
+        playerContext.IsInteracting = false;
+        playerContext.IsAttacking = false;
+        playerContext.NextLimb = false;
+        playerContext.PreviousLimb = false;
     }
 
     void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Water"))
-            IsInWater = true;
+            playerContext.IsInWater = true;
     }
 
     void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("Water"))
-            IsInWater = false;
+            playerContext.IsInWater = false;
     }
+
+    void OnMove(InputValue value)
+    {
+        playerContext.MoveInput = value.Get<Vector2>();
+    }
+
+    void OnLook(InputValue value)
+    {
+        playerContext.LookInput = value.Get<Vector2>() * config.lookSensitivity;
+    }
+
+    void OnSprint(InputValue value)
+    {
+        playerContext.IsSprinting = value.isPressed;
+    }
+
+    void OnJump(InputValue value)
+    {
+        playerContext.IsJumping = value.isPressed;
+    }
+
+    void OnCrouch(InputValue value)
+    {
+        playerContext.IsCrouching = value.isPressed; 
+    }
+
+    void OnCrouchToggle()
+    {
+        playerContext.IsCrouching = !playerContext.IsCrouching; 
+    }
+
+
+
+    void OnInteract()
+    {
+        playerContext.IsInteracting = true;
+    }
+
+    void OnAttack()
+    {
+        playerContext.IsAttacking = true;
+    }
+
+    void OnGrab(InputValue value)
+    {
+        playerContext.IsGrabbing = value.isPressed;
+    }
+
+    void OnNext()
+    {
+        playerContext.NextLimb = true;
+    }
+
+    void OnPrevious()
+    {
+        playerContext.PreviousLimb = true;
+    }
+
 }
