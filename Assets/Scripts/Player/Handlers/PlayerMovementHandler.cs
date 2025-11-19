@@ -7,16 +7,16 @@ public class PlayerMovementHandler
 
     private Vector3 moveDirection;
     private float currentSpeed;
-    private float lastGroundSpeed; 
+    private float lastGroundSpeed;
 
-    public PlayerMovementHandler(MovementConfig config, Transform cameraTransform)
+    public PlayerMovementHandler (MovementConfig config, Transform cameraTransform)
     {
         this.config = config;
         this.cameraTransform = cameraTransform;
-        lastGroundSpeed = config.walkSpeed; 
+        lastGroundSpeed = config.walkSpeed;
     }
 
-    public void HandleMovement(PlayerState state, Vector2 inputDir, Transform playerTransform)
+    public void HandleMovement (PlayerState state, Vector2 inputDir, Transform playerTransform)
     {
         Vector3 forward = cameraTransform.forward;
         Vector3 right = cameraTransform.right;
@@ -65,7 +65,7 @@ public class PlayerMovementHandler
         }
     }
 
-    public Vector3 GetFinalMove(Vector3 velocity)
+    public Vector3 GetFinalMove (Vector3 velocity)
     {
         Vector3 finalMove = moveDirection * currentSpeed;
         finalMove.y = velocity.y;

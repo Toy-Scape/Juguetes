@@ -4,12 +4,12 @@ public class PlayerStateHandler
 {
     private readonly StateConfig config;
 
-    public PlayerStateHandler(StateConfig config)
+    public PlayerStateHandler (StateConfig config)
     {
         this.config = config;
     }
 
-    public PlayerState EvaluateState(PlayerContext playerContext)
+    public PlayerState EvaluateState (PlayerContext playerContext)
     {
         if (playerContext.IsInWater)
             return playerContext.IsCrouching ? PlayerState.Diving : PlayerState.Swimming;

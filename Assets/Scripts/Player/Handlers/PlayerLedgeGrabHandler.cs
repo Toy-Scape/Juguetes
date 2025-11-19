@@ -13,19 +13,19 @@ public class PlayerLedgeGrabHandler
 
     public bool IsClimbing => isClimbing;
 
-    public PlayerLedgeGrabHandler(PlayerConfig config, Transform playerTransform)
+    public PlayerLedgeGrabHandler (PlayerConfig config, Transform playerTransform)
     {
         this.config = config;
         this.playerTransform = playerTransform;
     }
 
-    public bool CheckForLedge(Vector3 velocity, bool isGrounded)
+    public bool CheckForLedge (Vector3 velocity, bool isGrounded)
     {
         if (isGrounded || velocity.y >= 0) return false;
 
-        Vector3 origin = playerTransform.position + Vector3.up * config.ledgeGrabHeight;
+        Vector3 origin = playerTransform.position + Vector3.up * config.LedgeGrabHeight;
 
-        if (Physics.Raycast(origin, playerTransform.forward, out RaycastHit hit, config.ledgeDetectionDistance))
+        if (Physics.Raycast(origin, playerTransform.forward, out RaycastHit hit, config.LedgeDetectionDistance))
         {
             if (hit.collider.GetComponent<LedgeGrabSurface>() != null)
             {
@@ -37,11 +37,11 @@ public class PlayerLedgeGrabHandler
         return false;
     }
 
-    public void SnapToLedge()
+    public void SnapToLedge ()
     {
         Vector3 targetPos = new Vector3(
             ledgePosition.x,
-            ledgePosition.y - config.ledgeSnapOffsetY,
+            ledgePosition.y - config.LedgeSnapOffsetY,
             ledgePosition.z
         );
         playerTransform.position = targetPos;
@@ -50,11 +50,11 @@ public class PlayerLedgeGrabHandler
         playerTransform.rotation = targetRot;
     }
 
-    public void StartClimb()
+    public void StartClimb ()
     {
         climbTarget = new Vector3(
             playerTransform.position.x,
-            ledgePosition.y + config.ledgeSnapOffsetY,
+            ledgePosition.y + config.LedgeSnapOffsetY,
             playerTransform.position.z
         );
 
@@ -62,7 +62,7 @@ public class PlayerLedgeGrabHandler
         climbPhase = 1;
     }
 
-    public bool UpdateClimb()
+    public bool UpdateClimb ()
     {
         if (!isClimbing) return false;
 
@@ -71,12 +71,12 @@ public class PlayerLedgeGrabHandler
             playerTransform.position = Vector3.MoveTowards(
                 playerTransform.position,
                 climbTarget,
-                config.ledgeClimbUpSpeed * Time.deltaTime
+                config.LedgeClimbUpSpeed * Time.deltaTime
             );
 
             if (Vector3.Distance(playerTransform.position, climbTarget) < 0.01f)
             {
-                climbTarget = climbTarget + playerTransform.forward * config.ledgeForwardOffset;
+                climbTarget = climbTarget + playerTransform.forward * config.LedgeForwardOffset;
                 climbPhase = 2;
             }
         }
@@ -85,17 +85,17 @@ public class PlayerLedgeGrabHandler
             playerTransform.position = Vector3.MoveTowards(
                 playerTransform.position,
                 climbTarget,
-                config.ledgeClimbUpSpeed * Time.deltaTime
+                config.LedgeClimbUpSpeed * Time.deltaTime
             );
 
             if (Vector3.Distance(playerTransform.position, climbTarget) < 0.01f)
             {
                 isClimbing = false;
                 climbPhase = 0;
-                return true; 
+                return true;
             }
         }
 
-        return false; 
+        return false;
     }
 }

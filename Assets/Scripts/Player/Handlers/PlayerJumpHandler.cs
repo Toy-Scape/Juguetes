@@ -4,12 +4,12 @@ public class PlayerJumpHandler
 {
     private readonly JumpConfig config;
 
-    public PlayerJumpHandler(JumpConfig config)
+    public PlayerJumpHandler (JumpConfig config)
     {
         this.config = config;
     }
 
-    public Vector3 HandleJump(PlayerState state, bool isJumping, Vector3 velocity, bool isInWater, bool isGrounded)
+    public Vector3 HandleJump (PlayerState state, bool isJumping, Vector3 velocity, bool isInWater, bool isGrounded)
     {
         if (isJumping && isGrounded && !isInWater)
         {

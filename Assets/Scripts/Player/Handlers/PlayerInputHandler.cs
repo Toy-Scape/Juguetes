@@ -23,7 +23,7 @@ public class PlayerInputHandler : MonoBehaviour
     [Header("Settings")]
     public float lookSensitivity = 1f;
 
-    void Awake()
+    void Awake ()
     {
         controls = new InputSystem_Actions();
 
@@ -48,7 +48,7 @@ public class PlayerInputHandler : MonoBehaviour
             if (ctx.control.path.Contains("ctrl"))
                 IsCrouching = true;
             else
-                IsCrouching = !IsCrouching; 
+                IsCrouching = !IsCrouching;
         };
 
         controls.Player.Crouch.canceled += ctx =>
@@ -72,9 +72,9 @@ public class PlayerInputHandler : MonoBehaviour
         controls.Player.Previous.performed += ctx => PreviousLimb = true;
     }
 
-    void OnEnable() => controls.Player.Enable();
-    void OnDisable() => controls.Player.Disable();
-    void LateUpdate()
+    void OnEnable () => controls.Player.Enable();
+    void OnDisable () => controls.Player.Disable();
+    void LateUpdate ()
     {
         IsInteracting = false;
         IsAttacking = false;
@@ -82,7 +82,7 @@ public class PlayerInputHandler : MonoBehaviour
         PreviousLimb = false;
     }
 
-    void OnDestroy()
+    void OnDestroy ()
     {
         controls.Dispose();
     }

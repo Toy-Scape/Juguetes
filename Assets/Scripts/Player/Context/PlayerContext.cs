@@ -12,6 +12,7 @@ public class PlayerContext
     public bool IsJumping { get; set; }
     public bool IsCrouching { get; set; }
     public bool IsGrabbing { get; set; }
+    public bool IsGrabbingLedge { get; set; }
 
     public bool IsInteracting { get; set; }
     public bool IsAttacking { get; set; }
