@@ -328,7 +328,7 @@ Transform:
   m_GameObject: {fileID: 504615148}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.16, y: 0.73, z: 2.75}
+  m_LocalPosition: {x: 1, y: 0.73, z: 2.75}
   m_LocalScale: {x: 1.327, y: 1.327, z: 1.511055}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -650,7 +650,7 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 883425338343852037, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
   m_PrefabInstance: {fileID: 2042790738}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1547978646
+--- !u!114 &1547978653
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -659,9 +659,35 @@ MonoBehaviour:
   m_GameObject: {fileID: 252540455}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 70ff0ba063f64a41a0ddab68a8f7459b, type: 3}
+  m_Script: {fileID: 11500000, guid: c4daf54463214db58a2176aa0dcfba23, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::InventoryHolder
+  m_EditorClassIdentifier: Assembly-CSharp::Inventory.InventoryComponent
+  inventory:
+    items: []
+    limbs: []
+    maxCapacity: 20
+    maxLimbCapacity: 3
+  debugMode: 1
+  onItemAdded:
+    m_PersistentCalls:
+      m_Calls: []
+  onItemRemoved:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &1547978654
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 252540455}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae36ef8320c64633afaafa69c4afe6f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Player.PlayerInventoryIntegration
+  inventoryComponent: {fileID: 1547978653}
+  showDebugInfo: 1
 --- !u!1 &1634556443
 GameObject:
   m_ObjectHideFlags: 0
@@ -675,7 +701,7 @@ GameObject:
   - component: {fileID: 1634556447}
   - component: {fileID: 1634556446}
   - component: {fileID: 1634556445}
-  - component: {fileID: 1634556444}
+  - component: {fileID: 1634556450}
   m_Layer: 0
   m_Name: Cube (3)
   m_TagString: Untagged
@@ -683,20 +709,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1634556444
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1634556443}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 607a35d95bfc4fb984f2104cff7718fa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ItemPickup
-  itemId: cube2
-  itemName: Cubo
 --- !u!114 &1634556445
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -807,6 +819,21 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1634556450
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1634556443}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5545271374504951b9c18db1a435b245, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Interaction_System.Interactables.ItemPickup
+  item: {fileID: 11400000, guid: 4d4e899c9fa132944b8fae2775d989d5, type: 2}
+  quantity: 1
+  destroyOnPickup: 1
 --- !u!1 &1700374562 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1871022814468687510, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
@@ -981,20 +1008,27 @@ PrefabInstance:
       value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 8163815884479273772, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
-      propertyPath: rayOrigin
-      value: 
-      objectReference: {fileID: 1547978645}
-    - target: {fileID: 8163815884479273772, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
       propertyPath: interactionPrompt
       value: 
       objectReference: {fileID: 1700374562}
+    - target: {fileID: 8163815884479273772, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
+      propertyPath: rayOrigins.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8163815884479273772, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
+      propertyPath: 'rayOrigins.Array.data[0]'
+      value: 
+      objectReference: {fileID: 1547978645}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 6641168232080197241, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1547978646}
+      addedObject: {fileID: 1547978653}
+    - targetCorrespondingSourceObject: {fileID: 6641168232080197241, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1547978654}
   m_SourcePrefab: {fileID: 100100000, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
