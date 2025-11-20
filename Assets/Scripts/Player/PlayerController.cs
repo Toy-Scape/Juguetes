@@ -11,6 +11,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform cameraTransform;
     [SerializeField] private TMP_Text TMPPlayerState;
     [SerializeField] private PlayerInteractor playerInteractor;
+    [SerializeField] private LimbContextSO limbContextSO;
+
 
     private CharacterController controller;
 
