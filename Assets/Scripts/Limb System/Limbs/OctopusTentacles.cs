@@ -1,10 +1,13 @@
-﻿public class OctopusTentacles : Limb
+﻿using UnityEngine;
+
+[CreateAssetMenu(menuName = "Limb/OctopusTentacles")]
+public class OctopusTentaclesSO : LimbSO
 {
-    public OctopusTentacles ()
+    private void OnEnable ()
     {
         LimbName = "Tentáculos de Pulpo";
 
-        // Puedes tenr varias pasivas, aquí las agrupamos
+        // Agrupamos varias pasivas en una sola composite
         PassiveAbility = new CompositePassiveAbility(
             new WallClimbPassive(),
             new SwimPassive()

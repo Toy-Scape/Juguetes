@@ -1,12 +1,12 @@
 ﻿using UnityEngine;
 
-public abstract class Limb : MonoBehaviour
+public abstract class LimbSO : ScriptableObject
 {
-    public string LimbName { get; protected set; }
+    [field: SerializeField] public string LimbName { get; protected set; }
 
-    public IAbility ActiveAbility { get; protected set; }
-    public IPassiveAbility PassiveAbility { get; protected set; }
-    public ISecondaryAbility SecondaryAbility { get; protected set; }
+    [field: SerializeField] public IAbility ActiveAbility { get; protected set; }
+    [field: SerializeField] public IPassiveAbility PassiveAbility { get; protected set; }
+    [field: SerializeField] public ISecondaryAbility SecondaryAbility { get; protected set; }
 
     public virtual void OnEquip (LimbContext context)
     {

@@ -1,6 +1,7 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using TMPro;
+using UnityEngine;
 using UnityEngine.UI;
-using System.Collections.Generic;
 
 public class RadialMenu : MonoBehaviour
 {
@@ -9,7 +10,7 @@ public class RadialMenu : MonoBehaviour
     [SerializeField] private Transform radialContainer;
 
     private List<Button> buttons = new();
-    private Limb currentSelection;
+    private LimbSO currentSelection;
     private bool isOpen = false;
 
     void Start ()
@@ -32,11 +33,14 @@ public class RadialMenu : MonoBehaviour
 
     public void PopulateMenu ()
     {
+        // limpiar botones previos
         foreach (var btn in buttons)
             Destroy(btn.gameObject);
         buttons.Clear();
 
         var limbs = limbManager.GetAvailableLimbs();
+        if (limbs.Count == 0) return;
+
         float angleStep = 360f / limbs.Count;
         float radius = 150f;
 
@@ -46,12 +50,15 @@ public class RadialMenu : MonoBehaviour
             var buttonObj = Instantiate(buttonPrefab, radialContainer);
             var button = buttonObj.GetComponent<Button>();
 
-            button.GetComponentInChildren<Text>().text = limb.LimbName;
+            // mostrar nombre de la extremidad
+            button.GetComponentInChildren<TMP_Text>().text = limb.LimbName;
 
+            // calcular posición radial
             float angle = i * angleStep * Mathf.Deg2Rad;
             Vector2 pos = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * radius;
             buttonObj.GetComponent<RectTransform>().anchoredPosition = pos;
 
+            // asignar acción de equipar
             button.onClick.AddListener(() => limbManager.EquipLimb(limb));
             buttons.Add(button);
         }
@@ -74,12 +81,13 @@ public class RadialMenu : MonoBehaviour
         if (isOpen && currentSelection != null)
         {
             limbManager.EquipLimb(currentSelection);
-            Hide();
         }
     }
 
-    private Limb GetSelectionFromMouse (Vector2 mousePos, Vector2 center, List<Limb> limbs)
+    private LimbSO GetSelectionFromMouse (Vector2 mousePos, Vector2 center, List<LimbSO> limbs)
     {
+        if (limbs.Count == 0) return null;
+
         Vector2 dir = mousePos - center;
         float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
         if (angle < 0) angle += 360f;
@@ -89,9 +97,9 @@ public class RadialMenu : MonoBehaviour
         return limbs[index];
     }
 
-    private Limb GetSelectionFromJoystick (Vector2 input, List<Limb> limbs)
+    private LimbSO GetSelectionFromJoystick (Vector2 input, List<LimbSO> limbs)
     {
-        if (input == Vector2.zero) return null;
+        if (input == Vector2.zero || limbs.Count == 0) return null;
 
         float angle = Mathf.Atan2(input.y, input.x) * Mathf.Rad2Deg;
         if (angle < 0) angle += 360f;

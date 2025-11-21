@@ -7,6 +7,8 @@ public class LimbContext
     public bool CanClimbWalls { get; set; }
     public bool CanSwim { get; set; }
 
+    public bool HasObjectInHand { get; set; }
+    public bool IsAiming { get; set; }
 
     public void ResetContext ()
     {
@@ -15,5 +17,7 @@ public class LimbContext
         TentaclesActive = false;
         CanClimbWalls = false;
         CanSwim = false;
+        HasObjectInHand = false;
+        IsAiming = false;
     }
 }

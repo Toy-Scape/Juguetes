@@ -7,7 +7,6 @@ public class RadialMenuController : MonoBehaviour
 
     void OnOpenRadialMenu (InputValue value)
     {
-        Debug.Log("a");
         if (value.isPressed)
         {
             radialMenu.Show();
@@ -15,9 +14,11 @@ public class RadialMenuController : MonoBehaviour
         else
         {
             radialMenu.ConfirmSelection();
+            radialMenu.Hide();
         }
     }
 
+    // Navegación con joystick
     void OnNavigate (InputValue value)
     {
         if (!radialMenu.isActiveAndEnabled) return;
@@ -26,6 +27,7 @@ public class RadialMenuController : MonoBehaviour
         radialMenu.SelectWithJoystick(input);
     }
 
+    // Navegación con ratón
     void OnPoint (InputValue value)
     {
         if (!radialMenu.isActiveAndEnabled) return;
@@ -35,12 +37,14 @@ public class RadialMenuController : MonoBehaviour
         radialMenu.SelectWithMouse(mousePos, center);
     }
 
+    // Confirmar selección
     void OnRadialConfirm ()
     {
         if (!radialMenu.isActiveAndEnabled) return;
         radialMenu.ConfirmSelection();
     }
 
+    // Cancelar y cerrar menú
     void OnRadialCancel ()
     {
         if (!radialMenu.isActiveAndEnabled) return;

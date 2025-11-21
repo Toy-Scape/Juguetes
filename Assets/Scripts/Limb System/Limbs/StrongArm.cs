@@ -1,22 +1,46 @@
-
 using UnityEngine;
 
-public class StrongArm : Limb, IAimable
+[CreateAssetMenu(menuName = "Limb/StrongArm")]
+public class StrongArmSO : AimableLimbSO
 {
-    public StrongArm ()
+    private void OnEnable ()
     {
         LimbName = "Brazo Fuerte";
         PassiveAbility = new StrengthPassive();
         SecondaryAbility = new AimAbility(this);
     }
 
-    public void Aim (LimbContext context)
+    public override void Aim (LimbContext context)
     {
-        Debug.Log("Apuntando con objeto pesado...");
+        if (context.HasObjectInHand)
+        {
+            base.Aim(context); // activa IsAiming y log genérico
+            Debug.Log("Apuntando con objeto pesado...");
+        }
+        else
+        {
+            Debug.Log("No tienes objeto en la mano, no puedes apuntar.");
+        }
     }
 
-    public void Shoot (LimbContext context)
+    public override void Shoot (LimbContext context)
     {
-        Debug.Log("Lanzando objeto pesado!");
+        if (context.IsAiming && context.HasObjectInHand)
+        {
+            Debug.Log("Lanzando objeto pesado!");
+            // Aquí podrías invocar una habilidad activa si quieres
+            ActiveAbility?.Activate(context);
+            context.IsAiming = false; // reset tras disparo
+        }
+        else
+        {
+            Debug.Log("No estás apuntando o no tienes objeto.");
+        }
+    }
+
+    public override void StopAim (LimbContext context)
+    {
+        base.StopAim(context); // limpia IsAiming
+        Debug.Log("Dejaste de apuntar con el objeto pesado.");
     }
 }
