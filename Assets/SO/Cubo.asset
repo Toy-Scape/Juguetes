@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 639d2f37fe394d8696991a99ca6c7eac, type: 3}
-  m_Name: New Item
+  m_Name: Cubo
   m_EditorClassIdentifier: Assembly-CSharp::Inventory.ItemData
-  itemName: 
-  description: 
-  icon: {fileID: 0}
+  itemName: Cubo
+  description: Es un Cubo para ...
+  icon: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
   maxStackSize: 1
   isLimb: 0
