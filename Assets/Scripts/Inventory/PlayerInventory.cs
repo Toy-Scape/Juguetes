@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.Events;
+using Inventory.UI;
 
 namespace Inventory
 {
@@ -18,21 +19,31 @@ namespace Inventory
 
         // Eventos C# (no aparecen en el Inspector)
         [Header("Eventos")]
-        public UnityEvent<ItemData, int> onItemAdded;
-        public UnityEvent<ItemData, int> onItemRemoved;
-        private Inventory inventory;
+        // Inicializamos para que no sean null y otros componentes puedan suscribirse sin hacerlo en el Inspector.
+        public UnityEvent<ItemData, int> onItemAdded = new UnityEvent<ItemData, int>();
+        public UnityEvent<ItemData, int> onItemRemoved = new UnityEvent<ItemData, int>();
+        private Inventory _inventory;
 
-        public Inventory Inventory => inventory;
+        public Inventory Inventory => _inventory;
 
         private void Awake()
         {
-            inventory = new Inventory(maxCapacity, maxLimbCapacity);
+            _inventory = new Inventory(maxCapacity, maxLimbCapacity);
         }
 
         #region Input Actions (Unity Messages)
 
         void OnToggleInventory()
         {
+            // Localizar la UI registrada mediante el registro central.
+            var ui = InventoryUIRegistry.Get();
+            if (ui != null)
+            {
+                ui.ToggleInventory();
+                return;
+            }
+
+            // Si no hay UI registrada, dejamos el comportamiento de debug para diagnóstico.
             ShowInventoryInfo();
         }
 
@@ -48,7 +59,7 @@ namespace Inventory
                 return false;
             }
 
-            bool success = inventory.AddItem(itemData, quantity);
+            bool success = _inventory.AddItem(itemData, quantity);
 
             if (success)
             {
@@ -70,7 +81,7 @@ namespace Inventory
         {
             if (itemData == null) return false;
 
-            bool success = inventory.RemoveItem(itemData, quantity);
+            bool success = _inventory.RemoveItem(itemData, quantity);
 
             if (success)
             {
@@ -85,22 +96,22 @@ namespace Inventory
 
         public bool Contains(ItemData itemData)
         {
-            return inventory.Contains(itemData);
+            return _inventory.Contains(itemData);
         }
 
         public int GetItemCount(ItemData itemData)
         {
-            return inventory.GetItemCount(itemData);
+            return _inventory.GetItemCount(itemData);
         }
 
         public InventoryItem GetItem(ItemData itemData)
         {
-            return inventory.GetItem(itemData);
+            return _inventory.GetItem(itemData);
         }
 
         public void ClearInventory()
         {
-            inventory.Clear();
+            _inventory.Clear();
             if (showDebugLogs)
                 Debug.Log("Inventario limpiado");
         }
@@ -110,16 +121,16 @@ namespace Inventory
         private void ShowInventoryInfo()
         {
             Debug.Log("=== INVENTARIO DEL JUGADOR ===");
-            Debug.Log($"Items normales: {inventory.Items.Count}/{maxCapacity}");
+            Debug.Log($"Items normales: {_inventory.Items.Count}/{maxCapacity}");
             
-            foreach (var item in inventory.Items)
+            foreach (var item in _inventory.Items)
             {
                 Debug.Log($"  - {item.Data.ItemName} x{item.Quantity}");
             }
             
-            Debug.Log($"Extremidades: {inventory.Limbs.Count}/{maxLimbCapacity}");
+            Debug.Log($"Extremidades: {_inventory.Limbs.Count}/{maxLimbCapacity}");
             
-            foreach (var limb in inventory.Limbs)
+            foreach (var limb in _inventory.Limbs)
             {
                 Debug.Log($"  - {limb.Data.ItemName} x{limb.Quantity}");
             }
@@ -128,4 +139,3 @@ namespace Inventory
         }
     }
 }
-
