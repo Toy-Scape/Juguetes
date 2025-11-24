@@ -6,8 +6,8 @@ using UnityEngine.InputSystem;
 
 public class DialogueBox : MonoBehaviour
 {
-    [SerializeField] private GameObject dialogueContent;
-    [SerializeField] private GameObject thoughtContent;
+    [SerializeField] private GameObject dialogueContent = default;
+    [SerializeField] private GameObject thoughtContent = default;
     [SerializeField] private TextMeshProUGUI dialogueText;
     [SerializeField] private TextMeshProUGUI thoughtText;
     [SerializeField] private TextMeshProUGUI nameText;
@@ -22,7 +22,13 @@ public class DialogueBox : MonoBehaviour
     private int dialogueIndex;
     private Coroutine typingCoroutine;
     public bool IsTyping { get; private set;}
-    public bool IsOpen  { get => dialogueContent.activeInHierarchy || thoughtContent.activeInHierarchy; }
+    public bool IsOpen  
+    { 
+        get
+        {
+            return dialogueContent.activeInHierarchy || thoughtContent.activeInHierarchy;
+        }  
+    }
     public static DialogueBox Instance { get; private set;}
     private TextMeshProUGUI CurrentText
     {
@@ -35,7 +41,7 @@ public class DialogueBox : MonoBehaviour
     }
 
 
-    public void Awake ()
+    void Awake ()
     {
         Instance = this;
         Close();
