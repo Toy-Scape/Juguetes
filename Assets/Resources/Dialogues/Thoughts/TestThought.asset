@@ -12,7 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29b2a5239966e17419732012e75791f3, type: 3}
   m_Name: TestThought
   m_EditorClassIdentifier: Assembly-CSharp::Dialogue
-  lines:
+  Lines:
   - character: 0
-    text: Primero necestito el destornillador.
-  type: 1
+    Text: Primero necesito el destornillador.
+  - character: 0
+    Text: Primero necesit
+  Type: 1
