@@ -12,4 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29b2a5239966e17419732012e75791f3, type: 3}
   m_Name: Test
   m_EditorClassIdentifier: Assembly-CSharp::Dialogue
-  lines: []
+  lines:
+  - character: 0
+    text: Que haces?
+  - character: 1
+    text: Tomando el sol.

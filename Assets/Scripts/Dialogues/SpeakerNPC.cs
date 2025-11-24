@@ -1,10 +1,11 @@
-using UnityEditor.SceneManagement;
+using InteractionSystem.Interactables;
 using UnityEngine;
 
+[RequireComponent(typeof(NPCInteractableBase))]
 public class SpeakerNPC : MonoBehaviour
 {
-    public Dialogue dialogue;
-    public void TriggerDialogue()
+    [SerializeField] private Dialogue dialogue;
+    public void TriggerDialogue ()
     {
         if (!dialogue)
         {

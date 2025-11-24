@@ -1,9 +1,9 @@
 using InteractionSystem.Core;
 using UnityEngine;
-using InteractionSystem.Interfaces;
 
 namespace InteractionSystem.Interactables
 {
+    [RequireComponent(typeof(SpeakerNPC))]
     public class NPCInteractableBase : InteractableBase
     {
         [SerializeField] private SpeakerNPC speakerNPC;
@@ -12,7 +12,10 @@ namespace InteractionSystem.Interactables
         {
             if (speakerNPC != null)
             {
-                speakerNPC.TriggerDialogue();
+                if (!DialogueBox.Instance.IsOpen)
+                {
+                    speakerNPC.TriggerDialogue();
+                }
             }
             else
             {
