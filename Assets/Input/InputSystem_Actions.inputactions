@@ -122,6 +122,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "PointRadialMenu",
+                    "type": "Value",
+                    "id": "11bce911-b644-4915-bba8-9bdd08c0f232",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -578,22 +587,22 @@
                 },
                 {
                     "name": "",
-                    "id": "984479f6-43bd-4882-ab9a-f41fcbecaa8e",
-                    "path": "<Gamepad>/rightStick",
-                    "interactions": "",
+                    "id": "36ea650f-548f-486c-b152-d77998f970ce",
+                    "path": "<Gamepad>/rightTrigger",
+                    "interactions": "Press(behavior=2)",
                     "processors": "",
                     "groups": ";Gamepad",
-                    "action": "NavigateRadialMenu",
+                    "action": "OpenRadialMenu",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
-                    "id": "247766d7-4b88-40da-8b43-b8e7bc4a19ed",
-                    "path": "<Pointer>/delta",
+                    "id": "984479f6-43bd-4882-ab9a-f41fcbecaa8e",
+                    "path": "<Gamepad>/rightStick",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Keyboard&Mouse;Touch",
+                    "groups": ";Gamepad",
                     "action": "NavigateRadialMenu",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -606,6 +615,17 @@
                     "processors": "",
                     "groups": "Joystick",
                     "action": "NavigateRadialMenu",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "22714136-3233-49dc-8462-3d01f1dac061",
+                    "path": "<Pointer>/position",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse;Touch",
+                    "action": "PointRadialMenu",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

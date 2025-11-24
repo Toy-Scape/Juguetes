@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 [RequireComponent(typeof(CanvasRenderer))]
-public class CurvedSegmentGraphic : MaskableGraphic
+public class CurvedSegmentGraphic : MaskableGraphic, IPointerEnterHandler, IPointerExitHandler
 {
     [SerializeField, Min(0f)] private float innerRadius = 100f;
     [SerializeField, Min(0f)] private float outerRadius = 200f;
@@ -12,8 +13,16 @@ public class CurvedSegmentGraphic : MaskableGraphic
     [SerializeField, Range(4, 256)] private int segments = 32;
     [SerializeField, Min(0f)] private float dividerThickness = 4f;
     [SerializeField] private Color dividerColor = new Color(0.5f, 0.5f, 0.5f, 0);
+    [SerializeField] private Color hoverColor = new Color(0.8f, 0.8f, 0.8f, 0);
 
     private Vector2 centerOffset = Vector2.zero;
+    private Color baseColor;
+
+    protected override void Awake ()
+    {
+        base.Awake();
+        baseColor = color;
+    }
 
     public void Configure (float inner, float outer, float startDeg, float endDeg, int segs, Vector2 centerLocalOffset, float? divider = null)
     {
@@ -55,7 +64,8 @@ public class CurvedSegmentGraphic : MaskableGraphic
             verts.Add(MakeVertex(outer, color));
         }
 
-        for (int i = 0; i < verts.Count; i++) vh.AddVert(verts[i]);
+        for (int i = 0; i < verts.Count; i++) 
+            vh.AddVert(verts[i]);
 
         for (int i = 0; i < segments; i++)
         {
@@ -116,5 +126,21 @@ public class CurvedSegmentGraphic : MaskableGraphic
         float arc = Mathf.Repeat(endAngle - startAngle, 360f);
         float rel = Mathf.Repeat(angle - startAngle, 360f);
         return rel <= arc;
+    }
+
+    public void SetHover (bool isHovering)
+    {
+        color = isHovering ? hoverColor : baseColor;
+        SetVerticesDirty();
+    }
+
+    public void OnPointerEnter (PointerEventData eventData)
+    {
+        SetHover(true);
+    }
+
+    public void OnPointerExit (PointerEventData eventData)
+    {
+        SetHover(false);
     }
 }

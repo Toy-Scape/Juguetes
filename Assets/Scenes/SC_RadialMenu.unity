@@ -783,6 +783,11 @@ MonoBehaviour:
   limbManager: {fileID: 1749871450}
   buttonPrefab: {fileID: 7613636244303628331, guid: 92f810621fae6c546b77c64ba9834acf, type: 3}
   radialContainer: {fileID: 2146274029}
+  innerRadius: 190
+  outerRadius: 320
+  segments: 32
+  paddingAngle: 0.4
+  paddingRadial: 10
 --- !u!224 &1498811242
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1418,6 +1423,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2146274029}
+  - component: {fileID: 2146274030}
   m_Layer: 0
   m_Name: RadialContainer
   m_TagString: Untagged
@@ -1444,6 +1450,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!225 &2146274030
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2146274028}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 1
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

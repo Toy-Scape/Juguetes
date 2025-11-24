@@ -208,6 +208,15 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""PointRadialMenu"",
+                    ""type"": ""Value"",
+                    ""id"": ""11bce911-b644-4915-bba8-9bdd08c0f232"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -664,22 +673,22 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""984479f6-43bd-4882-ab9a-f41fcbecaa8e"",
-                    ""path"": ""<Gamepad>/rightStick"",
-                    ""interactions"": """",
+                    ""id"": ""36ea650f-548f-486c-b152-d77998f970ce"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""interactions"": ""Press(behavior=2)"",
                     ""processors"": """",
                     ""groups"": "";Gamepad"",
-                    ""action"": ""NavigateRadialMenu"",
+                    ""action"": ""OpenRadialMenu"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
-                    ""id"": ""247766d7-4b88-40da-8b43-b8e7bc4a19ed"",
-                    ""path"": ""<Pointer>/delta"",
+                    ""id"": ""984479f6-43bd-4882-ab9a-f41fcbecaa8e"",
+                    ""path"": ""<Gamepad>/rightStick"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": "";Keyboard&Mouse;Touch"",
+                    ""groups"": "";Gamepad"",
                     ""action"": ""NavigateRadialMenu"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -692,6 +701,17 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""Joystick"",
                     ""action"": ""NavigateRadialMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""22714136-3233-49dc-8462-3d01f1dac061"",
+                    ""path"": ""<Pointer>/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse;Touch"",
+                    ""action"": ""PointRadialMenu"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1365,6 +1385,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         m_Player_Grab = m_Player.FindAction("Grab", throwIfNotFound: true);
         m_Player_OpenRadialMenu = m_Player.FindAction("OpenRadialMenu", throwIfNotFound: true);
         m_Player_NavigateRadialMenu = m_Player.FindAction("NavigateRadialMenu", throwIfNotFound: true);
+        m_Player_PointRadialMenu = m_Player.FindAction("PointRadialMenu", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1473,6 +1494,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Grab;
     private readonly InputAction m_Player_OpenRadialMenu;
     private readonly InputAction m_Player_NavigateRadialMenu;
+    private readonly InputAction m_Player_PointRadialMenu;
     /// <summary>
     /// Provides access to input actions defined in input action map "Player".
     /// </summary>
@@ -1536,6 +1558,10 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Player/NavigateRadialMenu".
         /// </summary>
         public InputAction @NavigateRadialMenu => m_Wrapper.m_Player_NavigateRadialMenu;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/PointRadialMenu".
+        /// </summary>
+        public InputAction @PointRadialMenu => m_Wrapper.m_Player_PointRadialMenu;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -1601,6 +1627,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @NavigateRadialMenu.started += instance.OnNavigateRadialMenu;
             @NavigateRadialMenu.performed += instance.OnNavigateRadialMenu;
             @NavigateRadialMenu.canceled += instance.OnNavigateRadialMenu;
+            @PointRadialMenu.started += instance.OnPointRadialMenu;
+            @PointRadialMenu.performed += instance.OnPointRadialMenu;
+            @PointRadialMenu.canceled += instance.OnPointRadialMenu;
         }
 
         /// <summary>
@@ -1651,6 +1680,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @NavigateRadialMenu.started -= instance.OnNavigateRadialMenu;
             @NavigateRadialMenu.performed -= instance.OnNavigateRadialMenu;
             @NavigateRadialMenu.canceled -= instance.OnNavigateRadialMenu;
+            @PointRadialMenu.started -= instance.OnPointRadialMenu;
+            @PointRadialMenu.performed -= instance.OnPointRadialMenu;
+            @PointRadialMenu.canceled -= instance.OnPointRadialMenu;
         }
 
         /// <summary>
@@ -2064,6 +2096,13 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnNavigateRadialMenu(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "PointRadialMenu" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnPointRadialMenu(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "UI" which allows adding and removing callbacks.

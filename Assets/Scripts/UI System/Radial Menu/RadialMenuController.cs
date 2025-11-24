@@ -29,10 +29,9 @@ public class RadialMenuController : MonoBehaviour
 
     }
 
-    void OnNavigate (InputValue value)
+    void OnNavigateRadialMenu (InputValue value)
     {
         if (!radialMenu.isActiveAndEnabled) return;
-
         Vector2 input = value.Get<Vector2>();
         radialMenu.SelectWithJoystick(input);
     }
@@ -45,6 +44,7 @@ public class RadialMenuController : MonoBehaviour
         Vector2 center = radialMenu.transform.position;
         radialMenu.SelectWithMouse(mousePos, center);
     }
+
 
     void OnRadialConfirm ()
     {

@@ -9,6 +9,13 @@ public class RadialMenu : MonoBehaviour
     [SerializeField] private GameObject buttonPrefab;
     [SerializeField] private Transform radialContainer;
 
+    [Header("Radial Settings")]
+    [SerializeField] private float innerRadius = 100f;
+    [SerializeField] private float outerRadius = 180f;
+    [SerializeField] private int segments = 32;
+    [SerializeField] private float paddingAngle = 0.4f;
+    [SerializeField] private float paddingRadial = 10f;
+
     private List<Button> buttons = new();
     private LimbSO currentSelection;
     private bool isOpen = false;
@@ -41,42 +48,34 @@ public class RadialMenu : MonoBehaviour
         if (limbs.Count == 0) return;
 
         float angleStep = 360f / limbs.Count;
-        float innerRadius = 100f;
-        float outerRadius = 180f;
-        int segments = 32;
-
-        float paddingAngle = 0.4f;
-        float paddingRadial = 10f;
 
         for (int i = 0; i < limbs.Count; i++)
         {
             var limb = limbs[i];
-            var buttonObj = Instantiate(buttonPrefab, radialContainer);
-            var button = buttonObj.GetComponent<Button>();
 
+            // Instanciamos el prefab que ya contiene CurvedSegmentGraphic como padre
+            var prefabObj = Instantiate(buttonPrefab, radialContainer);
+            var arcGraphic = prefabObj.GetComponent<CurvedSegmentGraphic>();
+            var button = prefabObj.GetComponentInChildren<Button>();
             var text = button.GetComponentInChildren<TMP_Text>(true);
             text.text = limb.LimbName;
 
-            float angleRad = i * angleStep * Mathf.Deg2Rad;
-            Vector2 pos = new Vector2(Mathf.Cos(angleRad), Mathf.Sin(angleRad)) * ((innerRadius + outerRadius) * 0.5f);
-
-            var rt = buttonObj.GetComponent<RectTransform>();
-            rt.anchoredPosition = pos;
-            rt.rotation = Quaternion.identity;
-
-            var arcGraphic = buttonObj.GetComponentInChildren<CurvedSegmentGraphic>(true);
-            if (arcGraphic == null) arcGraphic = buttonObj.AddComponent<CurvedSegmentGraphic>();
-
             float startAngle = i * angleStep + paddingAngle;
             float endAngle = (i + 1) * angleStep - paddingAngle;
-            Vector2 centerOffset = -pos;
 
-            arcGraphic.Configure(innerRadius + paddingRadial, outerRadius - paddingRadial, startAngle, endAngle, segments, centerOffset, 0);
+            arcGraphic.Configure(innerRadius + paddingRadial, outerRadius - paddingRadial, startAngle, endAngle, segments, Vector2.zero, 0);
 
             float midRad = ((startAngle + endAngle) * 0.5f) * Mathf.Deg2Rad;
-            float labelRadius = (innerRadius + paddingRadial) + ((outerRadius - paddingRadial) - (innerRadius + paddingRadial)) * 0.35f;
-            Vector2 labelLocalPos = new Vector2(Mathf.Cos(midRad), Mathf.Sin(midRad)) * labelRadius;
-            text.rectTransform.anchoredPosition = labelLocalPos;
+            float effectiveInner = innerRadius + paddingRadial;
+            float effectiveOuter = outerRadius - paddingRadial;
+            float midRadius = (effectiveInner + effectiveOuter) * 0.5f;
+            Vector2 centerPoint = new Vector2(Mathf.Cos(midRad), Mathf.Sin(midRad)) * midRadius;
+
+            var rt = button.GetComponent<RectTransform>();
+            rt.anchoredPosition = centerPoint;
+            rt.rotation = Quaternion.identity;
+
+            text.rectTransform.anchoredPosition = Vector2.zero;
             text.rectTransform.rotation = Quaternion.identity;
 
             button.onClick.AddListener(() => limbManager.EquipLimb(limb));
@@ -88,12 +87,14 @@ public class RadialMenu : MonoBehaviour
     {
         var limbs = limbManager.GetAvailableLimbs();
         currentSelection = GetSelectionFromMouse(mousePos, center, limbs);
+        HighlightSelection(currentSelection);
     }
 
     public void SelectWithJoystick (Vector2 input)
     {
         var limbs = limbManager.GetAvailableLimbs();
         currentSelection = GetSelectionFromJoystick(input, limbs);
+        HighlightSelection(currentSelection);
     }
 
     public void ConfirmSelection ()
@@ -109,6 +110,11 @@ public class RadialMenu : MonoBehaviour
         if (limbs.Count == 0) return null;
 
         Vector2 dir = mousePos - center;
+        float dist = dir.magnitude;
+
+        if (dist < innerRadius)
+            return null;
+
         float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
         if (angle < 0) angle += 360f;
 
@@ -127,5 +133,19 @@ public class RadialMenu : MonoBehaviour
         float angleStep = 360f / limbs.Count;
         int index = Mathf.FloorToInt(angle / angleStep);
         return limbs[index];
+    }
+
+    private void HighlightSelection (LimbSO selection)
+    {
+        var limbs = limbManager.GetAvailableLimbs();
+        for (int i = 0; i < buttons.Count; i++)
+        {
+            var arc = buttons[i].GetComponentInParent<CurvedSegmentGraphic>();
+            if (arc != null)
+            {
+                bool isSelected = limbs[i] == selection;
+                arc.SetHover(isSelected);
+            }
+        }
     }
 }
