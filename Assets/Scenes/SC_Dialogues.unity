@@ -159,7 +159,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 0, y: 27}
+  m_AnchoredPosition: {x: 0, y: 100}
   m_SizeDelta: {x: -300, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &66898941
@@ -597,6 +597,7 @@ MonoBehaviour:
         m_CallState: 2
   nextDialogueAction: {fileID: 1222488934710843565, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   playerInput: {fileID: 1486029152}
+  thoughtsCloseDelay: 2
 --- !u!114 &465101254
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1770,7 +1771,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InteractionSystem.Interactables.ThoughtInteractableBase
   speakerNPC: {fileID: 1452361886}
-  destornillador: 0
+  requiredItem: 0
 --- !u!114 &1452361894
 MonoBehaviour:
   m_ObjectHideFlags: 0
