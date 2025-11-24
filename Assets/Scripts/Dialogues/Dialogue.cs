@@ -4,9 +4,16 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Dialogue", menuName = "Dialogue System/Dialogue")]
 public class Dialogue : ScriptableObject
 {
-    public List<Line> lines = new();
+    public List<Line> Lines = new();
+    public DialogueType Type;
 
-    public static Dialogue Load(string relativePath)
+    public enum DialogueType
+    {
+        Normal,
+        Thought
+    }
+    
+    public static Dialogue Load (string relativePath)
     {
         return Resources.Load<Dialogue>($"Dialogues/{relativePath}");
     }
@@ -14,10 +21,10 @@ public class Dialogue : ScriptableObject
     [System.Serializable]
     public struct Line
     {
-        public Character character;
-        public string text;
+        [SerializeField] private Character character;
+        public string Text;
 
-        public string GetCharacterName()
+        public string GetCharacterName ()
         {
             switch (character)
             {
