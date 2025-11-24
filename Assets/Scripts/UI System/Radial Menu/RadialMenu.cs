@@ -33,7 +33,6 @@ public class RadialMenu : MonoBehaviour
 
     public void PopulateMenu ()
     {
-        // limpiar botones previos
         foreach (var btn in buttons)
             Destroy(btn.gameObject);
         buttons.Clear();
@@ -42,7 +41,12 @@ public class RadialMenu : MonoBehaviour
         if (limbs.Count == 0) return;
 
         float angleStep = 360f / limbs.Count;
-        float radius = 150f;
+        float innerRadius = 100f;
+        float outerRadius = 180f;
+        int segments = 32;
+
+        float paddingAngle = 0.4f;
+        float paddingRadial = 10f;
 
         for (int i = 0; i < limbs.Count; i++)
         {
@@ -50,15 +54,31 @@ public class RadialMenu : MonoBehaviour
             var buttonObj = Instantiate(buttonPrefab, radialContainer);
             var button = buttonObj.GetComponent<Button>();
 
-            // mostrar nombre de la extremidad
-            button.GetComponentInChildren<TMP_Text>().text = limb.LimbName;
+            var text = button.GetComponentInChildren<TMP_Text>(true);
+            text.text = limb.LimbName;
 
-            // calcular posición radial
-            float angle = i * angleStep * Mathf.Deg2Rad;
-            Vector2 pos = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * radius;
-            buttonObj.GetComponent<RectTransform>().anchoredPosition = pos;
+            float angleRad = i * angleStep * Mathf.Deg2Rad;
+            Vector2 pos = new Vector2(Mathf.Cos(angleRad), Mathf.Sin(angleRad)) * ((innerRadius + outerRadius) * 0.5f);
 
-            // asignar acción de equipar
+            var rt = buttonObj.GetComponent<RectTransform>();
+            rt.anchoredPosition = pos;
+            rt.rotation = Quaternion.identity;
+
+            var arcGraphic = buttonObj.GetComponentInChildren<CurvedSegmentGraphic>(true);
+            if (arcGraphic == null) arcGraphic = buttonObj.AddComponent<CurvedSegmentGraphic>();
+
+            float startAngle = i * angleStep + paddingAngle;
+            float endAngle = (i + 1) * angleStep - paddingAngle;
+            Vector2 centerOffset = -pos;
+
+            arcGraphic.Configure(innerRadius + paddingRadial, outerRadius - paddingRadial, startAngle, endAngle, segments, centerOffset, 0);
+
+            float midRad = ((startAngle + endAngle) * 0.5f) * Mathf.Deg2Rad;
+            float labelRadius = (innerRadius + paddingRadial) + ((outerRadius - paddingRadial) - (innerRadius + paddingRadial)) * 0.35f;
+            Vector2 labelLocalPos = new Vector2(Mathf.Cos(midRad), Mathf.Sin(midRad)) * labelRadius;
+            text.rectTransform.anchoredPosition = labelLocalPos;
+            text.rectTransform.rotation = Quaternion.identity;
+
             button.onClick.AddListener(() => limbManager.EquipLimb(limb));
             buttons.Add(button);
         }

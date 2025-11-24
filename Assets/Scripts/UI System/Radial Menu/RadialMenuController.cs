@@ -4,21 +4,31 @@ using UnityEngine.InputSystem;
 public class RadialMenuController : MonoBehaviour
 {
     [SerializeField] private RadialMenu radialMenu;
+    private CameraManager cameraManager;
+
+    private void Start ()
+    {
+        cameraManager = FindFirstObjectByType<CameraManager>();
+    }
 
     void OnOpenRadialMenu (InputValue value)
     {
         if (value.isPressed)
         {
             radialMenu.Show();
+            cameraManager.LockCameraMovement();
+            cameraManager.UnlockCursor();
         }
         else
         {
             radialMenu.ConfirmSelection();
             radialMenu.Hide();
+            cameraManager.UnlockCameraMovement();
+            cameraManager.LockCursor();
         }
+
     }
 
-    // Navegación con joystick
     void OnNavigate (InputValue value)
     {
         if (!radialMenu.isActiveAndEnabled) return;
@@ -27,7 +37,6 @@ public class RadialMenuController : MonoBehaviour
         radialMenu.SelectWithJoystick(input);
     }
 
-    // Navegación con ratón
     void OnPoint (InputValue value)
     {
         if (!radialMenu.isActiveAndEnabled) return;
@@ -37,14 +46,12 @@ public class RadialMenuController : MonoBehaviour
         radialMenu.SelectWithMouse(mousePos, center);
     }
 
-    // Confirmar selección
     void OnRadialConfirm ()
     {
         if (!radialMenu.isActiveAndEnabled) return;
         radialMenu.ConfirmSelection();
     }
 
-    // Cancelar y cerrar menú
     void OnRadialCancel ()
     {
         if (!radialMenu.isActiveAndEnabled) return;
