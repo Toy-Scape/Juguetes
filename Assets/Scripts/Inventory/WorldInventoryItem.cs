@@ -15,9 +15,6 @@ namespace Inventory
         [SerializeField] private ItemData itemData;
         [SerializeField, Min(1)] private int quantity = 1;
         
-        [Header("Opciones")]
-        [SerializeField] private bool destroyOnPickup = true;
-
         private void OnValidate()
         {
             if (itemData == null)
@@ -53,7 +50,7 @@ namespace Inventory
             // Intentar añadir el item al inventario
             bool success = playerInventory.AddItem(itemData, quantity);
 
-            if (success && destroyOnPickup)
+            if (success)
             {
                 Destroy(gameObject);
             }

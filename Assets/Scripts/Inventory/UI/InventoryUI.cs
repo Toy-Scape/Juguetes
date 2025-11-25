@@ -32,35 +32,47 @@ namespace Inventory.UI
         [SerializeField] private Vector2 tooltipOffset = new Vector2(15, -15);
 
         [Header("Configuración")]
-        [SerializeField] private int maxSlotsToDisplay = 20;
         [SerializeField] private bool hideOnStart = true;
 
         private List<InventorySlotUI> _itemSlots = new List<InventorySlotUI>();
         private List<InventorySlotUI> _limbSlots = new List<InventorySlotUI>();
         private InventorySlotUI _selectedSlot;
-        private bool _isInventoryOpen = false;
+        private bool _isInventoryOpen;
 
         private void Awake()
         {
             // Registrar esta instancia en el registro central
             InventoryUIRegistry.Register(this);
 
-            // Buscar PlayerInventory si no está asignado
-            if (playerInventory == null)
-            {
-                playerInventory = UnityEngine.Object.FindFirstObjectByType<PlayerInventory>();
-            }
-
-            InitializeSlots();
-
+            // Ocultar el panel PRIMERO antes de cualquier otra cosa
             if (hideOnStart && inventoryPanel != null)
             {
                 inventoryPanel.SetActive(false);
+                _isInventoryOpen = false;
             }
 
             // Aseguramos que el tooltip esté oculto al inicio
             if (tooltipPanel != null)
                 tooltipPanel.SetActive(false);
+
+            // Buscar PlayerInventory si no está asignado
+            if (playerInventory == null)
+            {
+                playerInventory = UnityEngine.Object.FindFirstObjectByType<PlayerInventory>();
+            }
+        }
+
+        void Start ()
+        {
+            // Inicializar slots en Start para garantizar que PlayerInventory.Awake() ya se ejecutó
+            InitializeSlots();
+            
+            // Asegurar que el cursor esté correctamente configurado al inicio
+            if (!_isInventoryOpen)
+            {
+                Cursor.visible = false;
+                Cursor.lockState = CursorLockMode.Locked;
+            }
         }
 
         private void OnEnable()
@@ -70,26 +82,17 @@ namespace Inventory.UI
                 playerInventory = UnityEngine.Object.FindFirstObjectByType<PlayerInventory>();
             }
 
-            // Asegurarnos de que los slots existen (útil si playerInventory no estaba listo en Awake)
-            InitializeSlots();
-
+            // Suscribirse a eventos
             if (playerInventory != null)
             {
                 playerInventory.onItemAdded.AddListener(OnInventoryChanged);
                 playerInventory.onItemRemoved.AddListener(OnInventoryChanged);
             }
 
-            // Asegurarnos de que la UI refleja el estado actual del inventario al activarse.
-            RefreshUI();
-
-            // Diagnóstico: si hay limbs en el inventario pero no hay slots suficientes, avisar.
-            if (playerInventory != null && playerInventory.Inventory != null)
+            // Solo refrescar la UI si el inventario está abierto
+            if (_isInventoryOpen)
             {
-                int limbCount = playerInventory.Inventory.Limbs.Count;
-                if (limbCount > _limbSlots.Count)
-                {
-                    Debug.LogWarning($"[InventoryUI] Hay {limbCount} limbs en el inventario pero solo {_limbSlots.Count} slots disponibles.");
-                }
+                RefreshUI();
             }
         }
 
@@ -121,25 +124,69 @@ namespace Inventory.UI
 
         private void InitializeSlots()
         {
-            // Crear slots para items normales
-            if (itemsContainer != null && slotPrefab != null)
+            // Verificar que todo esté listo antes de crear slots
+            if (playerInventory == null || playerInventory.Inventory == null)
             {
-                CreateSlots(itemsContainer, _itemSlots, maxSlotsToDisplay);
+                Debug.LogWarning("[InventoryUI] PlayerInventory o su Inventory aún no están inicializados. Se intentará más tarde.");
+                return;
+            }
+            
+            if (slotPrefab == null)
+            {
+                Debug.LogWarning("[InventoryUI] slotPrefab es NULL! Asígnalo en el Inspector.");
+                return;
+            }
+            
+            Debug.Log($"[InventoryUI] InitializeSlots() - itemsContainer: {(itemsContainer != null ? itemsContainer.name : "NULL")}, limbsContainer: {(limbsContainer != null ? limbsContainer.name : "NULL")}, slotPrefab: OK");
+            
+            // Crear slots para items normales usando la capacidad del inventario
+            if (itemsContainer != null)
+            {
+                int itemCapacity = playerInventory.Inventory.MaxCapacity;
+                Debug.Log($"[InventoryUI] Creando slots para items. Capacidad configurada: {itemCapacity}");
+                CreateSlots(itemsContainer, _itemSlots, itemCapacity);
+            }
+            else
+            {
+                Debug.LogWarning("[InventoryUI] itemsContainer es NULL! Asígnalo en el Inspector.");
             }
 
-            // Crear slots para extremidades
-            if (limbsContainer != null && slotPrefab != null)
+            // Crear slots para extremidades usando la capacidad del inventario
+            if (limbsContainer != null)
             {
-                CreateSlots(limbsContainer, _limbSlots, playerInventory != null ? playerInventory.Inventory.MaxLimbCapacity : 4);
+                int limbCapacity = playerInventory.Inventory.MaxLimbCapacity;
+                Debug.Log($"[InventoryUI] Creando slots para limbs. Capacidad configurada: {limbCapacity}");
+                CreateSlots(limbsContainer, _limbSlots, limbCapacity);
             }
+            else
+            {
+                Debug.LogWarning("[InventoryUI] limbsContainer es NULL! Asígnalo en el Inspector.");
+            }
+
+            // Refrescar la UI después de crear los slots para mostrar items que ya existan
+            RefreshUI();
         }
 
         private void CreateSlots(Transform container, List<InventorySlotUI> slotList, int count)
         {
-            if (container == null || slotPrefab == null)
+            if (container == null)
+            {
+                Debug.LogWarning("[InventoryUI] Container es null, no se pueden crear slots");
                 return;
+            }
+            
+            if (slotPrefab == null)
+            {
+                Debug.LogWarning("[InventoryUI] SlotPrefab es null, no se pueden crear slots");
+                return;
+            }
 
             int toCreate = Mathf.Max(0, count - slotList.Count);
+            
+            if (toCreate > 0)
+            {
+                Debug.Log($"[InventoryUI] Creando {toCreate} slots en {container.name}. Capacidad total: {count}");
+            }
 
             for (int i = 0; i < toCreate; i++)
             {
@@ -157,6 +204,10 @@ namespace Inventory.UI
                         InventorySlotUI capturedSlot = slot;
                         button.onClick.AddListener(() => OnSlotClicked(capturedSlot));
                     }
+                }
+                else
+                {
+                    Debug.LogWarning("[InventoryUI] El prefab de slot no tiene el componente InventorySlotUI");
                 }
             }
         }
@@ -201,6 +252,12 @@ namespace Inventory.UI
         {
             var limbs = playerInventory.Inventory.Limbs;
 
+            // Diagnóstico: verificar si hay limbs pero no slots
+            if (limbs.Count > 0 && _limbSlots.Count == 0)
+            {
+                Debug.LogWarning($"[InventoryUI] Hay {limbs.Count} limbs en el inventario pero NO hay slots creados! Verifica que limbsContainer esté asignado en el Inspector.");
+            }
+
             // Comprobación: ¿el primer limb NO es limb? (puede indicar containers cruzados)
             if (limbs.Count > 0 && limbs[0].Data != null && !limbs[0].Data.IsLimb)
             {
@@ -242,8 +299,12 @@ namespace Inventory.UI
 
         private void OnInventoryChanged(ItemData itemData, int quantity)
         {
-            // Siempre refresh en memoria; si el panel está abierto, refrescamos la UI visible.
-            RefreshUI();
+            // Siempre actualizar la UI cuando cambie el inventario
+            // Esto asegura que cuando se abra el inventario, los datos ya estén actualizados
+            if (playerInventory != null && playerInventory.Inventory != null)
+            {
+                RefreshUI();
+            }
         }
 
         #endregion
@@ -282,7 +343,7 @@ namespace Inventory.UI
             Cursor.lockState = CursorLockMode.None;
 
             // Cambiar el modo de acción del PlayerInput a UI si existe
-            var playerInput = FindObjectOfType<PlayerInput>();
+            var playerInput = UnityEngine.Object.FindFirstObjectByType<PlayerInput>();
             if (playerInput != null && playerInput.currentActionMap.name != "UI")
             {
                 var uiActionMap = playerInput.actions.FindActionMap("UI", true);
@@ -313,7 +374,7 @@ namespace Inventory.UI
             Cursor.lockState = CursorLockMode.Locked;
 
             // Cambiar el modo de acción del PlayerInput a Player si existe
-            var playerInput = FindObjectOfType<PlayerInput>();
+            var playerInput = UnityEngine.Object.FindFirstObjectByType<PlayerInput>();
             if (playerInput != null && playerInput.currentActionMap.name != "Player")
             {
                 var playerActionMap = playerInput.actions.FindActionMap("Player", true);

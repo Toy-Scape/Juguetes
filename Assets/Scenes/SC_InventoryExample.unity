@@ -348,7 +348,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Inventory.WorldInventoryItem
   itemData: {fileID: 11400000, guid: 4d4e899c9fa132944b8fae2775d989d5, type: 2}
   quantity: 1
-  destroyOnPickup: 1
 --- !u!1 &1322937328
 GameObject:
   m_ObjectHideFlags: 0
@@ -664,7 +663,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Inventory.PlayerInventory
   maxCapacity: 20
-  maxLimbCapacity: 6
+  maxLimbCapacity: 4
   showDebugLogs: 1
   onItemAdded:
     m_PersistentCalls:
@@ -685,7 +684,6 @@ GameObject:
   - component: {fileID: 1634556447}
   - component: {fileID: 1634556446}
   - component: {fileID: 1634556445}
-  - component: {fileID: 1634556450}
   - component: {fileID: 1634556452}
   - component: {fileID: 1634556451}
   m_Layer: 0
@@ -805,18 +803,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1634556450
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1634556443}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5545271374504951b9c18db1a435b245, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Interaction_System.Interactables.ItemPickup
 --- !u!114 &1634556451
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -831,7 +817,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Inventory.WorldInventoryItem
   itemData: {fileID: 11400000, guid: 548b46ccf3642744f9e9c43de0090ec5, type: 2}
   quantity: 1
-  destroyOnPickup: 1
 --- !u!114 &1634556452
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1042,6 +1027,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1700374562}
     - target: {fileID: 8163815884479273772, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
+      propertyPath: promptFollowSpeed
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 8163815884479273772, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
       propertyPath: rayOrigins.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -1065,9 +1054,29 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 544992486585774367, guid: 9e1b44a1b59f6a746adab3fed00fabf0, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 181
+      objectReference: {fileID: 0}
+    - target: {fileID: 544992486585774367, guid: 9e1b44a1b59f6a746adab3fed00fabf0, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 57.42
+      objectReference: {fileID: 0}
+    - target: {fileID: 3370458373626307096, guid: 9e1b44a1b59f6a746adab3fed00fabf0, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3601486217681639399, guid: 9e1b44a1b59f6a746adab3fed00fabf0, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 169.81
+      objectReference: {fileID: 0}
     - target: {fileID: 3735826937783850833, guid: 9e1b44a1b59f6a746adab3fed00fabf0, type: 3}
       propertyPath: m_Name
       value: Inventory Canvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 3869733527544010521, guid: 9e1b44a1b59f6a746adab3fed00fabf0, type: 3}
+      propertyPath: m_Constraint
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4232238607252589307, guid: 9e1b44a1b59f6a746adab3fed00fabf0, type: 3}
       propertyPath: m_Pivot.x
@@ -1149,10 +1158,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6214505632991398614, guid: 9e1b44a1b59f6a746adab3fed00fabf0, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -434
+      objectReference: {fileID: 0}
+    - target: {fileID: 6312123984236788504, guid: 9e1b44a1b59f6a746adab3fed00fabf0, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -17
+      objectReference: {fileID: 0}
     - target: {fileID: 8562230448028309207, guid: 9e1b44a1b59f6a746adab3fed00fabf0, type: 3}
       propertyPath: playerInventory
       value: 
       objectReference: {fileID: 1547978653}
+    - target: {fileID: 8562230448028309207, guid: 9e1b44a1b59f6a746adab3fed00fabf0, type: 3}
+      propertyPath: maxSlotsToDisplay
+      value: 9
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
