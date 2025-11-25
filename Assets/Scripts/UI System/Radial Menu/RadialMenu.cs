@@ -53,7 +53,6 @@ public class RadialMenu : MonoBehaviour
         {
             var limb = limbs[i];
 
-            // Instanciamos el prefab que ya contiene CurvedSegmentGraphic como padre
             var prefabObj = Instantiate(buttonPrefab, radialContainer);
             var arcGraphic = prefabObj.GetComponent<CurvedSegmentGraphic>();
             var button = prefabObj.GetComponentInChildren<Button>();

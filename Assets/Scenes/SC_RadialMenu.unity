@@ -142,6 +142,25 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 883425338343852037, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
   m_PrefabInstance: {fileID: 1407418662}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &493996965
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 493996944}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e9fb74deaa107e4b87fb65f5948581d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LimbManager
+  limbContextSO: {fileID: 11400000, guid: d513b577569255c47a418a8ef684243d, type: 2}
+  availableLimbs:
+  - {fileID: 11400000, guid: b61593b9d2ebffb41977d60aebfeb44a, type: 2}
+  - {fileID: 11400000, guid: 29c265e8876586d44980782e571a6f07, type: 2}
+  - {fileID: 11400000, guid: 1129099a91e68664f9cb196523b29bcb, type: 2}
+  - {fileID: 11400000, guid: 510fd97b35b231e46946846fe842fe91, type: 2}
+  - {fileID: 11400000, guid: e3e8af9ef6033e1478fb4db964dde784, type: 2}
 --- !u!1 &885204445
 GameObject:
   m_ObjectHideFlags: 0
@@ -423,7 +442,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1749871451}
   - {fileID: 1752589871}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -670,6 +688,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 6641168232080197241, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
       insertIndex: -1
       addedObject: {fileID: 493996952}
+    - targetCorrespondingSourceObject: {fileID: 6641168232080197241, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 493996965}
   m_SourcePrefab: {fileID: 100100000, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
 --- !u!1 &1440855993
 GameObject:
@@ -780,7 +801,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cddbbf57610807c4c9c576e3ab5c4b94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RadialMenu
-  limbManager: {fileID: 1749871450}
+  limbManager: {fileID: 493996965}
   buttonPrefab: {fileID: 7613636244303628331, guid: 92f810621fae6c546b77c64ba9834acf, type: 3}
   radialContainer: {fileID: 2146274029}
   innerRadius: 190
@@ -831,56 +852,6 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
---- !u!1 &1749871449
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1749871451}
-  - component: {fileID: 1749871450}
-  m_Layer: 0
-  m_Name: Limb Manager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1749871450
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1749871449}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5e9fb74deaa107e4b87fb65f5948581d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::LimbManager
-  limbContextSO: {fileID: 11400000, guid: d513b577569255c47a418a8ef684243d, type: 2}
-  availableLimbs:
-  - {fileID: 11400000, guid: b61593b9d2ebffb41977d60aebfeb44a, type: 2}
-  - {fileID: 11400000, guid: 29c265e8876586d44980782e571a6f07, type: 2}
-  - {fileID: 11400000, guid: 1129099a91e68664f9cb196523b29bcb, type: 2}
-  - {fileID: 11400000, guid: 510fd97b35b231e46946846fe842fe91, type: 2}
---- !u!4 &1749871451
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1749871449}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1010142068}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1752589870
 GameObject:
   m_ObjectHideFlags: 0

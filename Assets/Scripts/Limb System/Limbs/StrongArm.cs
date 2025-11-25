@@ -5,7 +5,6 @@ public class StrongArmSO : AimableLimbSO
 {
     private void OnEnable ()
     {
-        LimbName = "Brazo Fuerte";
         PassiveAbility = new StrengthPassive();
         SecondaryAbility = new AimAbility(this);
     }
