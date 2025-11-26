@@ -241,7 +241,7 @@ MonoBehaviour:
   backgroundImage: {fileID: 6521273537311483784}
   emptyColor: {r: 0.2, g: 0.2, b: 0.2, a: 0.5}
   filledColor: {r: 0.3, g: 0.3, b: 0.3, a: 0.8}
-  selectedColor: {r: 0.9169104, g: 0.9622642, b: 0.64907444, a: 0.9}
+  selectedColor: {r: 0.9169104, g: 0.9622642, b: 0.64907444, a: 0}
   placeholderIcon: {fileID: 0}
 --- !u!222 &4511994266772462201
 CanvasRenderer:
