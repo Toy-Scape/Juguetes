@@ -190,6 +190,33 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""OpenRadialMenu"",
+                    ""type"": ""Button"",
+                    ""id"": ""229df002-9f4a-4b13-82cf-fd1eecb9c0ae"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""NavigateRadialMenu"",
+                    ""type"": ""Value"",
+                    ""id"": ""713da2f9-fb7a-46f6-af7d-585580ea81f1"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""PointRadialMenu"",
+                    ""type"": ""Value"",
+                    ""id"": ""11bce911-b644-4915-bba8-9bdd08c0f232"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -632,6 +659,61 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""action"": ""Grab"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b7cd3d6c-0ba9-48ac-97d1-d3220f55572d"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": ""Press(behavior=2)"",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""OpenRadialMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""36ea650f-548f-486c-b152-d77998f970ce"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""interactions"": ""Press(behavior=2)"",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""OpenRadialMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""984479f6-43bd-4882-ab9a-f41fcbecaa8e"",
+                    ""path"": ""<Gamepad>/rightStick"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""NavigateRadialMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0bec2f57-c6e7-490b-b5dd-edcfd781b867"",
+                    ""path"": ""<Joystick>/{Hatswitch}"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Joystick"",
+                    ""action"": ""NavigateRadialMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""22714136-3233-49dc-8462-3d01f1dac061"",
+                    ""path"": ""<Pointer>/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse;Touch"",
+                    ""action"": ""PointRadialMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -725,6 +807,24 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""type"": ""PassThrough"",
                     ""id"": ""9caa3d8a-6b2f-4e8e-8bad-6ede561bd9be"",
                     ""expectedControlType"": ""Quaternion"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ConfirmRadial"",
+                    ""type"": ""Button"",
+                    ""id"": ""a5ee0a2c-941d-42af-adc7-833015604116"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""CalcelRadial"",
+                    ""type"": ""Button"",
+                    ""id"": ""0858a5f9-19b4-49f5-85c4-e27508ee5a66"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
@@ -1148,6 +1248,61 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""action"": ""TrackedDeviceOrientation"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""fe68583c-0b83-4fe8-868a-721fc326b697"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ConfirmRadial"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""fe5bec5f-7842-4fa5-9a3f-3b036460312c"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ConfirmRadial"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""af463fa8-72b4-497b-b745-0c46b774fff3"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""CalcelRadial"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""972be20b-618d-4716-96a4-ca657e0e9d4a"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""CalcelRadial"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1f248f71-03c9-4465-8431-631fdb1716b0"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""CalcelRadial"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -1267,6 +1422,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         m_Player_Next = m_Player.FindAction("Next", throwIfNotFound: true);
         m_Player_Sprint = m_Player.FindAction("Sprint", throwIfNotFound: true);
         m_Player_Grab = m_Player.FindAction("Grab", throwIfNotFound: true);
+        m_Player_OpenRadialMenu = m_Player.FindAction("OpenRadialMenu", throwIfNotFound: true);
+        m_Player_NavigateRadialMenu = m_Player.FindAction("NavigateRadialMenu", throwIfNotFound: true);
+        m_Player_PointRadialMenu = m_Player.FindAction("PointRadialMenu", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1279,6 +1437,8 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         m_UI_ScrollWheel = m_UI.FindAction("ScrollWheel", throwIfNotFound: true);
         m_UI_TrackedDevicePosition = m_UI.FindAction("TrackedDevicePosition", throwIfNotFound: true);
         m_UI_TrackedDeviceOrientation = m_UI.FindAction("TrackedDeviceOrientation", throwIfNotFound: true);
+        m_UI_ConfirmRadial = m_UI.FindAction("ConfirmRadial", throwIfNotFound: true);
+        m_UI_CalcelRadial = m_UI.FindAction("CalcelRadial", throwIfNotFound: true);
         // Dialogue
         m_Dialogue = asset.FindActionMap("Dialogue", throwIfNotFound: true);
         m_Dialogue_NextDialogue = m_Dialogue.FindAction("NextDialogue", throwIfNotFound: true);
@@ -1375,6 +1535,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Next;
     private readonly InputAction m_Player_Sprint;
     private readonly InputAction m_Player_Grab;
+    private readonly InputAction m_Player_OpenRadialMenu;
+    private readonly InputAction m_Player_NavigateRadialMenu;
+    private readonly InputAction m_Player_PointRadialMenu;
     /// <summary>
     /// Provides access to input actions defined in input action map "Player".
     /// </summary>
@@ -1430,6 +1593,18 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Player/Grab".
         /// </summary>
         public InputAction @Grab => m_Wrapper.m_Player_Grab;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/OpenRadialMenu".
+        /// </summary>
+        public InputAction @OpenRadialMenu => m_Wrapper.m_Player_OpenRadialMenu;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/NavigateRadialMenu".
+        /// </summary>
+        public InputAction @NavigateRadialMenu => m_Wrapper.m_Player_NavigateRadialMenu;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/PointRadialMenu".
+        /// </summary>
+        public InputAction @PointRadialMenu => m_Wrapper.m_Player_PointRadialMenu;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -1489,6 +1664,15 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Grab.started += instance.OnGrab;
             @Grab.performed += instance.OnGrab;
             @Grab.canceled += instance.OnGrab;
+            @OpenRadialMenu.started += instance.OnOpenRadialMenu;
+            @OpenRadialMenu.performed += instance.OnOpenRadialMenu;
+            @OpenRadialMenu.canceled += instance.OnOpenRadialMenu;
+            @NavigateRadialMenu.started += instance.OnNavigateRadialMenu;
+            @NavigateRadialMenu.performed += instance.OnNavigateRadialMenu;
+            @NavigateRadialMenu.canceled += instance.OnNavigateRadialMenu;
+            @PointRadialMenu.started += instance.OnPointRadialMenu;
+            @PointRadialMenu.performed += instance.OnPointRadialMenu;
+            @PointRadialMenu.canceled += instance.OnPointRadialMenu;
         }
 
         /// <summary>
@@ -1533,6 +1717,15 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Grab.started -= instance.OnGrab;
             @Grab.performed -= instance.OnGrab;
             @Grab.canceled -= instance.OnGrab;
+            @OpenRadialMenu.started -= instance.OnOpenRadialMenu;
+            @OpenRadialMenu.performed -= instance.OnOpenRadialMenu;
+            @OpenRadialMenu.canceled -= instance.OnOpenRadialMenu;
+            @NavigateRadialMenu.started -= instance.OnNavigateRadialMenu;
+            @NavigateRadialMenu.performed -= instance.OnNavigateRadialMenu;
+            @NavigateRadialMenu.canceled -= instance.OnNavigateRadialMenu;
+            @PointRadialMenu.started -= instance.OnPointRadialMenu;
+            @PointRadialMenu.performed -= instance.OnPointRadialMenu;
+            @PointRadialMenu.canceled -= instance.OnPointRadialMenu;
         }
 
         /// <summary>
@@ -1580,6 +1773,8 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     private readonly InputAction m_UI_ScrollWheel;
     private readonly InputAction m_UI_TrackedDevicePosition;
     private readonly InputAction m_UI_TrackedDeviceOrientation;
+    private readonly InputAction m_UI_ConfirmRadial;
+    private readonly InputAction m_UI_CalcelRadial;
     /// <summary>
     /// Provides access to input actions defined in input action map "UI".
     /// </summary>
@@ -1631,6 +1826,14 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "UI/TrackedDeviceOrientation".
         /// </summary>
         public InputAction @TrackedDeviceOrientation => m_Wrapper.m_UI_TrackedDeviceOrientation;
+        /// <summary>
+        /// Provides access to the underlying input action "UI/ConfirmRadial".
+        /// </summary>
+        public InputAction @ConfirmRadial => m_Wrapper.m_UI_ConfirmRadial;
+        /// <summary>
+        /// Provides access to the underlying input action "UI/CalcelRadial".
+        /// </summary>
+        public InputAction @CalcelRadial => m_Wrapper.m_UI_CalcelRadial;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -1687,6 +1890,12 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @TrackedDeviceOrientation.started += instance.OnTrackedDeviceOrientation;
             @TrackedDeviceOrientation.performed += instance.OnTrackedDeviceOrientation;
             @TrackedDeviceOrientation.canceled += instance.OnTrackedDeviceOrientation;
+            @ConfirmRadial.started += instance.OnConfirmRadial;
+            @ConfirmRadial.performed += instance.OnConfirmRadial;
+            @ConfirmRadial.canceled += instance.OnConfirmRadial;
+            @CalcelRadial.started += instance.OnCalcelRadial;
+            @CalcelRadial.performed += instance.OnCalcelRadial;
+            @CalcelRadial.canceled += instance.OnCalcelRadial;
         }
 
         /// <summary>
@@ -1728,6 +1937,12 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @TrackedDeviceOrientation.started -= instance.OnTrackedDeviceOrientation;
             @TrackedDeviceOrientation.performed -= instance.OnTrackedDeviceOrientation;
             @TrackedDeviceOrientation.canceled -= instance.OnTrackedDeviceOrientation;
+            @ConfirmRadial.started -= instance.OnConfirmRadial;
+            @ConfirmRadial.performed -= instance.OnConfirmRadial;
+            @ConfirmRadial.canceled -= instance.OnConfirmRadial;
+            @CalcelRadial.started -= instance.OnCalcelRadial;
+            @CalcelRadial.performed -= instance.OnCalcelRadial;
+            @CalcelRadial.canceled -= instance.OnCalcelRadial;
         }
 
         /// <summary>
@@ -2006,6 +2221,27 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnGrab(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "OpenRadialMenu" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnOpenRadialMenu(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "NavigateRadialMenu" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnNavigateRadialMenu(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "PointRadialMenu" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnPointRadialMenu(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "UI" which allows adding and removing callbacks.
@@ -2084,6 +2320,20 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnTrackedDeviceOrientation(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "ConfirmRadial" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnConfirmRadial(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "CalcelRadial" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnCalcelRadial(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Dialogue" which allows adding and removing callbacks.
