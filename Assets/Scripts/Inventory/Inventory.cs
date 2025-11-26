@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿﻿using System.Collections.Generic;
 using UnityEngine;
 
 namespace Inventory
@@ -29,98 +29,39 @@ namespace Inventory
 
         public bool AddItem(ItemData itemData, int quantity)
         {
-            if (itemData == null || quantity <= 0)
+            if (!IsValidInput(itemData, quantity)) 
                 return false;
 
-            List<InventoryItem> targetList = itemData.IsLimb ? limbs : items;
-            int maxCap = itemData.IsLimb ? maxLimbCapacity : maxCapacity;
+            var targetList = GetTargetList(itemData);
+            var maxCap = GetMaxCapacity(itemData);
+            var remainingQuantity = TryStackToExistingItems(targetList, itemData, quantity);
 
-            int remainingQuantity = quantity;
-
-            // Intentar stackear en items existentes
-            foreach (var existingItem in targetList)
-            {
-                if (existingItem.CanStack(itemData))
-                {
-                    remainingQuantity = existingItem.AddQuantity(remainingQuantity);
-                    if (remainingQuantity <= 0)
-                        return true;
-                }
-            }
-
-            // Crear nuevos slots si es necesario
-            while (remainingQuantity > 0 && targetList.Count < maxCap)
-            {
-                int amountForNewStack = Mathf.Min(remainingQuantity, itemData.MaxStackSize);
-                targetList.Add(new InventoryItem(itemData, amountForNewStack));
-                remainingQuantity -= amountForNewStack;
-            }
-
-            return remainingQuantity <= 0;
+            return CreateNewStacks(targetList, itemData, remainingQuantity, maxCap);
         }
 
         public bool Contains(ItemData itemData)
         {
-            if (itemData == null)
+            if (itemData == null) 
                 return false;
 
-            List<InventoryItem> targetList = itemData.IsLimb ? limbs : items;
-
-            foreach (var item in targetList)
-            {
-                if (item.Data == itemData)
-                    return true;
-            }
-
-            return false;
+            return FindItem(GetTargetList(itemData), itemData) != null;
         }
 
         public InventoryItem GetItem(ItemData itemData)
         {
-            if (itemData == null)
+            if (itemData == null) 
                 return null;
 
-            List<InventoryItem> targetList = itemData.IsLimb ? limbs : items;
-
-            foreach (var item in targetList)
-            {
-                if (item.Data == itemData)
-                    return item;
-            }
-
-            return null;
+            return FindItem(GetTargetList(itemData), itemData);
         }
 
         public bool RemoveItem(ItemData itemData, int quantity = 1)
         {
-            if (itemData == null || quantity <= 0)
+            if (!IsValidInput(itemData, quantity)) 
                 return false;
 
-            List<InventoryItem> targetList = itemData.IsLimb ? limbs : items;
-            int remainingToRemove = quantity;
-
-            for (int i = targetList.Count - 1; i >= 0; i--)
-            {
-                if (targetList[i].Data == itemData)
-                {
-                    int itemQuantity = targetList[i].Quantity;
-                    if (itemQuantity <= remainingToRemove)
-                    {
-                        remainingToRemove -= itemQuantity;
-                        targetList.RemoveAt(i);
-                    }
-                    else
-                    {
-                        targetList[i].RemoveQuantity(remainingToRemove);
-                        remainingToRemove = 0;
-                    }
-
-                    if (remainingToRemove <= 0)
-                        return true;
-                }
-            }
-
-            return false;
+            var targetList = GetTargetList(itemData);
+            return RemoveItemsFromList(targetList, itemData, quantity);
         }
 
         public void Clear()
@@ -131,11 +72,103 @@ namespace Inventory
 
         public int GetItemCount(ItemData itemData)
         {
-            if (itemData == null)
+            if (itemData == null) 
                 return 0;
 
-            List<InventoryItem> targetList = itemData.IsLimb ? limbs : items;
-            int count = 0;
+            return CalculateTotalQuantity(GetTargetList(itemData), itemData);
+        }
+
+        #region Private Helper Methods
+
+        private bool IsValidInput(ItemData itemData, int quantity)
+        {
+            return itemData != null && quantity > 0;
+        }
+
+        private List<InventoryItem> GetTargetList(ItemData itemData)
+        {
+            return itemData.IsLimb ? limbs : items;
+        }
+
+        private int GetMaxCapacity(ItemData itemData)
+        {
+            return itemData.IsLimb ? maxLimbCapacity : maxCapacity;
+        }
+
+        private int TryStackToExistingItems(List<InventoryItem> targetList, ItemData itemData, int quantity)
+        {
+            var remainingQuantity = quantity;
+
+            foreach (var existingItem in targetList)
+            {
+                if (!existingItem.CanStack(itemData)) 
+                    continue;
+
+                remainingQuantity = existingItem.AddQuantity(remainingQuantity);
+                if (remainingQuantity <= 0) 
+                    break;
+            }
+
+            return remainingQuantity;
+        }
+
+        private bool CreateNewStacks(List<InventoryItem> targetList, ItemData itemData, int quantity, int maxCap)
+        {
+            var remainingQuantity = quantity;
+
+            while (remainingQuantity > 0 && targetList.Count < maxCap)
+            {
+                var amountForNewStack = Mathf.Min(remainingQuantity, itemData.MaxStackSize);
+                targetList.Add(new InventoryItem(itemData, amountForNewStack));
+                remainingQuantity -= amountForNewStack;
+            }
+
+            return remainingQuantity <= 0;
+        }
+
+        private InventoryItem FindItem(List<InventoryItem> targetList, ItemData itemData)
+        {
+            foreach (var item in targetList)
+            {
+                if (item.Data == itemData)
+                    return item;
+            }
+
+            return null;
+        }
+
+        private bool RemoveItemsFromList(List<InventoryItem> targetList, ItemData itemData, int quantity)
+        {
+            var remainingToRemove = quantity;
+
+            for (var i = targetList.Count - 1; i >= 0; i--)
+            {
+                if (targetList[i].Data != itemData) 
+                    continue;
+
+                var itemQuantity = targetList[i].Quantity;
+                
+                if (itemQuantity <= remainingToRemove)
+                {
+                    remainingToRemove -= itemQuantity;
+                    targetList.RemoveAt(i);
+                }
+                else
+                {
+                    targetList[i].RemoveQuantity(remainingToRemove);
+                    remainingToRemove = 0;
+                }
+
+                if (remainingToRemove <= 0)
+                    return true;
+            }
+
+            return false;
+        }
+
+        private int CalculateTotalQuantity(List<InventoryItem> targetList, ItemData itemData)
+        {
+            var count = 0;
 
             foreach (var item in targetList)
             {
@@ -145,6 +178,8 @@ namespace Inventory
 
             return count;
         }
+
+        #endregion
     }
 }
 

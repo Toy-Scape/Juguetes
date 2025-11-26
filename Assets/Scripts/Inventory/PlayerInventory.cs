@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.Events;
 using Inventory.UI;
 
@@ -6,136 +7,220 @@ namespace Inventory
 {
     /// <summary>
     /// Componente principal del inventario del jugador.
-    /// Añádelo al Player y todo funciona automáticamente.
+    /// Gestiona la comunicación entre el modelo de inventario y la capa de presentación.
     /// </summary>
     public class PlayerInventory : MonoBehaviour
     {
+        #region Constantes
+        
+        private const string LogPrefix = "[PlayerInventory]";
+        private const string WarningNullItem = "ItemData es null";
+        private const string WarningFullInventory = "Inventario lleno, no se pudo añadir: {0}";
+        
+        #endregion
+
+        #region Campos Serializados
+        
         [Header("Configuración")]
         [SerializeField] private int maxCapacity = 20;
         [SerializeField] private int maxLimbCapacity = 4;
         
         [Header("Debug")]
-        [SerializeField] private bool showDebugLogs = true;
+        [SerializeField] private bool enableDebugLogs = true;
 
-        // Eventos C# (no aparecen en el Inspector)
+        #endregion
+
+        #region Eventos
+        
         [Header("Eventos")]
-        // Inicializamos para que no sean null y otros componentes puedan suscribirse sin hacerlo en el Inspector.
         public UnityEvent<ItemData, int> onItemAdded = new UnityEvent<ItemData, int>();
         public UnityEvent<ItemData, int> onItemRemoved = new UnityEvent<ItemData, int>();
+        
+        #endregion
+
+        #region Campos Privados
+        
         private Inventory _inventory;
+        private InventoryUI _cachedUI;
+        
+        #endregion
 
+        #region Propiedades Públicas
+        
         public Inventory Inventory => _inventory;
+        
+        #endregion
 
+        #region Métodos Unity
+        
         private void Awake()
+        {
+            InitializeInventory();
+        }
+
+        private void OnToggleInventory()
+        {
+            if (TryGetOrCacheUI(out var ui))
+            {
+                ui.ToggleInventory();
+            }
+            else
+            {
+                // Fallback: mostrar info de debug si no hay UI disponible
+                LogInventoryInfo();
+            }
+        }
+
+        #endregion
+
+        #region API Pública
+
+        /// <summary>
+        /// Añade un ítem al inventario.
+        /// </summary>
+        /// <param name="itemData">Los datos del ítem a añadir</param>
+        /// <param name="quantity">Cantidad a añadir (por defecto 1)</param>
+        /// <returns>True si se añadió correctamente, false si el inventario está lleno</returns>
+        public bool AddItem(ItemData itemData, int quantity = 1)
+        {
+            if (!ValidateItemData(itemData)) return false;
+
+            var success = _inventory.AddItem(itemData, quantity);
+
+            if (success)
+            {
+                OnItemAddedSuccessfully(itemData, quantity);
+            }
+            else
+            {
+                LogWarningIfEnabled(string.Format(WarningFullInventory, itemData.name));
+            }
+
+            return success;
+        }
+
+        /// <summary>
+        /// Elimina un ítem del inventario.
+        /// </summary>
+        /// <param name="itemData">Los datos del ítem a eliminar</param>
+        /// <param name="quantity">Cantidad a eliminar (por defecto 1)</param>
+        /// <returns>True si se eliminó correctamente, false si no hay suficientes ítems</returns>
+        public bool RemoveItem(ItemData itemData, int quantity = 1)
+        {
+            if (!ValidateItemData(itemData)) return false;
+
+            var success = _inventory.RemoveItem(itemData, quantity);
+
+            if (success)
+            {
+                OnItemRemovedSuccessfully(itemData, quantity);
+            }
+
+            return success;
+        }
+
+        /// <summary>
+        /// Verifica si el inventario contiene un ítem específico.
+        /// </summary>
+        public bool Contains(ItemData itemData) => _inventory.Contains(itemData);
+
+        /// <summary>
+        /// Obtiene la cantidad total de un ítem en el inventario.
+        /// </summary>
+        public int GetItemCount(ItemData itemData) => _inventory.GetItemCount(itemData);
+
+        /// <summary>
+        /// Obtiene la primera instancia de un ítem del inventario.
+        /// </summary>
+        public InventoryItem GetItem(ItemData itemData) => _inventory.GetItem(itemData);
+
+        /// <summary>
+        /// Limpia completamente el inventario.
+        /// </summary>
+        public void ClearInventory()
+        {
+            _inventory.Clear();
+            LogIfEnabled("Inventario limpiado");
+        }
+
+        #endregion
+
+        #region Métodos Privados
+
+        private void InitializeInventory()
         {
             _inventory = new Inventory(maxCapacity, maxLimbCapacity);
         }
 
-        #region Input Actions (Unity Messages)
-
-        void OnToggleInventory()
+        private bool TryGetOrCacheUI(out InventoryUI ui)
         {
-            // Localizar la UI registrada mediante el registro central.
-            var ui = InventoryUIRegistry.Get();
-            if (ui != null)
+            if (_cachedUI != null)
             {
-                ui.ToggleInventory();
-                return;
+                ui = _cachedUI;
+                return true;
             }
 
-            // Si no hay UI registrada, dejamos el comportamiento de debug para diagnóstico.
-            ShowInventoryInfo();
+            _cachedUI = InventoryUIRegistry.Get();
+            ui = _cachedUI;
+            return _cachedUI != null;
+        }
+
+        private bool ValidateItemData(ItemData itemData)
+        {
+            if (itemData != null) return true;
+            
+            LogWarningIfEnabled(WarningNullItem);
+            return false;
+        }
+
+        private void OnItemAddedSuccessfully(ItemData itemData, int quantity)
+        {
+            onItemAdded?.Invoke(itemData, quantity);
+            LogIfEnabled($"✓ Añadido: {itemData.name} x{quantity}");
+        }
+
+        private void OnItemRemovedSuccessfully(ItemData itemData, int quantity)
+        {
+            onItemRemoved?.Invoke(itemData, quantity);
+            LogIfEnabled($"✓ Eliminado: {itemData.name} x{quantity}");
+        }
+
+        private void LogInventoryInfo()
+        {
+            if (!enableDebugLogs) return;
+
+            Debug.Log($"{LogPrefix} === INVENTARIO DEL JUGADOR ===");
+            LogItemList("Items normales", _inventory.Items, maxCapacity);
+            LogItemList("Extremidades", _inventory.Limbs, maxLimbCapacity);
+            Debug.Log($"{LogPrefix} ==============================");
+        }
+
+        private void LogItemList(string categoryName, IReadOnlyList<InventoryItem> items, int capacity)
+        {
+            Debug.Log($"{LogPrefix} {categoryName}: {items.Count}/{capacity}");
+            
+            foreach (var item in items)
+            {
+                Debug.Log($"{LogPrefix}   - {item.Data.ItemName} x{item.Quantity}");
+            }
+        }
+
+        private void LogIfEnabled(string message)
+        {
+            if (enableDebugLogs)
+            {
+                Debug.Log($"{LogPrefix} {message}");
+            }
+        }
+
+        private void LogWarningIfEnabled(string message)
+        {
+            if (enableDebugLogs)
+            {
+                Debug.LogWarning($"{LogPrefix} {message}");
+            }
         }
 
         #endregion
-
-        #region Public API
-
-        public bool AddItem(ItemData itemData, int quantity = 1)
-        {
-            if (itemData == null)
-            {
-                Debug.LogWarning("[PlayerInventory] ItemData es null");
-                return false;
-            }
-
-            bool success = _inventory.AddItem(itemData, quantity);
-
-            if (success)
-            {
-                onItemAdded?.Invoke(itemData, quantity);
-                
-                if (showDebugLogs)
-                    Debug.Log($"✓ Añadido: {itemData.name} x{quantity}");
-            }
-            else
-            {
-                if (showDebugLogs)
-                    Debug.LogWarning($"✗ Inventario lleno, no se pudo añadir: {itemData.name}");
-            }
-
-            return success;
-        }
-
-        public bool RemoveItem(ItemData itemData, int quantity = 1)
-        {
-            if (itemData == null) return false;
-
-            bool success = _inventory.RemoveItem(itemData, quantity);
-
-            if (success)
-            {
-                onItemRemoved?.Invoke(itemData, quantity);
-                
-                if (showDebugLogs)
-                    Debug.Log($"✓ Eliminado: {itemData.name} x{quantity}");
-            }
-
-            return success;
-        }
-
-        public bool Contains(ItemData itemData)
-        {
-            return _inventory.Contains(itemData);
-        }
-
-        public int GetItemCount(ItemData itemData)
-        {
-            return _inventory.GetItemCount(itemData);
-        }
-
-        public InventoryItem GetItem(ItemData itemData)
-        {
-            return _inventory.GetItem(itemData);
-        }
-
-        public void ClearInventory()
-        {
-            _inventory.Clear();
-            if (showDebugLogs)
-                Debug.Log("Inventario limpiado");
-        }
-
-        #endregion
-
-        private void ShowInventoryInfo()
-        {
-            Debug.Log("=== INVENTARIO DEL JUGADOR ===");
-            Debug.Log($"Items normales: {_inventory.Items.Count}/{maxCapacity}");
-            
-            foreach (var item in _inventory.Items)
-            {
-                Debug.Log($"  - {item.Data.ItemName} x{item.Quantity}");
-            }
-            
-            Debug.Log($"Extremidades: {_inventory.Limbs.Count}/{maxLimbCapacity}");
-            
-            foreach (var limb in _inventory.Limbs)
-            {
-                Debug.Log($"  - {limb.Data.ItemName} x{limb.Quantity}");
-            }
-            
-            Debug.Log("==============================");
-        }
     }
 }

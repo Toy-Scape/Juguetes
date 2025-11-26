@@ -299,12 +299,8 @@ namespace Inventory.UI
 
         private void OnInventoryChanged(ItemData itemData, int quantity)
         {
-            // Siempre actualizar la UI cuando cambie el inventario
-            // Esto asegura que cuando se abra el inventario, los datos ya estén actualizados
-            if (playerInventory != null && playerInventory.Inventory != null)
-            {
-                RefreshUI();
-            }
+            // Siempre refresh en memoria; si el panel está abierto, refrescamos la UI visible.
+            RefreshUI();
         }
 
         #endregion
@@ -431,4 +427,3 @@ namespace Inventory.UI
         #endregion
     }
 }
-

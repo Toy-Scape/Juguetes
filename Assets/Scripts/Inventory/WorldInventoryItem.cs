@@ -1,6 +1,5 @@
-﻿using InteractionSystem.Core;
-using UnityEngine;
-using InteractionSystem.Interfaces;
+﻿using UnityEngine;
+using InteractionSystem.Core;
 
 namespace Inventory
 {
@@ -12,25 +11,27 @@ namespace Inventory
     public class WorldInventoryItem : InteractableBase
     {
         [Header("Item Configuration")]
-        [SerializeField] private ItemData itemData;
+        [SerializeField] private ItemData itemData = default;
         [SerializeField, Min(1)] private int quantity = 1;
-        
-        private void OnValidate()
+
+        void OnValidate ()
         {
             if (itemData == null)
-            {
                 Debug.LogWarning($"[WorldInventoryItem] Asigna un ItemData en {gameObject.name}", this);
-            }
 
-            // Asegurar que tenga Collider
             if (GetComponent<Collider>() == null)
-            {
                 Debug.LogWarning($"[WorldInventoryItem] {gameObject.name} necesita un Collider", this);
-            }
-            
         }
 
-        public override void Interact()
+        void OnDrawGizmos ()
+        {
+            if (itemData == null) return;
+
+            Gizmos.color = itemData.IsLimb ? Color.red : Color.yellow;
+            Gizmos.DrawWireSphere(transform.position, 0.3f);
+        }
+
+        public override void Interact ()
         {
             if (itemData == null)
             {
@@ -38,50 +39,38 @@ namespace Inventory
                 return;
             }
 
-            // Buscar el PlayerInventory en la escena
             PlayerInventory playerInventory = FindPlayerInventory();
-
             if (playerInventory == null)
             {
                 Debug.LogWarning("[WorldInventoryItem] No se encontró PlayerInventory en el Player");
                 return;
             }
 
-            // Intentar añadir el item al inventario
             bool success = playerInventory.AddItem(itemData, quantity);
-
             if (success)
-            {
                 Destroy(gameObject);
-            }
         }
 
-        public override bool IsInteractable()
+        public override bool IsInteractable ()
         {
             return itemData != null && quantity > 0;
         }
 
-        private PlayerInventory FindPlayerInventory()
+        private PlayerInventory FindPlayerInventory ()
         {
-            // Intentar encontrar por tag Player primero
-            GameObject player = GameObject.FindGameObjectWithTag("Player");
-            if (player != null)
+            try
             {
+                GameObject player = GameObject.FindGameObjectWithTag("Player");
                 PlayerInventory inventory = player.GetComponent<PlayerInventory>();
-                if (inventory != null) return inventory;
+                if (inventory != null)
+                    return inventory;
             }
-
-            // Fallback: buscar en toda la escena
-            return FindFirstObjectByType<PlayerInventory>();
-        }
-
-        private void OnDrawGizmos()
-        {
-            if (itemData != null)
+            catch (UnityException)
             {
-                Gizmos.color = itemData.IsLimb ? Color.red : Color.yellow;
-                Gizmos.DrawWireSphere(transform.position, 0.3f);
+                // No hay objeto con tag Player
             }
+
+            return UnityEngine.Object.FindFirstObjectByType<PlayerInventory>();
         }
     }
 }
