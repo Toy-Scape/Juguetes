@@ -15,7 +15,6 @@ public class PlayerContext
     public bool IsGrabbingLedge { get; set; }
 
     public bool IsInteracting { get; set; }
-    public bool IsAttacking { get; set; }
     public bool NextLimb { get; set; }
     public bool PreviousLimb { get; set; }
 }

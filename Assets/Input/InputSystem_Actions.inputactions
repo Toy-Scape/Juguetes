@@ -25,15 +25,6 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Attack",
-                    "type": "Value",
-                    "id": "6c2ab1b8-8984-453a-af3d-a3c78ae1679a",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": true
-                },
-                {
                     "name": "Interact",
                     "type": "Button",
                     "id": "852140f2-7766-474d-8707-702459ba45f3",
@@ -89,7 +80,7 @@
                 },
                 {
                     "name": "Sprint",
-                    "type": "Value",
+                    "type": "Button",
                     "id": "641cd816-40e6-41b4-8c3d-04687c349290",
                     "expectedControlType": "",
                     "processors": "",
@@ -131,6 +122,24 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "Aim",
+                    "type": "Button",
+                    "id": "68069441-135d-4932-ba35-357eae7e925c",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Shoot",
+                    "type": "Button",
+                    "id": "69ade808-57ad-45d4-86a0-fed1cecdb8b9",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -301,72 +310,6 @@
                 },
                 {
                     "name": "",
-                    "id": "143bb1cd-cc10-4eca-a2f0-a3664166fe91",
-                    "path": "<Gamepad>/buttonWest",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Gamepad",
-                    "action": "Attack",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "05f6913d-c316-48b2-a6bb-e225f14c7960",
-                    "path": "<Mouse>/leftButton",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Keyboard&Mouse",
-                    "action": "Attack",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "886e731e-7071-4ae4-95c0-e61739dad6fd",
-                    "path": "<Touchscreen>/primaryTouch/tap",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Touch",
-                    "action": "Attack",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "ee3d0cd2-254e-47a7-a8cb-bc94d9658c54",
-                    "path": "<Joystick>/trigger",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Joystick",
-                    "action": "Attack",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "8255d333-5683-4943-a58a-ccb207ff1dce",
-                    "path": "<XRController>/{PrimaryAction}",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "XR",
-                    "action": "Attack",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "b3c1c7f0-bd20-4ee7-a0f1-899b24bca6d7",
-                    "path": "<Keyboard>/enter",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard&Mouse",
-                    "action": "Attack",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "cbac6039-9c09-46a1-b5f2-4e5124ccb5ed",
                     "path": "<Keyboard>/2",
                     "interactions": "",
@@ -402,7 +345,7 @@
                     "name": "",
                     "id": "f2e9ba44-c423-42a7-ad56-f20975884794",
                     "path": "<Keyboard>/leftShift",
-                    "interactions": "",
+                    "interactions": "Press(behavior=2)",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
                     "action": "Sprint",
@@ -588,10 +531,21 @@
                 {
                     "name": "",
                     "id": "36ea650f-548f-486c-b152-d77998f970ce",
-                    "path": "<Gamepad>/rightTrigger",
+                    "path": "<Gamepad>/rightShoulder",
                     "interactions": "Press(behavior=2)",
                     "processors": "",
                     "groups": ";Gamepad",
+                    "action": "OpenRadialMenu",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "52544ffb-197c-4c26-a3fd-d8a4ee665e5c",
+                    "path": "<Gamepad>/leftShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
                     "action": "OpenRadialMenu",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -626,6 +580,50 @@
                     "processors": "",
                     "groups": ";Keyboard&Mouse;Touch",
                     "action": "PointRadialMenu",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "574d09b3-858e-4611-9ef8-d1db3ddae804",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "Aim",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7a8822d8-1ca2-4a01-9d07-9a6ae49a8da2",
+                    "path": "<Gamepad>/leftTrigger",
+                    "interactions": "Press(behavior=2)",
+                    "processors": "",
+                    "groups": ";Gamepad",
+                    "action": "Aim",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "5dc242f3-8532-4e1a-a64b-24bef9578633",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Shoot",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "967b2bbe-ee67-4e06-b3c5-dd2a99c06ee5",
+                    "path": "<Gamepad>/rightTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Shoot",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -7,16 +7,4 @@ public class NormalArmSO : LimbSO
     {
         LimbName = "Brazo";
     }
-
-    public override void OnEquip (LimbContext context)
-    {
-        base.OnEquip(context);
-        Debug.Log("Equipado brazo normal");
-    }
-
-    public override void OnUnequip (LimbContext context)
-    {
-        base.OnUnequip(context);
-        Debug.Log("Desequipado brazo normal");
-    }
 }

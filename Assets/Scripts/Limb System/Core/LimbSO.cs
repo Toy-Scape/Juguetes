@@ -1,23 +1,32 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-[CreateAssetMenu(menuName = "Toy/Limb")]
+[CreateAssetMenu(menuName = "Limb/Limb")]
 public class LimbSO : ScriptableObject
 {
-    [field: SerializeField] public string LimbName { get; private set; }
-    [field: SerializeField] public IAbility ActiveAbility { get; private set; }
-    [field: SerializeField] public ISecondaryAbility SecondaryAbility { get; private set; }
-    [field: SerializeField] public List<IPassiveAbility> PassiveAbilities { get; private set; }
+    public string LimbName;
+
+    [SerializeField] protected IActiveAbility activeAbility;
+    [SerializeField] protected ISecondaryAbility secondaryAbility;
+    [SerializeField] protected IPassiveAbility passiveAbility;
 
     public void OnEquip (LimbContext context)
     {
-        foreach (var passive in PassiveAbilities)
-            passive.Apply(context);
+        passiveAbility?.Apply(context);
     }
 
     public void OnUnequip (LimbContext context)
     {
-        foreach (var passive in PassiveAbilities)
-            passive.Remove(context);
+        passiveAbility?.Remove(context);
+    }
+
+    public void UseActive (LimbContext context)
+    {
+        activeAbility?.Execute(context);
+    }
+
+    public void UseSecondary (LimbContext context)
+    {
+        if (secondaryAbility?.CanExecute(context) ?? false)
+            secondaryAbility.Execute(context);
     }
 }

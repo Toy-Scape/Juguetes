@@ -11,8 +11,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform cameraTransform;
     [SerializeField] private TMP_Text TMPPlayerState;
     [SerializeField] private PlayerInteractor playerInteractor;
-    [SerializeField] private LimbContextSO limbContextSO;
-
+    [SerializeField] private LimbManager limbManager;
 
     private CharacterController controller;
 
@@ -119,7 +118,6 @@ public class PlayerController : MonoBehaviour
     void LateUpdate ()
     {
         playerContext.IsInteracting = false;
-        playerContext.IsAttacking = false;
         playerContext.NextLimb = false;
         playerContext.PreviousLimb = false;
     }
@@ -171,10 +169,6 @@ public class PlayerController : MonoBehaviour
         playerContext.IsInteracting = true;
     }
 
-    void OnAttack ()
-    {
-        playerContext.IsAttacking = true;
-    }
 
     void OnGrab (InputValue value)
     {
@@ -189,6 +183,36 @@ public class PlayerController : MonoBehaviour
     void OnPrevious ()
     {
         playerContext.PreviousLimb = true;
+    }
+
+
+    public void OnAim (InputValue value)
+    {
+        bool pressed = value.isPressed;
+
+        var device = value.Get<float>(); 
+
+        if (Mouse.current != null && pressed)
+        {
+            limbManager.GetContext().IsAiming = !limbManager.GetContext().IsAiming;
+            Debug.Log($"Aim (mouse toggle): {limbManager.GetContext().IsAiming}");
+        }
+        else if (Gamepad.current != null)
+        {
+            limbManager.GetContext().IsAiming = pressed;
+            Debug.Log($"Aim (gamepad hold): {limbManager.GetContext().IsAiming}");
+        }
+
+        if (limbManager.GetContext().IsAiming)
+            limbManager.UseSecondary();
+    }
+
+    public void OnShoot (InputValue value)
+    {
+        bool pressed = value.isPressed;
+
+        if (pressed)
+            limbManager.UseActive();
     }
     #endregion
 

@@ -1,13 +1,35 @@
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Limb/HookArm")]
-public class HookArmSO : AimableLimbSO
+public class HookArmSO : LimbSO
 {
     private void OnEnable ()
     {
         LimbName = "Brazo Gancho";
 
-        ActiveAbility = new GrappleAbility();
-        SecondaryAbility = new AimAbility(this);
+        secondaryAbility = new AimAbility();
+        activeAbility = new ShootHookAbility();
+    }
+}
+
+public class AimAbility : ISecondaryAbility
+{
+    public bool CanExecute (LimbContext context) => true;
+    public void Execute (LimbContext context)
+    {
+        context.IsAiming = true;
+        Debug.Log("Apuntando gancho!");
+
+    }
+}
+
+public class ShootHookAbility : IActiveAbility
+{
+    public void Execute (LimbContext context)
+    {
+        if (context.IsAiming)
+        {
+            Debug.Log("Disparando gancho!");
+        }
     }
 }

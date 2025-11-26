@@ -1,44 +1,61 @@
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Limb/StrongArm")]
-public class StrongArmSO : AimableLimbSO
+public class StrongArmSO : LimbSO
 {
     private void OnEnable ()
     {
-        PassiveAbility = new StrengthPassive();
-        SecondaryAbility = new AimAbility(this);
-    }
+        LimbName = "Brazo Fuerte";
 
-    public override void Aim (LimbContext context)
-    {
-        if (context.HasObjectInHand)
-        {
-            base.Aim(context); 
-            Debug.Log("Apuntando con objeto pesado...");
-        }
-        else
-        {
-            Debug.Log("No tienes objeto en la mano, no puedes apuntar.");
-        }
+        secondaryAbility = new AimWithObjectAbility();
+        activeAbility = new ThrowObjectAbility();
+        passiveAbility = new SuperStrengthPassive();
     }
+}
 
-    public override void Shoot (LimbContext context)
+// Secundaria
+public class AimWithObjectAbility : ISecondaryAbility
+{
+    public bool CanExecute (LimbContext context) => true;// context.HeldObject != null;
+    public void Execute (LimbContext context)
     {
-        if (context.IsAiming && context.HasObjectInHand)
+        Debug.Log($"Apuntando con el brazo fuerte!");
+        context.IsAiming = true;
+    }
+}
+
+public class ThrowObjectAbility : IActiveAbility
+{
+    public void Execute (LimbContext context)
+    {
+        //if (context.IsAiming && context.HeldObject != null)
+        if (context.IsAiming)
         {
-            Debug.Log("Lanzando objeto pesado!");
-            ActiveAbility?.Activate(context);
+            // Revisar si esto funciona una vez tengamos bien el sistema de agarrar objetos...
+            //var rb = context.HeldObject.GetComponent<Rigidbody>();
+            //if (rb != null)
+            //{
+            //    rb.AddForce(Vector3.forward * 10f, ForceMode.Impulse);
+            //}
+
+            Debug.Log($"Objeto lanzado!");
+            context.HeldObject = null;
             context.IsAiming = false;
         }
-        else
-        {
-            Debug.Log("No estás apuntando o no tienes objeto.");
-        }
+    }
+}
+
+
+
+public class SuperStrengthPassive : IPassiveAbility
+{
+    public void Apply (LimbContext context)
+    {
+        context.CanLiftHeavyObjects = true;
     }
 
-    public override void StopAim (LimbContext context)
+    public void Remove (LimbContext context)
     {
-        base.StopAim(context);
-        Debug.Log("Dejaste de apuntar con el objeto pesado.");
+        context.CanLiftHeavyObjects = false;
     }
 }

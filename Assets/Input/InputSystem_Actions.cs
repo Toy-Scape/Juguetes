@@ -111,15 +111,6 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""Attack"",
-                    ""type"": ""Value"",
-                    ""id"": ""6c2ab1b8-8984-453a-af3d-a3c78ae1679a"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": true
-                },
-                {
                     ""name"": ""Interact"",
                     ""type"": ""Button"",
                     ""id"": ""852140f2-7766-474d-8707-702459ba45f3"",
@@ -175,7 +166,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""Sprint"",
-                    ""type"": ""Value"",
+                    ""type"": ""Button"",
                     ""id"": ""641cd816-40e6-41b4-8c3d-04687c349290"",
                     ""expectedControlType"": """",
                     ""processors"": """",
@@ -217,6 +208,24 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Aim"",
+                    ""type"": ""Button"",
+                    ""id"": ""68069441-135d-4932-ba35-357eae7e925c"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Shoot"",
+                    ""type"": ""Button"",
+                    ""id"": ""69ade808-57ad-45d4-86a0-fed1cecdb8b9"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -387,72 +396,6 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""143bb1cd-cc10-4eca-a2f0-a3664166fe91"",
-                    ""path"": ""<Gamepad>/buttonWest"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";Gamepad"",
-                    ""action"": ""Attack"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""05f6913d-c316-48b2-a6bb-e225f14c7960"",
-                    ""path"": ""<Mouse>/leftButton"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""Attack"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""886e731e-7071-4ae4-95c0-e61739dad6fd"",
-                    ""path"": ""<Touchscreen>/primaryTouch/tap"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";Touch"",
-                    ""action"": ""Attack"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""ee3d0cd2-254e-47a7-a8cb-bc94d9658c54"",
-                    ""path"": ""<Joystick>/trigger"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Joystick"",
-                    ""action"": ""Attack"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""8255d333-5683-4943-a58a-ccb207ff1dce"",
-                    ""path"": ""<XRController>/{PrimaryAction}"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""XR"",
-                    ""action"": ""Attack"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""b3c1c7f0-bd20-4ee7-a0f1-899b24bca6d7"",
-                    ""path"": ""<Keyboard>/enter"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""Attack"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""cbac6039-9c09-46a1-b5f2-4e5124ccb5ed"",
                     ""path"": ""<Keyboard>/2"",
                     ""interactions"": """",
@@ -488,7 +431,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""name"": """",
                     ""id"": ""f2e9ba44-c423-42a7-ad56-f20975884794"",
                     ""path"": ""<Keyboard>/leftShift"",
-                    ""interactions"": """",
+                    ""interactions"": ""Press(behavior=2)"",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""Sprint"",
@@ -674,10 +617,21 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""36ea650f-548f-486c-b152-d77998f970ce"",
-                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
                     ""interactions"": ""Press(behavior=2)"",
                     ""processors"": """",
                     ""groups"": "";Gamepad"",
+                    ""action"": ""OpenRadialMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""52544ffb-197c-4c26-a3fd-d8a4ee665e5c"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
                     ""action"": ""OpenRadialMenu"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -712,6 +666,50 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse;Touch"",
                     ""action"": ""PointRadialMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""574d09b3-858e-4611-9ef8-d1db3ddae804"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Aim"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7a8822d8-1ca2-4a01-9d07-9a6ae49a8da2"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""interactions"": ""Press(behavior=2)"",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""Aim"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5dc242f3-8532-4e1a-a64b-24bef9578633"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Shoot"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""967b2bbe-ee67-4e06-b3c5-dd2a99c06ee5"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Shoot"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1413,7 +1411,6 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
         m_Player_Look = m_Player.FindAction("Look", throwIfNotFound: true);
-        m_Player_Attack = m_Player.FindAction("Attack", throwIfNotFound: true);
         m_Player_Interact = m_Player.FindAction("Interact", throwIfNotFound: true);
         m_Player_Crouch = m_Player.FindAction("Crouch", throwIfNotFound: true);
         m_Player_CrouchToggle = m_Player.FindAction("CrouchToggle", throwIfNotFound: true);
@@ -1425,6 +1422,8 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         m_Player_OpenRadialMenu = m_Player.FindAction("OpenRadialMenu", throwIfNotFound: true);
         m_Player_NavigateRadialMenu = m_Player.FindAction("NavigateRadialMenu", throwIfNotFound: true);
         m_Player_PointRadialMenu = m_Player.FindAction("PointRadialMenu", throwIfNotFound: true);
+        m_Player_Aim = m_Player.FindAction("Aim", throwIfNotFound: true);
+        m_Player_Shoot = m_Player.FindAction("Shoot", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1526,7 +1525,6 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     private List<IPlayerActions> m_PlayerActionsCallbackInterfaces = new List<IPlayerActions>();
     private readonly InputAction m_Player_Move;
     private readonly InputAction m_Player_Look;
-    private readonly InputAction m_Player_Attack;
     private readonly InputAction m_Player_Interact;
     private readonly InputAction m_Player_Crouch;
     private readonly InputAction m_Player_CrouchToggle;
@@ -1538,6 +1536,8 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_OpenRadialMenu;
     private readonly InputAction m_Player_NavigateRadialMenu;
     private readonly InputAction m_Player_PointRadialMenu;
+    private readonly InputAction m_Player_Aim;
+    private readonly InputAction m_Player_Shoot;
     /// <summary>
     /// Provides access to input actions defined in input action map "Player".
     /// </summary>
@@ -1557,10 +1557,6 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Player/Look".
         /// </summary>
         public InputAction @Look => m_Wrapper.m_Player_Look;
-        /// <summary>
-        /// Provides access to the underlying input action "Player/Attack".
-        /// </summary>
-        public InputAction @Attack => m_Wrapper.m_Player_Attack;
         /// <summary>
         /// Provides access to the underlying input action "Player/Interact".
         /// </summary>
@@ -1606,6 +1602,14 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// </summary>
         public InputAction @PointRadialMenu => m_Wrapper.m_Player_PointRadialMenu;
         /// <summary>
+        /// Provides access to the underlying input action "Player/Aim".
+        /// </summary>
+        public InputAction @Aim => m_Wrapper.m_Player_Aim;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/Shoot".
+        /// </summary>
+        public InputAction @Shoot => m_Wrapper.m_Player_Shoot;
+        /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
         public InputActionMap Get() { return m_Wrapper.m_Player; }
@@ -1637,9 +1641,6 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Look.started += instance.OnLook;
             @Look.performed += instance.OnLook;
             @Look.canceled += instance.OnLook;
-            @Attack.started += instance.OnAttack;
-            @Attack.performed += instance.OnAttack;
-            @Attack.canceled += instance.OnAttack;
             @Interact.started += instance.OnInteract;
             @Interact.performed += instance.OnInteract;
             @Interact.canceled += instance.OnInteract;
@@ -1673,6 +1674,12 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @PointRadialMenu.started += instance.OnPointRadialMenu;
             @PointRadialMenu.performed += instance.OnPointRadialMenu;
             @PointRadialMenu.canceled += instance.OnPointRadialMenu;
+            @Aim.started += instance.OnAim;
+            @Aim.performed += instance.OnAim;
+            @Aim.canceled += instance.OnAim;
+            @Shoot.started += instance.OnShoot;
+            @Shoot.performed += instance.OnShoot;
+            @Shoot.canceled += instance.OnShoot;
         }
 
         /// <summary>
@@ -1690,9 +1697,6 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Look.started -= instance.OnLook;
             @Look.performed -= instance.OnLook;
             @Look.canceled -= instance.OnLook;
-            @Attack.started -= instance.OnAttack;
-            @Attack.performed -= instance.OnAttack;
-            @Attack.canceled -= instance.OnAttack;
             @Interact.started -= instance.OnInteract;
             @Interact.performed -= instance.OnInteract;
             @Interact.canceled -= instance.OnInteract;
@@ -1726,6 +1730,12 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @PointRadialMenu.started -= instance.OnPointRadialMenu;
             @PointRadialMenu.performed -= instance.OnPointRadialMenu;
             @PointRadialMenu.canceled -= instance.OnPointRadialMenu;
+            @Aim.started -= instance.OnAim;
+            @Aim.performed -= instance.OnAim;
+            @Aim.canceled -= instance.OnAim;
+            @Shoot.started -= instance.OnShoot;
+            @Shoot.performed -= instance.OnShoot;
+            @Shoot.canceled -= instance.OnShoot;
         }
 
         /// <summary>
@@ -2159,13 +2169,6 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnLook(InputAction.CallbackContext context);
         /// <summary>
-        /// Method invoked when associated input action "Attack" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnAttack(InputAction.CallbackContext context);
-        /// <summary>
         /// Method invoked when associated input action "Interact" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
@@ -2242,6 +2245,20 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnPointRadialMenu(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Aim" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnAim(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Shoot" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnShoot(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "UI" which allows adding and removing callbacks.
