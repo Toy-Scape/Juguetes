@@ -19,6 +19,7 @@ public class RadialMenu : MonoBehaviour
     private List<Button> buttons = new();
     private LimbSO currentSelection;
     private bool isOpen = false;
+    private LimbSO lastSelection;
 
     void Start ()
     {
@@ -121,17 +122,21 @@ public class RadialMenu : MonoBehaviour
         int index = Mathf.FloorToInt(angle / angleStep);
         return limbs[index];
     }
-
-    private LimbSO GetSelectionFromJoystick (Vector2 input, List<LimbSO> limbs)
+    private LimbSO GetSelectionFromJoystick (Vector2 input, List<LimbSO> limbs, float deadzone = 0.2f)
     {
-        if (input == Vector2.zero || limbs.Count == 0) return null;
+        if (limbs.Count == 0) return null;
+
+        if (input.magnitude < deadzone)
+            return lastSelection; 
 
         float angle = Mathf.Atan2(input.y, input.x) * Mathf.Rad2Deg;
         if (angle < 0) angle += 360f;
 
         float angleStep = 360f / limbs.Count;
         int index = Mathf.FloorToInt(angle / angleStep);
-        return limbs[index];
+
+        lastSelection = limbs[index];
+        return lastSelection;
     }
 
     private void HighlightSelection (LimbSO selection)
