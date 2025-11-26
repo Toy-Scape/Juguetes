@@ -4,7 +4,7 @@ using System.Collections.Generic;
 public class LimbManager : MonoBehaviour
 {
     [SerializeField] private LimbContextSO limbContextSO;
-    [SerializeField] private List<LimbSO> availableLimbs;   // ahora son ScriptableObjects
+    [SerializeField] private List<LimbSO> availableLimbs;  
 
     private LimbSO equippedLimb;
 

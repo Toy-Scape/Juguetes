@@ -13,7 +13,7 @@ public class StrongArmSO : AimableLimbSO
     {
         if (context.HasObjectInHand)
         {
-            base.Aim(context); // activa IsAiming y log genérico
+            base.Aim(context); 
             Debug.Log("Apuntando con objeto pesado...");
         }
         else
@@ -27,9 +27,8 @@ public class StrongArmSO : AimableLimbSO
         if (context.IsAiming && context.HasObjectInHand)
         {
             Debug.Log("Lanzando objeto pesado!");
-            // Aquí podrías invocar una habilidad activa si quieres
             ActiveAbility?.Activate(context);
-            context.IsAiming = false; // reset tras disparo
+            context.IsAiming = false;
         }
         else
         {
@@ -39,7 +38,7 @@ public class StrongArmSO : AimableLimbSO
 
     public override void StopAim (LimbContext context)
     {
-        base.StopAim(context); // limpia IsAiming
+        base.StopAim(context);
         Debug.Log("Dejaste de apuntar con el objeto pesado.");
     }
 }

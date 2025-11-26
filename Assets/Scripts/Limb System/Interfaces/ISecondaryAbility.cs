@@ -1,4 +1,4 @@
 ﻿public interface ISecondaryAbility
 {
-    void Perform (LimbContext context);
+    void Execute (LimbContext context);
 }

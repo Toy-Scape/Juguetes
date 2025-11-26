@@ -1,5 +1,5 @@
 public interface IAimable
 {
-	void Aim (LimbContext context);
-	void Shoot (LimbContext context);
+    void StartAiming (LimbContext context);
+    void StopAiming (LimbContext context);
 }

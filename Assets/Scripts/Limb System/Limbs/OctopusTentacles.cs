@@ -7,7 +7,6 @@ public class OctopusTentaclesSO : LimbSO
     {
         LimbName = "Tentáculos de Pulpo";
 
-        // Agrupamos varias pasivas en una sola composite
         PassiveAbility = new CompositePassiveAbility(
             new WallClimbPassive(),
             new SwimPassive()
