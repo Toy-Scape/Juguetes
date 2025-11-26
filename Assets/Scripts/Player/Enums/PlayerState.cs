@@ -8,5 +8,6 @@
     Diving,
     Jumping,
     Falling,
-    LedgeGrabbing
+    LedgeGrabbing,
+    WallWalking
 }

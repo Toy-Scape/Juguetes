@@ -2,7 +2,6 @@ using InteractionSystem.Core;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Windows;
 
 [RequireComponent(typeof(CharacterController))]
 public class PlayerController : MonoBehaviour
@@ -21,6 +20,7 @@ public class PlayerController : MonoBehaviour
     private PlayerStateHandler stateHandler;
     private PlayerPhysicsHandler physicsHandler;
     private PlayerLedgeGrabHandler ledgeGrabHandler;
+    private WallDetectionHandler wallHandler; 
 
     private PlayerContext playerContext = new();
 
@@ -30,13 +30,11 @@ public class PlayerController : MonoBehaviour
 
     void Start ()
     {
-        //Cursor.lockState = CursorLockMode.Locked;
-
         controller = GetComponent<CharacterController>();
 
         var crouchConfig = new CrouchConfig(config.StandingHeight, config.CrouchingHeight);
         var movementConfig = new MovementConfig(config.WalkSpeed, config.SprintSpeed, config.CrouchSpeed,
-                                                config.SwimSpeed, config.DiveSpeed);
+                                                config.SwimSpeed, config.DiveSpeed, config.WallWalkSpeed, config.RotationSpeed);
         var jumpConfig = new JumpConfig(config.JumpHeight, config.Gravity, config.SwimSpeed, config.DiveSpeed);
         var stateConfig = new StateConfig();
         var physicsConfig = new PhysicsConfig(config.Gravity);
@@ -47,10 +45,17 @@ public class PlayerController : MonoBehaviour
         stateHandler = new PlayerStateHandler(stateConfig);
         physicsHandler = new PlayerPhysicsHandler(physicsConfig);
         ledgeGrabHandler = new PlayerLedgeGrabHandler(config, transform);
+        wallHandler = new WallDetectionHandler(transform); // NUEVO
     }
 
     void Update ()
     {
+        // Detección de pared
+        if (playerContext.CanWalkOnWalls)
+        {
+            playerContext.IsOnWall = wallHandler.CheckForWall(playerContext, 1f);
+        }
+
         playerContext.IsGrabbingLedge = TryLedgeGrab();
         if (!playerContext.IsGrabbingLedge)
         {
@@ -58,30 +63,18 @@ public class PlayerController : MonoBehaviour
 
             CurrentState = stateHandler.EvaluateState(playerContext);
 
-            movementHandler.HandleMovement(CurrentState, playerContext.MoveInput, transform);
+            movementHandler.HandleMovement(CurrentState, playerContext.MoveInput, transform, playerContext);
             controller.height = crouchHandler.GetTargetHeight(CurrentState, controller.height);
             playerContext.Velocity = jumpHandler.HandleJump(CurrentState, playerContext.IsJumping, playerContext.Velocity, playerContext.IsInWater, playerContext.IsGrounded);
             playerContext.Velocity = physicsHandler.ApplyGravity(CurrentState, playerContext.Velocity, playerContext.IsGrounded);
 
             controller.Move(movementHandler.GetFinalMove(playerContext.Velocity) * Time.deltaTime);
-
-            //if (playerContext.IsAttacking)
-            //{
-            //    this.playerContext.IsAttacking = false;
-            //}
         }
 
         if (TMPPlayerState != null)
             TMPPlayerState.text = "Current State: " + CurrentState.ToString();
-
     }
 
-    /// <summary>
-    /// Tries to handle ledge grabbing logic.
-    /// </summary>
-    /// <returns>
-    /// True if the player is currently grabbing a ledge; otherwise, false.
-    /// </returns>
     private bool TryLedgeGrab ()
     {
         if (ledgeGrabCooldownTimer > 0f)
@@ -133,64 +126,38 @@ public class PlayerController : MonoBehaviour
         if (other.CompareTag("Water"))
             playerContext.IsInWater = false;
     }
-    #region "Inputs"
-    void OnMove (InputValue value)
-    {
-        playerContext.MoveInput = value.Get<Vector2>();
-    }
 
-    void OnLook (InputValue value)
-    {
-        playerContext.LookInput = value.Get<Vector2>() * config.LookSensitivity;
-    }
+    #region Inputs
+    void OnMove (InputValue value) => playerContext.MoveInput = value.Get<Vector2>();
+
+    void OnLook (InputValue value) => playerContext.LookInput = value.Get<Vector2>() * config.LookSensitivity;
 
     void OnSprint (InputValue value)
     {
-        playerContext.IsSprinting = value.isPressed;
+        bool pressed = value.isPressed;
+        if (Keyboard.current != null)
+            playerContext.IsSprinting = pressed;
+        else if (Gamepad.current != null && pressed)
+            playerContext.IsSprinting = !playerContext.IsSprinting;
     }
 
-    void OnJump (InputValue value)
-    {
-        playerContext.IsJumping = value.isPressed;
-    }
+    void OnJump (InputValue value) => playerContext.IsJumping = value.isPressed;
 
-    void OnCrouch (InputValue value)
-    {
-        playerContext.IsCrouching = value.isPressed;
-    }
+    void OnCrouch (InputValue value) => playerContext.IsCrouching = value.isPressed;
 
-    void OnCrouchToggle ()
-    {
-        playerContext.IsCrouching = !playerContext.IsCrouching;
-    }
+    void OnCrouchToggle () => playerContext.IsCrouching = !playerContext.IsCrouching;
 
-    void OnInteract ()
-    {
-        playerContext.IsInteracting = true;
-    }
+    void OnInteract () => playerContext.IsInteracting = true;
 
+    void OnGrab (InputValue value) => playerContext.IsGrabbing = value.isPressed;
 
-    void OnGrab (InputValue value)
-    {
-        playerContext.IsGrabbing = value.isPressed;
-    }
+    void OnNext () => playerContext.NextLimb = true;
 
-    void OnNext ()
-    {
-        playerContext.NextLimb = true;
-    }
-
-    void OnPrevious ()
-    {
-        playerContext.PreviousLimb = true;
-    }
-
+    void OnPrevious () => playerContext.PreviousLimb = true;
 
     public void OnAim (InputValue value)
     {
         bool pressed = value.isPressed;
-
-        var device = value.Get<float>(); 
 
         if (Mouse.current != null && pressed)
         {
@@ -209,11 +176,8 @@ public class PlayerController : MonoBehaviour
 
     public void OnShoot (InputValue value)
     {
-        bool pressed = value.isPressed;
-
-        if (pressed)
+        if (value.isPressed)
             limbManager.UseActive();
     }
     #endregion
-
 }

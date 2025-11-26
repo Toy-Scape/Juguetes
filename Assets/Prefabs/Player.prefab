@@ -381,10 +381,10 @@ GameObject:
   - component: {fileID: 883425338343852037}
   - component: {fileID: 6351818552598022896}
   - component: {fileID: 4306062687781308959}
-  - component: {fileID: 6629819060316150005}
   - component: {fileID: 3856169263455038750}
-  - component: {fileID: 8163815884479273772}
   - component: {fileID: 8113327342456687462}
+  - component: {fileID: 6629819060316150005}
+  - component: {fileID: 8163815884479273772}
   - component: {fileID: 7905357166921542345}
   - component: {fileID: 6602220929985291046}
   m_Layer: 0
@@ -482,39 +482,6 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &6629819060316150005
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6641168232080197241}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 39ff30d99363aa149bb02a2016f931e2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerControls
-  config:
-    walkSpeed: 4
-    sprintSpeed: 8
-    crouchSpeed: 2
-    swimSpeed: 3
-    diveSpeed: 2
-    lookSensitivity: 1
-    jumpHeight: 2
-    gravity: -9.81
-    standingHeight: 2
-    crouchingHeight: 1
-    ledgeDetectionDistance: 0.5
-    ledgeGrabHeight: 1
-    ledgeClimbUpSpeed: 5
-    ledgeSnapOffsetY: 0.5
-    ledgeForwardOffset: 0.5
-    ledgeGrabCooldown: 0.5
-  cameraTransform: {fileID: 0}
-  TMPPlayerState: {fileID: 0}
-  playerInteractor: {fileID: 8163815884479273772}
-  limbManager: {fileID: 6602220929985291046}
 --- !u!143 &3856169263455038750
 CharacterController:
   m_ObjectHideFlags: 0
@@ -540,30 +507,6 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &8163815884479273772
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6641168232080197241}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d9f593b93ceb5614abb13aec1fe3c284, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerInteractor
-  interactionDistance: 12.72
-  rayOrigin: {fileID: 0}
-  rayOrigins: []
-  outlineColor: {r: 1, g: 0.09411765, b: 0.7960785, a: 1}
-  outlineWidth: 10
-  outlineMode: 1
-  interactionPrompt: {fileID: 0}
-  interactionPromptText: {fileID: 3057687043173027603}
-  interactActionReference: {fileID: 1781555164194001046, guid: 052faaac586de48259a63d0c4782560b, type: 3}
-  fallbackPrompt: E
-  promptWorldOffset: {x: 0, y: 2.41, z: 0}
-  promptFollowSpeed: 7.7
 --- !u!114 &8113327342456687462
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -674,6 +617,63 @@ MonoBehaviour:
   m_DefaultActionMap: 
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!114 &6629819060316150005
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6641168232080197241}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39ff30d99363aa149bb02a2016f931e2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerControls
+  config:
+    walkSpeed: 4
+    sprintSpeed: 8
+    crouchSpeed: 2
+    swimSpeed: 3
+    diveSpeed: 2
+    lookSensitivity: 1
+    jumpHeight: 2
+    gravity: -9.81
+    standingHeight: 2
+    crouchingHeight: 1
+    ledgeDetectionDistance: 0.5
+    ledgeGrabHeight: 1
+    ledgeClimbUpSpeed: 5
+    ledgeSnapOffsetY: 0.5
+    ledgeForwardOffset: 0.5
+    ledgeGrabCooldown: 0.5
+  cameraTransform: {fileID: 0}
+  TMPPlayerState: {fileID: 0}
+  playerInteractor: {fileID: 8163815884479273772}
+  limbManager: {fileID: 6602220929985291046}
+--- !u!114 &8163815884479273772
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6641168232080197241}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9f593b93ceb5614abb13aec1fe3c284, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerInteractor
+  interactionDistance: 12.72
+  rayOrigin: {fileID: 0}
+  rayOrigins: []
+  outlineColor: {r: 1, g: 0.09411765, b: 0.7960785, a: 1}
+  outlineWidth: 10
+  outlineMode: 1
+  interactionPrompt: {fileID: 0}
+  interactionPromptText: {fileID: 3057687043173027603}
+  interactActionReference: {fileID: 1781555164194001046, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  fallbackPrompt: E
+  promptWorldOffset: {x: 0, y: 2.41, z: 0}
+  promptFollowSpeed: 7.7
 --- !u!114 &7905357166921542345
 MonoBehaviour:
   m_ObjectHideFlags: 0

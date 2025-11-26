@@ -16,8 +16,9 @@ public class PlayerMovementHandler
         lastGroundSpeed = config.walkSpeed;
     }
 
-    public void HandleMovement (PlayerState state, Vector2 inputDir, Transform playerTransform)
+    public void HandleMovement (PlayerState state, Vector2 inputDir, Transform playerTransform, PlayerContext playerContext)
     {
+        // Dirección relativa a la cámara
         Vector3 forward = cameraTransform.forward;
         Vector3 right = cameraTransform.right;
         forward.y = 0; right.y = 0;
@@ -25,6 +26,7 @@ public class PlayerMovementHandler
 
         moveDirection = (forward * inputDir.y + right * inputDir.x).normalized;
 
+        // Velocidad según estado
         switch (state)
         {
             case PlayerState.Walking:
@@ -42,6 +44,9 @@ public class PlayerMovementHandler
             case PlayerState.Diving:
                 currentSpeed = config.diveSpeed;
                 break;
+            case PlayerState.WallWalking:
+                currentSpeed = config.wallWalkSpeed; // nuevo valor en MovementConfig
+                break;
             case PlayerState.Jumping:
             case PlayerState.Falling:
                 currentSpeed = lastGroundSpeed;
@@ -54,9 +59,27 @@ public class PlayerMovementHandler
         if (state == PlayerState.Walking || state == PlayerState.Sprinting || state == PlayerState.Crouching)
             lastGroundSpeed = currentSpeed;
 
+        // Ajuste de dirección si está en pared
+        if (state == PlayerState.WallWalking && playerContext.IsOnWall)
+        {
+            moveDirection = Vector3.ProjectOnPlane(moveDirection, playerContext.WallNormal).normalized;
+        }
+
+        // Rotación del jugador
         if (moveDirection.magnitude > 0.1f)
         {
-            Quaternion targetRotation = Quaternion.LookRotation(moveDirection);
+            Quaternion targetRotation;
+
+            if (state == PlayerState.WallWalking && playerContext.IsOnWall)
+            {
+                // Orienta al jugador con la normal de la pared como "up"
+                targetRotation = Quaternion.LookRotation(moveDirection, -playerContext.WallNormal);
+            }
+            else
+            {
+                targetRotation = Quaternion.LookRotation(moveDirection);
+            }
+
             playerTransform.rotation = Quaternion.RotateTowards(
                 playerTransform.rotation,
                 targetRotation,

@@ -17,4 +17,11 @@ public class PlayerContext
     public bool IsInteracting { get; set; }
     public bool NextLimb { get; set; }
     public bool PreviousLimb { get; set; }
+
+    public bool IsAttacking { get; set; }
+    public bool IsAiming { get; set; }
+
+    public bool CanWalkOnWalls { get; set; }   
+    public bool IsOnWall { get; set; }         
+    public Vector3 WallNormal { get; set; }   
 }
