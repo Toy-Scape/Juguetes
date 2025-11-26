@@ -30,6 +30,15 @@ namespace Inventory.UI
         {
             return _registered;
         }
+
+        /// <summary>
+        /// Obtiene la instancia activa de InventoryUI.
+        /// Alias de Get() para mayor claridad en la API pública.
+        /// </summary>
+        public static InventoryUI GetActiveUI()
+        {
+            return _registered;
+        }
     }
 }
 

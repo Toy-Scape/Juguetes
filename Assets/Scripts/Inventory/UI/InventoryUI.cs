@@ -216,6 +216,33 @@ namespace Inventory.UI
 
         #region Actualización UI
 
+        /// <summary>
+        /// Refresca toda la interfaz del inventario para mostrar los items actuales.
+        /// </summary>
+        /// <remarks>
+        /// Este método actualiza todos los slots del inventario, tanto de items normales
+        /// como de extremidades (limbs). Es llamado automáticamente cuando:
+        /// - Se añade un item al inventario
+        /// - Se elimina un item del inventario
+        /// - Se abre el panel del inventario
+        /// 
+        /// También puedes llamarlo manualmente si necesitas forzar una actualización
+        /// de la UI, por ejemplo después de cargar una partida guardada.
+        /// </remarks>
+        /// <example>
+        /// <code>
+        /// // Refrescar la UI después de cargar datos guardados
+        /// void LoadInventory()
+        /// {
+        ///     // ... cargar datos ...
+        ///     var inventoryUI = InventoryUIRegistry.GetActiveUI();
+        ///     if (inventoryUI != null)
+        ///     {
+        ///         inventoryUI.RefreshUI();
+        ///     }
+        /// }
+        /// </code>
+        /// </example>
         public void RefreshUI()
         {
             if (playerInventory == null || playerInventory.Inventory == null)
@@ -307,6 +334,14 @@ namespace Inventory.UI
 
         #region Control de Visibilidad
 
+        /// <summary>
+        /// Alterna la visibilidad del inventario entre abierto y cerrado.
+        /// </summary>
+        /// <remarks>
+        /// Este método es llamado automáticamente por el sistema de Input cuando se presiona
+        /// la tecla configurada para abrir/cerrar el inventario (por defecto TAB).
+        /// También puede ser llamado manualmente desde otros scripts.
+        /// </remarks>
         public void ToggleInventory()
         {
             if (inventoryPanel == null)
@@ -324,6 +359,29 @@ namespace Inventory.UI
             }
         }
 
+        /// <summary>
+        /// Abre el panel del inventario y configura el estado del juego para la UI.
+        /// </summary>
+        /// <remarks>
+        /// Al abrir el inventario:
+        /// - Activa el panel de UI
+        /// - Refresca todos los slots con los items actuales
+        /// - Muestra y desbloquea el cursor del ratón
+        /// - Cambia el mapa de acciones del PlayerInput a "UI" si existe
+        /// 
+        /// Usa este método cuando necesites abrir el inventario programáticamente,
+        /// por ejemplo, al inicio de un tutorial o después de completar una misión.
+        /// </remarks>
+        /// <example>
+        /// <code>
+        /// // Abrir el inventario desde otro script
+        /// var inventoryUI = InventoryUIRegistry.GetActiveUI();
+        /// if (inventoryUI != null)
+        /// {
+        ///     inventoryUI.OpenInventory();
+        /// }
+        /// </code>
+        /// </example>
         public void OpenInventory()
         {
             if (inventoryPanel == null)
@@ -351,6 +409,33 @@ namespace Inventory.UI
             // Time.timeScale = 0f;
         }
 
+        /// <summary>
+        /// Cierra el panel del inventario y restaura el estado del juego normal.
+        /// </summary>
+        /// <remarks>
+        /// Al cerrar el inventario:
+        /// - Desactiva el panel de UI
+        /// - Deselecciona cualquier slot que estuviera seleccionado
+        /// - Oculta y bloquea el cursor del ratón
+        /// - Cambia el mapa de acciones del PlayerInput a "Player" si existe
+        /// 
+        /// Este método es útil cuando necesites forzar el cierre del inventario,
+        /// por ejemplo, al iniciar una cinemática o una escena de combate.
+        /// </remarks>
+        /// <example>
+        /// <code>
+        /// // Cerrar el inventario al iniciar una cinemática
+        /// void StartCutscene()
+        /// {
+        ///     var inventoryUI = InventoryUIRegistry.GetActiveUI();
+        ///     if (inventoryUI != null)
+        ///     {
+        ///         inventoryUI.CloseInventory();
+        ///     }
+        ///     // Iniciar cinemática...
+        /// }
+        /// </code>
+        /// </example>
         public void CloseInventory()
         {
             if (inventoryPanel == null)
@@ -386,6 +471,30 @@ namespace Inventory.UI
 
         #region Tooltip
 
+        /// <summary>
+        /// Muestra el tooltip con la información del item en la posición especificada.
+        /// </summary>
+        /// <param name="item">El item del inventario a mostrar en el tooltip</param>
+        /// <param name="screenPosition">La posición en pantalla donde mostrar el tooltip (generalmente la posición del cursor)</param>
+        /// <remarks>
+        /// Este método es llamado automáticamente por InventorySlotUI cuando el cursor
+        /// pasa sobre un slot con un item. El tooltip muestra el nombre y descripción
+        /// del item con un offset configurable desde el Inspector.
+        /// 
+        /// Si necesitas personalizar el comportamiento del tooltip, puedes modificar
+        /// el offset desde el Inspector en la sección "Tooltip (hover)".
+        /// </remarks>
+        /// <example>
+        /// <code>
+        /// // Mostrar tooltip manualmente para un item específico
+        /// var inventoryUI = InventoryUIRegistry.GetActiveUI();
+        /// if (inventoryUI != null)
+        /// {
+        ///     Vector2 mousePos = Mouse.current.position.ReadValue();
+        ///     inventoryUI.ShowTooltip(myItem, mousePos);
+        /// }
+        /// </code>
+        /// </example>
         public void ShowTooltip(InventoryItem item, Vector2 screenPosition)
         {
             if (tooltipPanel == null || item == null || item.Data == null)
@@ -418,6 +527,14 @@ namespace Inventory.UI
             }
         }
 
+        /// <summary>
+        /// Oculta el tooltip del inventario.
+        /// </summary>
+        /// <remarks>
+        /// Este método es llamado automáticamente por InventorySlotUI cuando el cursor
+        /// sale de un slot. También puedes llamarlo manualmente si necesitas ocultar
+        /// el tooltip programáticamente.
+        /// </remarks>
         public void HideTooltip()
         {
             if (tooltipPanel != null)
