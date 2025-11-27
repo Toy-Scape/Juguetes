@@ -1,7 +1,7 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
-using TMPro;
+﻿using TMPro;
+using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 namespace Inventory.UI
 {
@@ -161,10 +161,25 @@ namespace Inventory.UI
 
             if (backgroundImage != null)
             {
-                if (IsEmpty)
-                    backgroundImage.color = emptyColor;
+                // Permitir selección visual incluso si está vacío para navegación con mando
+                if (_isSelected)
+                {
+                    backgroundImage.color = selectedColor;
+                }
                 else
-                    backgroundImage.color = selected ? selectedColor : filledColor;
+                {
+                    backgroundImage.color = IsEmpty ? emptyColor : filledColor;
+                }
+            }
+        }
+
+        public void SetSelectedColor(Color color)
+        {
+            selectedColor = color;
+            // Actualizar si ya está seleccionado
+            if (_isSelected)
+            {
+                if (backgroundImage != null) backgroundImage.color = selectedColor;
             }
         }
 

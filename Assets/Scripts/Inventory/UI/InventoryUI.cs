@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
+using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 namespace Inventory.UI
 {
@@ -33,6 +33,9 @@ namespace Inventory.UI
 
         [Header("Configuración")]
         [SerializeField] private bool hideOnStart = true;
+        [SerializeField] private int itemsGridColumns = 5;
+        [SerializeField] private int limbsGridColumns = 1;
+        [SerializeField] private Color selectedSlotColor = new Color(0.5f, 0.7f, 1f, 0.9f);
 
         private List<InventorySlotUI> _itemSlots = new List<InventorySlotUI>();
         private List<InventorySlotUI> _limbSlots = new List<InventorySlotUI>();
@@ -62,11 +65,11 @@ namespace Inventory.UI
             }
         }
 
-        void Start ()
+        void Start()
         {
             // Inicializar slots en Start para garantizar que PlayerInventory.Awake() ya se ejecutó
             InitializeSlots();
-            
+
             // Asegurar que el cursor esté correctamente configurado al inicio
             if (!_isInventoryOpen)
             {
@@ -118,6 +121,156 @@ namespace Inventory.UI
             ToggleInventory();
         }
 
+        public void HandleNavigation(Vector2 input)
+        {
+            if (!_isInventoryOpen) return;
+
+            // Normalizar input para evitar movimientos diagonales accidentales y ruido
+            if (input.magnitude > 0.5f)
+            {
+                if (Mathf.Abs(input.x) > Mathf.Abs(input.y))
+                    input = new Vector2(Mathf.Sign(input.x), 0);
+                else
+                    input = new Vector2(0, Mathf.Sign(input.y));
+
+                MoveSelection(input);
+            }
+        }
+
+        private void MoveSelection(Vector2 direction)
+        {
+            // Si no hay nada seleccionado, seleccionar el primero
+            if (_selectedSlot == null)
+            {
+                if (_itemSlots.Count > 0) SelectSlot(_itemSlots[0]);
+                else if (_limbSlots.Count > 0) SelectSlot(_limbSlots[0]);
+                return;
+            }
+
+            // Determinar en qué lista estamos
+            List<InventorySlotUI> currentList = null;
+            int currentIndex = -1;
+            int currentColumns = 1;
+
+            if (_itemSlots.Contains(_selectedSlot))
+            {
+                currentList = _itemSlots;
+                currentIndex = _itemSlots.IndexOf(_selectedSlot);
+                currentColumns = itemsGridColumns;
+            }
+            else if (_limbSlots.Contains(_selectedSlot))
+            {
+                currentList = _limbSlots;
+                currentIndex = _limbSlots.IndexOf(_selectedSlot);
+                currentColumns = limbsGridColumns;
+            }
+
+            if (currentList == null || currentIndex == -1) return;
+
+            int newIndex = currentIndex;
+
+            // Movimiento Horizontal
+            if (direction.x != 0)
+            {
+                // Calcular fila y columna actual
+                int row = currentIndex / currentColumns;
+                int col = currentIndex % currentColumns;
+
+                // Intentar mover horizontalmente
+                int newCol = col + (int)direction.x;
+
+                // Lógica de salto entre grids
+                if (currentList == _itemSlots)
+                {
+                    // Si estamos en Items y nos salimos por la derecha -> Ir a Limbs
+                    if (newCol >= currentColumns)
+                    {
+                        if (_limbSlots.Count > 0)
+                        {
+                            // Intentar mantener la fila relativa
+                            int targetIndex = Mathf.Min(row, _limbSlots.Count - 1);
+                            SelectSlot(_limbSlots[targetIndex]);
+                        }
+                        return;
+                    }
+                }
+                else if (currentList == _limbSlots)
+                {
+                    // Si estamos en Limbs y nos salimos por la izquierda -> Ir a Items
+                    if (newCol < 0)
+                    {
+                        if (_itemSlots.Count > 0)
+                        {
+                            // Ir a la última columna de la misma fila en Items
+                            int targetRowStart = row * itemsGridColumns;
+                            if (targetRowStart < _itemSlots.Count)
+                            {
+                                int targetIndex = Mathf.Min(targetRowStart + (itemsGridColumns - 1), _itemSlots.Count - 1);
+                                SelectSlot(_itemSlots[targetIndex]);
+                            }
+                            else
+                            {
+                                SelectSlot(_itemSlots[_itemSlots.Count - 1]);
+                            }
+                        }
+                        return;
+                    }
+                }
+
+                // Movimiento normal dentro del grid
+                if (newCol >= 0 && newCol < currentColumns)
+                {
+                    newIndex = row * currentColumns + newCol;
+                }
+                else
+                {
+                    return;
+                }
+            }
+            // Movimiento Vertical
+            else if (direction.y != 0)
+            {
+                newIndex -= (int)direction.y * currentColumns;
+            }
+
+            // Validar límites generales del índice
+            if (newIndex >= 0 && newIndex < currentList.Count)
+            {
+                SelectSlot(currentList[newIndex]);
+            }
+        }
+
+        private void SelectSlot(InventorySlotUI slot)
+        {
+            if (slot == null) return;
+
+            if (_selectedSlot != null)
+            {
+                _selectedSlot.SetSelected(false);
+            }
+
+            _selectedSlot = slot;
+            _selectedSlot.SetSelected(true);
+
+            // Mostrar tooltip si tiene item
+            if (!slot.IsEmpty)
+            {
+                // Posicionar tooltip cerca del slot seleccionado
+                RectTransform slotRect = slot.GetComponent<RectTransform>();
+                if (slotRect != null)
+                {
+                    Vector3[] corners = new Vector3[4];
+                    slotRect.GetWorldCorners(corners);
+                    Vector2 center = (corners[0] + corners[2]) / 2;
+                    ShowTooltip(slot.CurrentItem, center);
+                }
+            }
+            else
+            {
+                HideTooltip();
+            }
+        }
+
         #endregion
 
         #region Inicialización
@@ -130,18 +283,26 @@ namespace Inventory.UI
                 Debug.LogWarning("[InventoryUI] PlayerInventory o su Inventory aún no están inicializados. Se intentará más tarde.");
                 return;
             }
-            
+
             if (slotPrefab == null)
             {
                 Debug.LogWarning("[InventoryUI] slotPrefab es NULL! Asígnalo en el Inspector.");
                 return;
             }
-            
+
             Debug.Log($"[InventoryUI] InitializeSlots() - itemsContainer: {(itemsContainer != null ? itemsContainer.name : "NULL")}, limbsContainer: {(limbsContainer != null ? limbsContainer.name : "NULL")}, slotPrefab: OK");
-            
+
             // Crear slots para items normales usando la capacidad del inventario
             if (itemsContainer != null)
             {
+                // Configurar Grid Layout
+                GridLayoutGroup grid = itemsContainer.GetComponent<GridLayoutGroup>();
+                if (grid != null)
+                {
+                    grid.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
+                    grid.constraintCount = itemsGridColumns;
+                }
+
                 int itemCapacity = playerInventory.Inventory.MaxCapacity;
                 Debug.Log($"[InventoryUI] Creando slots para items. Capacidad configurada: {itemCapacity}");
                 CreateSlots(itemsContainer, _itemSlots, itemCapacity);
@@ -154,6 +315,14 @@ namespace Inventory.UI
             // Crear slots para extremidades usando la capacidad del inventario
             if (limbsContainer != null)
             {
+                // Configurar Grid Layout
+                GridLayoutGroup grid = limbsContainer.GetComponent<GridLayoutGroup>();
+                if (grid != null)
+                {
+                    grid.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
+                    grid.constraintCount = limbsGridColumns;
+                }
+
                 int limbCapacity = playerInventory.Inventory.MaxLimbCapacity;
                 Debug.Log($"[InventoryUI] Creando slots para limbs. Capacidad configurada: {limbCapacity}");
                 CreateSlots(limbsContainer, _limbSlots, limbCapacity);
@@ -174,7 +343,7 @@ namespace Inventory.UI
                 Debug.LogWarning("[InventoryUI] Container es null, no se pueden crear slots");
                 return;
             }
-            
+
             if (slotPrefab == null)
             {
                 Debug.LogWarning("[InventoryUI] SlotPrefab es null, no se pueden crear slots");
@@ -182,7 +351,7 @@ namespace Inventory.UI
             }
 
             int toCreate = Mathf.Max(0, count - slotList.Count);
-            
+
             if (toCreate > 0)
             {
                 Debug.Log($"[InventoryUI] Creando {toCreate} slots en {container.name}. Capacidad total: {count}");
@@ -204,6 +373,9 @@ namespace Inventory.UI
                         InventorySlotUI capturedSlot = slot;
                         button.onClick.AddListener(() => OnSlotClicked(capturedSlot));
                     }
+
+                    // Configurar color de selección
+                    slot.SetSelectedColor(selectedSlotColor);
                 }
                 else
                 {
@@ -212,37 +384,9 @@ namespace Inventory.UI
             }
         }
 
-        #endregion
-
-        #region Actualización UI
-
         /// <summary>
         /// Refresca toda la interfaz del inventario para mostrar los items actuales.
         /// </summary>
-        /// <remarks>
-        /// Este método actualiza todos los slots del inventario, tanto de items normales
-        /// como de extremidades (limbs). Es llamado automáticamente cuando:
-        /// - Se añade un item al inventario
-        /// - Se elimina un item del inventario
-        /// - Se abre el panel del inventario
-        /// 
-        /// También puedes llamarlo manualmente si necesitas forzar una actualización
-        /// de la UI, por ejemplo después de cargar una partida guardada.
-        /// </remarks>
-        /// <example>
-        /// <code>
-        /// // Refrescar la UI después de cargar datos guardados
-        /// void LoadInventory()
-        /// {
-        ///     // ... cargar datos ...
-        ///     var inventoryUI = InventoryUIRegistry.GetActiveUI();
-        ///     if (inventoryUI != null)
-        ///     {
-        ///         inventoryUI.RefreshUI();
-        ///     }
-        /// }
-        /// </code>
-        /// </example>
         public void RefreshUI()
         {
             if (playerInventory == null || playerInventory.Inventory == null)
@@ -256,7 +400,6 @@ namespace Inventory.UI
         {
             var items = playerInventory.Inventory.Items;
 
-            // Comprobación: ¿el primer item es limb? (puede indicar containers cruzados)
             if (items.Count > 0 && items[0].Data != null && items[0].Data.IsLimb)
             {
                 Debug.LogWarning("[InventoryUI] ¡Parece que los containers están cruzados! El primer item normal es un limb. Revisa la asignación de itemsContainer y limbsContainer en el inspector.");
@@ -279,13 +422,11 @@ namespace Inventory.UI
         {
             var limbs = playerInventory.Inventory.Limbs;
 
-            // Diagnóstico: verificar si hay limbs pero no slots
             if (limbs.Count > 0 && _limbSlots.Count == 0)
             {
                 Debug.LogWarning($"[InventoryUI] Hay {limbs.Count} limbs en el inventario pero NO hay slots creados! Verifica que limbsContainer esté asignado en el Inspector.");
             }
 
-            // Comprobación: ¿el primer limb NO es limb? (puede indicar containers cruzados)
             if (limbs.Count > 0 && limbs[0].Data != null && !limbs[0].Data.IsLimb)
             {
                 Debug.LogWarning("[InventoryUI] ¡Parece que los containers están cruzados! El primer limb no es limb. Revisa la asignación de itemsContainer y limbsContainer en el inspector.");
@@ -313,20 +454,17 @@ namespace Inventory.UI
             if (slot == null || slot.IsEmpty)
                 return;
 
-            // Deseleccionar el anterior
             if (_selectedSlot != null)
             {
                 _selectedSlot.SetSelected(false);
             }
 
-            // Seleccionar el nuevo
             _selectedSlot = slot;
             _selectedSlot.SetSelected(true);
         }
 
         private void OnInventoryChanged(ItemData itemData, int quantity)
         {
-            // Siempre refresh en memoria; si el panel está abierto, refrescamos la UI visible.
             RefreshUI();
         }
 
@@ -334,14 +472,6 @@ namespace Inventory.UI
 
         #region Control de Visibilidad
 
-        /// <summary>
-        /// Alterna la visibilidad del inventario entre abierto y cerrado.
-        /// </summary>
-        /// <remarks>
-        /// Este método es llamado automáticamente por el sistema de Input cuando se presiona
-        /// la tecla configurada para abrir/cerrar el inventario (por defecto TAB).
-        /// También puede ser llamado manualmente desde otros scripts.
-        /// </remarks>
         public void ToggleInventory()
         {
             if (inventoryPanel == null)
@@ -359,29 +489,6 @@ namespace Inventory.UI
             }
         }
 
-        /// <summary>
-        /// Abre el panel del inventario y configura el estado del juego para la UI.
-        /// </summary>
-        /// <remarks>
-        /// Al abrir el inventario:
-        /// - Activa el panel de UI
-        /// - Refresca todos los slots con los items actuales
-        /// - Muestra y desbloquea el cursor del ratón
-        /// - Cambia el mapa de acciones del PlayerInput a "UI" si existe
-        /// 
-        /// Usa este método cuando necesites abrir el inventario programáticamente,
-        /// por ejemplo, al inicio de un tutorial o después de completar una misión.
-        /// </remarks>
-        /// <example>
-        /// <code>
-        /// // Abrir el inventario desde otro script
-        /// var inventoryUI = InventoryUIRegistry.GetActiveUI();
-        /// if (inventoryUI != null)
-        /// {
-        ///     inventoryUI.OpenInventory();
-        /// }
-        /// </code>
-        /// </example>
         public void OpenInventory()
         {
             if (inventoryPanel == null)
@@ -390,13 +497,10 @@ namespace Inventory.UI
             _isInventoryOpen = true;
             inventoryPanel.SetActive(true);
             RefreshUI();
-            // Mostrar items por defecto
 
-            // Habilitar el cursor del ratón
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
 
-            // Cambiar el modo de acción del PlayerInput a UI si existe
             var playerInput = UnityEngine.Object.FindFirstObjectByType<PlayerInput>();
             if (playerInput != null && playerInput.currentActionMap.name != "UI")
             {
@@ -404,38 +508,8 @@ namespace Inventory.UI
                 if (uiActionMap != null)
                     playerInput.SwitchCurrentActionMap("UI");
             }
-
-            // Pausar el juego o desactivar controles del jugador aquí si es necesario
-            // Time.timeScale = 0f;
         }
 
-        /// <summary>
-        /// Cierra el panel del inventario y restaura el estado del juego normal.
-        /// </summary>
-        /// <remarks>
-        /// Al cerrar el inventario:
-        /// - Desactiva el panel de UI
-        /// - Deselecciona cualquier slot que estuviera seleccionado
-        /// - Oculta y bloquea el cursor del ratón
-        /// - Cambia el mapa de acciones del PlayerInput a "Player" si existe
-        /// 
-        /// Este método es útil cuando necesites forzar el cierre del inventario,
-        /// por ejemplo, al iniciar una cinemática o una escena de combate.
-        /// </remarks>
-        /// <example>
-        /// <code>
-        /// // Cerrar el inventario al iniciar una cinemática
-        /// void StartCutscene()
-        /// {
-        ///     var inventoryUI = InventoryUIRegistry.GetActiveUI();
-        ///     if (inventoryUI != null)
-        ///     {
-        ///         inventoryUI.CloseInventory();
-        ///     }
-        ///     // Iniciar cinemática...
-        /// }
-        /// </code>
-        /// </example>
         public void CloseInventory()
         {
             if (inventoryPanel == null)
@@ -450,11 +524,9 @@ namespace Inventory.UI
                 _selectedSlot = null;
             }
 
-            // Ocultar y bloquear el cursor
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
 
-            // Cambiar el modo de acción del PlayerInput a Player si existe
             var playerInput = UnityEngine.Object.FindFirstObjectByType<PlayerInput>();
             if (playerInput != null && playerInput.currentActionMap.name != "Player")
             {
@@ -462,45 +534,17 @@ namespace Inventory.UI
                 if (playerActionMap != null)
                     playerInput.SwitchCurrentActionMap("Player");
             }
-
-            // Reanudar el juego aquí si es necesario
-            // Time.timeScale = 1f;
         }
 
         #endregion
 
         #region Tooltip
 
-        /// <summary>
-        /// Muestra el tooltip con la información del item en la posición especificada.
-        /// </summary>
-        /// <param name="item">El item del inventario a mostrar en el tooltip</param>
-        /// <param name="screenPosition">La posición en pantalla donde mostrar el tooltip (generalmente la posición del cursor)</param>
-        /// <remarks>
-        /// Este método es llamado automáticamente por InventorySlotUI cuando el cursor
-        /// pasa sobre un slot con un item. El tooltip muestra el nombre y descripción
-        /// del item con un offset configurable desde el Inspector.
-        /// 
-        /// Si necesitas personalizar el comportamiento del tooltip, puedes modificar
-        /// el offset desde el Inspector en la sección "Tooltip (hover)".
-        /// </remarks>
-        /// <example>
-        /// <code>
-        /// // Mostrar tooltip manualmente para un item específico
-        /// var inventoryUI = InventoryUIRegistry.GetActiveUI();
-        /// if (inventoryUI != null)
-        /// {
-        ///     Vector2 mousePos = Mouse.current.position.ReadValue();
-        ///     inventoryUI.ShowTooltip(myItem, mousePos);
-        /// }
-        /// </code>
-        /// </example>
         public void ShowTooltip(InventoryItem item, Vector2 screenPosition)
         {
             if (tooltipPanel == null || item == null || item.Data == null)
                 return;
 
-            // Actualizar nombre y descripción
             if (tooltipNameText != null)
                 tooltipNameText.text = item.Data.ItemName;
 
@@ -509,32 +553,22 @@ namespace Inventory.UI
 
             tooltipPanel.SetActive(true);
 
-            // Posicionar el tooltip cerca del cursor con offset configurable
             RectTransform rt = tooltipPanel.GetComponent<RectTransform>();
             if (rt != null)
             {
                 Vector2 anchoredPos;
                 RectTransformUtility.ScreenPointToLocalPointInRectangle(
-                    rt.parent as RectTransform, 
-                    screenPosition, 
-                    null, 
+                    rt.parent as RectTransform,
+                    screenPosition,
+                    null,
                     out anchoredPos
                 );
-                
-                // Aplicar offset configurable desde el inspector
+
                 anchoredPos += tooltipOffset;
                 rt.anchoredPosition = anchoredPos;
             }
         }
 
-        /// <summary>
-        /// Oculta el tooltip del inventario.
-        /// </summary>
-        /// <remarks>
-        /// Este método es llamado automáticamente por InventorySlotUI cuando el cursor
-        /// sale de un slot. También puedes llamarlo manualmente si necesitas ocultar
-        /// el tooltip programáticamente.
-        /// </remarks>
         public void HideTooltip()
         {
             if (tooltipPanel != null)

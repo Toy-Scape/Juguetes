@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
+using Inventory.UI;
 using UnityEngine;
 using UnityEngine.Events;
-using Inventory.UI;
+using UnityEngine.InputSystem;
 
 namespace Inventory
 {
@@ -12,47 +13,47 @@ namespace Inventory
     public class PlayerInventory : MonoBehaviour
     {
         #region Constantes
-        
+
         private const string LogPrefix = "[PlayerInventory]";
         private const string WarningNullItem = "ItemData es null";
         private const string WarningFullInventory = "Inventario lleno, no se pudo añadir: {0}";
-        
+
         #endregion
 
         #region Campos Serializados
-        
+
         [Header("Configuración")]
         [SerializeField] private int maxCapacity = 20;
         [SerializeField] private int maxLimbCapacity = 4;
-        
+
         [Header("Debug")]
         [SerializeField] private bool enableDebugLogs = true;
 
         #endregion
 
         #region Eventos
-        
+
         [Header("Eventos")]
         public UnityEvent<ItemData, int> onItemAdded = new UnityEvent<ItemData, int>();
         public UnityEvent<ItemData, int> onItemRemoved = new UnityEvent<ItemData, int>();
-        
+
         #endregion
 
         #region Campos Privados
-        
+
         private Inventory _inventory;
         private InventoryUI _cachedUI;
-        
+
         #endregion
 
         #region Propiedades Públicas
-        
+
         public Inventory Inventory => _inventory;
-        
+
         #endregion
 
         #region Métodos Unity
-        
+
         private void Awake()
         {
             InitializeInventory();
@@ -68,6 +69,15 @@ namespace Inventory
             {
                 // Fallback: mostrar info de debug si no hay UI disponible
                 LogInventoryInfo();
+            }
+        }
+
+        public void OnNavigate(InputValue value)
+        {
+            Debug.Log("OnNavigate");
+            if (TryGetOrCacheUI(out var ui))
+            {
+                ui.HandleNavigation(value.Get<Vector2>());
             }
         }
 
@@ -168,7 +178,7 @@ namespace Inventory
         private bool ValidateItemData(ItemData itemData)
         {
             if (itemData != null) return true;
-            
+
             LogWarningIfEnabled(WarningNullItem);
             return false;
         }
@@ -198,7 +208,7 @@ namespace Inventory
         private void LogItemList(string categoryName, IReadOnlyList<InventoryItem> items, int capacity)
         {
             Debug.Log($"{LogPrefix} {categoryName}: {items.Count}/{capacity}");
-            
+
             foreach (var item in items)
             {
                 Debug.Log($"{LogPrefix}   - {item.Data.ItemName} x{item.Quantity}");
