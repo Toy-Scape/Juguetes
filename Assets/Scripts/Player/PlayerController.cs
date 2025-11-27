@@ -11,6 +11,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform cameraTransform;
     [SerializeField] private TMP_Text TMPPlayerState;
     [SerializeField] private PlayerInteractor playerInteractor;
+    [SerializeField] private LimbContextSO limbContextSO;
+
 
     private CharacterController controller;
 
@@ -29,7 +31,7 @@ public class PlayerController : MonoBehaviour
 
     void Start ()
     {
-        Cursor.lockState = CursorLockMode.Locked;
+        //Cursor.lockState = CursorLockMode.Locked;
 
         controller = GetComponent<CharacterController>();
 
@@ -64,11 +66,10 @@ public class PlayerController : MonoBehaviour
 
             controller.Move(movementHandler.GetFinalMove(playerContext.Velocity) * Time.deltaTime);
 
-            if (playerContext.IsAttacking)
-            {
-                // TODO:: Lógica del gancho/lanzar objetos, etc.
-                this.playerContext.IsAttacking = false;
-            }
+            //if (playerContext.IsAttacking)
+            //{
+            //    this.playerContext.IsAttacking = false;
+            //}
         }
 
         if (TMPPlayerState != null)
