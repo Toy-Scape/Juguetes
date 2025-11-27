@@ -11,6 +11,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform cameraTransform;
     [SerializeField] private TMP_Text TMPPlayerState;
     [SerializeField] private PlayerInteractor playerInteractor;
+    [SerializeField] private GrabInteractor grabInteractor;
+
 
     private CharacterController controller;
 
@@ -66,7 +68,7 @@ public class PlayerController : MonoBehaviour
 
             if (playerContext.IsAttacking)
             {
-                // TODO:: Lógica del gancho/lanzar objetos, etc.
+                // TODO:: Lï¿½gica del gancho/lanzar objetos, etc.
                 this.playerContext.IsAttacking = false;
             }
         }
