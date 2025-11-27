@@ -51,6 +51,7 @@ public class PlayerController : MonoBehaviour
     void Update ()
     {
         // Detección de pared
+        playerContext.CanWalkOnWalls = limbManager.GetContext().CanClimbWalls;
         if (playerContext.CanWalkOnWalls)
         {
             playerContext.IsOnWall = wallHandler.CheckForWall(playerContext, 1f);

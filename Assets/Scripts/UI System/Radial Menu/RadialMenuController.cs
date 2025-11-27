@@ -13,7 +13,7 @@ public class RadialMenuController : MonoBehaviour
 
     void OnOpenRadialMenu (InputValue value)
     {
-        if (value.isPressed)
+        if (value.isPressed && radialMenu.CanBeOpened())
         {
             radialMenu.Show();
             cameraManager.LockCameraMovement();

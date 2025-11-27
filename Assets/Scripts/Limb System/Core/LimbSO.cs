@@ -4,10 +4,13 @@
 public class LimbSO : ScriptableObject
 {
     public string LimbName;
+    public LimbSlot Slot;
+    public Sprite LimbIcon;
+    public GameObject LimbModel;
 
-    [SerializeField] protected IActiveAbility activeAbility;
-    [SerializeField] protected ISecondaryAbility secondaryAbility;
-    [SerializeField] protected IPassiveAbility passiveAbility;
+    [SerializeField] protected ActiveAbilitySO activeAbility;
+    [SerializeField] protected SecondaryAbilitySO secondaryAbility;
+    [SerializeField] protected PassiveAbilitySO passiveAbility;
 
     public void OnEquip (LimbContext context)
     {
