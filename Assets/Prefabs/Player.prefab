@@ -724,11 +724,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e9fb74deaa107e4b87fb65f5948581d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LimbManager
-  availableLimbs:
-  - {fileID: 11400000, guid: a9c84fbcd3b88034a823714ce8e96172, type: 2}
-  - {fileID: 11400000, guid: b61593b9d2ebffb41977d60aebfeb44a, type: 2}
-  - {fileID: 11400000, guid: 1129099a91e68664f9cb196523b29bcb, type: 2}
-  - {fileID: 11400000, guid: 510fd97b35b231e46946846fe842fe91, type: 2}
+  DefaultLimb: {fileID: 11400000, guid: a9c84fbcd3b88034a823714ce8e96172, type: 2}
   inventory: {fileID: 7956428153845167614}
   limbSockets: []
 --- !u!1 &7557932846192746383
