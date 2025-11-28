@@ -497,10 +497,10 @@ namespace Inventory.UI
             _isInventoryOpen = true;
             inventoryPanel.SetActive(true);
             RefreshUI();
-
-            Cursor.visible = true;
-            Cursor.lockState = CursorLockMode.None;
-
+            
+            CameraManager.instance.LockCameraMovement();
+            CameraManager.instance.UnlockCursor();
+            
             var playerInput = UnityEngine.Object.FindFirstObjectByType<PlayerInput>();
             if (playerInput != null && playerInput.currentActionMap.name != "UI")
             {
@@ -524,8 +524,8 @@ namespace Inventory.UI
                 _selectedSlot = null;
             }
 
-            Cursor.visible = false;
-            Cursor.lockState = CursorLockMode.Locked;
+            CameraManager.instance.UnlockCameraMovement();
+            CameraManager.instance.LockCursor();
 
             var playerInput = UnityEngine.Object.FindFirstObjectByType<PlayerInput>();
             if (playerInput != null && playerInput.currentActionMap.name != "Player")
