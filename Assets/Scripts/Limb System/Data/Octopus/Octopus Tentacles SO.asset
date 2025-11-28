@@ -13,4 +13,9 @@ MonoBehaviour:
   m_Name: Octopus Tentacles SO
   m_EditorClassIdentifier: Assembly-CSharp::OctopusTentaclesSO
   LimbName: "Tent\xE1culos de Pulpo"
+  Slot: 2
   LimbIcon: {fileID: 21300000, guid: 10eb338915e5ac044bacd94e9c42e8a8, type: 3}
+  LimbModel: {fileID: 0}
+  activeAbility: {fileID: 0}
+  secondaryAbility: {fileID: 0}
+  passiveAbility: {fileID: 11400000, guid: 4f58cf73ffd7c1040a68fd260cc6711c, type: 2}

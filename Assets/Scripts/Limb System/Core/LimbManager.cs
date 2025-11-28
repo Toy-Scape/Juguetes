@@ -37,6 +37,7 @@ public class LimbManager : MonoBehaviour
         if (equippedLimb != null)
         {
             equippedLimb.OnUnequip(context);
+            context.Reset();
         }
 
         equippedLimb = newLimb;
@@ -44,7 +45,7 @@ public class LimbManager : MonoBehaviour
 
         RefreshVisuals();
 
-        Debug.Log($"Equipada extremidad: {equippedLimb.LimbName} en {equippedLimb.Slot}");
+        Debug.Log($"Equipada extremidad: {equippedLimb.LimbName} en {equippedLimb.SlotName}");
     }
 
     private void RefreshVisuals()

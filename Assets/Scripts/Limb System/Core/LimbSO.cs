@@ -1,4 +1,9 @@
-﻿using UnityEngine;
+﻿using System;
+using System.ComponentModel;
+using System.Linq;
+using System.Reflection;
+using UnityEngine;
+using static UnityEngine.Rendering.DebugUI;
 
 [CreateAssetMenu(menuName = "Limb/Limb")]
 public class LimbSO : ScriptableObject
@@ -31,5 +36,14 @@ public class LimbSO : ScriptableObject
     {
         if (secondaryAbility?.CanExecute(context) ?? false)
             secondaryAbility.Execute(context);
+    }
+
+    public string SlotName {
+        get => GetSlotName();
+    }
+
+    private string GetSlotName()
+    {
+        return this.Slot.GetType().GetField(Slot.ToString()).GetCustomAttribute<DescriptionAttribute>().Description;
     }
 }
