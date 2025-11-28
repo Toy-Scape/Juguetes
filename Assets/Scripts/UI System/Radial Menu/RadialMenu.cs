@@ -20,7 +20,7 @@ public class RadialMenu : MonoBehaviour
     [SerializeField] private float paddingRadial = 10f;
     [SerializeField] private float globalRotationOffset = 90f;
 
-    private List<Button> buttons = new();
+    private List<GameObject> buttons = new();
     private LimbSO currentSelection;
     private bool isOpen = false;
     private LimbSO lastSelection;
@@ -39,6 +39,8 @@ public class RadialMenu : MonoBehaviour
 
     public void Show ()
     {
+        PopulateMenu();
+
         isOpen = true;
         gameObject.SetActive(true);
     }
@@ -51,8 +53,8 @@ public class RadialMenu : MonoBehaviour
 
     public void PopulateMenu ()
     {
-        foreach (var btn in buttons)
-            Destroy(btn.gameObject);
+        foreach (var obj in buttons)
+            Destroy(obj);
         buttons.Clear();
 
         var limbs = limbManager.GetAvailableLimbs();
@@ -90,7 +92,7 @@ public class RadialMenu : MonoBehaviour
             //text.rectTransform.rotation = Quaternion.identity;
 
             button.onClick.AddListener(() => limbManager.EquipLimb(limb));
-            buttons.Add(button);
+            buttons.Add(prefabObj);
         }
     }
 
@@ -158,7 +160,7 @@ public class RadialMenu : MonoBehaviour
         var limbs = limbManager.GetAvailableLimbs();
         for (int i = 0; i < buttons.Count; i++)
         {
-            var arc = buttons[i].GetComponentInParent<CurvedSegmentGraphic>();
+            var arc = buttons[i].GetComponent<CurvedSegmentGraphic>();
             if (arc != null)
             {
                 bool isSelected = limbs[i] == selection;

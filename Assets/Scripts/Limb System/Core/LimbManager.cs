@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
+using Inventory;
 
 public class LimbManager : MonoBehaviour
 {
@@ -14,7 +15,8 @@ public class LimbManager : MonoBehaviour
 
     private LimbContext context = new();
     
-    [SerializeField] private List<LimbSO> availableLimbs;
+    [SerializeField] private LimbSO DefaultLimb;
+    [SerializeField] private PlayerInventory inventory;
     [SerializeField] private List<LimbSocketDefinition> limbSockets;
 
     private LimbSO equippedLimb;
@@ -84,5 +86,5 @@ public class LimbManager : MonoBehaviour
 
     public LimbContext GetContext () => context;
     public LimbSO GetEquippedLimb () => equippedLimb;
-    public List<LimbSO> GetAvailableLimbs () => availableLimbs;
+    public List<LimbSO> GetAvailableLimbs () => inventory.GetAllLimbs().Select(p => p.LimbSO).Prepend(DefaultLimb).ToList();
 }

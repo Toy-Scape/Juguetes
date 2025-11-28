@@ -11,9 +11,10 @@ public class CurvedSegmentGraphic : MaskableGraphic, IPointerEnterHandler, IPoin
     [SerializeField, Range(0f, 360f)] private float startAngle = 0f;
     [SerializeField, Range(0f, 360f)] private float endAngle = 60f;
     [SerializeField, Range(4, 256)] private int segments = 32;
-    [SerializeField, Min(0f)] private float dividerThickness = 4f;
-    [SerializeField] private Color dividerColor = new Color(0.5f, 0.5f, 0.5f, 0);
     [SerializeField] private Color hoverColor = new Color(0.8f, 0.8f, 0.8f, 0);
+    [Header("Divider")]
+    [SerializeField] private Color dividerColor = new Color(0.5f, 0.5f, 0.5f, 0);
+    [SerializeField, Min(0f)] private float dividerThickness = 4f;
 
     private Vector2 centerOffset = Vector2.zero;
     private Color baseColor;
