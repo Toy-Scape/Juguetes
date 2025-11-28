@@ -124,17 +124,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 883425338343852037, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
   m_PrefabInstance: {fileID: 1407418662}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &493996965 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6602220929985291046, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
-  m_PrefabInstance: {fileID: 1407418662}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5e9fb74deaa107e4b87fb65f5948581d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::LimbManager
 --- !u!1 &885204445
 GameObject:
   m_ObjectHideFlags: 0
@@ -754,6 +743,10 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1688514977732223978, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
+      propertyPath: radialMenu
+      value: 
+      objectReference: {fileID: 1498811241}
     - target: {fileID: 6602220929985291046, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
       propertyPath: limbSockets.Array.size
       value: 1
@@ -791,6 +784,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: a9c84fbcd3b88034a823714ce8e96172, type: 2}
     - target: {fileID: 6629819060316150005, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
+      propertyPath: limbManager
+      value: 
+      objectReference: {fileID: 1938695004}
+    - target: {fileID: 6629819060316150005, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
       propertyPath: cameraTransform
       value: 
       objectReference: {fileID: 986123351}
@@ -798,6 +795,26 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 7319195771677131702, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
+      propertyPath: availableLimbs.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7319195771677131702, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
+      propertyPath: 'availableLimbs.Array.data[0]'
+      value: 
+      objectReference: {fileID: 11400000, guid: a9c84fbcd3b88034a823714ce8e96172, type: 2}
+    - target: {fileID: 7319195771677131702, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
+      propertyPath: 'availableLimbs.Array.data[1]'
+      value: 
+      objectReference: {fileID: 11400000, guid: b61593b9d2ebffb41977d60aebfeb44a, type: 2}
+    - target: {fileID: 7319195771677131702, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
+      propertyPath: 'availableLimbs.Array.data[2]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 1129099a91e68664f9cb196523b29bcb, type: 2}
+    - target: {fileID: 7319195771677131702, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
+      propertyPath: 'availableLimbs.Array.data[3]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 510fd97b35b231e46946846fe842fe91, type: 2}
     - target: {fileID: 7905357166921542345, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
       propertyPath: radialMenu
       value: 
@@ -916,7 +933,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cddbbf57610807c4c9c576e3ab5c4b94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RadialMenu
-  limbManager: {fileID: 493996965}
+  limbManager: {fileID: 1938695004}
   buttonPrefab: {fileID: 7613636244303628331, guid: 92f810621fae6c546b77c64ba9834acf, type: 3}
   radialContainer: {fileID: 2146274029}
   centerLabel: {fileID: 1073488194}
@@ -1015,6 +1032,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 496c46a34a4eb9a48a88b7dc69d12245, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CameraManager
+  inputController: {fileID: 0}
 --- !u!1 &1822980947
 GameObject:
   m_ObjectHideFlags: 0
@@ -1263,6 +1281,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1857979745}
   m_CullTransparentMesh: 1
+--- !u!114 &1938695004 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7319195771677131702, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
+  m_PrefabInstance: {fileID: 1407418662}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e9fb74deaa107e4b87fb65f5948581d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LimbManager
 --- !u!1 &2059893610
 GameObject:
   m_ObjectHideFlags: 0

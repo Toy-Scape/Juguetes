@@ -29,11 +29,13 @@ public class LimbSO : ScriptableObject
 
     public void UseActive (LimbContext context)
     {
+        Debug.Log($"Using active ability of limb: {LimbName}");
         activeAbility?.Execute(context);
     }
 
     public void UseSecondary (LimbContext context)
     {
+        Debug.Log($"Using active ability of limb: {LimbName}");
         if (secondaryAbility?.CanExecute(context) ?? false)
             secondaryAbility.Execute(context);
     }
