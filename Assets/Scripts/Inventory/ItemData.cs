@@ -1,4 +1,5 @@
-﻿﻿using UnityEngine;
+﻿using Unity.VisualScripting;
+ using UnityEngine;
 
 namespace Inventory
 {
@@ -25,6 +26,9 @@ namespace Inventory
         
         [Header("Categoría")]
         [SerializeField] private bool isLimb;
+        
+        [Header("Limb SO")]
+        [SerializeField] private LimbSO limbSO;
 
         /// <summary>Nombre del ítem que se muestra en la UI</summary>
         public string ItemName => itemName;
@@ -44,7 +48,14 @@ namespace Inventory
         private void OnValidate()
         {
             maxStackSize = Mathf.Max(MinStackSize, maxStackSize);
+            
+            // Limpiar limbSO si isLimb es false
+            if (!isLimb)
+            {
+                limbSO = null;
+            }
         }
+        
+        public LimbSO LimbSO => limbSO;
     }
 }
-
