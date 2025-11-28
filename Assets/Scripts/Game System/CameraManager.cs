@@ -3,12 +3,21 @@ using UnityEngine;
 
 public class CameraManager : MonoBehaviour
 {
-    private CinemachineInputAxisController inputController;
+    [SerializeField] private CinemachineInputAxisController inputController;
+    public static CameraManager instance;
 
-    void Awake ()
+    void Awake()
     {
-        inputController = FindFirstObjectByType<CinemachineInputAxisController>();
-        LockCursor();
+        if (instance != null && instance != this)
+        {
+            Destroy(this.gameObject);
+        }
+        else
+        {
+            LockCursor();
+            instance = this;
+            DontDestroyOnLoad(this.gameObject);
+        }
     }
 
     public void LockCameraMovement ()
