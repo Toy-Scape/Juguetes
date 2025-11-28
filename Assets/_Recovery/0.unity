@@ -2539,6 +2539,7 @@ MonoBehaviour:
   player: {fileID: 1409714644}
   pushCollider: {fileID: 1747129378}
   grabOffset: 1
+  playerBodyColliders: []
 --- !u!1 &1501845958
 GameObject:
   m_ObjectHideFlags: 0

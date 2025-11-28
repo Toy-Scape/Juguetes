@@ -36,15 +36,17 @@ public class Grabbable : MonoBehaviour, IGrabbable
         joint.yMotion = ConfigurableJointMotion.Limited;
         joint.zMotion = ConfigurableJointMotion.Limited;
 
-        joint.angularXMotion = ConfigurableJointMotion.Limited;
-        joint.angularYMotion = ConfigurableJointMotion.Limited;
-        joint.angularZMotion = ConfigurableJointMotion.Limited;
+        joint.angularXMotion = ConfigurableJointMotion.Locked;
+        joint.angularYMotion = ConfigurableJointMotion.Locked;
+        joint.angularZMotion = ConfigurableJointMotion.Locked;
+
+        float resistance = Mathf.Clamp(moveResistance, 0.1f, 10f);
 
         JointDrive drive = new JointDrive
         {
-            positionSpring = 800 / moveResistance,
-            positionDamper = 40,
-            maximumForce = 10000
+            positionSpring = 300f / resistance,
+            positionDamper = 50f / resistance,
+            maximumForce = 2000f / resistance
         };
 
         joint.xDrive = drive;

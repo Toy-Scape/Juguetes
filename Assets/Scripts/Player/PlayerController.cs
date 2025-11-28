@@ -59,9 +59,9 @@ public class PlayerController : MonoBehaviour
 
             CurrentState = stateHandler.EvaluateState(playerContext);
 
-            movementHandler.HandleMovement(CurrentState, playerContext.MoveInput, transform);
+            movementHandler.HandleMovement(CurrentState, playerContext.MoveInput, transform, playerContext.IsPushing, playerContext.PushSpeedMultiplier);
             controller.height = crouchHandler.GetTargetHeight(CurrentState, controller.height);
-            playerContext.Velocity = jumpHandler.HandleJump(CurrentState, playerContext.IsJumping, playerContext.Velocity, playerContext.IsInWater, playerContext.IsGrounded);
+            playerContext.Velocity = jumpHandler.HandleJump(CurrentState, playerContext.IsJumping, playerContext.Velocity, playerContext.IsInWater, playerContext.IsGrounded, playerContext.IsPushing);
             playerContext.Velocity = physicsHandler.ApplyGravity(CurrentState, playerContext.Velocity, playerContext.IsGrounded);
 
             controller.Move(movementHandler.GetFinalMove(playerContext.Velocity) * Time.deltaTime);
@@ -193,4 +193,9 @@ public class PlayerController : MonoBehaviour
     }
     #endregion
 
+    public void SetGrabState(bool isGrabbing, float resistance)
+    {
+        playerContext.IsPushing = isGrabbing;
+        playerContext.PushSpeedMultiplier = 1f / Mathf.Max(resistance, 1f);
+    }
 }

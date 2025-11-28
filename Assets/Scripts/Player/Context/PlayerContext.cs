@@ -18,4 +18,7 @@ public class PlayerContext
     public bool IsAttacking { get; set; }
     public bool NextLimb { get; set; }
     public bool PreviousLimb { get; set; }
+
+    public bool IsPushing { get; set; }
+    public float PushSpeedMultiplier { get; set; } = 1f;
 }

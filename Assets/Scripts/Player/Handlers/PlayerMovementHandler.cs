@@ -16,7 +16,7 @@ public class PlayerMovementHandler
         lastGroundSpeed = config.walkSpeed;
     }
 
-    public void HandleMovement (PlayerState state, Vector2 inputDir, Transform playerTransform)
+    public void HandleMovement (PlayerState state, Vector2 inputDir, Transform playerTransform, bool isPushing, float pushSpeedMultiplier)
     {
         Vector3 forward = cameraTransform.forward;
         Vector3 right = cameraTransform.right;
@@ -51,10 +51,28 @@ public class PlayerMovementHandler
                 break;
         }
 
+        if (isPushing)
+        {
+            currentSpeed *= pushSpeedMultiplier;
+        }
+
         if (state == PlayerState.Walking || state == PlayerState.Sprinting || state == PlayerState.Crouching)
             lastGroundSpeed = currentSpeed;
 
-        if (moveDirection.magnitude > 0.1f)
+        if (isPushing)
+        {
+             // When pushing, rotate to face camera forward (strafing)
+             if (forward.sqrMagnitude > 0.001f)
+             {
+                 Quaternion targetRotation = Quaternion.LookRotation(forward);
+                 playerTransform.rotation = Quaternion.RotateTowards(
+                     playerTransform.rotation,
+                     targetRotation,
+                     config.rotationSpeed * Time.deltaTime
+                 );
+             }
+        }
+        else if (moveDirection.magnitude > 0.1f)
         {
             Quaternion targetRotation = Quaternion.LookRotation(moveDirection);
             playerTransform.rotation = Quaternion.RotateTowards(

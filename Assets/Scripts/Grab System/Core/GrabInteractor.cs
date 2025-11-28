@@ -9,19 +9,29 @@ public class GrabInteractor : MonoBehaviour
     [SerializeField] private Transform holdPoint;
     [SerializeField] private Transform grabAnchor; 
     [SerializeField] private Transform player;
+    [SerializeField] private Collider pushCollider;
     [SerializeField] private float grabOffset = 1f;
+    [SerializeField] private Collider[] playerBodyColliders;
+
 
 
     private Rigidbody grabAnchorRb;
     private IGrabbable currentGrabbed;
     private IPickable currentPicked;
     private Transform grabbedTransform;
+    private Collider[] objectColliders;
     private bool grabButtonHeld;
+
+
+    private PlayerController playerController;
 
     private void Awake()
     {
         if (rayOrigin == null)
             rayOrigin = Camera.main.transform;
+
+        if (player != null)
+            playerController = player.GetComponent<PlayerController>();
 
         if (grabAnchor != null)
         {
@@ -29,9 +39,9 @@ public class GrabInteractor : MonoBehaviour
             if (grabAnchorRb == null)
             {
                 grabAnchorRb = grabAnchor.gameObject.AddComponent<Rigidbody>();
-                grabAnchorRb.isKinematic = true;
-                grabAnchorRb.useGravity = false;
             }
+            grabAnchorRb.isKinematic = true;
+            grabAnchorRb.useGravity = false;
         }
         else
         {
@@ -41,13 +51,6 @@ public class GrabInteractor : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (currentGrabbed != null && grabbedTransform != null)
-        {
-            holdPoint.position = grabbedTransform.position + player.forward * grabOffset;
-            holdPoint.rotation = player.rotation;
-        }
-
-
         if (grabAnchor != null && holdPoint != null)
         {
             grabAnchor.position = holdPoint.position;
@@ -78,6 +81,24 @@ public class GrabInteractor : MonoBehaviour
 
         if (currentPicked != null)
         {
+            // Restore collisions
+            if (currentPicked is Component pickedComponent)
+            {
+                var pickedColliders = pickedComponent.GetComponentsInChildren<Collider>();
+                foreach (var pc in playerBodyColliders)
+                {
+                    foreach (var oc in pickedColliders)
+                        Physics.IgnoreCollision(pc, oc, false);
+                }
+
+                var characterController = player.GetComponent<CharacterController>();
+                if (characterController != null)
+                {
+                    foreach (var oc in pickedColliders)
+                        Physics.IgnoreCollision(characterController, oc, false);
+                }
+            }
+
             currentPicked.Drop();
             currentPicked = null;
             return;
@@ -93,7 +114,23 @@ public class GrabInteractor : MonoBehaviour
         if (hit.collider.TryGetComponent<IPickable>(out var pickable))
         {
             currentPicked = pickable;
-            pickable.Pick(holdPoint);
+            pickable.Pick(grabAnchor); // Pass grabAnchor instead of holdPoint
+
+            // Ignore collisions between picked object and player
+            var pickedColliders = hit.collider.GetComponentsInChildren<Collider>();
+            foreach (var pc in playerBodyColliders)
+            {
+                foreach (var oc in pickedColliders)
+                    Physics.IgnoreCollision(pc, oc, true);
+            }
+
+            var characterController = player.GetComponent<CharacterController>();
+            if (characterController != null)
+            {
+                foreach (var oc in pickedColliders)
+                    Physics.IgnoreCollision(characterController, oc, true);
+            }
+
             return true;
         }
 
@@ -102,29 +139,56 @@ public class GrabInteractor : MonoBehaviour
 
     private void TryStartGrab()
     {
+        if (currentPicked != null) return;
+
         if (!Raycast(out RaycastHit hit)) return;
 
         if (hit.collider.TryGetComponent<IGrabbable>(out var grabbable))
         {
             currentGrabbed = grabbable;
 
-            MovePlayerToGrabPosition(hit.collider.transform);
-
+            MovePlayerToGrabPosition(hit);
             RotatePlayerToFaceObject(hit.collider.transform);
 
             currentGrabbed.StartGrab(grabAnchorRb, hit.point);
 
             grabbedTransform = hit.collider.transform;
+
+            objectColliders = grabbedTransform.GetComponentsInChildren<Collider>();
+            pushCollider.enabled = true;
+
+            // Ignorar colisiones entre objeto y el cuerpo
+            foreach (var pc in playerBodyColliders)
+            {
+                foreach (var oc in objectColliders)
+                    Physics.IgnoreCollision(pc, oc, true);
+            }
+
+            // Ignorar colisiones con el CharacterController explícitamente
+            var characterController = player.GetComponent<CharacterController>();
+            if (characterController != null)
+            {
+                foreach (var oc in objectColliders)
+                    Physics.IgnoreCollision(characterController, oc, true);
+            }
+
+            // Habilitar colisiones pushCollider <-> objeto
+            pushCollider.enabled = true;
+
+            if (playerController != null)
+                playerController.SetGrabState(true, grabbable.MoveResistance);
         }
     }
 
-    private void MovePlayerToGrabPosition(Transform target)
+    private void MovePlayerToGrabPosition(RaycastHit hit)
     {
-        Vector3 dir = (player.position - target.position).normalized;
-        Vector3 targetPos = target.position + dir * grabOffset;
+        Vector3 dir = (player.position - hit.point).normalized;
+        Vector3 targetPos = hit.point + dir * grabOffset;
+        Vector3 moveDir = targetPos - player.position;
+        grabAnchorRb.MovePosition(player.position + moveDir * Time.fixedDeltaTime);
 
-        player.position = targetPos; 
     }
+
 
     private void RotatePlayerToFaceObject(Transform target)
     {
@@ -137,8 +201,30 @@ public class GrabInteractor : MonoBehaviour
 
     private void StopGrab()
     {
+        if (objectColliders != null)
+        {
+            foreach (var pc in playerBodyColliders)
+            {
+                foreach (var oc in objectColliders)
+                    Physics.IgnoreCollision(pc, oc, false);
+            }
+
+            var characterController = player.GetComponent<CharacterController>();
+            if (characterController != null)
+            {
+                foreach (var oc in objectColliders)
+                    Physics.IgnoreCollision(characterController, oc, false);
+            }
+        }
+
+        pushCollider.enabled = false;
         currentGrabbed?.StopGrab();
+        grabbedTransform = null;
         currentGrabbed = null;
+
+        if (playerController != null)
+            playerController.SetGrabState(false, 1f);
+
     }
 
     private bool Raycast(out RaycastHit hit)

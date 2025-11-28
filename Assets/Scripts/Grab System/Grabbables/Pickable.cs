@@ -14,24 +14,46 @@ public class Pickable : MonoBehaviour, IPickable
             gripPoint = transform; 
     }
 
+    private FixedJoint joint;
+
     public void Pick(Transform hand)
     {
-        rb.isKinematic = true;
-        rb.interpolation = RigidbodyInterpolation.None;
-        GetComponent<Collider>().enabled = false;
-
-        transform.SetParent(hand);
-
+        rb.isKinematic = false;
+        rb.useGravity = false;
+        rb.interpolation = RigidbodyInterpolation.Interpolate;
+        // Do NOT disable collider
+        
+        // Align to hand
         transform.position = hand.position - (gripPoint.position - transform.position);
         transform.rotation = hand.rotation;
+
+        // Create joint
+        if (joint != null) Destroy(joint);
+        joint = gameObject.AddComponent<FixedJoint>();
+        
+        Rigidbody handRb = hand.GetComponent<Rigidbody>();
+        if (handRb != null)
+        {
+            joint.connectedBody = handRb;
+        }
+        else
+        {
+            // Fallback if hand has no RB (should not happen with GrabInteractor update)
+            joint.connectedAnchor = hand.position;
+        }
     }
 
     public void Drop()
     {
-        transform.SetParent(null);
+        if (joint != null)
+        {
+            Destroy(joint);
+            joint = null;
+        }
 
-        GetComponent<Collider>().enabled = true;
+        // Collider is already enabled
         rb.isKinematic = false;
+        rb.useGravity = true;
         rb.interpolation = RigidbodyInterpolation.Interpolate;
     }
 }
