@@ -768,6 +768,17 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""8ff6b53b-eac4-4726-aa9e-4562a9ac15bd"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": ""Press(behavior=2)"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""OpenRadialMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""984479f6-43bd-4882-ab9a-f41fcbecaa8e"",
                     ""path"": ""<Gamepad>/rightStick"",
                     ""interactions"": """",
