@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Inventory.UI;
 using UnityEngine;
 using UnityEngine.Events;
@@ -151,6 +152,16 @@ namespace Inventory
         {
             _inventory.Clear();
             LogIfEnabled("Inventario limpiado");
+        }
+
+        public InventoryItem[] GetAllItems()
+        {
+            return _inventory.Items.ToArray();
+        }
+        
+        public ItemData[] GetAllLimbs()
+        {
+            return _inventory.Limbs.Select(p => p.Data).ToArray();
         }
 
         #endregion
