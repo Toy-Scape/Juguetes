@@ -18,7 +18,7 @@ public class PlayerMovementHandler
 
     public void HandleMovement (PlayerState state, Vector2 inputDir, Transform playerTransform, PlayerContext playerContext)
     {
-        // Dirección relativa a la cámara
+        // Direcciï¿½n relativa a la cï¿½mara
         Vector3 forward = cameraTransform.forward;
         Vector3 right = cameraTransform.right;
         forward.y = 0; right.y = 0;
@@ -26,7 +26,7 @@ public class PlayerMovementHandler
 
         moveDirection = (forward * inputDir.y + right * inputDir.x).normalized;
 
-        // Velocidad según estado
+        // Velocidad segï¿½n estado
         switch (state)
         {
             case PlayerState.Walking:
@@ -59,14 +59,28 @@ public class PlayerMovementHandler
         if (state == PlayerState.Walking || state == PlayerState.Sprinting || state == PlayerState.Crouching)
             lastGroundSpeed = currentSpeed;
 
-        // Ajuste de dirección si está en pared
+        // Ajuste de direcciï¿½n si estï¿½ en pared
         if (state == PlayerState.WallWalking && playerContext.IsOnWall)
         {
             moveDirection = Vector3.ProjectOnPlane(moveDirection, playerContext.WallNormal).normalized;
         }
 
-        // Rotación del jugador
-        if (moveDirection.magnitude > 0.1f)
+        // Rotaciï¿½n del jugador
+        if (playerContext.IsPushing)
+        {
+            currentSpeed *= playerContext.PushSpeedMultiplier;
+             // When pushing, rotate to face camera forward (strafing)
+             if (forward.sqrMagnitude > 0.001f)
+             {
+                 Quaternion targetRotation = Quaternion.LookRotation(forward);
+                 playerTransform.rotation = Quaternion.RotateTowards(
+                     playerTransform.rotation,
+                     targetRotation,
+                     config.rotationSpeed * playerContext.PushSpeedMultiplier * Time.deltaTime
+                 );
+             }
+        }
+        else if (moveDirection.magnitude > 0.1f)
         {
             Quaternion targetRotation;
 

@@ -10,6 +10,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform cameraTransform;
     [SerializeField] private TMP_Text TMPPlayerState;
     [SerializeField] private PlayerInteractor playerInteractor;
+    [SerializeField] private GrabInteractor grabInteractor;
+
     [SerializeField] private LimbManager limbManager;
 
     private CharacterController controller;
@@ -50,7 +52,7 @@ public class PlayerController : MonoBehaviour
 
     void Update ()
     {
-        // Detección de pared
+        // Detecciï¿½n de pared
         playerContext.CanWalkOnWalls = limbManager.GetContext().CanClimbWalls;
         if (playerContext.CanWalkOnWalls)
         {
@@ -66,7 +68,7 @@ public class PlayerController : MonoBehaviour
 
             movementHandler.HandleMovement(CurrentState, playerContext.MoveInput, transform, playerContext);
             controller.height = crouchHandler.GetTargetHeight(CurrentState, controller.height);
-            playerContext.Velocity = jumpHandler.HandleJump(CurrentState, playerContext.IsJumping, playerContext.Velocity, playerContext.IsInWater, playerContext.IsGrounded);
+            playerContext.Velocity = jumpHandler.HandleJump(CurrentState, playerContext.IsJumping, playerContext.Velocity, playerContext.IsInWater, playerContext.IsGrounded, playerContext.IsPushing);
             playerContext.Velocity = physicsHandler.ApplyGravity(CurrentState, playerContext.Velocity, playerContext.IsGrounded);
 
             controller.Move(movementHandler.GetFinalMove(playerContext.Velocity) * Time.deltaTime);
@@ -118,13 +120,13 @@ public class PlayerController : MonoBehaviour
 
     void OnTriggerEnter (Collider other)
     {
-        if (other.CompareTag("Water"))
+        if (other.gameObject.tag == "Water")
             playerContext.IsInWater = true;
     }
 
     void OnTriggerExit (Collider other)
     {
-        if (other.CompareTag("Water"))
+        if (other.gameObject.tag == "Water")
             playerContext.IsInWater = false;
     }
 
@@ -181,4 +183,10 @@ public class PlayerController : MonoBehaviour
             limbManager.UseActive();
     }
     #endregion
+
+    public void SetGrabState(bool isGrabbing, float resistance)
+    {
+        playerContext.IsPushing = isGrabbing;
+        playerContext.PushSpeedMultiplier = 1f / Mathf.Max(resistance, 1f);
+    }
 }
