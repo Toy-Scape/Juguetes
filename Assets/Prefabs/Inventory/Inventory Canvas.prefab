@@ -95,8 +95,10 @@ MonoBehaviour:
   tooltipNameText: {fileID: 2725978283731557285}
   tooltipDescriptionText: {fileID: 7871485419364900957}
   tooltipOffset: {x: 140, y: -50}
-  maxSlotsToDisplay: 30
   hideOnStart: 1
+  itemsGridColumns: 5
+  limbsGridColumns: 1
+  selectedSlotColor: {r: 0.5, g: 0.7, b: 1, a: 0.9}
 --- !u!1 &2687932162441288471
 GameObject:
   m_ObjectHideFlags: 0
