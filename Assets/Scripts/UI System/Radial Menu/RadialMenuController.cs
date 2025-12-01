@@ -36,7 +36,7 @@ public class RadialMenuController : MonoBehaviour
         radialMenu.SelectWithJoystick(input);
     }
 
-    void OnPoint (InputValue value)
+    void OnPointRadialMenu (InputValue value)
     {
         if (!radialMenu.isActiveAndEnabled) return;
 
