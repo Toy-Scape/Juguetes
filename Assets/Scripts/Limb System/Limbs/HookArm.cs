@@ -1,13 +1,7 @@
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Limb/HookArm")]
-public class HookArmSO : AimableLimbSO
+public class HookArmSO : LimbSO
 {
-    private void OnEnable ()
-    {
-        LimbName = "Brazo Gancho";
-
-        ActiveAbility = new GrappleAbility();
-        SecondaryAbility = new AimAbility(this);
-    }
+    // Logic moved to Inspector assignment
 }

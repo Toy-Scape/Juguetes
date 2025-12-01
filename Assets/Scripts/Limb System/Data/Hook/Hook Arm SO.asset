@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 17c22aae0d943ca45a6989973be7be28, type: 3}
+  m_Name: Hook Arm SO
+  m_EditorClassIdentifier: Assembly-CSharp::HookArmSO
+  LimbName: Brazo Gancho
+  Slot: 1
+  LimbIcon: {fileID: 21300000, guid: c9441e6ead152a64d88ccdfcd241ea8f, type: 3}
+  LimbModel: {fileID: 0}
+  activeAbility: {fileID: 11400000, guid: a85cce09634815946878b9729a68bbb9, type: 2}
+  secondaryAbility: {fileID: 11400000, guid: b42e881635273bb44934a06c8f7ddf09, type: 2}
+  passiveAbility: {fileID: 0}

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,6 +9,8 @@ public class RadialMenu : MonoBehaviour
     [SerializeField] private LimbManager limbManager;
     [SerializeField] private GameObject buttonPrefab;
     [SerializeField] private Transform radialContainer;
+    [SerializeField] private TMP_Text centerLabel;
+
 
     [Header("Radial Settings")]
     [SerializeField] private float innerRadius = 100f;
@@ -15,8 +18,9 @@ public class RadialMenu : MonoBehaviour
     [SerializeField] private int segments = 32;
     [SerializeField] private float paddingAngle = 0.4f;
     [SerializeField] private float paddingRadial = 10f;
+    [SerializeField] private float globalRotationOffset = 90f;
 
-    private List<Button> buttons = new();
+    private List<GameObject> buttons = new();
     private LimbSO currentSelection;
     private bool isOpen = false;
     private LimbSO lastSelection;
@@ -27,8 +31,16 @@ public class RadialMenu : MonoBehaviour
         Hide();
     }
 
+    public bool CanBeOpened ()
+    {
+        var limbs = limbManager.GetAvailableLimbs();
+        return limbs.Count > 1;
+    }
+
     public void Show ()
     {
+        PopulateMenu();
+
         isOpen = true;
         gameObject.SetActive(true);
     }
@@ -41,8 +53,8 @@ public class RadialMenu : MonoBehaviour
 
     public void PopulateMenu ()
     {
-        foreach (var btn in buttons)
-            Destroy(btn.gameObject);
+        foreach (var obj in buttons)
+            Destroy(obj);
         buttons.Clear();
 
         var limbs = limbManager.GetAvailableLimbs();
@@ -53,15 +65,16 @@ public class RadialMenu : MonoBehaviour
         for (int i = 0; i < limbs.Count; i++)
         {
             var limb = limbs[i];
-
             var prefabObj = Instantiate(buttonPrefab, radialContainer);
             var arcGraphic = prefabObj.GetComponent<CurvedSegmentGraphic>();
             var button = prefabObj.GetComponentInChildren<Button>();
+            var image = button.GetComponentInChildren<Image>(true);
             var text = button.GetComponentInChildren<TMP_Text>(true);
-            text.text = limb.LimbName;
+            image.sprite = limb.LimbIcon;
+            text.text = "";
 
-            float startAngle = i * angleStep + paddingAngle;
-            float endAngle = (i + 1) * angleStep - paddingAngle;
+            float startAngle = i * angleStep + paddingAngle + globalRotationOffset;
+            float endAngle = (i + 1) * angleStep - paddingAngle + globalRotationOffset;
 
             arcGraphic.Configure(innerRadius + paddingRadial, outerRadius - paddingRadial, startAngle, endAngle, segments, Vector2.zero, 0);
 
@@ -75,11 +88,11 @@ public class RadialMenu : MonoBehaviour
             rt.anchoredPosition = centerPoint;
             rt.rotation = Quaternion.identity;
 
-            text.rectTransform.anchoredPosition = Vector2.zero;
-            text.rectTransform.rotation = Quaternion.identity;
+            //text.rectTransform.anchoredPosition = Vector2.zero;
+            //text.rectTransform.rotation = Quaternion.identity;
 
             button.onClick.AddListener(() => limbManager.EquipLimb(limb));
-            buttons.Add(button);
+            buttons.Add(prefabObj);
         }
     }
 
@@ -117,20 +130,23 @@ public class RadialMenu : MonoBehaviour
 
         float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
         if (angle < 0) angle += 360f;
+        angle = (angle - globalRotationOffset + 360f) % 360f;
 
         float angleStep = 360f / limbs.Count;
         int index = Mathf.FloorToInt(angle / angleStep);
         return limbs[index];
     }
+
     private LimbSO GetSelectionFromJoystick (Vector2 input, List<LimbSO> limbs, float deadzone = 0.2f)
     {
         if (limbs.Count == 0) return null;
 
         if (input.magnitude < deadzone)
-            return lastSelection; 
+            return lastSelection;
 
         float angle = Mathf.Atan2(input.y, input.x) * Mathf.Rad2Deg;
         if (angle < 0) angle += 360f;
+        angle = (angle - globalRotationOffset + 360f) % 360f;
 
         float angleStep = 360f / limbs.Count;
         int index = Mathf.FloorToInt(angle / angleStep);
@@ -144,12 +160,15 @@ public class RadialMenu : MonoBehaviour
         var limbs = limbManager.GetAvailableLimbs();
         for (int i = 0; i < buttons.Count; i++)
         {
-            var arc = buttons[i].GetComponentInParent<CurvedSegmentGraphic>();
+            var arc = buttons[i].GetComponent<CurvedSegmentGraphic>();
             if (arc != null)
             {
                 bool isSelected = limbs[i] == selection;
                 arc.SetHover(isSelected);
             }
         }
+
+        if (centerLabel != null)
+            centerLabel.text = selection != null ? selection.LimbName : "";
     }
 }

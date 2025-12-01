@@ -405,7 +405,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.35356, y: 2.18, z: 0.35356}
-  m_LocalScale: {x: 0.25, y: 0.25, z: 0.25}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 8908092247317713429}
@@ -501,6 +501,8 @@ MonoBehaviour:
     crouchSpeed: 2
     swimSpeed: 3
     diveSpeed: 2
+    wallWalkSpeed: 3
+    rotationSpeed: 720
     lookSensitivity: 1
     jumpHeight: 2
     gravity: -9.81
@@ -515,7 +517,7 @@ MonoBehaviour:
   cameraTransform: {fileID: 0}
   TMPPlayerState: {fileID: 0}
   playerInteractor: {fileID: 8163815884479273772}
-  limbContextSO: {fileID: 11400000, guid: d513b577569255c47a418a8ef684243d, type: 2}
+  limbManager: {fileID: 7319195771677131702}
 --- !u!143 &3856169263455038750
 CharacterController:
   m_ObjectHideFlags: 0
@@ -537,7 +539,7 @@ CharacterController:
   m_Height: 2
   m_Radius: 0.5
   m_SlopeLimit: 45
-  m_StepOffset: 0.3
+  m_StepOffset: 0.1
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0, z: 0}
@@ -722,13 +724,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e9fb74deaa107e4b87fb65f5948581d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LimbManager
-  limbContextSO: {fileID: 11400000, guid: d513b577569255c47a418a8ef684243d, type: 2}
-  availableLimbs:
-  - {fileID: 11400000, guid: b61593b9d2ebffb41977d60aebfeb44a, type: 2}
-  - {fileID: 11400000, guid: 29c265e8876586d44980782e571a6f07, type: 2}
-  - {fileID: 11400000, guid: 1129099a91e68664f9cb196523b29bcb, type: 2}
-  - {fileID: 11400000, guid: 510fd97b35b231e46946846fe842fe91, type: 2}
-  - {fileID: 11400000, guid: e3e8af9ef6033e1478fb4db964dde784, type: 2}
+  DefaultLimb: {fileID: 11400000, guid: a9c84fbcd3b88034a823714ce8e96172, type: 2}
+  inventory: {fileID: 7956428153845167614}
+  limbSockets: []
 --- !u!1 &7557932846192746383
 GameObject:
   m_ObjectHideFlags: 0
