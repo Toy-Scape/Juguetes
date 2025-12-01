@@ -2787,6 +2787,10 @@ PrefabInstance:
       value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 6629819060316150005, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
+      propertyPath: limbManager
+      value: 
+      objectReference: {fileID: 1728560817}
+    - target: {fileID: 6629819060316150005, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
       propertyPath: limbContextSO
       value: 
       objectReference: {fileID: 11400000, guid: d513b577569255c47a418a8ef684243d, type: 2}
@@ -2798,6 +2802,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 7319195771677131702, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
+      propertyPath: availableLimbs.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7319195771677131702, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
+      propertyPath: 'availableLimbs.Array.data[0]'
+      value: 
+      objectReference: {fileID: 11400000, guid: a9c84fbcd3b88034a823714ce8e96172, type: 2}
+    - target: {fileID: 7319195771677131702, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
+      propertyPath: 'availableLimbs.Array.data[1]'
+      value: 
+      objectReference: {fileID: 11400000, guid: b61593b9d2ebffb41977d60aebfeb44a, type: 2}
     - target: {fileID: 7911996690848532477, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
       propertyPath: m_LocalPosition.y
       value: 9

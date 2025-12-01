@@ -19,6 +19,12 @@ public class PlayerConfig
     [SerializeField] private float diveSpeed = 2f;
     public float DiveSpeed => diveSpeed;
 
+    [SerializeField] private float wallWalkSpeed = 3f;  
+    public float WallWalkSpeed => wallWalkSpeed;
+
+    [SerializeField] private float rotationSpeed = 720f; 
+    public float RotationSpeed => rotationSpeed;
+
     [SerializeField] private float lookSensitivity = 1f;
     public float LookSensitivity => lookSensitivity;
 
