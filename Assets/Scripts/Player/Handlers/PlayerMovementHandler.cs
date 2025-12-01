@@ -16,8 +16,9 @@ public class PlayerMovementHandler
         lastGroundSpeed = config.walkSpeed;
     }
 
-    public void HandleMovement (PlayerState state, Vector2 inputDir, Transform playerTransform, bool isPushing, float pushSpeedMultiplier)
+    public void HandleMovement (PlayerState state, Vector2 inputDir, Transform playerTransform, PlayerContext playerContext)
     {
+        // Direcci�n relativa a la c�mara
         Vector3 forward = cameraTransform.forward;
         Vector3 right = cameraTransform.right;
         forward.y = 0; right.y = 0;
@@ -25,6 +26,7 @@ public class PlayerMovementHandler
 
         moveDirection = (forward * inputDir.y + right * inputDir.x).normalized;
 
+        // Velocidad seg�n estado
         switch (state)
         {
             case PlayerState.Walking:
@@ -42,6 +44,9 @@ public class PlayerMovementHandler
             case PlayerState.Diving:
                 currentSpeed = config.diveSpeed;
                 break;
+            case PlayerState.WallWalking:
+                currentSpeed = config.wallWalkSpeed; // nuevo valor en MovementConfig
+                break;
             case PlayerState.Jumping:
             case PlayerState.Falling:
                 currentSpeed = lastGroundSpeed;
@@ -54,9 +59,16 @@ public class PlayerMovementHandler
         if (state == PlayerState.Walking || state == PlayerState.Sprinting || state == PlayerState.Crouching)
             lastGroundSpeed = currentSpeed;
 
-        if (isPushing)
+        // Ajuste de direcci�n si est� en pared
+        if (state == PlayerState.WallWalking && playerContext.IsOnWall)
         {
-            currentSpeed *= pushSpeedMultiplier;
+            moveDirection = Vector3.ProjectOnPlane(moveDirection, playerContext.WallNormal).normalized;
+        }
+
+        // Rotaci�n del jugador
+        if (playerContext.IsPushing)
+        {
+            currentSpeed *= playerContext.PushSpeedMultiplier;
              // When pushing, rotate to face camera forward (strafing)
              if (forward.sqrMagnitude > 0.001f)
              {
@@ -64,13 +76,24 @@ public class PlayerMovementHandler
                  playerTransform.rotation = Quaternion.RotateTowards(
                      playerTransform.rotation,
                      targetRotation,
-                     config.rotationSpeed * pushSpeedMultiplier * Time.deltaTime
+                     config.rotationSpeed * playerContext.PushSpeedMultiplier * Time.deltaTime
                  );
              }
         }
         else if (moveDirection.magnitude > 0.1f)
         {
-            Quaternion targetRotation = Quaternion.LookRotation(moveDirection);
+            Quaternion targetRotation;
+
+            if (state == PlayerState.WallWalking && playerContext.IsOnWall)
+            {
+                // Orienta al jugador con la normal de la pared como "up"
+                targetRotation = Quaternion.LookRotation(moveDirection, -playerContext.WallNormal);
+            }
+            else
+            {
+                targetRotation = Quaternion.LookRotation(moveDirection);
+            }
+
             playerTransform.rotation = Quaternion.RotateTowards(
                 playerTransform.rotation,
                 targetRotation,
