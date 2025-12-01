@@ -10,7 +10,7 @@ public class Grabbable : MonoBehaviour, IGrabbable
 
     public float MoveResistance => moveResistance;
 
-    private void Awake()
+    private void Awake ()
     {
         rb = GetComponent<Rigidbody>();
         rb.isKinematic = false;
@@ -18,7 +18,7 @@ public class Grabbable : MonoBehaviour, IGrabbable
         rb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
     }
 
-    public void StartGrab(Rigidbody grabAnchorRb, Vector3 grabPoint)
+    public void StartGrab (Rigidbody grabAnchorRb, Vector3 grabPoint)
     {
         if (joint != null)
             Destroy(joint);
@@ -64,7 +64,7 @@ public class Grabbable : MonoBehaviour, IGrabbable
         joint.angularYZDrive = angDrive;
     }
 
-    public void StopGrab()
+    public void StopGrab ()
     {
         if (joint != null)
             Destroy(joint);

@@ -51,16 +51,12 @@ public class PlayerMovementHandler
                 break;
         }
 
-        if (isPushing)
-        {
-            currentSpeed *= pushSpeedMultiplier;
-        }
-
         if (state == PlayerState.Walking || state == PlayerState.Sprinting || state == PlayerState.Crouching)
             lastGroundSpeed = currentSpeed;
 
         if (isPushing)
         {
+            currentSpeed *= pushSpeedMultiplier;
              // When pushing, rotate to face camera forward (strafing)
              if (forward.sqrMagnitude > 0.001f)
              {
@@ -68,7 +64,7 @@ public class PlayerMovementHandler
                  playerTransform.rotation = Quaternion.RotateTowards(
                      playerTransform.rotation,
                      targetRotation,
-                     config.rotationSpeed * Time.deltaTime
+                     config.rotationSpeed * pushSpeedMultiplier * Time.deltaTime
                  );
              }
         }

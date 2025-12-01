@@ -20,8 +20,8 @@ public class PlayerStateHandler
             else if (playerContext.Velocity.y < 0) return PlayerState.Falling;
         }
 
-        if (playerContext.IsCrouching) return PlayerState.Crouching;
-        if (playerContext.IsSprinting) return PlayerState.Sprinting;
+        if (playerContext.IsCrouching && !playerContext.IsPushing) return PlayerState.Crouching;
+        if (playerContext.IsSprinting && !playerContext.IsPushing) return PlayerState.Sprinting;
         if (playerContext.MoveInput.magnitude > config.minMoveThreshold) return PlayerState.Walking;
 
         return PlayerState.Idle;

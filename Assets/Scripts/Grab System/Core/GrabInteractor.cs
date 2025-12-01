@@ -13,19 +13,15 @@ public class GrabInteractor : MonoBehaviour
     [SerializeField] private float grabOffset = 1f;
     [SerializeField] private Collider[] playerBodyColliders;
 
-
-
     private Rigidbody grabAnchorRb;
     private IGrabbable currentGrabbed;
     private IPickable currentPicked;
     private Transform grabbedTransform;
     private Collider[] objectColliders;
     private bool grabButtonHeld;
-
-
     private PlayerController playerController;
 
-    private void Awake()
+    private void Awake ()
     {
         if (rayOrigin == null)
             rayOrigin = Camera.main.transform;
@@ -40,16 +36,21 @@ public class GrabInteractor : MonoBehaviour
             {
                 grabAnchorRb = grabAnchor.gameObject.AddComponent<Rigidbody>();
             }
-            grabAnchorRb.isKinematic = true;
+            grabAnchorRb.isKinematic = false;
             grabAnchorRb.useGravity = false;
         }
         else
         {
             Debug.LogError("GrabInteractor: asigna GrabAnchor en inspector");
         }
+
+        if (pushCollider != null)
+        {
+            pushCollider.enabled = false;
+        }
     }
 
-    private void FixedUpdate()
+    private void FixedUpdate ()
     {
         if (grabAnchor != null && holdPoint != null)
         {
@@ -59,7 +60,7 @@ public class GrabInteractor : MonoBehaviour
     }
 
 
-    void Update()
+    void Update ()
     {
         if (grabButtonHeld)
         {
@@ -73,31 +74,44 @@ public class GrabInteractor : MonoBehaviour
         }
     }
 
-    public void OnGrab(InputValue value)
+    public void OnGrab (InputValue value)
     {
         grabButtonHeld = value.isPressed;
 
-        if (!grabButtonHeld) return;
+        if (!grabButtonHeld)
+        {
+            if (currentGrabbed != null)
+                StopGrab();
+
+            return;
+        }
 
         if (currentPicked != null)
         {
-            // Restore collisions
-            if (currentPicked is Component pickedComponent)
-            {
-                var pickedColliders = pickedComponent.GetComponentsInChildren<Collider>();
-                foreach (var pc in playerBodyColliders)
-                {
-                    foreach (var oc in pickedColliders)
-                        Physics.IgnoreCollision(pc, oc, false);
-                }
+            DropPickedObject();
+            return;
+        }
 
-                var characterController = player.GetComponent<CharacterController>();
-                if (characterController != null)
-                {
-                    foreach (var oc in pickedColliders)
-                        Physics.IgnoreCollision(characterController, oc, false);
-                }
-            }
+        if (TryPick()) return;
+
+        TryStartGrab();
+    }
+
+    private void DropPickedObject ()
+    {
+        var pickedComponent = currentPicked as Component;
+        if (pickedComponent != null)
+        {
+            var pickedColliders = pickedComponent.GetComponentsInChildren<Collider>();
+
+            foreach (var pc in playerBodyColliders)
+                foreach (var oc in pickedColliders)
+                    Physics.IgnoreCollision(pc, oc, false);
+
+            var characterController = player.GetComponent<CharacterController>();
+            if (characterController != null)
+                foreach (var oc in pickedColliders)
+                    Physics.IgnoreCollision(characterController, oc, false);
 
             currentPicked.Drop();
             currentPicked = null;
@@ -107,14 +121,15 @@ public class GrabInteractor : MonoBehaviour
         if (TryPick()) return;
     }
 
-    private bool TryPick()
+    private bool TryPick ()
     {
         if (!Raycast(out RaycastHit hit)) return false;
 
         if (hit.collider.TryGetComponent<IPickable>(out var pickable))
         {
             currentPicked = pickable;
-            pickable.Pick(grabAnchor); // Pass grabAnchor instead of holdPoint
+            // Place the picked object at the player's hold point so its gripPoint aligns there
+            pickable.Pick(holdPoint);
 
             // Ignore collisions between picked object and player
             var pickedColliders = hit.collider.GetComponentsInChildren<Collider>();
@@ -137,7 +152,7 @@ public class GrabInteractor : MonoBehaviour
         return false;
     }
 
-    private void TryStartGrab()
+    private void TryStartGrab ()
     {
         if (currentPicked != null) return;
 
@@ -180,17 +195,15 @@ public class GrabInteractor : MonoBehaviour
         }
     }
 
-    private void MovePlayerToGrabPosition(RaycastHit hit)
+    private void MovePlayerToGrabPosition (RaycastHit hit)
     {
         Vector3 dir = (player.position - hit.point).normalized;
         Vector3 targetPos = hit.point + dir * grabOffset;
         Vector3 moveDir = targetPos - player.position;
         grabAnchorRb.MovePosition(player.position + moveDir * Time.fixedDeltaTime);
-
     }
 
-
-    private void RotatePlayerToFaceObject(Transform target)
+    private void RotatePlayerToFaceObject (Transform target)
     {
         Vector3 lookDir = target.position - player.position;
         lookDir.y = 0f;
@@ -199,7 +212,7 @@ public class GrabInteractor : MonoBehaviour
             player.rotation = Quaternion.LookRotation(lookDir);
     }
 
-    private void StopGrab()
+    private void StopGrab ()
     {
         if (objectColliders != null)
         {
@@ -227,7 +240,7 @@ public class GrabInteractor : MonoBehaviour
 
     }
 
-    private bool Raycast(out RaycastHit hit)
+    private bool Raycast (out RaycastHit hit)
     {
         return Physics.Raycast(rayOrigin.position, rayOrigin.forward, out hit, grabDistance);
     }

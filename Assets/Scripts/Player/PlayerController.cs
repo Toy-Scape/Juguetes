@@ -127,13 +127,13 @@ public class PlayerController : MonoBehaviour
 
     void OnTriggerEnter (Collider other)
     {
-        if (other.CompareTag("Water"))
+        if (other.gameObject.tag == "Water")
             playerContext.IsInWater = true;
     }
 
     void OnTriggerExit (Collider other)
     {
-        if (other.CompareTag("Water"))
+        if (other.gameObject.tag == "Water")
             playerContext.IsInWater = false;
     }
     #region "Inputs"
