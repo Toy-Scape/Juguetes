@@ -9,9 +9,9 @@ public class PlayerJumpHandler
         this.config = config;
     }
 
-    public Vector3 HandleJump (PlayerState state, bool isJumping, Vector3 velocity, bool isInWater, bool isGrounded)
+    public Vector3 HandleJump (PlayerState state, bool isJumping, Vector3 velocity, bool isInWater, bool isGrounded, bool isPushing)
     {
-        if (isJumping && isGrounded && !isInWater)
+        if (isJumping && isGrounded && !isInWater && !isPushing)
         {
             velocity.y = Mathf.Sqrt(config.jumpHeight * -2f * config.gravity);
         }
