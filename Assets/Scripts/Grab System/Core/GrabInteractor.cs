@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 public class GrabInteractor : MonoBehaviour
 {
     [SerializeField] private float grabDistance = 3f;
-    [SerializeField] private Transform rayOrigin;
+    [SerializeField] private Transform[] rayOrigins;
     [SerializeField] private Transform holdPoint;
     [SerializeField] private Transform grabAnchor;
     [SerializeField] private Transform player;
@@ -23,8 +23,8 @@ public class GrabInteractor : MonoBehaviour
 
     private void Awake()
     {
-        if (rayOrigin == null)
-            rayOrigin = Camera.main.transform;
+        if (rayOrigins == null || rayOrigins.Length == 0)
+            rayOrigins = new Transform[] { Camera.main.transform };
 
         if (player != null)
             playerController = player.GetComponent<PlayerController>();
@@ -242,6 +242,15 @@ public class GrabInteractor : MonoBehaviour
 
     private bool Raycast(out RaycastHit hit)
     {
-        return Physics.Raycast(rayOrigin.position, rayOrigin.forward, out hit, grabDistance);
+        hit = new RaycastHit();
+        foreach (var origin in rayOrigins)
+        {
+            if (origin == null) continue;
+            if (Physics.Raycast(origin.position, origin.forward, out hit, grabDistance))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }
