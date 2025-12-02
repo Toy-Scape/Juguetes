@@ -3322,7 +3322,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6629819060316150005, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
       propertyPath: config.ledgeForwardOffset
-      value: 1
+      value: 3.91
       objectReference: {fileID: 0}
     - target: {fileID: 6629819060316150005, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
       propertyPath: config.ledgeDetectionDistance
