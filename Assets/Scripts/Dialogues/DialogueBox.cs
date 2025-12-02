@@ -148,7 +148,7 @@ public class DialogueBox : MonoBehaviour
 
     private IEnumerator ReenablePlayerNextFrame ()
     {
-        yield return null;
+        yield return new WaitForSecondsRealtime(0.1f);
         playerInput.SwitchCurrentActionMap("Player");
     }
 

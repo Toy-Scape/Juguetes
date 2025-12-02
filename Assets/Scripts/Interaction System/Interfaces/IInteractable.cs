@@ -1,4 +1,4 @@
-using UnityEngine;
+using InteractionSystem.Core;
 
 namespace InteractionSystem.Interfaces
 {

@@ -62,6 +62,8 @@ namespace Inventory
 
         private void OnToggleInventory()
         {
+            if (DialogueBox.Instance != null && DialogueBox.Instance.IsOpen) return;
+
             if (TryGetOrCacheUI(out var ui))
             {
                 ui.ToggleInventory();
@@ -158,7 +160,7 @@ namespace Inventory
         {
             return _inventory.Items.ToArray();
         }
-        
+
         public ItemData[] GetAllLimbs()
         {
             return _inventory.Limbs.Select(p => p.Data).ToArray();

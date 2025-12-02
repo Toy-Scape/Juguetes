@@ -221,7 +221,7 @@ PrefabInstance:
     - target: {fileID: 6629819060316150005, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
       propertyPath: cameraTransform
       value: 
-      objectReference: {fileID: 857064564}
+      objectReference: {fileID: 0}
     - target: {fileID: 6629819060316150005, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
       propertyPath: config.lookSensitivity
       value: 0.5
@@ -496,11 +496,6 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
   CustomBlends: {fileID: 0}
---- !u!4 &857064564 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 7911996690848532477, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
-  m_PrefabInstance: {fileID: 546033687}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &871797904
 GameObject:
   m_ObjectHideFlags: 0

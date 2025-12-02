@@ -7,7 +7,7 @@ public class GrabInteractor : MonoBehaviour
     [SerializeField] private float grabDistance = 3f;
     [SerializeField] private Transform rayOrigin;
     [SerializeField] private Transform holdPoint;
-    [SerializeField] private Transform grabAnchor; 
+    [SerializeField] private Transform grabAnchor;
     [SerializeField] private Transform player;
     [SerializeField] private Collider pushCollider;
     [SerializeField] private float grabOffset = 1f;
@@ -21,7 +21,7 @@ public class GrabInteractor : MonoBehaviour
     private bool grabButtonHeld;
     private PlayerController playerController;
 
-    private void Awake ()
+    private void Awake()
     {
         if (rayOrigin == null)
             rayOrigin = Camera.main.transform;
@@ -50,7 +50,7 @@ public class GrabInteractor : MonoBehaviour
         }
     }
 
-    private void FixedUpdate ()
+    private void FixedUpdate()
     {
         if (grabAnchor != null && holdPoint != null)
         {
@@ -60,7 +60,7 @@ public class GrabInteractor : MonoBehaviour
     }
 
 
-    void Update ()
+    void Update()
     {
         if (grabButtonHeld)
         {
@@ -74,7 +74,7 @@ public class GrabInteractor : MonoBehaviour
         }
     }
 
-    public void OnGrab (InputValue value)
+    public void OnGrab(InputValue value)
     {
         grabButtonHeld = value.isPressed;
 
@@ -97,7 +97,7 @@ public class GrabInteractor : MonoBehaviour
         TryStartGrab();
     }
 
-    private void DropPickedObject ()
+    private void DropPickedObject()
     {
         var pickedComponent = currentPicked as Component;
         if (pickedComponent != null)
@@ -121,7 +121,7 @@ public class GrabInteractor : MonoBehaviour
         if (TryPick()) return;
     }
 
-    private bool TryPick ()
+    private bool TryPick()
     {
         if (!Raycast(out RaycastHit hit)) return false;
 
@@ -152,7 +152,7 @@ public class GrabInteractor : MonoBehaviour
         return false;
     }
 
-    private void TryStartGrab ()
+    private void TryStartGrab()
     {
         if (currentPicked != null) return;
 
@@ -195,7 +195,7 @@ public class GrabInteractor : MonoBehaviour
         }
     }
 
-    private void MovePlayerToGrabPosition (RaycastHit hit)
+    private void MovePlayerToGrabPosition(RaycastHit hit)
     {
         Vector3 dir = (player.position - hit.point).normalized;
         Vector3 targetPos = hit.point + dir * grabOffset;
@@ -203,7 +203,7 @@ public class GrabInteractor : MonoBehaviour
         grabAnchorRb.MovePosition(player.position + moveDir * Time.fixedDeltaTime);
     }
 
-    private void RotatePlayerToFaceObject (Transform target)
+    private void RotatePlayerToFaceObject(Transform target)
     {
         Vector3 lookDir = target.position - player.position;
         lookDir.y = 0f;
@@ -212,7 +212,7 @@ public class GrabInteractor : MonoBehaviour
             player.rotation = Quaternion.LookRotation(lookDir);
     }
 
-    private void StopGrab ()
+    private void StopGrab()
     {
         if (objectColliders != null)
         {
@@ -240,7 +240,7 @@ public class GrabInteractor : MonoBehaviour
 
     }
 
-    private bool Raycast (out RaycastHit hit)
+    private bool Raycast(out RaycastHit hit)
     {
         return Physics.Raycast(rayOrigin.position, rayOrigin.forward, out hit, grabDistance);
     }
