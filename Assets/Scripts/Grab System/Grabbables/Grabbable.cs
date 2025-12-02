@@ -1,16 +1,18 @@
 using InteractionSystem.Interfaces;
 using UnityEngine;
+using System.Linq;
 
 public class Grabbable : MonoBehaviour, IGrabbable
 {
     [SerializeField] private float moveResistance = 1f;
+    [SerializeField] private GrabConditionSO[] grabConditions;
 
     private Rigidbody rb;
     private ConfigurableJoint joint;
 
     public float MoveResistance => moveResistance;
 
-    private void Awake ()
+    private void Awake()
     {
         rb = GetComponent<Rigidbody>();
         rb.isKinematic = true;
@@ -18,15 +20,22 @@ public class Grabbable : MonoBehaviour, IGrabbable
         rb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
     }
 
-    public void StartGrab (Rigidbody grabAnchorRb, Vector3 grabPoint)
+    public bool CanBeGrabbed()
     {
+        if (grabConditions == null || grabConditions.Length == 0) return true;
+        return grabConditions.All(c => c != null && c.CanGrab());
+    }
+
+    public void StartGrab(Rigidbody grabAnchorRb, Vector3 grabPoint)
+    {
+        if (!CanBeGrabbed()) return;
+
         rb.isKinematic = false;
         if (joint != null)
             Destroy(joint);
 
         joint = gameObject.AddComponent<ConfigurableJoint>();
         joint.connectedBody = grabAnchorRb;
-
         joint.autoConfigureConnectedAnchor = false;
 
         Vector3 localAnchor = transform.InverseTransformPoint(grabPoint);
@@ -65,10 +74,9 @@ public class Grabbable : MonoBehaviour, IGrabbable
         joint.angularYZDrive = angDrive;
     }
 
-    public void StopGrab ()
+    public void StopGrab()
     {
         rb.isKinematic = true;
-        
         if (joint != null)
             Destroy(joint);
     }

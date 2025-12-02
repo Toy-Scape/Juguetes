@@ -127,6 +127,8 @@ public class GrabInteractor : MonoBehaviour
 
         if (hit.collider.TryGetComponent<IPickable>(out var pickable))
         {
+            if (!pickable.CanBePicked())
+                return false;
             currentPicked = pickable;
             // Place the picked object at the player's hold point so its gripPoint aligns there
             pickable.Pick(holdPoint);
@@ -160,6 +162,8 @@ public class GrabInteractor : MonoBehaviour
 
         if (hit.collider.TryGetComponent<IGrabbable>(out var grabbable))
         {
+            if (!grabbable.CanBeGrabbed())
+                return;
             currentGrabbed = grabbable;
 
             MovePlayerToGrabPosition(hit);
