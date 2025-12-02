@@ -15,7 +15,10 @@ public class TutorialNPC : NPCInteractableBase
     {
         base.Interact();
 
-        AddLimbToInventory();
+        if (!playerInventory.Contains(limbItemData))
+        {
+            AddLimbToInventory();
+        }
     }
 
     private void AddLimbToInventory()

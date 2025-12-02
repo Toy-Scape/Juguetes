@@ -13,13 +13,14 @@ public class Grabbable : MonoBehaviour, IGrabbable
     private void Awake ()
     {
         rb = GetComponent<Rigidbody>();
-        rb.isKinematic = false;
+        rb.isKinematic = true;
         rb.interpolation = RigidbodyInterpolation.Interpolate;
         rb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
     }
 
     public void StartGrab (Rigidbody grabAnchorRb, Vector3 grabPoint)
     {
+        rb.isKinematic = false;
         if (joint != null)
             Destroy(joint);
 
@@ -66,6 +67,8 @@ public class Grabbable : MonoBehaviour, IGrabbable
 
     public void StopGrab ()
     {
+        rb.isKinematic = true;
+        
         if (joint != null)
             Destroy(joint);
     }

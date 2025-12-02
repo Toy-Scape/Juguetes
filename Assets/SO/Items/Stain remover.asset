@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Inventory.ItemData
   itemName: Destornillador
   description: Puede abrir conductos de ventilacion.
-  icon: {fileID: 21300000, guid: 2632360410af008408a760daf2a94a63, type: 3}
+  icon: {fileID: 21300000, guid: 5533de36e327add47af54f5a95e59413, type: 3}
   maxStackSize: 1
   isLimb: 0
   limbSO: {fileID: 0}

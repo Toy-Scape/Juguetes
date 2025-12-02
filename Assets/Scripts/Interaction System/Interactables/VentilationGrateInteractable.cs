@@ -2,6 +2,7 @@ using InteractionSystem.Core;
 using InteractionSystem.Interactables;
 using Inventory;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Interaction_System.Interactables
 {
@@ -9,6 +10,7 @@ namespace Interaction_System.Interactables
     {
         [SerializeField] ItemData itemData;
         PlayerInventory playerInventory;
+        private SceneManager sceneManager;
     
         void Start()
         {
@@ -19,7 +21,7 @@ namespace Interaction_System.Interactables
         {
             if (playerInventory.Contains(itemData))
             {
-                this.gameObject.SetActive(false);
+                SceneManager.LoadScene(1);
             }
             else
             {
