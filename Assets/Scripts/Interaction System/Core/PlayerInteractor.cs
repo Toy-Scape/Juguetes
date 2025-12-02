@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using TMPro;
 using InteractionSystem.Interfaces;
+using Inventory;
 
 namespace InteractionSystem.Core
 {
@@ -36,6 +37,7 @@ namespace InteractionSystem.Core
         private RectTransform promptRectTransform;
         private Vector3 promptTargetWorldPosition;
         private bool promptHasTarget;
+        private PlayerInventory playerInventory;
 
         public float InteractionDistance => interactionDistance;
 
@@ -82,6 +84,12 @@ namespace InteractionSystem.Core
                     interactionPromptText.enabled = false;
                 }
             }
+
+            playerInventory = GetComponent<PlayerInventory>();
+            if (playerInventory == null)
+            {
+                Debug.LogWarning("PlayerInteractor: PlayerInventory not found on the same GameObject.");
+            }
         }
 
         void OnValidate ()
@@ -115,7 +123,11 @@ namespace InteractionSystem.Core
             }
 
             Debug.Log("OnInteract performed on " + focusedGameObject.name);
-            focusedInteractable.Interact();
+            InteractContext context = new InteractContext
+            {
+                PlayerInventory = playerInventory
+            };
+            focusedInteractable.Interact(context);
         }
 
         private void CheckForInteractable ()

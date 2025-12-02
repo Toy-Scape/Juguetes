@@ -37,7 +37,7 @@ namespace InteractionSystem.Core
             }
         }
 
-        public abstract void Interact ();
+        public abstract void Interact (InteractContext context);
 
         public abstract bool IsInteractable ();
     }

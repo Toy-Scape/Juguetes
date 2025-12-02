@@ -4,7 +4,7 @@ namespace InteractionSystem.Interfaces
 {
     public interface IInteractable
     {
-        void Interact();
+        void Interact(InteractContext context);
 
         bool IsInteractable();
     }
