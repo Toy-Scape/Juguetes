@@ -10,7 +10,6 @@ namespace InteractionSystem.Core
     public class PlayerInteractor : MonoBehaviour
     {
         [SerializeField] private float interactionDistance = 3f;
-        [SerializeField] private Transform rayOrigin = null;
         [SerializeField] private Transform[] rayOrigins = new Transform[0];
 
         [Header("Outline Settings")]
@@ -50,17 +49,23 @@ namespace InteractionSystem.Core
                     return rayOrigins;
                 }
 
-                return new Transform[] { rayOrigin != null ? rayOrigin : transform };
+                return new Transform[] { transform };
             }
         }
         
         void Awake ()
         {
-            Debug.Log("PlayerInteractor Awake. RayOrigin: " + rayOrigin);
-
-            if (rayOrigin == null)
+            if (rayOrigins == null || rayOrigins.Length == 0)
             {
-                rayOrigin = Camera.main != null ? Camera.main.transform : transform;
+                var mainCam = Camera.main;
+                if (mainCam != null)
+                {
+                    rayOrigins = new Transform[] { mainCam.transform };
+                }
+                else
+                {
+                    rayOrigins = new Transform[] { transform };
+                }
             }
 
             InteractableBase.SetGlobalOutlineProperties(outlineColor, outlineWidth, outlineMode);
@@ -240,7 +245,7 @@ namespace InteractionSystem.Core
         private void SetPromptTargetToPlayer ()
         {
             promptHasTarget = true;
-            Transform followTarget = rayOrigin != null ? rayOrigin : transform;
+            Transform followTarget = (rayOrigins != null && rayOrigins.Length > 0) ? rayOrigins[0] : transform;
             promptTargetWorldPosition = followTarget.position + promptWorldOffset;
         }
 
@@ -309,7 +314,11 @@ namespace InteractionSystem.Core
             Vector3 current = interactionPrompt.transform.position;
             interactionPrompt.transform.position = Vector3.Lerp(current, targetPosition, Time.deltaTime * promptFollowSpeed);
 
-            Camera cam = Camera.main != null ? Camera.main : (rayOrigin != null ? rayOrigin.GetComponent<Camera>() : null);
+            Camera cam = Camera.main;
+            if (cam == null && rayOrigins != null && rayOrigins.Length > 0)
+            {
+                 cam = rayOrigins[0].GetComponent<Camera>();
+            }
 
             if (cam != null)
             {
