@@ -54,6 +54,8 @@ public class DialogueBox : MonoBehaviour
             dialogueContent.SetActive(true);
             thoughtContent.SetActive(false);
             playerInput.SwitchCurrentActionMap("Dialogue");
+
+            StartCoroutine(EnableNextDialogueAction());
         }
         else if (activeDialogue.Type == Dialogue.DialogueType.Thought)
         {
@@ -71,10 +73,13 @@ public class DialogueBox : MonoBehaviour
         thoughtContent.SetActive(false);
         onClose?.Invoke();
 
+        nextDialogueAction.action.performed -= OnNextDialogue;
+        nextDialogueAction.action.Disable();
+
         StartCoroutine(ReenablePlayerNextFrame());
     }
 
-     private void OnNextDialogue ()
+     private void OnNextDialogue (InputAction.CallbackContext ctx)
     {
         Next();
     }
@@ -143,7 +148,7 @@ public class DialogueBox : MonoBehaviour
 
     private IEnumerator ReenablePlayerNextFrame ()
     {
-        yield return null;
+        yield return new WaitForSecondsRealtime(0.1f);
         playerInput.SwitchCurrentActionMap("Player");
     }
 
@@ -153,5 +158,10 @@ public class DialogueBox : MonoBehaviour
         Close();
     }
 
-
+    private IEnumerator EnableNextDialogueAction ()
+    {
+        yield return null;
+        nextDialogueAction.action.performed += OnNextDialogue;
+        nextDialogueAction.action.Enable();
+    }
 }

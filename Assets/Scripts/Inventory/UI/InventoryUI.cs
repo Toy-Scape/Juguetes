@@ -497,10 +497,10 @@ namespace Inventory.UI
             _isInventoryOpen = true;
             inventoryPanel.SetActive(true);
             RefreshUI();
-            
+
             CameraManager.instance.LockCameraMovement();
             CameraManager.instance.UnlockCursor();
-            
+
             var playerInput = FindFirstObjectByType<PlayerInput>();
             if (playerInput != null && playerInput.currentActionMap.name != "UI")
             {
