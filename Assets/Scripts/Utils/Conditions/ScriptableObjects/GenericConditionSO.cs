@@ -11,16 +11,16 @@ public enum VariableType
 
 public enum ComparisonType
 {
-    Equal,
-    Greater,
-    GreaterOrEqual,
-    Less,
-    LessOrEqual,
+    EqualTo,
+    GreaterThan,
+    GreaterOrEqualThan,
+    LessThan,
+    LessOrEqualThan,
     Between
 }
 
-[CreateAssetMenu(menuName = "GrabConditions/Generic Comparison")]
-public class GrabConditionSO : GrabCondition
+[CreateAssetMenu(menuName = "Conditions/Generic Comparison")]
+public class GenericConditionSO : GenericCondition
 {
     [SerializeField] private VariableType variableType;
 
@@ -36,7 +36,7 @@ public class GrabConditionSO : GrabCondition
     [SerializeField] private bool boolValue;
     [SerializeField] private string stringValue;
 
-    public override bool CanGrab()
+    public override bool ConditionIsMet()
     {
         switch (variableType)
         {
@@ -65,19 +65,19 @@ public class GrabConditionSO : GrabCondition
     {
         switch (comparison)
         {
-            case ComparisonType.Equal:
+            case ComparisonType.EqualTo:
                 return current.CompareTo(a) == 0;
 
-            case ComparisonType.Greater:
+            case ComparisonType.GreaterThan:
                 return current.CompareTo(a) > 0;
 
-            case ComparisonType.GreaterOrEqual:
+            case ComparisonType.GreaterOrEqualThan:
                 return current.CompareTo(a) >= 0;
 
-            case ComparisonType.Less:
+            case ComparisonType.LessThan:
                 return current.CompareTo(a) < 0;
 
-            case ComparisonType.LessOrEqual:
+            case ComparisonType.LessOrEqualThan:
                 return current.CompareTo(a) <= 0;
 
             case ComparisonType.Between:
