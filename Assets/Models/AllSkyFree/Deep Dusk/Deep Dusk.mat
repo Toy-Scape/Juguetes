@@ -24,27 +24,27 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _BackTex:
-        m_Texture: {fileID: 2800000, guid: b5e7a693cffee0f4eb9afedddad60bc3, type: 3}
+        m_Texture: {fileID: 2800000, guid: fe721cc3821f129418d4a355d64bfcbd, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _DownTex:
-        m_Texture: {fileID: 2800000, guid: 345cbc158b1e7184c9ebfbead417696c, type: 3}
+        m_Texture: {fileID: 2800000, guid: aa580abf4e3f8e64db181ffbc1254e05, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _FrontTex:
-        m_Texture: {fileID: 2800000, guid: e255f5bc7b6a66e489bcfec1befca7dc, type: 3}
+        m_Texture: {fileID: 2800000, guid: 2d78b3a0482ff5749a82f5b3b176a722, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _LeftTex:
-        m_Texture: {fileID: 2800000, guid: 30d515cf90fc1ab498da2c36fda39376, type: 3}
+        m_Texture: {fileID: 2800000, guid: 0ea86b554bfcf6843937ad1e23477d34, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _RightTex:
-        m_Texture: {fileID: 2800000, guid: 320ab3fdbab645a4c965e22e1a4401dd, type: 3}
+        m_Texture: {fileID: 2800000, guid: 318341697ee13a841af70e3639efcbe9, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _UpTex:
-        m_Texture: {fileID: 2800000, guid: 9e1c4adb2efd23347a52481ba78be12d, type: 3}
+        m_Texture: {fileID: 2800000, guid: 78bfd2ece70232b4ead14f366c5fd4fd, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Ints: []
