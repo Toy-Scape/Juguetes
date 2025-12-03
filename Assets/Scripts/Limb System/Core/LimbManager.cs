@@ -13,25 +13,37 @@ public class LimbManager : MonoBehaviour
         public LimbSO DefaultLimb;
     }
 
-    private LimbContext context = new();
-    
+    [SerializeField] private ContextVariablesSO contextVariables;
     [SerializeField] private LimbSO DefaultLimb;
     [SerializeField] private PlayerInventory inventory;
     [SerializeField] private List<LimbSocketDefinition> limbSockets;
 
+    private LimbContext context;
     private LimbSO equippedLimb;
     private Dictionary<LimbSlot, GameObject> spawnedLimbModels = new();
 
     private void Awake()
     {
+        contextVariables.canLiftHeavyObjectsVar.Value = false;
+        contextVariables.canClimbWallsVar.Value = false;
+        contextVariables.canSwimVar.Value = false;
+        contextVariables.isAimingVar.Value = false;
+
+        context = new LimbContext
+        {
+            CanLiftHeavyObjectsVar = contextVariables.canLiftHeavyObjectsVar,
+            CanClimbWallsVar = contextVariables.canClimbWallsVar,
+            CanSwimVar = contextVariables.canSwimVar,
+            IsAimingVar = contextVariables.isAimingVar
+        };
+
         RefreshVisuals();
     }
 
-    public void EquipLimb (LimbSO newLimb)
+    public void EquipLimb(LimbSO newLimb)
     {
         if (newLimb == null) return;
 
-        // Unequip previous if exists
         if (equippedLimb != null)
         {
             equippedLimb.OnUnequip(context);
@@ -42,8 +54,6 @@ public class LimbManager : MonoBehaviour
         equippedLimb.OnEquip(context);
 
         RefreshVisuals();
-
-        Debug.Log($"Equipada extremidad: {equippedLimb.LimbName} en {equippedLimb.SlotName}");
     }
 
     private void RefreshVisuals()
@@ -81,10 +91,10 @@ public class LimbManager : MonoBehaviour
         }
     }
 
-    public void UseActive () => equippedLimb?.UseActive(context);
-    public void UseSecondary () => equippedLimb?.UseSecondary(context);
+    public void UseActive() => equippedLimb?.UseActive(context);
+    public void UseSecondary() => equippedLimb?.UseSecondary(context);
 
-    public LimbContext GetContext () => context;
-    public LimbSO GetEquippedLimb () => equippedLimb;
-    public List<LimbSO> GetAvailableLimbs () => inventory.GetAllLimbs().Select(p => p.LimbSO).Prepend(DefaultLimb).ToList();
+    public LimbContext GetContext() => context;
+    public LimbSO GetEquippedLimb() => equippedLimb;
+    public List<LimbSO> GetAvailableLimbs() => inventory.GetAllLimbs().Select(p => p.LimbSO).Prepend(DefaultLimb).ToList();
 }
