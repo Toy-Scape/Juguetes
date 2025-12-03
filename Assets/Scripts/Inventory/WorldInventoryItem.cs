@@ -31,7 +31,7 @@ namespace Inventory
             Gizmos.DrawWireSphere(transform.position, 0.3f);
         }
 
-        public override void Interact ()
+        public override void Interact (InteractContext context)
         {
             if (itemData == null)
             {
@@ -39,10 +39,10 @@ namespace Inventory
                 return;
             }
 
-            PlayerInventory playerInventory = FindPlayerInventory();
+            PlayerInventory playerInventory = context.PlayerInventory;
             if (playerInventory == null)
             {
-                Debug.LogWarning("[WorldInventoryItem] No se encontró PlayerInventory en el Player");
+                Debug.LogWarning("[WorldInventoryItem] No se encontró PlayerInventory en el Contexto");
                 return;
             }
 
@@ -54,23 +54,6 @@ namespace Inventory
         public override bool IsInteractable ()
         {
             return itemData != null && quantity > 0;
-        }
-
-        private PlayerInventory FindPlayerInventory ()
-        {
-            try
-            {
-                GameObject player = GameObject.FindGameObjectWithTag("Player");
-                PlayerInventory inventory = player.GetComponent<PlayerInventory>();
-                if (inventory != null)
-                    return inventory;
-            }
-            catch (UnityException)
-            {
-                // No hay objeto con tag Player
-            }
-
-            return UnityEngine.Object.FindFirstObjectByType<PlayerInventory>();
         }
     }
 }

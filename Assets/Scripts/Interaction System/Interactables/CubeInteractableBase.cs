@@ -6,7 +6,7 @@ namespace InteractionSystem.Interactables
 {
     public class CubeInteractableBase : InteractableBase
     {
-        public override void Interact ()
+        public override void Interact (InteractContext context)
         {
             Debug.Log("Interact");
         }
