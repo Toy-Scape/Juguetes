@@ -24,14 +24,13 @@ public class GrabConditionSO : GrabCondition
 {
     [SerializeField] private VariableType variableType;
 
-    // Campos para cada tipo
     [SerializeField] private FloatVariableSO floatVar;
     [SerializeField] private IntVariableSO intVar;
     [SerializeField] private BoolVariableSO boolVar;
     [SerializeField] private StringVariableSO stringVar;
 
     [SerializeField] private ComparisonType comparison;
-    [SerializeField] private string valueA; // usamos string para flexibilidad
+    [SerializeField] private string valueA; 
     [SerializeField] private string valueB;
 
     [SerializeField] private bool boolValue;
