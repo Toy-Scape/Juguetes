@@ -5,7 +5,7 @@ using System.Linq;
 public class Pickable : MonoBehaviour, IPickable
 {
     [SerializeField] private Transform gripPoint;
-    [SerializeField] private GrabConditionSO[] pickConditions;
+    [SerializeField] private GenericConditionSO[] pickConditions;
 
     private Rigidbody rb;
 
@@ -18,7 +18,7 @@ public class Pickable : MonoBehaviour, IPickable
     public bool CanBePicked()
     {
         if (pickConditions == null || pickConditions.Length == 0) return true;
-        return pickConditions.All(c => c != null && c.CanGrab());
+        return pickConditions.All(c => c != null && c.ConditionIsMet());
     }
 
 

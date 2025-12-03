@@ -19,8 +19,8 @@ public enum ComparisonType
     Between
 }
 
-[CreateAssetMenu(menuName = "GrabConditions/Generic Comparison")]
-public class GrabConditionSO : GrabCondition
+[CreateAssetMenu(menuName = "Conditions/Generic Comparison")]
+public class GenericConditionSO : GenericCondition
 {
     [SerializeField] private VariableType variableType;
 
@@ -36,7 +36,7 @@ public class GrabConditionSO : GrabCondition
     [SerializeField] private bool boolValue;
     [SerializeField] private string stringValue;
 
-    public override bool CanGrab()
+    public override bool ConditionIsMet()
     {
         switch (variableType)
         {

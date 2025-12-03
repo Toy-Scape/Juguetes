@@ -5,7 +5,7 @@ using System.Linq;
 public class Grabbable : MonoBehaviour, IGrabbable
 {
     [SerializeField] private float moveResistance = 1f;
-    [SerializeField] private GrabConditionSO[] grabConditions;
+    [SerializeField] private GenericConditionSO[] grabConditions;
 
     private Rigidbody rb;
     private ConfigurableJoint joint;
@@ -23,7 +23,7 @@ public class Grabbable : MonoBehaviour, IGrabbable
     public bool CanBeGrabbed()
     {
         if (grabConditions == null || grabConditions.Length == 0) return true;
-        return grabConditions.All(c => c != null && c.CanGrab());
+        return grabConditions.All(c => c != null && c.ConditionIsMet());
     }
 
     public void StartGrab(Rigidbody grabAnchorRb, Vector3 grabPoint)
