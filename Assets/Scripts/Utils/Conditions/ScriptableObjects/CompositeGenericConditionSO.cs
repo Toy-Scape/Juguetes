@@ -6,13 +6,13 @@ public enum CompositeType
     Or
 }
 
-[CreateAssetMenu(menuName = "GrabConditions/Composite")]
-public class CompositeGrabConditionSO : GrabConditionSO
+[CreateAssetMenu(menuName = "Conditions/Composite")]
+public class CompositeGenericConditionSO : GenericCondition
 {
     [SerializeField] private CompositeType compositeType;
-    [SerializeField] private GrabConditionSO[] conditions;
+    [SerializeField] private GenericConditionSO[] conditions;
 
-    public override bool CanGrab()
+    public override bool ConditionIsMet()
     {
         if (conditions == null || conditions.Length == 0) return true;
 
@@ -22,7 +22,7 @@ public class CompositeGrabConditionSO : GrabConditionSO
                 foreach (var c in conditions)
                 {
                     if (c == null) continue;
-                    if (!c.CanGrab()) return false;
+                    if (!c.ConditionIsMet()) return false;
                 }
                 return true;
 
@@ -30,7 +30,7 @@ public class CompositeGrabConditionSO : GrabConditionSO
                 foreach (var c in conditions)
                 {
                     if (c == null) continue;
-                    if (c.CanGrab()) return true;
+                    if (c.ConditionIsMet()) return true;
                 }
                 return false;
 
