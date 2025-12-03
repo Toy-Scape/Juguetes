@@ -11,11 +11,11 @@ public enum VariableType
 
 public enum ComparisonType
 {
-    Equal,
-    Greater,
-    GreaterOrEqual,
-    Less,
-    LessOrEqual,
+    EqualTo,
+    GreaterThan,
+    GreaterOrEqualThan,
+    LessThan,
+    LessOrEqualThan,
     Between
 }
 
@@ -65,19 +65,19 @@ public class GenericConditionSO : GenericCondition
     {
         switch (comparison)
         {
-            case ComparisonType.Equal:
+            case ComparisonType.EqualTo:
                 return current.CompareTo(a) == 0;
 
-            case ComparisonType.Greater:
+            case ComparisonType.GreaterThan:
                 return current.CompareTo(a) > 0;
 
-            case ComparisonType.GreaterOrEqual:
+            case ComparisonType.GreaterOrEqualThan:
                 return current.CompareTo(a) >= 0;
 
-            case ComparisonType.Less:
+            case ComparisonType.LessThan:
                 return current.CompareTo(a) < 0;
 
-            case ComparisonType.LessOrEqual:
+            case ComparisonType.LessOrEqualThan:
                 return current.CompareTo(a) <= 0;
 
             case ComparisonType.Between:
