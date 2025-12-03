@@ -3,13 +3,13 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using TMPro;
 using InteractionSystem.Interfaces;
+using Inventory;
 
 namespace InteractionSystem.Core
 {
     public class PlayerInteractor : MonoBehaviour
     {
         [SerializeField] private float interactionDistance = 3f;
-        [SerializeField] private Transform rayOrigin = null;
         [SerializeField] private Transform[] rayOrigins = new Transform[0];
 
         [Header("Outline Settings")]
@@ -36,6 +36,7 @@ namespace InteractionSystem.Core
         private RectTransform promptRectTransform;
         private Vector3 promptTargetWorldPosition;
         private bool promptHasTarget;
+        private PlayerInventory playerInventory;
 
         public float InteractionDistance => interactionDistance;
 
@@ -48,17 +49,23 @@ namespace InteractionSystem.Core
                     return rayOrigins;
                 }
 
-                return new Transform[] { rayOrigin != null ? rayOrigin : transform };
+                return new Transform[] { transform };
             }
         }
         
         void Awake ()
         {
-            Debug.Log("PlayerInteractor Awake. RayOrigin: " + rayOrigin);
-
-            if (rayOrigin == null)
+            if (rayOrigins == null || rayOrigins.Length == 0)
             {
-                rayOrigin = Camera.main != null ? Camera.main.transform : transform;
+                var mainCam = Camera.main;
+                if (mainCam != null)
+                {
+                    rayOrigins = new Transform[] { mainCam.transform };
+                }
+                else
+                {
+                    rayOrigins = new Transform[] { transform };
+                }
             }
 
             InteractableBase.SetGlobalOutlineProperties(outlineColor, outlineWidth, outlineMode);
@@ -81,6 +88,12 @@ namespace InteractionSystem.Core
                     interactionPromptText.text = "";
                     interactionPromptText.enabled = false;
                 }
+            }
+
+            playerInventory = GetComponent<PlayerInventory>();
+            if (playerInventory == null)
+            {
+                Debug.LogWarning("PlayerInteractor: PlayerInventory not found on the same GameObject.");
             }
         }
 
@@ -115,7 +128,11 @@ namespace InteractionSystem.Core
             }
 
             Debug.Log("OnInteract performed on " + focusedGameObject.name);
-            focusedInteractable.Interact();
+            InteractContext context = new InteractContext
+            {
+                PlayerInventory = playerInventory
+            };
+            focusedInteractable.Interact(context);
         }
 
         private void CheckForInteractable ()
@@ -228,7 +245,7 @@ namespace InteractionSystem.Core
         private void SetPromptTargetToPlayer ()
         {
             promptHasTarget = true;
-            Transform followTarget = rayOrigin != null ? rayOrigin : transform;
+            Transform followTarget = (rayOrigins != null && rayOrigins.Length > 0) ? rayOrigins[0] : transform;
             promptTargetWorldPosition = followTarget.position + promptWorldOffset;
         }
 
@@ -297,7 +314,11 @@ namespace InteractionSystem.Core
             Vector3 current = interactionPrompt.transform.position;
             interactionPrompt.transform.position = Vector3.Lerp(current, targetPosition, Time.deltaTime * promptFollowSpeed);
 
-            Camera cam = Camera.main != null ? Camera.main : (rayOrigin != null ? rayOrigin.GetComponent<Camera>() : null);
+            Camera cam = Camera.main;
+            if (cam == null && rayOrigins != null && rayOrigins.Length > 0)
+            {
+                 cam = rayOrigins[0].GetComponent<Camera>();
+            }
 
             if (cam != null)
             {

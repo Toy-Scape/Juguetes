@@ -12,20 +12,15 @@ namespace Interaction_System.Interactables
         PlayerInventory playerInventory;
         private SceneManager sceneManager;
     
-        void Start()
+        public override void Interact(InteractContext context)
         {
-            playerInventory = FindFirstObjectByType<PlayerInventory>();
-        }
-
-        public override void Interact()
-        {
-            if (playerInventory.Contains(itemData))
+            if (context.PlayerInventory != null && context.PlayerInventory.Contains(itemData))
             {
                 SceneManager.LoadScene(1);
             }
             else
             {
-                base.Interact();
+                base.Interact(context);
             }
         }
         

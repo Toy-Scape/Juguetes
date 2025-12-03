@@ -52,14 +52,16 @@ public class PlayerController : MonoBehaviour
 
     void Update ()
     {
-        // Detecci�n de pared
+        // Detección de pared
         playerContext.CanWalkOnWalls = limbManager.GetContext().CanClimbWalls;
         if (playerContext.CanWalkOnWalls)
         {
             playerContext.IsOnWall = wallHandler.CheckForWall(playerContext, 1f);
         }
 
+        // Check for ledge grab BEFORE applying gravity/physics
         playerContext.IsGrabbingLedge = TryLedgeGrab();
+        
         if (!playerContext.IsGrabbingLedge)
         {
             playerContext.IsGrounded = controller.isGrounded;
@@ -87,12 +89,12 @@ public class PlayerController : MonoBehaviour
         {
             playerContext.Velocity = Vector3.zero;
 
-            if (playerContext.IsJumping && !ledgeGrabHandler.IsClimbing)
+            if (playerContext.IsJumping && !ledgeGrabHandler.IsClimbing && !ledgeGrabHandler.IsSnapping)
             {
                 ledgeGrabHandler.StartClimb();
             }
 
-            if (ledgeGrabHandler.UpdateClimb())
+            if (ledgeGrabHandler.Update())
             {
                 CurrentState = PlayerState.Walking;
             }
@@ -106,7 +108,7 @@ public class PlayerController : MonoBehaviour
         {
             CurrentState = PlayerState.LedgeGrabbing;
             playerContext.Velocity = Vector3.zero;
-            ledgeGrabHandler.SnapToLedge();
+            ledgeGrabHandler.StartSnap();
         }
         return CurrentState == PlayerState.LedgeGrabbing;
     }

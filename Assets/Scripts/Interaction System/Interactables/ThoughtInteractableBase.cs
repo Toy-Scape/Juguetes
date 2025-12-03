@@ -7,7 +7,7 @@ namespace InteractionSystem.Interactables
     {
         [SerializeField] private SpeakerNPC speakerNPC;
         [SerializeField] private bool requiredItem;
-        public override void Interact ()
+        public override void Interact (InteractContext context)
         {
             if (speakerNPC != null && requiredItem)
             {

@@ -53,6 +53,9 @@ public class PlayerConfig
     [SerializeField] private float ledgeClimbUpSpeed = 5f;
     public float LedgeClimbUpSpeed => ledgeClimbUpSpeed;
 
+    [SerializeField] private float ledgeSnapSpeed = 10f;
+    public float LedgeSnapSpeed => ledgeSnapSpeed;
+
     [SerializeField] private float ledgeSnapOffsetY = 0.5f;
     public float LedgeSnapOffsetY => ledgeSnapOffsetY;
 

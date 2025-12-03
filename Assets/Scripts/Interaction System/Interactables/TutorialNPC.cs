@@ -1,4 +1,5 @@
 using InteractionSystem.Interactables;
+using InteractionSystem.Core;
 using Inventory;
 using UnityEngine;
 
@@ -7,21 +8,17 @@ public class TutorialNPC : NPCInteractableBase
     PlayerInventory playerInventory;
     [SerializeField] ItemData limbItemData;
     
-    void Start()
+    public override void Interact(InteractContext context)
     {
-        playerInventory = FindFirstObjectByType<PlayerInventory>();
-    }
-    public override void Interact()
-    {
-        base.Interact();
+        base.Interact(context);
 
-        if (!playerInventory.Contains(limbItemData))
+        if (context.PlayerInventory != null && !context.PlayerInventory.Contains(limbItemData))
         {
-            AddLimbToInventory();
+            AddLimbToInventory(context.PlayerInventory);
         }
     }
 
-    private void AddLimbToInventory()
+    private void AddLimbToInventory(PlayerInventory playerInventory)
     {
         Debug.Log("Adding limb");
         playerInventory.AddItem(limbItemData, 1);
