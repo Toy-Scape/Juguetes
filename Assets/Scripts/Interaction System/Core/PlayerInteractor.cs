@@ -1,9 +1,9 @@
 using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.InputSystem;
-using TMPro;
 using InteractionSystem.Interfaces;
 using Inventory;
+using TMPro;
+using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace InteractionSystem.Core
 {
@@ -52,8 +52,8 @@ namespace InteractionSystem.Core
                 return new Transform[] { transform };
             }
         }
-        
-        void Awake ()
+
+        void Awake()
         {
             if (rayOrigins == null || rayOrigins.Length == 0)
             {
@@ -97,7 +97,7 @@ namespace InteractionSystem.Core
             }
         }
 
-        void OnValidate ()
+        void OnValidate()
         {
             InteractableBase.SetGlobalOutlineProperties(outlineColor, outlineWidth, outlineMode);
 
@@ -107,13 +107,19 @@ namespace InteractionSystem.Core
             }
         }
 
-        void Update ()
+        void Update()
         {
+            // Check if the focused object was destroyed externally
+            if (focusedInteractable != null && focusedGameObject == null)
+            {
+                ClearOutline();
+            }
+
             UpdatePromptPosition();
             CheckForInteractable();
         }
 
-        public void OnInteract ()
+        public void OnInteract()
         {
             if (focusedInteractable == null)
             {
@@ -135,7 +141,7 @@ namespace InteractionSystem.Core
             focusedInteractable.Interact(context);
         }
 
-        private void CheckForInteractable ()
+        private void CheckForInteractable()
         {
             RaycastHit closestHitInfo = default;
             bool hasHit = false;
@@ -188,7 +194,7 @@ namespace InteractionSystem.Core
                         focusedIsUsable = isUsable;
                     }
 
-                    SetPromptTargetFromHit(closestHitInfo);
+                    // SetPromptTargetFromHit(closestHitInfo); // Removed to keep prompt fixed on object center
                     return;
                 }
                 else
@@ -204,7 +210,7 @@ namespace InteractionSystem.Core
             }
         }
 
-        private IInteractable FindInteractableInParents (GameObject start)
+        private IInteractable FindInteractableInParents(GameObject start)
         {
             Transform t = start.transform;
 
@@ -221,13 +227,14 @@ namespace InteractionSystem.Core
             return null;
         }
 
-        private void SetPromptTargetFromHit (RaycastHit hit)
+        private void SetPromptTargetFromHit(RaycastHit hit)
         {
             promptHasTarget = true;
             promptTargetWorldPosition = hit.point + promptWorldOffset;
+            if (interactionPrompt != null) interactionPrompt.transform.position = promptTargetWorldPosition;
         }
 
-        private void SetPromptTargetFromGameObject (GameObject go)
+        private void SetPromptTargetFromGameObject(GameObject go)
         {
             promptHasTarget = true;
 
@@ -236,20 +243,23 @@ namespace InteractionSystem.Core
             if (c != null)
             {
                 promptTargetWorldPosition = c.bounds.center + promptWorldOffset;
+                if (interactionPrompt != null) interactionPrompt.transform.position = promptTargetWorldPosition;
                 return;
             }
 
             promptTargetWorldPosition = go.transform.position + promptWorldOffset;
+            if (interactionPrompt != null) interactionPrompt.transform.position = promptTargetWorldPosition;
         }
 
-        private void SetPromptTargetToPlayer ()
+        private void SetPromptTargetToPlayer()
         {
             promptHasTarget = true;
             Transform followTarget = (rayOrigins != null && rayOrigins.Length > 0) ? rayOrigins[0] : transform;
             promptTargetWorldPosition = followTarget.position + promptWorldOffset;
+            if (interactionPrompt != null) interactionPrompt.transform.position = promptTargetWorldPosition;
         }
 
-        private void ApplyOutline (GameObject target)
+        private void ApplyOutline(GameObject target)
         {
             if (target == null)
                 return;
@@ -267,7 +277,7 @@ namespace InteractionSystem.Core
             SetPromptTargetFromGameObject(target);
         }
 
-        private void ClearOutline ()
+        private void ClearOutline()
         {
             if (focusedOutline != null)
             {
@@ -282,7 +292,7 @@ namespace InteractionSystem.Core
             promptHasTarget = false;
         }
 
-        private void ShowPrompt (bool show, string bindingText)
+        private void ShowPrompt(bool show, string bindingText)
         {
             if (interactionPrompt == null)
                 return;
@@ -304,20 +314,18 @@ namespace InteractionSystem.Core
             }
         }
 
-        private void UpdatePromptPosition ()
+        private void UpdatePromptPosition()
         {
             if (interactionPrompt == null || !promptHasTarget)
                 return;
 
-            Vector3 targetPosition = promptTargetWorldPosition;
-
-            Vector3 current = interactionPrompt.transform.position;
-            interactionPrompt.transform.position = Vector3.Lerp(current, targetPosition, Time.deltaTime * promptFollowSpeed);
+            // Position is now updated only once when target is set, so we don't update it here.
+            // interactionPrompt.transform.position = Vector3.Lerp(current, targetPosition, Time.deltaTime * promptFollowSpeed);
 
             Camera cam = Camera.main;
             if (cam == null && rayOrigins != null && rayOrigins.Length > 0)
             {
-                 cam = rayOrigins[0].GetComponent<Camera>();
+                cam = rayOrigins[0].GetComponent<Camera>();
             }
 
             if (cam != null)
@@ -329,7 +337,7 @@ namespace InteractionSystem.Core
             }
         }
 
-        private void ShowPrompt (bool show)
+        private void ShowPrompt(bool show)
         {
             ShowPrompt(show, promptBindingDisplay);
         }

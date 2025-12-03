@@ -13,8 +13,8 @@ GameObject:
   - component: {fileID: 3683018885965906054}
   - component: {fileID: 8858152663285210659}
   - component: {fileID: 8912843967949340189}
-  - component: {fileID: 5848617764647948382}
   - component: {fileID: 6768512488755421449}
+  - component: {fileID: 4657225757251611371}
   m_Layer: 0
   m_Name: NPC Example
   m_TagString: Untagged
@@ -33,7 +33,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 2.48, y: 1.02, z: -0.15}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -134,19 +134,6 @@ MonoBehaviour:
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
---- !u!114 &5848617764647948382
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4539893171313378828}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 23843eefd341f12408cdac0f081bc87a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::InteractionSystem.Interactables.NPCInteractableBase
-  speakerNPC: {fileID: 6768512488755421449}
 --- !u!114 &6768512488755421449
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -159,4 +146,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22c554b69029cff4b867aeb4fd558524, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpeakerNPC
-  dialogue: {fileID: 11400000, guid: 5caab9f9a01810b40b5b42b047cc2b07, type: 2}
+  dialogue: {fileID: 11400000, guid: 0a32a9f4e17a9cd4ead0f0140f7383a4, type: 2}
+--- !u!114 &4657225757251611371
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4539893171313378828}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f9c319afe62c82429ff001931ec81bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TutorialNPC
+  speakerNPC: {fileID: 6768512488755421449}
+  limbItemData: {fileID: 11400000, guid: 548b46ccf3642744f9e9c43de0090ec5, type: 2}

@@ -549,13 +549,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5070382226027974490}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.38268343, y: 0, z: 0, w: 0.92387956}
+  m_LocalRotation: {x: -0.60507476, y: -0.64886296, z: -0.33742437, w: 0.3146527}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 6344158462292624300}
-  m_LocalEulerAnglesHint: {x: -45, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -54.951, y: -180, z: 86}
 --- !u!1 &5323054587820962801
 GameObject:
   m_ObjectHideFlags: 0
@@ -733,7 +733,7 @@ MonoBehaviour:
     ledgeClimbUpSpeed: 5
     ledgeSnapSpeed: 10
     ledgeSnapOffsetY: 0.5
-    ledgeForwardOffset: 3.91
+    ledgeForwardOffset: 1
     ledgeGrabCooldown: 1
   cameraTransform: {fileID: 0}
   TMPPlayerState: {fileID: 0}
@@ -995,6 +995,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e9fb74deaa107e4b87fb65f5948581d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LimbManager
+  contextVariables: {fileID: 11400000, guid: 702be583fc2e0c74b9f1138c0c183447, type: 2}
   DefaultLimb: {fileID: 11400000, guid: a9c84fbcd3b88034a823714ce8e96172, type: 2}
   inventory: {fileID: 7956428153845167614}
   limbSockets: []
