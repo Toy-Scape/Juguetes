@@ -10,39 +10,80 @@ public class CameraManager : MonoBehaviour
     {
         if (instance != null && instance != this)
         {
-            Destroy(this.gameObject);
+            Destroy(gameObject);
+        }
+        else
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+    }
+
+    private void Start()
+    {
+        LockCursor();
+        UnlockCameraMovement();
+    }
+
+    private void OnEnable()
+    {
+        InputManager.OnActionMapChanged += HandleActionMapChanged;
+        RadialMenuController.OnRadialOpen += HandleRadialOpen;
+        RadialMenuController.OnRadialClose += HandleRadialClose;
+    }
+
+    private void OnDisable()
+    {
+        InputManager.OnActionMapChanged -= HandleActionMapChanged;
+        RadialMenuController.OnRadialOpen -= HandleRadialOpen;
+        RadialMenuController.OnRadialClose -= HandleRadialClose;
+    }
+
+    private void HandleActionMapChanged(string newMap)
+    {
+        if (newMap == ActionMaps.UI)
+        {
+            UnlockCursor();
+            LockCameraMovement();
         }
         else
         {
             LockCursor();
-            instance = this;
-            DontDestroyOnLoad(this.gameObject);
+            UnlockCameraMovement();
         }
     }
 
-    public void LockCameraMovement ()
+    private void HandleRadialOpen()
+    {
+        LockCameraMovement();
+        UnlockCursor();
+    }
+
+    private void HandleRadialClose()
+    {
+        UnlockCameraMovement();
+        LockCursor();
+    }
+
+    public void LockCameraMovement()
     {
         if (inputController != null)
-        {
             inputController.enabled = false;
-        }
     }
 
-    public void UnlockCameraMovement ()
+    public void UnlockCameraMovement()
     {
         if (inputController != null)
-        {
             inputController.enabled = true;
-        }
     }
 
-    public void LockCursor ()
+    public void LockCursor()
     {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
 
-    public void UnlockCursor ()
+    public void UnlockCursor()
     {
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;

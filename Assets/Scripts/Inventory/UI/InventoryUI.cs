@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -41,6 +42,9 @@ namespace Inventory.UI
         private List<InventorySlotUI> _limbSlots = new List<InventorySlotUI>();
         private InventorySlotUI _selectedSlot;
         private bool _isInventoryOpen;
+
+    public static event Action OnInventoryOpened;
+    public static event Action OnInventoryClosed;
 
         private void Awake()
         {
@@ -481,7 +485,7 @@ namespace Inventory.UI
 
             if (_isInventoryOpen)
             {
-                OpenInventory();
+                OpenInventory(); 
             }
             else
             {
@@ -497,17 +501,7 @@ namespace Inventory.UI
             _isInventoryOpen = true;
             inventoryPanel.SetActive(true);
             RefreshUI();
-
-            CameraManager.instance.LockCameraMovement();
-            CameraManager.instance.UnlockCursor();
-
-            var playerInput = FindFirstObjectByType<PlayerInput>();
-            if (playerInput != null && playerInput.currentActionMap.name != "UI")
-            {
-                var uiActionMap = playerInput.actions.FindActionMap("UI", true);
-                if (uiActionMap != null)
-                    playerInput.SwitchCurrentActionMap("UI");
-            }
+            OnInventoryOpened?.Invoke();
         }
 
         public void CloseInventory()
@@ -523,17 +517,7 @@ namespace Inventory.UI
                 _selectedSlot.SetSelected(false);
                 _selectedSlot = null;
             }
-
-            CameraManager.instance.UnlockCameraMovement();
-            CameraManager.instance.LockCursor();
-
-            var playerInput = UnityEngine.Object.FindFirstObjectByType<PlayerInput>();
-            if (playerInput != null && playerInput.currentActionMap.name != "Player")
-            {
-                var playerActionMap = playerInput.actions.FindActionMap("Player", true);
-                if (playerActionMap != null)
-                    playerInput.SwitchCurrentActionMap("Player");
-            }
+            OnInventoryClosed?.Invoke();
         }
 
         #endregion

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
@@ -17,6 +18,10 @@ public class DialogueBox : MonoBehaviour
     [SerializeField] private InputActionReference nextDialogueAction;
     [SerializeField] private PlayerInput playerInput; 
     [SerializeField] private float thoughtsCloseDelay = 2f;
+
+    public static event Action OnDialogueOpen;
+    public static event Action OnDialogueClose;
+
     private Dialogue activeDialogue;
     private string fullText;
     private int dialogueIndex;
@@ -53,7 +58,7 @@ public class DialogueBox : MonoBehaviour
         {
             dialogueContent.SetActive(true);
             thoughtContent.SetActive(false);
-            playerInput.SwitchCurrentActionMap("Dialogue");
+            OnDialogueOpen?.Invoke();
 
             StartCoroutine(EnableNextDialogueAction());
         }
@@ -72,6 +77,7 @@ public class DialogueBox : MonoBehaviour
         dialogueContent.SetActive(false);
         thoughtContent.SetActive(false);
         onClose?.Invoke();
+        OnDialogueClose?.Invoke();
 
         nextDialogueAction.action.performed -= OnNextDialogue;
         nextDialogueAction.action.Disable();

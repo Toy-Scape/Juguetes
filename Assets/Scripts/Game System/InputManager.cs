@@ -1,125 +1,125 @@
-//using TMPro;
-//using UnityEngine;
-//using UnityEngine.InputSystem;
+using System;
+using UnityEngine;
+using UnityEngine.InputSystem;
+using Inventory.UI;
 
-//public class InputManager : MonoBehaviour
-//{
-//    [SerializeField] private PlayerInput playerInput;
-//    [SerializeField] private TMP_Text currentInputMap;
+public static class ActionMaps
+{
+    public const string Player = "Player";
+    public const string UI = "UI";
+    public const string Dialogue = "Dialogue";
+}
 
-//    private string currentMap;
-//    private InputAction openRadialAction;
-//    private bool justSwitched; // evita rebotes
+public class InputManager : MonoBehaviour
+{
+    public static InputManager Instance { get; private set; }
 
-//    private void Awake ()
-//    {
-//        if (playerInput == null)
-//            playerInput = FindFirstObjectByType<PlayerInput>();
+    [SerializeField] private PlayerInput playerInput;
 
-//        SwitchToPlayer();
+    private int uiCounter = 0;
+    private int dialogueCounter = 0;
 
-//        openRadialAction = playerInput.actions["OpenRadialMenu"];
-//        openRadialAction.performed += OnOpenRadialPerformed;
-//        openRadialAction.canceled += OnOpenRadialCanceled;
+    public static event Action<string> OnActionMapChanged;
 
-//    }
-//    private void Update ()
-//    {
-//        currentInputMap.text = $"Current Action Map: {currentMap}";
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
 
-//        if (currentMap == "Player")
-//        {
-//            Cursor.lockState = CursorLockMode.Locked;
-//            Cursor.visible = false;
-//        }
-//        else
-//        {
-//            Cursor.lockState = CursorLockMode.None;
-//            Cursor.visible = true;
-//        }
-//    }
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+    }
 
+    private void OnEnable()
+    {
+        RadialMenuController.OnRadialOpen += HandleRadialOpen;
+        RadialMenuController.OnRadialClose += HandleRadialClose;
 
-//    private void OnDestroy ()
-//    {
-//        openRadialAction.performed -= OnOpenRadialPerformed;
-//        openRadialAction.canceled -= OnOpenRadialCanceled;
-//    }
+        InventoryUI.OnInventoryOpened += OpenUI;
+        InventoryUI.OnInventoryClosed += CloseUI;
 
-//    void OnOpenRadial(InputValue value)
-//    {
-//        if (justSwitched)
-//            return;
-//        justSwitched = true;
-//        Invoke(nameof(ResetSwitchFlag), 0.1f);
-//        if (value.isPressed && currentMap == "Player")
-//        {
-//            SwitchToRadialMenu();
-//        }
-//        else if (!value.isPressed && currentMap == "RadialMenu")
-//        {
-//            SwitchToPlayer();
-//        }
-//    }
-//    private void OnOpenRadialPerformed (InputAction.CallbackContext ctx)
-//    {
-//        if (currentMap == "Player")
-//        {
-//            SwitchToRadialMenu();
-//        }
-//    }
+        DialogueBox.OnDialogueOpen += OpenDialogue;
+        DialogueBox.OnDialogueClose += CloseDialogue;
+    }
 
-//    private void OnOpenRadialCanceled (InputAction.CallbackContext ctx)
-//    {
-//        if (currentMap == "RadialMenu")
-//        {
-//            SwitchToPlayer();
-//        }
-//    }
+    private void OnDisable()
+    {
+        RadialMenuController.OnRadialOpen -= HandleRadialOpen;
+        RadialMenuController.OnRadialClose -= HandleRadialClose;
 
-//    private void ResetSwitchFlag ()
-//    {
-//        justSwitched = false;
-//    }
+        InventoryUI.OnInventoryOpened -= OpenUI;
+        InventoryUI.OnInventoryClosed -= CloseUI;
 
-//    private void SwitchToPlayer ()
-//    {
-//        playerInput.SwitchCurrentActionMap("Player");
-//        currentMap = "Player";
-//        RebindOpenRadial();
-//    }
+        DialogueBox.OnDialogueOpen -= OpenDialogue;
+        DialogueBox.OnDialogueClose -= CloseDialogue;
+    }
 
-//    private void SwitchToRadialMenu ()
-//    {
-//        playerInput.SwitchCurrentActionMap("RadialMenu");
-//        currentMap = "RadialMenu";
-//        RebindOpenRadial();
-//    }
+    private void Start()
+    {
+        if (playerInput != null)
+            UpdateActionMap();
+        else
+            Debug.LogWarning("[InputManager] PlayerInput no asignado al iniciar.");
+    }
 
-//    private void RebindOpenRadial ()
-//    {
-//        if (openRadialAction != null)
-//        {
-//            openRadialAction.performed -= OnOpenRadialPerformed;
-//            openRadialAction.canceled -= OnOpenRadialCanceled;
-//        }
+    public void OpenUI()
+    {
+        uiCounter++;
+        UpdateActionMap();
+    }
 
-//        openRadialAction = playerInput.currentActionMap.FindAction("OpenRadialMenu");
-//        openRadialAction.performed += OnOpenRadialPerformed;
-//        openRadialAction.canceled += OnOpenRadialCanceled;
-//    }
+    public void CloseUI()
+    {
+        uiCounter = Mathf.Max(0, uiCounter - 1);
+        UpdateActionMap();
+    }
 
-//    public void SwitchToUI ()
-//    {
-//        playerInput.SwitchCurrentActionMap("UI");
-//        currentMap = "UI";
+    public void OpenDialogue()
+    {
+        dialogueCounter++;
+        UpdateActionMap();
+    }
 
-//        Cursor.lockState = CursorLockMode.None;
-//        Cursor.visible = true;
-//    }
+    public void CloseDialogue()
+    {
+        dialogueCounter = Mathf.Max(0, dialogueCounter - 1);
+        UpdateActionMap();
+    }
 
-//    public string GetCurrentMap ()
-//    {
-//        return currentMap;
-//    }
-//}
+    private void HandleRadialOpen()
+    {
+        OnActionMapChanged?.Invoke(ActionMaps.Player);
+    }
+
+    private void HandleRadialClose()
+    {
+        OnActionMapChanged?.Invoke(ActionMaps.Player);
+    }
+
+    private void UpdateActionMap()
+    {
+        string newMap;
+
+        if (uiCounter > 0)
+            newMap = ActionMaps.UI;
+        else if (dialogueCounter > 0)
+            newMap = ActionMaps.Dialogue;
+        else
+            newMap = ActionMaps.Player;
+
+        if (playerInput != null && playerInput.currentActionMap != null && playerInput.currentActionMap.name != newMap)
+        {
+            playerInput.SwitchCurrentActionMap(newMap);
+            OnActionMapChanged?.Invoke(newMap);
+            Debug.Log($"[InputManager] ActionMap cambiado a: {newMap}");
+        }
+    }
+
+    public string GetCurrentActionMap()
+    {
+        return playerInput != null && playerInput.currentActionMap != null ? playerInput.currentActionMap.name : string.Empty;
+    }
+}

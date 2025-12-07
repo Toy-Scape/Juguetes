@@ -47,19 +47,17 @@ public class PlayerController : MonoBehaviour
         stateHandler = new PlayerStateHandler(stateConfig);
         physicsHandler = new PlayerPhysicsHandler(physicsConfig);
         ledgeGrabHandler = new PlayerLedgeGrabHandler(config, transform);
-        wallHandler = new WallDetectionHandler(transform); // NUEVO
+        wallHandler = new WallDetectionHandler(transform); 
     }
 
     void Update ()
     {
-        // Detección de pared
         playerContext.CanWalkOnWalls = limbManager.GetContext().CanClimbWalls;
         if (playerContext.CanWalkOnWalls)
         {
             playerContext.IsOnWall = wallHandler.CheckForWall(playerContext, 1f);
         }
 
-        // Check for ledge grab BEFORE applying gravity/physics
         playerContext.IsGrabbingLedge = TryLedgeGrab();
         
         if (!playerContext.IsGrabbingLedge)
