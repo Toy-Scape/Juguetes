@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
@@ -23,6 +24,9 @@ public class DialogueBox : MonoBehaviour
     [Header("Events")]
     [SerializeField] public UnityEvent onOpen;
     [SerializeField] public UnityEvent onClose;
+
+    public static event Action OnDialogueOpen;
+    public static event Action OnDialogueClose;
 
     private Dialogue activeDialogue;
     private string fullText;
@@ -91,8 +95,10 @@ public class DialogueBox : MonoBehaviour
             if (thoughtContent) thoughtContent.SetActive(false);
 
             // centralizamos cambios de action map en InputMapManager para evitar asserts
-            if (InputMapManager.Instance != null)
-                InputMapManager.Instance.SwitchToActionMapSafe("Dialogue");
+            //if (InputMapManager.Instance != null)
+            //    InputMapManager.Instance.SwitchToActionMapSafe(ActionMaps.Dialogue);
+
+            OnDialogueOpen?.Invoke();
 
             StartCoroutine(EnableNextDialogueAction());
         }
@@ -104,7 +110,6 @@ public class DialogueBox : MonoBehaviour
             // Para pensamientos NO cambiamos el action map (son pasivos y se cierran solos).
             // Iniciamos el flujo de escribir el pensamiento; el cierre se disparará al terminar de escribir.
         }
-
         onOpen?.Invoke();
     }
     
@@ -128,8 +133,9 @@ public class DialogueBox : MonoBehaviour
         onClose?.Invoke();
 
         // devolver control al Player action map (via InputMapManager para evitar asserts)
-        if (InputMapManager.Instance != null)
-        InputMapManager.Instance.SwitchToActionMapSafe("Player");
+        //if (InputMapManager.Instance != null)
+        //InputMapManager.Instance.SwitchToActionMapSafe("Player");
+        OnDialogueClose?.Invoke();
 
         // cancelar tipeo si existe
         if (typingCoroutine != null)
