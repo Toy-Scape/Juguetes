@@ -2,7 +2,7 @@ using UnityEngine;
 using InteractionSystem.Interfaces;
 using System.Linq;
 
-public class Pickable : MonoBehaviour, IPickable
+public class Pickable : MonoBehaviour, IPickable    
 {
     [SerializeField] private Transform gripPoint;
     [SerializeField] private GenericConditionSO[] pickConditions;

@@ -12,6 +12,7 @@ namespace CheckpointSystem
         [Header("Settings")]
         [SerializeField] private bool autoSave = true;
         [SerializeField] private string saveKey = "PlayerSaveData";
+        [SerializeField] private DeadZone deadZone;
 
         private GameData currentGameData;
         private List<Checkpoint> allCheckpoints;
@@ -87,6 +88,15 @@ namespace CheckpointSystem
 
             currentGameData.lastCheckpointPosition = checkpoint.transform.position;
             currentGameData.lastCheckpointRotation = checkpoint.transform.rotation;
+
+            // Update Dead Zone Position
+            if (deadZone != null)
+            {
+                float newY = checkpoint.transform.position.y - checkpoint.DeadZoneOffset;
+                Vector3 pos = deadZone.transform.position;
+                pos.y = newY;
+                deadZone.transform.position = pos;
+            }
 
             SaveProgress();
         }
@@ -205,6 +215,11 @@ namespace CheckpointSystem
         public bool IsPuzzleSolved(string puzzleId)
         {
             return currentGameData.solvedPuzzles.Contains(puzzleId);
+        }
+
+        public Vector3 GetLastCheckpointPosition()
+        {
+            return currentGameData.lastCheckpointPosition;
         }
     }
 }

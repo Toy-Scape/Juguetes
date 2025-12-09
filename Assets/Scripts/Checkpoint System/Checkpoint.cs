@@ -12,6 +12,11 @@ namespace CheckpointSystem
         [SerializeField] private Material activeMaterial;
         [SerializeField] private Material inactiveMaterial;
 
+        [Header("Settings")]
+        [SerializeField] private float deadZoneOffset = 10f;
+
+        public float DeadZoneOffset => deadZoneOffset;
+
         private bool isActivated = false;
 
         private void OnTriggerEnter(Collider other)
