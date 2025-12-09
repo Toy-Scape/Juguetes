@@ -4,17 +4,17 @@ using UnityEngine;
 public class CameraManager : MonoBehaviour
 {
     [SerializeField] private CinemachineInputAxisController inputController;
-    public static CameraManager instance;
+    public static CameraManager Instance;
 
     void Awake()
     {
-        if (instance != null && instance != this)
+        if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
         }
         else
         {
-            instance = this;
+            Instance = this;
             DontDestroyOnLoad(gameObject);
         }
     }
@@ -28,15 +28,11 @@ public class CameraManager : MonoBehaviour
     private void OnEnable()
     {
         InputManager.OnActionMapChanged += HandleActionMapChanged;
-        RadialMenuController.OnRadialOpen += HandleRadialOpen;
-        RadialMenuController.OnRadialClose += HandleRadialClose;
     }
 
     private void OnDisable()
     {
         InputManager.OnActionMapChanged -= HandleActionMapChanged;
-        RadialMenuController.OnRadialOpen -= HandleRadialOpen;
-        RadialMenuController.OnRadialClose -= HandleRadialClose;
     }
 
     private void HandleActionMapChanged(string newMap)
@@ -51,18 +47,6 @@ public class CameraManager : MonoBehaviour
             LockCursor();
             UnlockCameraMovement();
         }
-    }
-
-    private void HandleRadialOpen()
-    {
-        LockCameraMovement();
-        UnlockCursor();
-    }
-
-    private void HandleRadialClose()
-    {
-        UnlockCameraMovement();
-        LockCursor();
     }
 
     public void LockCameraMovement()

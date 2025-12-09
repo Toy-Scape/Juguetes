@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Inventory.UI;
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -8,6 +9,22 @@ public class RadialMenuController : MonoBehaviour
 
     public static event Action OnRadialOpen;
     public static event Action OnRadialClose;
+
+    private void Start ()
+    {
+        InventoryUI.OnInventoryOpened += HandleInventoryOpened;
+    }
+
+    private void OnDestroy ()
+    {
+        InventoryUI.OnInventoryOpened -= HandleInventoryOpened;
+    }
+
+    private void HandleInventoryOpened ()
+    {
+        radialMenu.ConfirmSelection();
+        radialMenu.Hide();
+    }
 
     void OnOpenRadialMenu(InputValue value)
     {

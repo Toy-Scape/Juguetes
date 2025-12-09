@@ -38,11 +38,11 @@ public class InputManager : MonoBehaviour
         RadialMenuController.OnRadialOpen += HandleRadialOpen;
         RadialMenuController.OnRadialClose += HandleRadialClose;
 
-        InventoryUI.OnInventoryOpened += OpenUI;
-        InventoryUI.OnInventoryClosed += CloseUI;
+        InventoryUI.OnInventoryOpened += HandleOpenUI;
+        InventoryUI.OnInventoryClosed += HandleCloseUI;
 
-        DialogueBox.OnDialogueOpen += OpenDialogue;
-        DialogueBox.OnDialogueClose += CloseDialogue;
+        DialogueBox.OnDialogueOpen += HandleDialogueOpen;
+        DialogueBox.OnDialogueClose += HandleDialogueClose;
     }
 
     private void OnDisable()
@@ -50,11 +50,11 @@ public class InputManager : MonoBehaviour
         RadialMenuController.OnRadialOpen -= HandleRadialOpen;
         RadialMenuController.OnRadialClose -= HandleRadialClose;
 
-        InventoryUI.OnInventoryOpened -= OpenUI;
-        InventoryUI.OnInventoryClosed -= CloseUI;
+        InventoryUI.OnInventoryOpened -= HandleOpenUI;
+        InventoryUI.OnInventoryClosed -= HandleCloseUI;
 
-        DialogueBox.OnDialogueOpen -= OpenDialogue;
-        DialogueBox.OnDialogueClose -= CloseDialogue;
+        DialogueBox.OnDialogueOpen -= HandleDialogueOpen;
+        DialogueBox.OnDialogueClose -= HandleDialogueClose;
     }
 
     private void Start()
@@ -65,25 +65,25 @@ public class InputManager : MonoBehaviour
             Debug.LogWarning("[InputManager] PlayerInput no asignado al iniciar.");
     }
 
-    public void OpenUI()
+    public void HandleOpenUI()
     {
         uiCounter++;
         UpdateActionMap();
     }
 
-    public void CloseUI()
+    public void HandleCloseUI()
     {
         uiCounter = Mathf.Max(0, uiCounter - 1);
         UpdateActionMap();
     }
 
-    public void OpenDialogue()
+    public void HandleDialogueOpen()
     {
         dialogueCounter++;
         UpdateActionMap();
     }
 
-    public void CloseDialogue()
+    public void HandleDialogueClose()
     {
         dialogueCounter = Mathf.Max(0, dialogueCounter - 1);
         UpdateActionMap();
@@ -91,12 +91,14 @@ public class InputManager : MonoBehaviour
 
     private void HandleRadialOpen()
     {
-        OnActionMapChanged?.Invoke(ActionMaps.Player);
+        CameraManager.Instance.LockCameraMovement();
+        CameraManager.Instance.UnlockCursor();
     }
 
     private void HandleRadialClose()
     {
-        OnActionMapChanged?.Invoke(ActionMaps.Player);
+        CameraManager.Instance.UnlockCameraMovement();
+        CameraManager.Instance.LockCursor();
     }
 
     private void UpdateActionMap()
