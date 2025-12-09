@@ -4,36 +4,61 @@ using UnityEngine;
 public class CameraManager : MonoBehaviour
 {
     [SerializeField] private CinemachineInputAxisController inputController;
-    public static CameraManager instance;
+    public static CameraManager Instance;
 
-    void Awake()
+    void Awake ()
     {
-        if (instance != null && instance != this)
+        if (Instance != null && Instance != this)
         {
-            Destroy(this.gameObject);
+            Destroy(gameObject);
+        }
+        else
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+    }
+
+    private void Start ()
+    {
+        LockCursor();
+        UnlockCameraMovement();
+    }
+
+    private void OnEnable ()
+    {
+        InputMapManager.OnActionMapChanged += HandleActionMapChanged;
+    }
+
+    private void OnDisable ()
+    {
+        InputMapManager.OnActionMapChanged -= HandleActionMapChanged;
+    }
+
+    private void HandleActionMapChanged (string newMap)
+    {
+        if (newMap == ActionMaps.UI)
+        {
+            UnlockCursor();
+            LockCameraMovement();
         }
         else
         {
             LockCursor();
-            instance = this;
-            DontDestroyOnLoad(this.gameObject);
+            UnlockCameraMovement();
         }
     }
 
     public void LockCameraMovement ()
     {
         if (inputController != null)
-        {
             inputController.enabled = false;
-        }
     }
 
     public void UnlockCameraMovement ()
     {
         if (inputController != null)
-        {
             inputController.enabled = true;
-        }
     }
 
     public void LockCursor ()
