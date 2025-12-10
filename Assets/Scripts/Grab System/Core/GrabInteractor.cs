@@ -4,7 +4,8 @@ using UnityEngine.InputSystem;
 
 public class GrabInteractor : MonoBehaviour
 {
-    [SerializeField] private float grabDistance = 3f;
+    [SerializeField] private float sphereRadius = 0.5f;
+    [SerializeField] private float sphereCastOffset = 0.5f;
     [SerializeField] private Transform[] rayOrigins;
     [SerializeField] private Transform holdPoint;
     [SerializeField] private Transform grabAnchor;
@@ -123,9 +124,9 @@ public class GrabInteractor : MonoBehaviour
 
     private bool TryPick()
     {
-        if (!Raycast(out RaycastHit hit)) return false;
+        if (!DetectBestTarget<IPickable>(out var pickableCollider, out var hitPoint)) return false;
 
-        if (hit.collider.TryGetComponent<IPickable>(out var pickable))
+        if (pickableCollider.TryGetComponent<IPickable>(out var pickable))
         {
             if (!pickable.CanBePicked())
                 return false;
@@ -134,7 +135,7 @@ public class GrabInteractor : MonoBehaviour
             pickable.Pick(holdPoint);
 
             // Ignore collisions between picked object and player
-            var pickedColliders = hit.collider.GetComponentsInChildren<Collider>();
+            var pickedColliders = pickableCollider.GetComponentsInChildren<Collider>();
             foreach (var pc in playerBodyColliders)
             {
                 foreach (var oc in pickedColliders)
@@ -158,9 +159,9 @@ public class GrabInteractor : MonoBehaviour
     {
         if (currentPicked != null) return;
 
-        if (!Raycast(out RaycastHit hit)) return;
+        if (!DetectBestTarget<IGrabbable>(out var grabbableCollider, out var hitPoint)) return;
 
-        if (hit.collider.TryGetComponent<IGrabbable>(out var grabbable))
+        if (grabbableCollider.TryGetComponent<IGrabbable>(out var grabbable))
         {
             if (!grabbable.CanBeGrabbed())
             {
@@ -173,12 +174,12 @@ public class GrabInteractor : MonoBehaviour
             }
             currentGrabbed = grabbable;
 
-            MovePlayerToGrabPosition(hit);
-            RotatePlayerToFaceObject(hit.collider.transform);
+            MovePlayerToGrabPosition(hitPoint);
+            RotatePlayerToFaceObject(grabbableCollider.transform);
 
-            currentGrabbed.StartGrab(grabAnchorRb, hit.point);
+            currentGrabbed.StartGrab(grabAnchorRb, hitPoint);
 
-            grabbedTransform = hit.collider.transform;
+            grabbedTransform = grabbableCollider.transform;
 
             objectColliders = grabbedTransform.GetComponentsInChildren<Collider>();
             pushCollider.enabled = true;
@@ -206,10 +207,10 @@ public class GrabInteractor : MonoBehaviour
         }
     }
 
-    private void MovePlayerToGrabPosition(RaycastHit hit)
+    private void MovePlayerToGrabPosition(Vector3 grabPoint)
     {
-        Vector3 dir = (player.position - hit.point).normalized;
-        Vector3 targetPos = hit.point + dir * grabOffset;
+        Vector3 dir = (player.position - grabPoint).normalized;
+        Vector3 targetPos = grabPoint + dir * grabOffset;
         Vector3 moveDir = targetPos - player.position;
         grabAnchorRb.MovePosition(player.position + moveDir * Time.fixedDeltaTime);
     }
@@ -251,17 +252,51 @@ public class GrabInteractor : MonoBehaviour
 
     }
 
-    private bool Raycast(out RaycastHit hit)
+    private bool DetectBestTarget<T>(out Collider bestCollider, out Vector3 hitPoint) where T : class
     {
-        hit = new RaycastHit();
+        bestCollider = null;
+        hitPoint = Vector3.zero;
+        float closestDistanceSqr = float.MaxValue;
+
         foreach (var origin in rayOrigins)
         {
             if (origin == null) continue;
-            if (Physics.Raycast(origin.position, origin.forward, out hit, grabDistance))
+
+            Vector3 sphereCenter = origin.position + origin.forward * sphereCastOffset;
+            Collider[] hits = Physics.OverlapSphere(sphereCenter, sphereRadius);
+
+            foreach (var hit in hits)
             {
-                return true;
+                if (hit.GetComponent<T>() != null)
+                {
+                    Vector3 closestPoint = hit.ClosestPoint(player.position);
+                    float distSqr = (player.position - closestPoint).sqrMagnitude;
+
+                    if (distSqr < closestDistanceSqr)
+                    {
+                        closestDistanceSqr = distSqr;
+                        bestCollider = hit;
+                        hitPoint = closestPoint;
+                    }
+                }
             }
         }
-        return false;
+
+        return bestCollider != null;
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        if (rayOrigins == null) return;
+
+        Gizmos.color = Color.yellow;
+        foreach (var origin in rayOrigins)
+        {
+            if (origin != null)
+            {
+                Vector3 sphereCenter = origin.position + origin.forward * sphereCastOffset;
+                Gizmos.DrawWireSphere(sphereCenter, sphereRadius);
+            }
+        }
     }
 }
