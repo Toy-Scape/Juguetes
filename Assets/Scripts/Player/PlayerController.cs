@@ -43,7 +43,7 @@ public class PlayerController : MonoBehaviour
                                                 config.SwimSpeed, config.DiveSpeed, config.WallWalkSpeed,
                                                 config.RotationSpeed, config.Acceleration, config.Deceleration,
                                                 config.InputSmoothing, config.TurnSmoothTime);
-        var jumpConfig = new JumpConfig(config.JumpHeight, config.Gravity, config.SwimSpeed, config.DiveSpeed);
+        var jumpConfig = new JumpConfig(config.JumpHeight, config.Gravity, config.SwimSpeed, config.DiveSpeed, config.CoyoteTime, config.JumpBufferTime);
         var stateConfig = new StateConfig();
         var physicsConfig = new PhysicsConfig(config.Gravity);
 
@@ -74,17 +74,20 @@ public class PlayerController : MonoBehaviour
 
             CurrentState = stateHandler.EvaluateState(playerContext);
 
+            jumpHandler.UpdateTimers(Time.deltaTime, playerContext.IsGrounded, playerContext.IsJumping);
+
             movementHandler.HandleMovement(CurrentState, playerContext.MoveInput, transform, playerContext);
             controller.height = crouchHandler.GetTargetHeight(CurrentState, controller.height);
 
-            // Logic for Jump Vibration
-            if (playerContext.IsJumping && playerContext.IsGrounded && !playerContext.IsInWater)
-                if (gamepadVibration != null)
-                    gamepadVibration.Vibrate(config.JumpVibration.x, config.JumpVibration.y, config.JumpVibration.z);
-
-            // Logic for Land Vibration
+            // Logic for Jump Vibration & Execution
             bool wasGrounded = playerContext.IsGrounded;
-            playerContext.Velocity = jumpHandler.HandleJump(CurrentState, playerContext.IsJumping, playerContext.Velocity, playerContext.IsInWater, playerContext.IsGrounded, playerContext.IsPushing);
+            Vector3 currentVelocity = playerContext.Velocity;
+            bool jumped = jumpHandler.HandleJump(CurrentState, ref currentVelocity, playerContext.IsInWater, playerContext.IsGrounded, playerContext.IsPushing);
+            playerContext.Velocity = currentVelocity;
+
+            if (jumped && gamepadVibration != null)
+                gamepadVibration.Vibrate(config.JumpVibration.x, config.JumpVibration.y, config.JumpVibration.z);
+
             playerContext.Velocity = physicsHandler.ApplyGravity(CurrentState, playerContext.Velocity, playerContext.IsGrounded);
 
             controller.Move(movementHandler.GetFinalMove(playerContext.Velocity) * Time.deltaTime);
