@@ -23,6 +23,10 @@ namespace InteractionSystem.Core
         [SerializeField] private InputActionReference interactActionReference = null;
         [SerializeField] private string fallbackPrompt = "E";
 
+        [Header("Feedback")]
+        [SerializeField] private GamepadVibration vibration;
+        [SerializeField] private PlayerConfig config;
+
         [Header("Prompt Positioning")]
         [SerializeField] private Vector3 promptWorldOffset = new Vector3(0f, 1.5f, 0f);
         [SerializeField, Range(0.01f, 20f)] private float promptFollowSpeed = 10f;
@@ -95,6 +99,16 @@ namespace InteractionSystem.Core
             {
                 Debug.LogWarning("PlayerInteractor: PlayerInventory not found on the same GameObject.");
             }
+
+            // Auto-wire feedback dependencies
+            if (vibration == null) vibration = GetComponent<GamepadVibration>();
+            if (vibration == null) vibration = GetComponentInChildren<GamepadVibration>();
+
+            if (config == null)
+            {
+                var pc = GetComponent<PlayerController>();
+                if (pc != null) config = pc.Config;
+            }
         }
 
         void OnValidate()
@@ -138,7 +152,14 @@ namespace InteractionSystem.Core
             {
                 PlayerInventory = playerInventory
             };
+            InvokeInteractionVibration();
             focusedInteractable.Interact(context);
+        }
+
+        private void InvokeInteractionVibration()
+        {
+            if (vibration != null && config != null)
+                vibration.Vibrate(config.InteractVibration.x, config.InteractVibration.y, config.InteractVibration.z);
         }
 
         private void CheckForInteractable()

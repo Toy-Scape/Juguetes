@@ -3524,9 +3524,45 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1030598504}
     - target: {fileID: 6629819060316150005, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
+      propertyPath: config.gravity
+      value: -28.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 6629819060316150005, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
       propertyPath: cameraTransform
       value: 
       objectReference: {fileID: 1658184139}
+    - target: {fileID: 6629819060316150005, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
+      propertyPath: config.walkSpeed
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 6629819060316150005, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
+      propertyPath: config.jumpHeight
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6629819060316150005, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
+      propertyPath: config.sprintSpeed
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 6629819060316150005, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
+      propertyPath: config.acceleration
+      value: 26.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6629819060316150005, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
+      propertyPath: config.deceleration
+      value: 40.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 6629819060316150005, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
+      propertyPath: config.inputSmoothing
+      value: 10.27
+      objectReference: {fileID: 0}
+    - target: {fileID: 6629819060316150005, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
+      propertyPath: config.turnSmoothTime
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6629819060316150005, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
+      propertyPath: config.ledgeClimbUpSpeed
+      value: 13
+      objectReference: {fileID: 0}
     - target: {fileID: 6641168232080197241, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
       propertyPath: m_Name
       value: Player

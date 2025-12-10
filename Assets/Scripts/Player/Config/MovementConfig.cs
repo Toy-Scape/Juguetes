@@ -9,10 +9,15 @@ public class MovementConfig
     public float diveSpeed;
     public float rotationSpeed;
     public float wallWalkSpeed;
+    public float acceleration;
+    public float deceleration;
+    public float inputSmoothing;
+    public float turnSmoothTime;
 
-    public MovementConfig (float walkSpeed, float sprintSpeed, float crouchSpeed,
+    public MovementConfig(float walkSpeed, float sprintSpeed, float crouchSpeed,
                           float swimSpeed, float diveSpeed, float wallWalkSpeed,
-                          float rotationSpeed = 720f)
+                          float rotationSpeed, float acceleration, float deceleration,
+                          float inputSmoothing, float turnSmoothTime)
     {
         this.walkSpeed = walkSpeed;
         this.sprintSpeed = sprintSpeed;
@@ -21,5 +26,9 @@ public class MovementConfig
         this.diveSpeed = diveSpeed;
         this.wallWalkSpeed = wallWalkSpeed;
         this.rotationSpeed = rotationSpeed;
+        this.acceleration = acceleration;
+        this.deceleration = deceleration;
+        this.inputSmoothing = inputSmoothing;
+        this.turnSmoothTime = turnSmoothTime;
     }
 }
