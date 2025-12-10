@@ -62,6 +62,12 @@ public class PlayerConfig
     [SerializeField] private float gravity = -9.81f;
     public float Gravity => gravity;
 
+    [SerializeField] private float coyoteTime = 0.15f;
+    public float CoyoteTime => coyoteTime;
+
+    [SerializeField] private float jumpBufferTime = 0.1f;
+    public float JumpBufferTime => jumpBufferTime;
+
     [SerializeField] private float standingHeight = 2f;
     public float StandingHeight => standingHeight;
 
