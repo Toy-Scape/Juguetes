@@ -19,6 +19,7 @@ namespace CheckpointSystem
             public int quantity;
         }
         public List<InventoryEntry> inventoryItems = new List<InventoryEntry>();
+        public List<InventoryEntry> inventoryLimbs = new List<InventoryEntry>();
 
         // Puzzle progress
         // Store IDs of solved puzzles or collected unique items

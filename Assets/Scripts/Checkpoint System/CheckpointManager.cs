@@ -116,6 +116,16 @@ namespace CheckpointSystem
                         quantity = item.Quantity
                     });
                 }
+
+                currentGameData.inventoryLimbs.Clear();
+                foreach (var item in playerInventory.GetAllLimbItems())
+                {
+                    currentGameData.inventoryLimbs.Add(new GameData.InventoryEntry
+                    {
+                        itemName = item.Data.name,
+                        quantity = item.Quantity
+                    });
+                }
             }
 
             // Save Puzzles (Assumed handled elsewhere via AddSolvedPuzzle)
@@ -181,10 +191,12 @@ namespace CheckpointSystem
         private void RestoreInventory()
         {
             var playerInventory = FindFirstObjectByType<PlayerInventory>();
-            if (playerInventory != null && currentGameData.inventoryItems.Count > 0)
-            {
-                playerInventory.ClearInventory();
+            if (playerInventory == null) return;
 
+            playerInventory.ClearInventory();
+
+            if (currentGameData.inventoryItems.Count > 0)
+            {
                 foreach (var itemEntry in currentGameData.inventoryItems)
                 {
                     // Try to load ItemData from Resources
@@ -198,6 +210,38 @@ namespace CheckpointSystem
                     else
                     {
                         Debug.LogWarning($"Could not find ItemData for '{itemEntry.itemName}'. Make sure it is in a 'Resources/Items' folder.");
+                    }
+                }
+            }
+
+            if (currentGameData.inventoryLimbs.Count > 0)
+            {
+                foreach (var limbEntry in currentGameData.inventoryLimbs)
+                {
+                    // Try to load Limb ItemData from Resources. Assumes same structure or unique names findable.
+                    // IMPORTANT: The user said they moved things to Resources. We assume path "Items/" works or we might need "Limbs/"
+                    // We will try "Items/" first, and if not found, maybe just "Limbs/" or empty path if they are at root.
+                    // Simplest first attempt: Try same path as items, or root if unique.
+
+                    var itemData = Resources.Load<ItemData>($"Items/{limbEntry.itemName}");
+                    if (itemData == null)
+                    {
+                        // Try Limbs specific folder just in case
+                        itemData = Resources.Load<ItemData>($"Limbs/{limbEntry.itemName}");
+                    }
+                    if (itemData == null)
+                    {
+                        // Basic load by name if in root or unknown path structure but unique name
+                        itemData = Resources.Load<ItemData>(limbEntry.itemName);
+                    }
+
+                    if (itemData != null)
+                    {
+                        playerInventory.AddItem(itemData, limbEntry.quantity);
+                    }
+                    else
+                    {
+                        Debug.LogWarning($"Could not find Limb ItemData for '{limbEntry.itemName}'. Checked 'Items/', 'Limbs/' and root in Resources.");
                     }
                 }
             }
