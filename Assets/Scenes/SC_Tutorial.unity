@@ -1251,6 +1251,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 3e39166f856313145adc73276c52a832, type: 3}
   m_PrefabInstance: {fileID: 611164029}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &615313555 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6641168232080197241, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
+  m_PrefabInstance: {fileID: 1580724418}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &641249786 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1997857997583707999, guid: 235dc7df742c7214b97d4cd100b29707, type: 3}
@@ -2970,6 +2975,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6992158795375959285, guid: 235dc7df742c7214b97d4cd100b29707, type: 3}
+      propertyPath: grabConditions.Array.size
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8699495499050405152, guid: 235dc7df742c7214b97d4cd100b29707, type: 3}
       propertyPath: m_Name
       value: Box (2)
@@ -3536,6 +3545,10 @@ PrefabInstance:
       value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 6629819060316150005, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
+      propertyPath: gamepadVibration
+      value: 
+      objectReference: {fileID: 1728560828}
+    - target: {fileID: 6629819060316150005, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
       propertyPath: config.jumpHeight
       value: 3
       objectReference: {fileID: 0}
@@ -3560,8 +3573,32 @@ PrefabInstance:
       value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 6629819060316150005, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
+      propertyPath: config.jumpVibration.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6629819060316150005, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
+      propertyPath: config.jumpVibration.y
+      value: 0.01
+      objectReference: {fileID: 0}
+    - target: {fileID: 6629819060316150005, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
+      propertyPath: config.landVibration.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6629819060316150005, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
+      propertyPath: config.landVibration.y
+      value: 0.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 6629819060316150005, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
       propertyPath: config.ledgeClimbUpSpeed
       value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 6629819060316150005, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
+      propertyPath: config.interactVibration.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6629819060316150005, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
+      propertyPath: config.interactVibration.y
+      value: 0.05
       objectReference: {fileID: 0}
     - target: {fileID: 6641168232080197241, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
       propertyPath: m_Name
@@ -3578,7 +3615,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6641168232080197241, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1728560828}
   m_SourcePrefab: {fileID: 100100000, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
 --- !u!1001 &1609681451
 PrefabInstance:
@@ -3927,7 +3967,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7956428153845167614, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
   m_PrefabInstance: {fileID: 1580724418}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 615313555}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 19d6c962e6894a6a82cc87dbd9ec81b6, type: 3}
@@ -3938,7 +3978,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7319195771677131702, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
   m_PrefabInstance: {fileID: 1580724418}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 615313555}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5e9fb74deaa107e4b87fb65f5948581d, type: 3}
@@ -3949,12 +3989,24 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8113327342456687462, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
   m_PrefabInstance: {fileID: 1580724418}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 615313555}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.InputSystem::UnityEngine.InputSystem.PlayerInput
+--- !u!114 &1728560828
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 615313555}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71961f7d71c87a04d9f50426eed98dbe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GamepadVibration
 --- !u!1 &1730512417
 GameObject:
   m_ObjectHideFlags: 0
