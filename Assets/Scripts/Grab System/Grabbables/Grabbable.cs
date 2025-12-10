@@ -1,16 +1,19 @@
+using System.Linq;
 using InteractionSystem.Interfaces;
 using UnityEngine;
-using System.Linq;
 
 public class Grabbable : MonoBehaviour, IGrabbable
 {
     [SerializeField] private float moveResistance = 1f;
     [SerializeField] private GenericConditionSO[] grabConditions;
+    [SerializeField] private Dialogue failThought;
 
     private Rigidbody rb;
     private ConfigurableJoint joint;
 
     public float MoveResistance => moveResistance;
+
+    public Dialogue GetFailThought() => failThought;
 
     private void Awake()
     {

@@ -163,7 +163,14 @@ public class GrabInteractor : MonoBehaviour
         if (hit.collider.TryGetComponent<IGrabbable>(out var grabbable))
         {
             if (!grabbable.CanBeGrabbed())
+            {
+                var failThought = grabbable.GetFailThought();
+                if (failThought != null && DialogueBox.Instance != null && !DialogueBox.Instance.IsOpen)
+                {
+                    DialogueBox.Instance.StartDialogue(failThought);
+                }
                 return;
+            }
             currentGrabbed = grabbable;
 
             MovePlayerToGrabPosition(hit);
