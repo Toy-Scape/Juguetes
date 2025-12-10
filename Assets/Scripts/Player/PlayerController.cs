@@ -94,7 +94,11 @@ public class PlayerController : MonoBehaviour
 
             playerContext.Velocity = physicsHandler.ApplyGravity(CurrentState, playerContext.Velocity, playerContext.IsGrounded);
 
-            controller.Move(movementHandler.GetFinalMove(playerContext.Velocity) * Time.deltaTime);
+            var movement = movementHandler.GetFinalMove(playerContext.Velocity) * Time.deltaTime;
+            controller.Move(movement);
+
+            if (new Vector3(movement.x, 0, movement.z).AlmostZero())
+                playerContext.IsSprinting = false;
 
             // Check landing
             if (!wasGrounded && controller.isGrounded && gamepadVibration != null)
