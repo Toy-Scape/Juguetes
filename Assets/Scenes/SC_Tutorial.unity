@@ -4342,7 +4342,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2607587796172180171, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
       propertyPath: config.inputSmoothing
-      value: 10.27
+      value: 93.77
       objectReference: {fileID: 0}
     - target: {fileID: 2607587796172180171, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
       propertyPath: config.MaxGrabDistance
