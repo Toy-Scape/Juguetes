@@ -107,7 +107,15 @@ namespace InteractionSystem.Core
             if (config == null)
             {
                 var pc = GetComponent<PlayerController>();
-                if (pc != null) config = pc.Config;
+                if (pc != null) 
+                {
+                    config = pc.Config;
+                }
+                else
+                {
+                    var agPc = GetComponent<Assets.Scripts.AntiGravityController.AntiGravityPlayerController>();
+                    if (agPc != null) config = agPc.Config;
+                }
             }
         }
 

@@ -20,7 +20,7 @@ public class GrabInteractor : MonoBehaviour
     private Transform grabbedTransform;
     private Collider[] objectColliders;
     private bool grabButtonHeld;
-    private PlayerController playerController;
+    private Assets.Scripts.AntiGravityController.AntiGravityPlayerController playerController;
 
     private void Awake()
     {
@@ -28,7 +28,7 @@ public class GrabInteractor : MonoBehaviour
             rayOrigins = new Transform[] { Camera.main.transform };
 
         if (player != null)
-            playerController = player.GetComponent<PlayerController>();
+            playerController = player.GetComponent<Assets.Scripts.AntiGravityController.AntiGravityPlayerController>();
 
         if (grabAnchor != null)
         {
@@ -116,6 +116,10 @@ public class GrabInteractor : MonoBehaviour
 
             currentPicked.Drop();
             currentPicked = null;
+            
+            if (playerController != null)
+                playerController.SetPickState(false);
+
             return;
         }
 
@@ -148,6 +152,9 @@ public class GrabInteractor : MonoBehaviour
                 foreach (var oc in pickedColliders)
                     Physics.IgnoreCollision(characterController, oc, true);
             }
+
+            if (playerController != null)
+                playerController.SetPickState(true);
 
             return true;
         }
@@ -192,18 +199,21 @@ public class GrabInteractor : MonoBehaviour
             }
 
             // Ignorar colisiones con el CharacterController explícitamente
+            // Ignorar colisiones con el CharacterController explícitamente -> COMENTADO PARA EVITAR ATRAVESAR EL OBJETO
+            /*
             var characterController = player.GetComponent<CharacterController>();
             if (characterController != null)
             {
                 foreach (var oc in objectColliders)
                     Physics.IgnoreCollision(characterController, oc, true);
             }
+            */
 
             // Habilitar colisiones pushCollider <-> objeto
             pushCollider.enabled = true;
 
             if (playerController != null)
-                playerController.SetGrabState(true, grabbable.MoveResistance);
+                playerController.SetGrabState(true, grabbable.MoveResistance, grabbableCollider.transform);
         }
     }
 
@@ -234,12 +244,14 @@ public class GrabInteractor : MonoBehaviour
                     Physics.IgnoreCollision(pc, oc, false);
             }
 
+            /*
             var characterController = player.GetComponent<CharacterController>();
             if (characterController != null)
             {
                 foreach (var oc in objectColliders)
                     Physics.IgnoreCollision(characterController, oc, false);
             }
+            */
         }
 
         pushCollider.enabled = false;
@@ -248,7 +260,7 @@ public class GrabInteractor : MonoBehaviour
         currentGrabbed = null;
 
         if (playerController != null)
-            playerController.SetGrabState(false, 1f);
+            playerController.SetGrabState(false, 1f, null);
 
     }
 

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Assets.Scripts.AntiGravityController;
 using Inventory; // Access to PlayerInventory and ItemData
 using UnityEngine;
 
@@ -147,7 +148,7 @@ namespace CheckpointSystem
             else
             {
                 // Default start
-                var player = FindFirstObjectByType<PlayerController>().gameObject;
+                var player = FindFirstObjectByType<AntiGravityPlayerController>().gameObject;
                 if (player != null)
                 {
                     currentGameData.lastCheckpointPosition = player.transform.position;
@@ -159,7 +160,7 @@ namespace CheckpointSystem
         public void RespawnPlayer()
         {
             // 1. Reset Player Position
-            var player = FindFirstObjectByType<PlayerController>().gameObject;
+            var player = FindFirstObjectByType<AntiGravityPlayerController>().gameObject;
             if (player != null)
             {
                 var respawnComponent = player.GetComponent<PlayerRespawn>();

@@ -9,7 +9,10 @@ namespace CheckpointSystem
         private void OnTriggerEnter(Collider other)
         {
             // 1. Check for Player
-            if (other.GetComponent<PlayerController>() != null || other.GetComponentInParent<PlayerController>() != null)
+            if (other.GetComponent<PlayerController>() != null || 
+                other.GetComponentInParent<PlayerController>() != null ||
+                other.GetComponent<Assets.Scripts.AntiGravityController.AntiGravityPlayerController>() != null ||
+                other.GetComponentInParent<Assets.Scripts.AntiGravityController.AntiGravityPlayerController>() != null)
             {
                 CheckpointManager.Instance.RespawnPlayer();
                 return;

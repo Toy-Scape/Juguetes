@@ -99,4 +99,11 @@ public class PlayerConfig
 
     [SerializeField] private float ledgeGrabCooldown = 0.5f;
     public float LedgeGrabCooldown => ledgeGrabCooldown;
+
+    [Header("Ledge Climb Settings")]
+    [SerializeField] private float climbDuration = 1.0f;
+    public float ClimbDuration => climbDuration;
+
+    // [Header("Grab Settings")]
+    // public float MaxGrabDistance = 1.5f; // Removed
 }
