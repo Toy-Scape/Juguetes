@@ -1,5 +1,6 @@
 using InteractionSystem.Core;
 using TMPro;
+using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -7,10 +8,13 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] private PlayerConfig config;
+    public PlayerConfig Config => config;
     [SerializeField] private Transform cameraTransform;
     [SerializeField] private TMP_Text TMPPlayerState;
     [SerializeField] private PlayerInteractor playerInteractor;
     [SerializeField] private GrabInteractor grabInteractor;
+    [SerializeField] private GamepadVibration gamepadVibration;
+    [SerializeField] private CinemachineImpulseSource landingImpulseSource; // Camera Shake
 
     [SerializeField] private LimbManager limbManager;
 
@@ -22,7 +26,7 @@ public class PlayerController : MonoBehaviour
     private PlayerStateHandler stateHandler;
     private PlayerPhysicsHandler physicsHandler;
     private PlayerLedgeGrabHandler ledgeGrabHandler;
-    private WallDetectionHandler wallHandler; 
+    private WallDetectionHandler wallHandler;
 
     private PlayerContext playerContext = new();
 
@@ -30,14 +34,20 @@ public class PlayerController : MonoBehaviour
 
     public PlayerState CurrentState { get; private set; } = PlayerState.Idle;
 
-    void Start ()
+    void Start()
     {
         controller = GetComponent<CharacterController>();
+        if (gamepadVibration == null) gamepadVibration = GetComponent<GamepadVibration>();
+        if (gamepadVibration == null) gamepadVibration = GetComponentInChildren<GamepadVibration>();
+
+        if (landingImpulseSource == null) landingImpulseSource = GetComponent<CinemachineImpulseSource>();
 
         var crouchConfig = new CrouchConfig(config.StandingHeight, config.CrouchingHeight);
         var movementConfig = new MovementConfig(config.WalkSpeed, config.SprintSpeed, config.CrouchSpeed,
-                                                config.SwimSpeed, config.DiveSpeed, config.WallWalkSpeed, config.RotationSpeed);
-        var jumpConfig = new JumpConfig(config.JumpHeight, config.Gravity, config.SwimSpeed, config.DiveSpeed);
+                                                config.SwimSpeed, config.DiveSpeed, config.WallWalkSpeed,
+                                                config.RotationSpeed, config.Acceleration, config.Deceleration,
+                                                config.InputSmoothing, config.TurnSmoothTime);
+        var jumpConfig = new JumpConfig(config.JumpHeight, config.Gravity, config.SwimSpeed, config.DiveSpeed, config.CoyoteTime, config.JumpBufferTime);
         var stateConfig = new StateConfig();
         var physicsConfig = new PhysicsConfig(config.Gravity);
 
@@ -50,7 +60,7 @@ public class PlayerController : MonoBehaviour
         wallHandler = new WallDetectionHandler(transform); // NUEVO
     }
 
-    void Update ()
+    void Update()
     {
         // Detección de pared
         playerContext.CanWalkOnWalls = limbManager.GetContext().CanClimbWalls;
@@ -61,26 +71,57 @@ public class PlayerController : MonoBehaviour
 
         // Check for ledge grab BEFORE applying gravity/physics
         playerContext.IsGrabbingLedge = TryLedgeGrab();
-        
+
         if (!playerContext.IsGrabbingLedge)
         {
             playerContext.IsGrounded = controller.isGrounded;
 
             CurrentState = stateHandler.EvaluateState(playerContext);
 
+            jumpHandler.UpdateTimers(Time.deltaTime, playerContext.IsGrounded, playerContext.IsJumping);
+
             movementHandler.HandleMovement(CurrentState, playerContext.MoveInput, transform, playerContext);
             controller.height = crouchHandler.GetTargetHeight(CurrentState, controller.height);
-            playerContext.Velocity = jumpHandler.HandleJump(CurrentState, playerContext.IsJumping, playerContext.Velocity, playerContext.IsInWater, playerContext.IsGrounded, playerContext.IsPushing);
+
+            // Logic for Jump Vibration & Execution
+            bool wasGrounded = playerContext.IsGrounded;
+            Vector3 currentVelocity = playerContext.Velocity;
+            bool jumped = jumpHandler.HandleJump(CurrentState, ref currentVelocity, playerContext.IsInWater, playerContext.IsGrounded, playerContext.IsPushing);
+            playerContext.Velocity = currentVelocity;
+
+            if (jumped && gamepadVibration != null)
+                gamepadVibration.Vibrate(config.JumpVibration.x, config.JumpVibration.y, config.JumpVibration.z);
+
             playerContext.Velocity = physicsHandler.ApplyGravity(CurrentState, playerContext.Velocity, playerContext.IsGrounded);
 
             controller.Move(movementHandler.GetFinalMove(playerContext.Velocity) * Time.deltaTime);
+
+            // Check landing
+            if (!wasGrounded && controller.isGrounded && gamepadVibration != null)
+            {
+                if (Mathf.Abs(playerContext.Velocity.y) >= config.MinFallForceForFeedback)
+                {
+                    gamepadVibration.Vibrate(config.LandVibration.x, config.LandVibration.y, config.LandVibration.z);
+                    if (landingImpulseSource != null) landingImpulseSource.GenerateImpulse();
+                }
+            }
+
+            // Continuous Drag Vibration
+            if (playerContext.IsPushing && playerContext.Velocity.magnitude > 0.1f && gamepadVibration != null)
+            {
+                gamepadVibration.SetContinuousVibration(config.DragVibration.x, config.DragVibration.y);
+            }
+            else if (gamepadVibration != null)
+            {
+                gamepadVibration.StopContinuousVibration();
+            }
         }
 
         if (TMPPlayerState != null)
             TMPPlayerState.text = "Current State: " + CurrentState.ToString();
     }
 
-    private bool TryLedgeGrab ()
+    private bool TryLedgeGrab()
     {
         if (ledgeGrabCooldownTimer > 0f)
             ledgeGrabCooldownTimer -= Time.deltaTime;
@@ -113,31 +154,31 @@ public class PlayerController : MonoBehaviour
         return CurrentState == PlayerState.LedgeGrabbing;
     }
 
-    void LateUpdate ()
+    void LateUpdate()
     {
         playerContext.IsInteracting = false;
         playerContext.NextLimb = false;
         playerContext.PreviousLimb = false;
     }
 
-    void OnTriggerEnter (Collider other)
+    void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == "Water")
             playerContext.IsInWater = true;
     }
 
-    void OnTriggerExit (Collider other)
+    void OnTriggerExit(Collider other)
     {
         if (other.gameObject.tag == "Water")
             playerContext.IsInWater = false;
     }
 
     #region Inputs
-    void OnMove (InputValue value) => playerContext.MoveInput = value.Get<Vector2>();
+    void OnMove(InputValue value) => playerContext.MoveInput = value.Get<Vector2>();
 
-    void OnLook (InputValue value) => playerContext.LookInput = value.Get<Vector2>() * config.LookSensitivity;
+    void OnLook(InputValue value) => playerContext.LookInput = value.Get<Vector2>() * config.LookSensitivity;
 
-    void OnSprint (InputValue value)
+    void OnSprint(InputValue value)
     {
         bool pressed = value.isPressed;
         if (Keyboard.current != null)
@@ -150,19 +191,19 @@ public class PlayerController : MonoBehaviour
 
     void OnJump (InputValue value) => playerContext.IsJumping = value.isPressed;
 
-    void OnCrouch (InputValue value) => playerContext.IsCrouching = value.isPressed;
+    void OnCrouch(InputValue value) => playerContext.IsCrouching = value.isPressed;
 
-    void OnCrouchToggle () => playerContext.IsCrouching = !playerContext.IsCrouching;
+    void OnCrouchToggle() => playerContext.IsCrouching = !playerContext.IsCrouching;
 
-    void OnInteract () => playerContext.IsInteracting = true;
+    void OnInteract() => playerContext.IsInteracting = true;
 
-    void OnGrab (InputValue value) => playerContext.IsGrabbing = value.isPressed;
+    void OnGrab(InputValue value) => playerContext.IsGrabbing = value.isPressed;
 
-    void OnNext () => playerContext.NextLimb = true;
+    void OnNext() => playerContext.NextLimb = true;
 
-    void OnPrevious () => playerContext.PreviousLimb = true;
+    void OnPrevious() => playerContext.PreviousLimb = true;
 
-    public void OnAim (InputValue value)
+    public void OnAim(InputValue value)
     {
         bool pressed = value.isPressed;
 
@@ -181,7 +222,7 @@ public class PlayerController : MonoBehaviour
             limbManager.UseSecondary();
     }
 
-    public void OnShoot (InputValue value)
+    public void OnShoot(InputValue value)
     {
         if (value.isPressed)
             limbManager.UseActive();

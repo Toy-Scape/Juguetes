@@ -4,24 +4,57 @@ public class PlayerJumpHandler
 {
     private readonly JumpConfig config;
 
-    public PlayerJumpHandler (JumpConfig config)
+    public PlayerJumpHandler(JumpConfig config)
     {
         this.config = config;
     }
 
-    public Vector3 HandleJump (PlayerState state, bool isJumping, Vector3 velocity, bool isInWater, bool isGrounded, bool isPushing)
+    private float coyoteTimeCounter;
+    private float jumpBufferCounter;
+
+    public void UpdateTimers(float deltaTime, bool isGrounded, bool jumpPressed)
     {
-        if (isJumping && isGrounded && !isInWater && !isPushing)
+        if (isGrounded)
+        {
+            coyoteTimeCounter = config.coyoteTime;
+        }
+        else
+        {
+            coyoteTimeCounter -= deltaTime;
+        }
+
+        if (jumpPressed)
+        {
+            jumpBufferCounter = config.jumpBufferTime;
+        }
+        else
+        {
+            jumpBufferCounter -= deltaTime;
+        }
+    }
+
+    // Returns true if a jump was performed
+    public bool HandleJump(PlayerState state, ref Vector3 velocity, bool isInWater, bool isGrounded, bool isPushing)
+    {
+        // Standard Jump with Coyote & Buffer
+        if (jumpBufferCounter > 0f && coyoteTimeCounter > 0f && !isInWater && !isPushing)
         {
             velocity.y = Mathf.Sqrt(config.jumpHeight * -2f * config.gravity);
+            jumpBufferCounter = 0f;
+            coyoteTimeCounter = 0f; // Consume coyote time to prevent double jump
+            return true;
         }
-        else if (isJumping && isInWater)
+        // Water Jump Logic (Immediate)
+        else if (jumpBufferCounter > 0f && isInWater)
         {
             if (state == PlayerState.Swimming)
                 velocity.y = config.swimSpeed;
             else if (state == PlayerState.Diving)
                 velocity.y = -config.diveSpeed;
+
+            jumpBufferCounter = 0f;
+            return true;
         }
-        return velocity;
+        return false;
     }
 }

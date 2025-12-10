@@ -19,14 +19,43 @@ public class PlayerConfig
     [SerializeField] private float diveSpeed = 2f;
     public float DiveSpeed => diveSpeed;
 
-    [SerializeField] private float wallWalkSpeed = 3f;  
+    [SerializeField] private float wallWalkSpeed = 3f;
     public float WallWalkSpeed => wallWalkSpeed;
 
-    [SerializeField] private float rotationSpeed = 720f; 
+    [SerializeField] private float rotationSpeed = 720f;
     public float RotationSpeed => rotationSpeed;
 
     [SerializeField] private float lookSensitivity = 1f;
     public float LookSensitivity => lookSensitivity;
+
+    [Header("Smoothing & Feel")]
+    [SerializeField] private float acceleration = 10f;
+    public float Acceleration => acceleration;
+
+    [SerializeField] private float deceleration = 10f;
+    public float Deceleration => deceleration;
+
+    [SerializeField] private float inputSmoothing = 10f;
+    public float InputSmoothing => inputSmoothing;
+
+    [SerializeField] private float turnSmoothTime = 0.1f;
+    public float TurnSmoothTime => turnSmoothTime;
+
+    [Header("Vibration Feedback")]
+    [SerializeField] private Vector3 jumpVibration = new Vector3(0.02f, 0.05f, 0.1f); // Subtle
+    public Vector3 JumpVibration => jumpVibration;
+
+    [SerializeField] private Vector3 landVibration = new Vector3(0.15f, 0.05f, 0.15f); // Noticeable but not harsh
+    public Vector3 LandVibration => landVibration;
+
+    [SerializeField] private Vector3 interactVibration = new Vector3(0.05f, 0.05f, 0.1f); // Soft click
+    public Vector3 InteractVibration => interactVibration;
+
+    [SerializeField] private Vector3 dragVibration = new Vector3(0.1f, 0.0f, 0.0f); // Rumble, no time needed
+    public Vector3 DragVibration => dragVibration;
+
+    [SerializeField] private float minFallForceForFeedback = 8.0f; // Threshold for heavy landing
+    public float MinFallForceForFeedback => minFallForceForFeedback;
 
 
     [Header("Jump & Physics")]
@@ -35,6 +64,12 @@ public class PlayerConfig
 
     [SerializeField] private float gravity = -9.81f;
     public float Gravity => gravity;
+
+    [SerializeField] private float coyoteTime = 0.15f;
+    public float CoyoteTime => coyoteTime;
+
+    [SerializeField] private float jumpBufferTime = 0.1f;
+    public float JumpBufferTime => jumpBufferTime;
 
     [SerializeField] private float standingHeight = 2f;
     public float StandingHeight => standingHeight;
