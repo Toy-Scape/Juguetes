@@ -54,6 +54,9 @@ public class PlayerConfig
     [SerializeField] private Vector3 dragVibration = new Vector3(0.1f, 0.0f, 0.0f); // Rumble, no time needed
     public Vector3 DragVibration => dragVibration;
 
+    [SerializeField] private float minFallForceForFeedback = 8.0f; // Threshold for heavy landing
+    public float MinFallForceForFeedback => minFallForceForFeedback;
+
 
     [Header("Jump & Physics")]
     [SerializeField] private float jumpHeight = 2f;

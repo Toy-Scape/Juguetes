@@ -1,5 +1,6 @@
 using InteractionSystem.Core;
 using TMPro;
+using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -13,6 +14,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private PlayerInteractor playerInteractor;
     [SerializeField] private GrabInteractor grabInteractor;
     [SerializeField] private GamepadVibration gamepadVibration;
+    [SerializeField] private CinemachineImpulseSource landingImpulseSource; // Camera Shake
 
     [SerializeField] private LimbManager limbManager;
 
@@ -37,6 +39,8 @@ public class PlayerController : MonoBehaviour
         controller = GetComponent<CharacterController>();
         if (gamepadVibration == null) gamepadVibration = GetComponent<GamepadVibration>();
         if (gamepadVibration == null) gamepadVibration = GetComponentInChildren<GamepadVibration>();
+
+        if (landingImpulseSource == null) landingImpulseSource = GetComponent<CinemachineImpulseSource>();
 
         var crouchConfig = new CrouchConfig(config.StandingHeight, config.CrouchingHeight);
         var movementConfig = new MovementConfig(config.WalkSpeed, config.SprintSpeed, config.CrouchSpeed,
@@ -94,7 +98,13 @@ public class PlayerController : MonoBehaviour
 
             // Check landing
             if (!wasGrounded && controller.isGrounded && gamepadVibration != null)
-                gamepadVibration.Vibrate(config.LandVibration.x, config.LandVibration.y, config.LandVibration.z);
+            {
+                if (Mathf.Abs(playerContext.Velocity.y) >= config.MinFallForceForFeedback)
+                {
+                    gamepadVibration.Vibrate(config.LandVibration.x, config.LandVibration.y, config.LandVibration.z);
+                    if (landingImpulseSource != null) landingImpulseSource.GenerateImpulse();
+                }
+            }
 
             // Continuous Drag Vibration
             if (playerContext.IsPushing && playerContext.Velocity.magnitude > 0.1f && gamepadVibration != null)
