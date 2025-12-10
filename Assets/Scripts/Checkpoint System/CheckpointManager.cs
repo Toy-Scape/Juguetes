@@ -137,7 +137,7 @@ namespace CheckpointSystem
             else
             {
                 // Default start
-                var player = GameObject.FindGameObjectWithTag("Player");
+                var player = FindFirstObjectByType<PlayerController>().gameObject;
                 if (player != null)
                 {
                     currentGameData.lastCheckpointPosition = player.transform.position;
@@ -149,7 +149,7 @@ namespace CheckpointSystem
         public void RespawnPlayer()
         {
             // 1. Reset Player Position
-            var player = GameObject.FindGameObjectWithTag("Player");
+            var player = FindFirstObjectByType<PlayerController>().gameObject;
             if (player != null)
             {
                 var respawnComponent = player.GetComponent<PlayerRespawn>();
