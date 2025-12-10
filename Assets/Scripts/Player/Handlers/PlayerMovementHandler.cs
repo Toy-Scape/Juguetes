@@ -84,9 +84,10 @@ public class PlayerMovementHandler
         }
 
         // 3. Smooth Rotation
+        appliedSpeed = currentSpeed;
         if (playerContext.IsPushing)
         {
-            currentSpeed *= playerContext.PushSpeedMultiplier;
+            appliedSpeed *= playerContext.PushSpeedMultiplier;
             // Strafe rotation
             if (forward.sqrMagnitude > 0.001f)
             {
@@ -121,14 +122,13 @@ public class PlayerMovementHandler
         }
     }
 
+    // Add appliedSpeed field
+    private float appliedSpeed;
+
     public Vector3 GetFinalMove(Vector3 velocity)
     {
-        // Apply currentSpeed to the direction
-        // Note: moveDirection is normalized. 
-        // If magnitude of input is 0, moveDirection might be zero? 
-        // No, (0,0).normalized is (0,0,0).
-
-        Vector3 finalMove = moveDirection * currentSpeed;
+        // Apply appliedSpeed
+        Vector3 finalMove = moveDirection * appliedSpeed;
         finalMove.y = velocity.y;
         return finalMove;
     }
