@@ -286,7 +286,7 @@ GameObject:
   - component: {fileID: 93656862909993055}
   m_Layer: 0
   m_Name: f (1)
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -397,7 +397,7 @@ GameObject:
   - component: {fileID: 2652189712267631932}
   m_Layer: 0
   m_Name: f
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -608,6 +608,7 @@ GameObject:
   - component: {fileID: 7319195771677131702}
   - component: {fileID: 3434473845669599158}
   - component: {fileID: 1800428321446316545}
+  - component: {fileID: 6611762367846655109}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -716,21 +717,31 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerControls
   config:
-    walkSpeed: 4
-    sprintSpeed: 8
+    walkSpeed: 6
+    sprintSpeed: 11
     crouchSpeed: 2
     swimSpeed: 3
     diveSpeed: 2
     wallWalkSpeed: 3
     rotationSpeed: 720
     lookSensitivity: 1
-    jumpHeight: 2
-    gravity: -9.81
+    acceleration: 26.1
+    deceleration: 40.6
+    inputSmoothing: 10.27
+    turnSmoothTime: 0.1
+    jumpVibration: {x: 0, y: 0.01, z: 0.1}
+    landVibration: {x: 0, y: 0.05, z: 0.15}
+    interactVibration: {x: 0, y: 0.05, z: 0.1}
+    dragVibration: {x: 0.1, y: 0, z: 0}
+    jumpHeight: 3
+    gravity: -28.8
+    coyoteTime: 0.15
+    jumpBufferTime: 0.1
     standingHeight: 2
     crouchingHeight: 1
     ledgeDetectionDistance: 1
     ledgeGrabHeight: 1
-    ledgeClimbUpSpeed: 5
+    ledgeClimbUpSpeed: 13
     ledgeSnapSpeed: 10
     ledgeSnapOffsetY: 0.5
     ledgeForwardOffset: 1
@@ -739,6 +750,7 @@ MonoBehaviour:
   TMPPlayerState: {fileID: 0}
   playerInteractor: {fileID: 8163815884479273772}
   grabInteractor: {fileID: 3434473845669599158}
+  gamepadVibration: {fileID: 6611762367846655109}
   limbManager: {fileID: 7319195771677131702}
 --- !u!143 &3856169263455038750
 CharacterController:
@@ -789,6 +801,37 @@ MonoBehaviour:
   interactionPromptText: {fileID: 0}
   interactActionReference: {fileID: 1781555164194001046, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   fallbackPrompt: E
+  vibration: {fileID: 0}
+  config:
+    walkSpeed: 4
+    sprintSpeed: 8
+    crouchSpeed: 2
+    swimSpeed: 3
+    diveSpeed: 2
+    wallWalkSpeed: 3
+    rotationSpeed: 720
+    lookSensitivity: 1
+    acceleration: 10
+    deceleration: 10
+    inputSmoothing: 10
+    turnSmoothTime: 0.1
+    jumpVibration: {x: 0.02, y: 0.05, z: 0.1}
+    landVibration: {x: 0.15, y: 0.05, z: 0.15}
+    interactVibration: {x: 0.05, y: 0.05, z: 0.1}
+    dragVibration: {x: 0.1, y: 0, z: 0}
+    jumpHeight: 2
+    gravity: -9.81
+    coyoteTime: 0.15
+    jumpBufferTime: 0.1
+    standingHeight: 2
+    crouchingHeight: 1
+    ledgeDetectionDistance: 0.5
+    ledgeGrabHeight: 1
+    ledgeClimbUpSpeed: 5
+    ledgeSnapSpeed: 10
+    ledgeSnapOffsetY: 0.5
+    ledgeForwardOffset: 0.5
+    ledgeGrabCooldown: 0.5
   promptWorldOffset: {x: 0, y: 2.41, z: 0}
   promptFollowSpeed: 20
 --- !u!114 &8113327342456687462
@@ -1034,6 +1077,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6efd64d10586d0643966079894d48ba0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InteractionSystem.Core.InteractionGizmos
+--- !u!114 &6611762367846655109
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6641168232080197241}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71961f7d71c87a04d9f50426eed98dbe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GamepadVibration
 --- !u!1 &7557932846192746383
 GameObject:
   m_ObjectHideFlags: 0
@@ -1048,7 +1103,7 @@ GameObject:
   - component: {fileID: 8325635022521770606}
   m_Layer: 0
   m_Name: f (2)
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
