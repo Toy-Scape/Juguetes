@@ -146,6 +146,8 @@ public class PlayerController : MonoBehaviour
             playerContext.IsSprinting = !playerContext.IsSprinting;
     }
 
+    void OnSprintToggle () => playerContext.IsSprinting = !playerContext.IsSprinting;
+
     void OnJump (InputValue value) => playerContext.IsJumping = value.isPressed;
 
     void OnCrouch (InputValue value) => playerContext.IsCrouching = value.isPressed;
