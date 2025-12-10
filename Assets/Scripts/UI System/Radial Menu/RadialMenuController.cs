@@ -1,14 +1,29 @@
-﻿using UnityEngine;
+﻿using Inventory.UI;
+using System;
+using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class RadialMenuController : MonoBehaviour
 {
     [SerializeField] private RadialMenu radialMenu;
-    private CameraManager cameraManager;
+
+    public static event Action OnRadialOpen;
+    public static event Action OnRadialClose;
 
     private void Start ()
     {
-        cameraManager = FindFirstObjectByType<CameraManager>();
+        InventoryUI.OnInventoryOpened += HandleInventoryOpened;
+    }
+
+    private void OnDestroy ()
+    {
+        InventoryUI.OnInventoryOpened -= HandleInventoryOpened;
+    }
+
+    private void HandleInventoryOpened ()
+    {
+        radialMenu.ConfirmSelection();
+        radialMenu.Hide();
     }
 
     void OnOpenRadialMenu (InputValue value)
@@ -16,17 +31,14 @@ public class RadialMenuController : MonoBehaviour
         if (value.isPressed && radialMenu.CanBeOpened())
         {
             radialMenu.Show();
-            cameraManager.LockCameraMovement();
-            cameraManager.UnlockCursor();
+            OnRadialOpen?.Invoke();
         }
         else
         {
             radialMenu.ConfirmSelection();
             radialMenu.Hide();
-            cameraManager.UnlockCameraMovement();
-            cameraManager.LockCursor();
+            OnRadialClose?.Invoke();
         }
-
     }
 
     void OnNavigateRadialMenu (InputValue value)
@@ -39,12 +51,10 @@ public class RadialMenuController : MonoBehaviour
     void OnPointRadialMenu (InputValue value)
     {
         if (!radialMenu.isActiveAndEnabled) return;
-
         Vector2 mousePos = value.Get<Vector2>();
         Vector2 center = radialMenu.transform.position;
         radialMenu.SelectWithMouse(mousePos, center);
     }
-
 
     void OnRadialConfirm ()
     {

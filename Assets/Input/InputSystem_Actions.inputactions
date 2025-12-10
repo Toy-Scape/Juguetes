@@ -106,6 +106,15 @@
                     "initialStateCheck": true
                 },
                 {
+                    "name": "SprintToggle",
+                    "type": "Button",
+                    "id": "330868bb-0beb-4b64-a8df-0b6cea2699af",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
                     "name": "Grab",
                     "type": "Value",
                     "id": "11ef7b18-118c-4cb6-ac5c-63b584983c8e",
@@ -513,23 +522,23 @@
                 },
                 {
                     "name": "",
-                    "id": "8cbb2f4b-a784-49cc-8d5e-c010b8c7f4e6",
+                    "id": "ea509516-edc0-449e-bf30-c63e4904f38f",
                     "path": "<Gamepad>/leftStickPress",
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
-                    "action": "Sprint",
+                    "action": "SprintToggle",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
-                    "id": "d8bf24bf-3f2f-4160-a97c-38ec1eb520ba",
+                    "id": "dccb3cea-13b5-46fe-b87b-4254b9d636f0",
                     "path": "<XRController>/trigger",
                     "interactions": "",
                     "processors": "",
                     "groups": "XR",
-                    "action": "Sprint",
+                    "action": "SprintToggle",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
