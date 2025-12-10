@@ -9,6 +9,10 @@ namespace CheckpointSystem
 
         public void ResetState()
         {
+            // If the item is currently picked, do not reset it (it stays with the player)
+            var pickable = GetComponent<Pickable>();
+            if (pickable != null && pickable.IsPicked) return;
+
             if (CheckpointManager.Instance != null)
             {
                 // Reset position to last checkpoint
