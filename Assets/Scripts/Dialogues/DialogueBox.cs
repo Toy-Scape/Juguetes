@@ -38,6 +38,7 @@ public class DialogueBox : MonoBehaviour
     private Coroutine thoughtCloseCoroutine;
 
     private GameObject player;
+    private GameObject currentSpeaker;
 
     private HashSet<int> duringTriggeredLines = new HashSet<int>();
 
@@ -56,11 +57,14 @@ public class DialogueBox : MonoBehaviour
             Destroy(gameObject);
             return;
         }
-        if (player == null) { 
-            var controller = FindFirstObjectByType<PlayerController>(); 
-            if (controller != null) 
-                player = controller.gameObject; 
+
+        if (player == null)
+        {
+            var controller = FindFirstObjectByType<PlayerController>();
+            if (controller != null)
+                player = controller.gameObject;
         }
+
         Instance = this;
         CloseImmediate();
     }
@@ -154,11 +158,15 @@ public class DialogueBox : MonoBehaviour
         }
 
         var line = activeDialogue.Lines[dialogueIndex];
+
         nameText.text = line.GetCharacterName();
         nameText.color = line.GetNameColor();
         fullText = line.Text ?? string.Empty;
 
-        var context = new DialogueContext(player);
+        currentSpeaker = CharacterManager.Instance.GetModel(line.Character.CharacterId);
+
+        var context = new DialogueContext(player, currentSpeaker);
+
         activeDialogue.TriggerActions(dialogueIndex, TriggerTiming.OnStart, context);
 
         IsTyping = true;
@@ -178,7 +186,7 @@ public class DialogueBox : MonoBehaviour
         CurrentText.text = fullText;
         IsTyping = false;
 
-        var context = new DialogueContext(player);
+        var context = new DialogueContext(player, currentSpeaker);
         int currentLine = dialogueIndex - 1;
 
         if (!duringTriggeredLines.Contains(currentLine))

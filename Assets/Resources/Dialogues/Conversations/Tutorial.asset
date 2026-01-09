@@ -28,6 +28,8 @@ MonoBehaviour:
     Text: "No hace falta. Mejor ll\xE9vatelos t\xFA. Mis brazos a\xFAn funcionan\u2026
       solo que yo ya no puedo usarlos."
     Actions:
+    - timing: 0
+      action: {fileID: 11400000, guid: 0a8ad60cc2802444ba9e055bbdc7a102, type: 2}
     - timing: 1
       action: {fileID: 11400000, guid: 0a8ad60cc2802444ba9e055bbdc7a102, type: 2}
   - Character: {fileID: 11400000, guid: 42b78f4e58247f64fb0fc56d0c5d1796, type: 2}
