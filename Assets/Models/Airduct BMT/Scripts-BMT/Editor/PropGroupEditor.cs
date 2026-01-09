@@ -8,7 +8,7 @@ using UnityObject = UnityEngine.Object;
 namespace BuildingMakerToolset.PropPlacer
 {
     [CustomEditor( typeof( PropGroup ) )]
-    public class PropGroupEditor : Editor
+    public class PropGroupEditor : UnityEditor.Editor
     {
         SerializedObject serializeTgt;
         SerializedProperty prefabArrayProp;

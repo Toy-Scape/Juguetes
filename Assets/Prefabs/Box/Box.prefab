@@ -15,7 +15,8 @@ GameObject:
   - component: {fileID: 5008705304066357733}
   - component: {fileID: 2206446519046526588}
   - component: {fileID: 6992158795375959285}
-  m_Layer: 0
+  - component: {fileID: -4171990098250736426}
+  m_Layer: 7
   m_Name: Box
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -169,3 +170,19 @@ MonoBehaviour:
   grabConditions:
   - {fileID: 11400000, guid: b6aca484fd4ac2244b6a4cf6ae02475e, type: 2}
   failThought: {fileID: 11400000, guid: 6519da417d9f74e4aa335534f5ca3ab9, type: 2}
+--- !u!208 &-4171990098250736426
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8699495499050405152}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5

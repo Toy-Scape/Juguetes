@@ -5,7 +5,7 @@ using UnityEditor;
 using System.Linq;
 namespace BuildingMakerToolset.PropPlacer {
     [CustomEditor( typeof(BuildingUnit))]
-    public class BuildingUnitEditor : Editor
+    public class BuildingUnitEditor : UnityEditor.Editor
     {
         public override void OnInspectorGUI()
         {

@@ -16,7 +16,7 @@ namespace BuildingMakerToolset.PropPlacer
 
     [CanEditMultipleObjects]
     [CustomEditor( typeof( RowPropPlacer ) )]
-    public class RowPropPlacerEditor : Editor
+    public class RowPropPlacerEditor : UnityEditor.Editor
     {
         
         bool editNotPossible;
