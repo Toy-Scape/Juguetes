@@ -7,20 +7,15 @@ public class TutorialNPC : NPCInteractableBase
 {
     PlayerInventory playerInventory;
     [SerializeField] ItemData limbItemData;
-
-    [SerializeField] GameObject LeftArm;
-    [SerializeField] GameObject RightArm;
-
+    
     public override void Interact(InteractContext context)
     {
         base.Interact(context);
 
-        if (context.PlayerInventory != null && !context.PlayerInventory.Contains(limbItemData))
-        {
-            AddLimbToInventory(context.PlayerInventory);
-            LeftArm.SetActive(false);
-            RightArm.SetActive(false);
-        }
+        //if (context.PlayerInventory != null && !context.PlayerInventory.Contains(limbItemData))
+        //{
+        //    AddLimbToInventory(context.PlayerInventory);
+        //}
     }
 
     private void AddLimbToInventory(PlayerInventory playerInventory)
