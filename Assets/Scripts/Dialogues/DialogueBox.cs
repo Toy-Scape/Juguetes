@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -36,108 +37,80 @@ public class DialogueBox : MonoBehaviour
     private Coroutine typingCoroutine;
     private Coroutine thoughtCloseCoroutine;
 
-    public bool IsTyping { get; private set;}
+    private GameObject player;
 
-    public bool IsOpen  
-    { 
-        get
-        {
-            return dialogueContent.activeInHierarchy || thoughtContent.activeInHierarchy;
-        }  
-    }
+    private HashSet<int> duringTriggeredLines = new HashSet<int>();
 
-    public static DialogueBox Instance { get; private set;}
+    public bool IsTyping { get; private set; }
+    public bool IsOpen => dialogueContent.activeInHierarchy || thoughtContent.activeInHierarchy;
 
-    private TextMeshProUGUI CurrentText
-    {
-        get
-        {
-            return activeDialogue.Type == Dialogue.DialogueType.Normal
-                ? dialogueText
-                : thoughtText;
-        }
-    }
+    public static DialogueBox Instance { get; private set; }
 
+    private TextMeshProUGUI CurrentText =>
+        activeDialogue.Type == Dialogue.DialogueType.Normal ? dialogueText : thoughtText;
 
     private void Awake ()
     {
         if (Instance != null && Instance != this)
         {
-        Destroy(gameObject);
-        return;
+            Destroy(gameObject);
+            return;
+        }
+        if (player == null) { 
+            var controller = FindFirstObjectByType<PlayerController>(); 
+            if (controller != null) 
+                player = controller.gameObject; 
         }
         Instance = this;
-        // asegurar estado inicial
         CloseImmediate();
     }
 
     private void OnDestroy ()
     {
-        // limpieza por seguridad
-        if (nextDialogueAction != null && nextDialogueAction.action != null)
+        if (nextDialogueAction?.action != null)
         {
-        nextDialogueAction.action.performed -= OnNextDialogue;
-        nextDialogueAction.action.Disable();
+            nextDialogueAction.action.performed -= OnNextDialogue;
+            nextDialogueAction.action.Disable();
         }
     }
 
-    /// <summary>
-    /// Abre el diálogo activo. No asume que el activeDialogue sea nulo.
-    /// </summary>
-    public void Open()
+    public void Open ()
     {
         if (activeDialogue == null)
-        return;
+            return;
 
         if (activeDialogue.Type == Dialogue.DialogueType.Normal)
         {
-            if (dialogueContent) dialogueContent.SetActive(true);
-            if (thoughtContent) thoughtContent.SetActive(false);
-
-            // centralizamos cambios de action map en InputMapManager para evitar asserts
-            //if (InputMapManager.Instance != null)
-            //    InputMapManager.Instance.SwitchToActionMapSafe(ActionMaps.Dialogue);
-
+            dialogueContent.SetActive(true);
+            thoughtContent.SetActive(false);
             OnDialogueOpen?.Invoke();
-
             StartCoroutine(EnableNextDialogueAction());
         }
-        else if (activeDialogue.Type == Dialogue.DialogueType.Thought)
+        else
         {
-            if (dialogueContent) dialogueContent.SetActive(false);
-            if (thoughtContent) thoughtContent.SetActive(true);
-
-            // Para pensamientos NO cambiamos el action map (son pasivos y se cierran solos).
-            // Iniciamos el flujo de escribir el pensamiento; el cierre se disparará al terminar de escribir.
+            dialogueContent.SetActive(false);
+            thoughtContent.SetActive(true);
         }
+
         onOpen?.Invoke();
     }
-    
-    /// <summary>
-    /// Cierra el diálogo y su UI. Usa un cierre "seguro" que limpia listeners.
-    /// </summary>
+
     public void Close ()
     {
-        // cancelar cierres pendientes
         if (thoughtCloseCoroutine != null)
         {
             StopCoroutine(thoughtCloseCoroutine);
             thoughtCloseCoroutine = null;
         }
 
-        if (dialogueContent) dialogueContent.SetActive(false);
-        if (thoughtContent) thoughtContent.SetActive(false);
+        dialogueContent.SetActive(false);
+        thoughtContent.SetActive(false);
 
         globalInteractionLockUntil = Time.unscaledTime + interactionLockTime;
 
         onClose?.Invoke();
-
-        // devolver control al Player action map (via InputMapManager para evitar asserts)
-        //if (InputMapManager.Instance != null)
-        //InputMapManager.Instance.SwitchToActionMapSafe("Player");
         OnDialogueClose?.Invoke();
 
-        // cancelar tipeo si existe
         if (typingCoroutine != null)
         {
             StopCoroutine(typingCoroutine);
@@ -147,15 +120,12 @@ public class DialogueBox : MonoBehaviour
         IsTyping = false;
     }
 
-    /// <summary>
-    /// Versión usada en Awake para evitar ejecutar eventos y corutinas.
-    /// </summary>
     private void CloseImmediate ()
     {
-        if (dialogueContent) dialogueContent.SetActive(false);
-        if (thoughtContent) thoughtContent.SetActive(false);
+        dialogueContent.SetActive(false);
+        thoughtContent.SetActive(false);
 
-        if (nextDialogueAction != null && nextDialogueAction.action != null)
+        if (nextDialogueAction?.action != null)
         {
             nextDialogueAction.action.performed -= OnNextDialogue;
             nextDialogueAction.action.Disable();
@@ -164,35 +134,35 @@ public class DialogueBox : MonoBehaviour
         IsTyping = false;
     }
 
-     private void OnNextDialogue (InputAction.CallbackContext ctx)
-    {
-        Next();
-    }
+    private void OnNextDialogue (InputAction.CallbackContext ctx) => Next();
 
     public void Next ()
     {
         if (activeDialogue == null)
-        return;
+            return;
 
-        // si está escribiendo: fastforward
         if (IsTyping)
         {
             FastForward();
             return;
         }
 
-        // si ya no quedan líneas -> cerrar
         if (dialogueIndex >= activeDialogue.Lines.Count)
         {
-            StartCoroutine(CloseSafelyNextFrame());
+            StartCoroutine(CCloseSafelyNextFrame());
             return;
         }
 
         var line = activeDialogue.Lines[dialogueIndex];
         nameText.text = line.GetCharacterName();
+        nameText.color = line.GetNameColor();
         fullText = line.Text ?? string.Empty;
+
+        var context = new DialogueContext(player);
+        activeDialogue.TriggerActions(dialogueIndex, TriggerTiming.OnStart, context);
+
         IsTyping = true;
-        typingCoroutine = StartCoroutine(TypeWriterEffectCoroutine());
+        typingCoroutine = StartCoroutine(TypeWriterEffectCoroutine(dialogueIndex, context));
 
         dialogueIndex++;
     }
@@ -205,11 +175,20 @@ public class DialogueBox : MonoBehaviour
             typingCoroutine = null;
         }
 
-        // mostrar todo el texto inmediatamente
         CurrentText.text = fullText;
         IsTyping = false;
 
-        // asegurar que se dispare el final del tipeo (por ejemplo para pensamientos)
+        var context = new DialogueContext(player);
+        int currentLine = dialogueIndex - 1;
+
+        if (!duringTriggeredLines.Contains(currentLine))
+        {
+            activeDialogue.TriggerActions(currentLine, TriggerTiming.During, context);
+            duringTriggeredLines.Add(currentLine);
+        }
+
+        activeDialogue.TriggerActions(currentLine, TriggerTiming.OnEnd, context);
+
         OnTypingComplete();
     }
 
@@ -220,38 +199,51 @@ public class DialogueBox : MonoBehaviour
 
         activeDialogue = dialogue;
         dialogueIndex = 0;
+        duringTriggeredLines.Clear();
+
         Open();
         Next();
     }
 
-    private IEnumerator TypeWriterEffectCoroutine ()
+    private IEnumerator TypeWriterEffectCoroutine (int lineIndex, DialogueContext context)
     {
-        if (CurrentText == null)
-        yield break;
-
         CurrentText.text = string.Empty;
         float delay = Mathf.Max(0.001f, 1f / Mathf.Max(1f, textSpeed));
 
-        foreach (char c in fullText)
+        int half = fullText.Length / 2;
+        bool duringTriggered = false;
+
+        for (int i = 0; i < fullText.Length; i++)
         {
             if (!IsOpen) yield break;
-            CurrentText.text += c;
+
+            CurrentText.text += fullText[i];
+
+            if (!duringTriggered && i == half)
+            {
+                duringTriggered = true;
+                duringTriggeredLines.Add(lineIndex);
+                activeDialogue.TriggerActions(lineIndex, TriggerTiming.During, context);
+            }
+
             yield return new WaitForSeconds(delay);
+        }
+
+        if (!duringTriggered)
+        {
+            duringTriggeredLines.Add(lineIndex);
+            activeDialogue.TriggerActions(lineIndex, TriggerTiming.During, context);
         }
 
         IsTyping = false;
 
-        // Notificar que hemos terminado de escribir
+        activeDialogue.TriggerActions(lineIndex, TriggerTiming.OnEnd, context);
+
         OnTypingComplete();
     }
 
-    /// <summary>
-    /// Cuando se acaba de escribir un texto (o se fastforwardea), aquí se centraliza la lógica
-    /// que dependa del final del tipeo: p.ej. iniciar el cierre automático de pensamientos.
-    /// </summary>
     private void OnTypingComplete ()
     {
-        // Si es un pensamiento, lanzar la corutina de cierre (asegurando no duplicarla)
         if (activeDialogue != null && activeDialogue.Type == Dialogue.DialogueType.Thought)
         {
             if (thoughtCloseCoroutine != null)
@@ -259,6 +251,7 @@ public class DialogueBox : MonoBehaviour
                 StopCoroutine(thoughtCloseCoroutine);
                 thoughtCloseCoroutine = null;
             }
+
             thoughtCloseCoroutine = StartCoroutine(CloseThoughtAfterDelay());
         }
     }
@@ -269,34 +262,22 @@ public class DialogueBox : MonoBehaviour
         Close();
     }
 
-    private IEnumerator ReenablePlayerNextFrame ()
-    {
-        yield return new WaitForSecondsRealtime(0.1f);
-        if (InputMapManager.Instance != null)
-            InputMapManager.Instance.SwitchToActionMap("Player");
-    }
-
     private IEnumerator EnableNextDialogueAction ()
     {
-        // esperar un frame para evitar race conditions con el InputSystem
         yield return null;
 
         if (nextDialogueAction?.action == null)
-        yield break;
+            yield break;
 
-        // asegurarse de doble-subscribe
         nextDialogueAction.action.performed -= OnNextDialogue;
         nextDialogueAction.action.performed += OnNextDialogue;
+        nextDialogueAction.action.Enable();
     }
 
-    private IEnumerator CloseSafelyNextFrame()
+    private IEnumerator CCloseSafelyNextFrame ()
     {
-        // Esperar a que termine el ciclo interno del Input System
         yield return null;
-
-        // Espera extra muy corta para gamepads (opcional pero muy efectivo)
         yield return new WaitForEndOfFrame();
-
         Close();
     }
 }

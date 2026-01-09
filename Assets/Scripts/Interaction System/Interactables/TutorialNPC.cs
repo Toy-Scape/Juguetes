@@ -12,10 +12,10 @@ public class TutorialNPC : NPCInteractableBase
     {
         base.Interact(context);
 
-        if (context.PlayerInventory != null && !context.PlayerInventory.Contains(limbItemData))
-        {
-            AddLimbToInventory(context.PlayerInventory);
-        }
+        //if (context.PlayerInventory != null && !context.PlayerInventory.Contains(limbItemData))
+        //{
+        //    AddLimbToInventory(context.PlayerInventory);
+        //}
     }
 
     private void AddLimbToInventory(PlayerInventory playerInventory)
