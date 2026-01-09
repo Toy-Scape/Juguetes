@@ -191,9 +191,9 @@ public class PlayerController : MonoBehaviour
             playerContext.IsSprinting = !playerContext.IsSprinting;
     }
 
-    void OnSprintToggle () => playerContext.IsSprinting = !playerContext.IsSprinting;
+    void OnSprintToggle() => playerContext.IsSprinting = !playerContext.IsSprinting;
 
-    void OnJump (InputValue value) => playerContext.IsJumping = value.isPressed;
+    void OnJump(InputValue value) => playerContext.IsJumping = value.isPressed;
 
     void OnCrouch(InputValue value) => playerContext.IsCrouching = value.isPressed;
 
@@ -230,6 +230,18 @@ public class PlayerController : MonoBehaviour
     {
         if (value.isPressed)
             limbManager.UseActive();
+    }
+
+    public void OnPause(InputValue value)
+    {
+        if (value.isPressed)
+        {
+            var pauseHandler = FindFirstObjectByType<UI_System.Menus.GamePauseHandler>();
+            if (pauseHandler != null)
+            {
+                pauseHandler.TogglePause();
+            }
+        }
     }
     #endregion
 

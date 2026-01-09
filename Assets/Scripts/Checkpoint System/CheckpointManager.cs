@@ -27,6 +27,7 @@ namespace CheckpointSystem
             }
 
             Instance = this;
+            transform.SetParent(null);
             DontDestroyOnLoad(gameObject);
 
             currentGameData = new GameData();

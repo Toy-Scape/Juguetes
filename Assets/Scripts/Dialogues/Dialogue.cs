@@ -12,8 +12,8 @@ public class Dialogue : ScriptableObject
         Normal,
         Thought
     }
-    
-    public static Dialogue Load (string relativePath)
+
+    public static Dialogue Load(string relativePath)
     {
         return Resources.Load<Dialogue>($"Dialogues/{relativePath}");
     }
@@ -22,9 +22,14 @@ public class Dialogue : ScriptableObject
     public struct Line
     {
         [SerializeField] private Character character;
-        public string Text;
+        [Header("Localization")]
+        [Tooltip("Key from the Localization Database")]
+        public string Key;
 
-        public string GetCharacterName ()
+        // Removed direct Text field to enforce Localization
+        // public string Text;
+
+        public string GetCharacterName()
         {
             switch (character)
             {

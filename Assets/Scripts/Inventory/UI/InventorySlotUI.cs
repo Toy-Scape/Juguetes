@@ -54,7 +54,11 @@ namespace Inventory.UI
             // Actualizar nombre
             if (nameText != null)
             {
-                nameText.text = item.Data.ItemName;
+                if (Localization.LocalizationManager.Instance != null)
+                    nameText.text = Localization.LocalizationManager.Instance.GetLocalizedValue(item.Data.NameKey);
+                else
+                    nameText.text = item.Data.NameKey;
+
                 nameText.enabled = true;
             }
 

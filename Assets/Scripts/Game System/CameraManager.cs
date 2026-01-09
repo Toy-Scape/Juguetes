@@ -6,7 +6,7 @@ public class CameraManager : MonoBehaviour
     [SerializeField] private CinemachineInputAxisController inputController;
     public static CameraManager Instance;
 
-    void Awake ()
+    void Awake()
     {
         if (Instance != null && Instance != this)
         {
@@ -15,27 +15,28 @@ public class CameraManager : MonoBehaviour
         else
         {
             Instance = this;
+            transform.SetParent(null);
             DontDestroyOnLoad(gameObject);
         }
     }
 
-    private void Start ()
+    private void Start()
     {
         LockCursor();
         UnlockCameraMovement();
     }
 
-    private void OnEnable ()
+    private void OnEnable()
     {
         InputMapManager.OnActionMapChanged += HandleActionMapChanged;
     }
 
-    private void OnDisable ()
+    private void OnDisable()
     {
         InputMapManager.OnActionMapChanged -= HandleActionMapChanged;
     }
 
-    private void HandleActionMapChanged (string newMap)
+    private void HandleActionMapChanged(string newMap)
     {
         if (newMap == ActionMaps.UI)
         {
@@ -49,25 +50,25 @@ public class CameraManager : MonoBehaviour
         }
     }
 
-    public void LockCameraMovement ()
+    public void LockCameraMovement()
     {
         if (inputController != null)
             inputController.enabled = false;
     }
 
-    public void UnlockCameraMovement ()
+    public void UnlockCameraMovement()
     {
         if (inputController != null)
             inputController.enabled = true;
     }
 
-    public void LockCursor ()
+    public void LockCursor()
     {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
 
-    public void UnlockCursor ()
+    public void UnlockCursor()
     {
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;

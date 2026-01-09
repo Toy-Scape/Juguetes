@@ -14,24 +14,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Dialogue
   Lines:
   - character: 0
-    Text: "\xBFEst\xE1s bien? Te ves\u2026 incompleto."
+    Key: tutorial-robotin-dialogue-1
   - character: 1
-    Text: "Hehe\u2026 incompleto dice. Me faltan los brazos, chaval. As\xED no puedo
-      moverme ni defenderme."
+    Key: tutorial-juan-dialogue-1
   - character: 0
-    Text: "\xBFQuieres que los busque?"
+    Key: tutorial-robotin-dialogue-2
   - character: 1
-    Text: "No hace falta. Mejor ll\xE9vatelos t\xFA. Mis brazos a\xFAn funcionan\u2026
-      solo que yo ya no puedo usarlos."
+    Key: tutorial-juan-dialogue-2
   - character: 0
-    Text: "\xBFQuieres que me ponga tus brazos?"
+    Key: tutorial-robotin-dialogue-3
   - character: 1
-    Text: "Exacto. Te servir\xE1n para aprender a cambiar piezas. Adem\xE1s, ah\xED
-      en la mesa hay un destornillador. Con mis brazos podr\xE1s usarlo y abrir la
-      rejilla de ventilaci\xF3n."
+    Key: tutorial-juan-dialogue-3
   - character: 0
-    Text: "\xBFY t\xFA? \xBFQu\xE9 har\xE1s?"
+    Key: tutorial-robotin-dialogue-4
   - character: 1
-    Text: "Yo no tengo escapatoria, Robot\xEDn. Pero t\xFA s\xED. As\xED que ve.
-      Esc\xE1pate por los dos."
+    Key: tutorial-juan-dialogue-4
   Type: 0
