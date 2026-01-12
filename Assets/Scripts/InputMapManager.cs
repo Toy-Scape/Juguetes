@@ -3,6 +3,7 @@ using System.Collections;
 using Inventory.UI;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public static class ActionMaps
 {
@@ -50,6 +51,8 @@ public class InputMapManager : MonoBehaviour
 
         DialogueBox.OnDialogueOpen += HandleDialogueOpen;
         DialogueBox.OnDialogueClose += HandleDialogueClose;
+
+        SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
     private void OnDisable()
@@ -62,6 +65,21 @@ public class InputMapManager : MonoBehaviour
 
         //DialogueBox.OnDialogueOpen -= HandleDialogueOpen;
         //DialogueBox.OnDialogueClose -= HandleDialogueClose;
+
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        // Only reset counters if we are loading a whole new context (Single mode).
+        // If we are loading Additively (like Pause Menu), we should NOT reset, 
+        // as the new scene might register itself as UI immediately.
+        if (mode == LoadSceneMode.Single)
+        {
+            uiCounter = 0;
+            dialogueCounter = 0;
+            UpdateActionMap();
+        }
     }
 
     private void Start()
@@ -117,14 +135,20 @@ public class InputMapManager : MonoBehaviour
 
     private void HandleRadialOpen()
     {
-        CameraManager.Instance.LockCameraMovement();
-        CameraManager.Instance.UnlockCursor();
+        if (CameraManager.Instance != null)
+        {
+            CameraManager.Instance.LockCameraMovement();
+            CameraManager.Instance.UnlockCursor();
+        }
     }
 
     private void HandleRadialClose()
     {
-        CameraManager.Instance.UnlockCameraMovement();
-        CameraManager.Instance.LockCursor();
+        if (CameraManager.Instance != null)
+        {
+            CameraManager.Instance.UnlockCameraMovement();
+            CameraManager.Instance.LockCursor();
+        }
     }
 
     private void UpdateActionMap()

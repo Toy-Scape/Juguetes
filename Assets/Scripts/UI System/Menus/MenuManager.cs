@@ -40,16 +40,16 @@ namespace UI_System.Menus
 
         private void Start()
         {
+            // Failsafe: Always unlock cursor when MenuManager starts (it's a menu!)
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+
             if (InputMapManager.Instance != null)
             {
                 InputMapManager.Instance.HandleOpenUI();
             }
             // Fallback if InputMapManager is not present (e.g. testing Menu scene alone without bootstrap)
-            else
-            {
-                Cursor.lockState = CursorLockMode.None;
-                Cursor.visible = true;
-            }
+            // ... already handled above
         }
 
         private void OnDestroy()
