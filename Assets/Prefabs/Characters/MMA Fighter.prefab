@@ -50,8 +50,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp-firstpass::Outline
   outlineMode: 1
   outlineColor: {r: 1, g: 1, b: 1, a: 1}
-  outlineWidth: 2
-  precomputeOutline: 0
+  outlineWidth: 3
+  precomputeOutline: 1
   bakeKeys: []
   bakeValues: []
 --- !u!114 &5947560341606306514
@@ -117,7 +117,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: a1b513f8f6c39de4e923a352e99e10c1, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -0.15
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: a1b513f8f6c39de4e923a352e99e10c1, type: 3}
       propertyPath: m_LocalPosition.z
@@ -155,6 +155,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: MMA Fighter - Armature Missing arm
       objectReference: {fileID: 0}
+    - target: {fileID: 3206701719980038830, guid: a1b513f8f6c39de4e923a352e99e10c1, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.79
+      objectReference: {fileID: 0}
+    - target: {fileID: 5866666021909216657, guid: a1b513f8f6c39de4e923a352e99e10c1, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 0af24823dcf0a58428d54622632c8120, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

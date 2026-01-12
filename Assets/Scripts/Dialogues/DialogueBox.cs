@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -43,6 +44,8 @@ public class DialogueBox : MonoBehaviour
 
     public bool IsTyping { get; private set; }
 
+    public bool IsOpen => dialogueContent.activeInHierarchy || thoughtContent.activeInHierarchy;
+
     public static DialogueBox Instance { get; private set; }
 
     private TextMeshProUGUI CurrentText =>
@@ -81,7 +84,7 @@ public class DialogueBox : MonoBehaviour
     /// <summary>
     /// Abre el diálogo activo. No asume que el activeDialogue sea nulo.
     /// </summary>
-    public void Open()
+    public void Open ()
     {
         if (activeDialogue == null)
             return;
@@ -98,7 +101,8 @@ public class DialogueBox : MonoBehaviour
             if (dialogueContent) dialogueContent.SetActive(false);
             if (thoughtContent) thoughtContent.SetActive(true);
 
-        onOpen?.Invoke();
+            onOpen?.Invoke();
+        }
     }
 
     /// <summary>
@@ -187,7 +191,7 @@ public class DialogueBox : MonoBehaviour
         activeDialogue.TriggerActions(dialogueIndex, TriggerTiming.OnStart, context);
 
         IsTyping = true;
-        typingCoroutine = StartCoroutine(TypeWriterEffectCoroutine());
+        typingCoroutine = StartCoroutine(TypeWriterEffectCoroutine(dialogueIndex, context));
 
         dialogueIndex++;
     }
@@ -225,17 +229,23 @@ public class DialogueBox : MonoBehaviour
 
         activeDialogue = dialogue;
         dialogueIndex = 0;
+        duringTriggeredLines.Clear();
         Open();
         Next();
     }
 
-    private IEnumerator TypeWriterEffectCoroutine()
+    private IEnumerator TypeWriterEffectCoroutine (int lineIndex, DialogueContext context)
     {
         if (CurrentText == null)
             yield break;
 
         CurrentText.text = string.Empty;
         float delay = Mathf.Max(0.001f, 1f / Mathf.Max(1f, textSpeed));
+
+        int half = fullText.Length / 2;
+        bool duringTriggered = false;
+
+        int i = 0; // índice manual
 
         foreach (char c in fullText)
         {
@@ -250,6 +260,8 @@ public class DialogueBox : MonoBehaviour
                 activeDialogue.TriggerActions(lineIndex, TriggerTiming.During, context);
             }
 
+            i++; // avanzar índice
+
             yield return new WaitForSeconds(delay);
         }
 
@@ -260,10 +272,10 @@ public class DialogueBox : MonoBehaviour
         }
 
         IsTyping = false;
-
-        // Notificar que hemos terminado de escribir
+        activeDialogue.TriggerActions(lineIndex, TriggerTiming.OnEnd, context);
         OnTypingComplete();
     }
+
 
     /// <summary>
     /// Cuando se acaba de escribir un texto (o se fastforwardea), aquí se centraliza la lógica

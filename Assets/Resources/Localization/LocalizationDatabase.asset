@@ -84,12 +84,12 @@ MonoBehaviour:
     basque: "Ez da beharrezkoa. Hobe zuk eramatea. Nire besoek oraindik funtzionatzen
       dute\u2026 nik erabiltzerik ez dudan arren.\n"
   - key: tutorial-juan-dialogue-3
-    english: "Exacto. Te servir\xE1n para aprender a cambiar piezas. Adem\xE1s, ah\xED
-      en la mesa hay un destornillador. Con mis brazos podr\xE1s usarlo y abrir la
-      rejilla de ventilaci\xF3n.\n"
-    spanish: "Exactly. They\u2019ll help you learn how to swap parts. Also, there\u2019s
+    english: "Exactly. They\u2019ll help you learn how to swap parts. Also, there\u2019s
       a screwdriver on the table over there. With my arms you\u2019ll be able to
       use it and open the ventilation grate.\n"
+    spanish: "Exacto. Te servir\xE1n para aprender a cambiar piezas. Adem\xE1s, ah\xED
+      en la mesa hay un destornillador. Con mis brazos podr\xE1s usarlo y abrir la
+      rejilla de ventilaci\xF3n."
     basque: "Hori da. Piezen aldaketa ikasteko balioko dizute. Gainera, mahai gainean
       han destornilladore bat dago. Nire besoekin erabili ahal izango duzu eta aireztapen\u2011sarea
       ireki.\n"

@@ -1743,6 +1743,33 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1997857997583707999, guid: 235dc7df742c7214b97d4cd100b29707, type: 3}
   m_PrefabInstance: {fileID: 833805902791553219}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &713214427 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 9049972337583187700, guid: 5d6e0895ca865a04c97530f491606a99, type: 3}
+  m_PrefabInstance: {fileID: 6739438036025674557}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &713214428
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 713214427}
+  m_Enabled: 1
+  m_Avatar: {fileID: 9000000, guid: a1b513f8f6c39de4e923a352e99e10c1, type: 3}
+  m_Controller: {fileID: 9100000, guid: 0af24823dcf0a58428d54622632c8120, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1001 &725648790
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2247,6 +2274,18 @@ PrefabInstance:
     - target: {fileID: 7925042974416950007, guid: 6cdab5b0b0234a5478f65b4a6b2a5bf5, type: 3}
       propertyPath: m_Name
       value: Game Systems
+      objectReference: {fileID: 0}
+    - target: {fileID: 8040803963412535677, guid: 6cdab5b0b0234a5478f65b4a6b2a5bf5, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 44.38272
+      objectReference: {fileID: 0}
+    - target: {fileID: 8040803963412535677, guid: 6cdab5b0b0234a5478f65b4a6b2a5bf5, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 3.17946
+      objectReference: {fileID: 0}
+    - target: {fileID: 8040803963412535677, guid: 6cdab5b0b0234a5478f65b4a6b2a5bf5, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -38.7
       objectReference: {fileID: 0}
     - target: {fileID: 8040803963412535677, guid: 6cdab5b0b0234a5478f65b4a6b2a5bf5, type: 3}
       propertyPath: m_LocalRotation.w
@@ -5517,10 +5556,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 2322742075433182772, guid: 5d6e0895ca865a04c97530f491606a99, type: 3}
-      propertyPath: m_Controller
-      value: 
-      objectReference: {fileID: 9100000, guid: 0af24823dcf0a58428d54622632c8120, type: 2}
     - target: {fileID: 2348123604914624309, guid: 5d6e0895ca865a04c97530f491606a99, type: 3}
       propertyPath: m_Name
       value: MMA Fighter
@@ -5565,42 +5600,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6761840435817578763, guid: 5d6e0895ca865a04c97530f491606a99, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -0.79
-      objectReference: {fileID: 0}
-    - target: {fileID: 8564761586587253838, guid: 5d6e0895ca865a04c97530f491606a99, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -0.15
-      objectReference: {fileID: 0}
-    - target: {fileID: 8845013033102487776, guid: 5d6e0895ca865a04c97530f491606a99, type: 3}
-      propertyPath: outlineMode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8845013033102487776, guid: 5d6e0895ca865a04c97530f491606a99, type: 3}
-      propertyPath: outlineWidth
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 8845013033102487776, guid: 5d6e0895ca865a04c97530f491606a99, type: 3}
-      propertyPath: outlineColor.b
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8845013033102487776, guid: 5d6e0895ca865a04c97530f491606a99, type: 3}
-      propertyPath: outlineColor.g
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8845013033102487776, guid: 5d6e0895ca865a04c97530f491606a99, type: 3}
-      propertyPath: outlineColor.r
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 8845013033102487776, guid: 5d6e0895ca865a04c97530f491606a99, type: 3}
       propertyPath: precomputeOutline
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 9049972337583187700, guid: 5d6e0895ca865a04c97530f491606a99, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 713214428}
   m_SourcePrefab: {fileID: 100100000, guid: 5d6e0895ca865a04c97530f491606a99, type: 3}
 --- !u!1 &6739438036025674558 stripped
 GameObject:
