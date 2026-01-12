@@ -20,6 +20,7 @@ public class HideModelPartsAction : ActionBase
             if (part != null)
             {
                 part.gameObject.SetActive(false);
+                Debug.Log($"HideModelPartsAction: Part '{partName}' hidden on '{context.Speaker.name}'.");
             }
             else
             {
