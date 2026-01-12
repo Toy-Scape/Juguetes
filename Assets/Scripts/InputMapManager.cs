@@ -1,8 +1,9 @@
 using System;
 using System.Collections;
+using Inventory.UI;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using Inventory.UI;
+using UnityEngine.SceneManagement;
 
 public static class ActionMaps
 {
@@ -23,7 +24,7 @@ public class InputMapManager : MonoBehaviour
 
     public static event Action<string> OnActionMapChanged;
 
-    private void Awake ()
+    private void Awake()
     {
         if (Instance != null && Instance != this)
         {
@@ -36,10 +37,11 @@ public class InputMapManager : MonoBehaviour
         if (playerInput == null)
             playerInput = GetComponent<PlayerInput>();
 
+        transform.SetParent(null);
         DontDestroyOnLoad(gameObject);
     }
 
-    private void OnEnable ()
+    private void OnEnable()
     {
         RadialMenuController.OnRadialOpen += HandleRadialOpen;
         RadialMenuController.OnRadialClose += HandleRadialClose;
@@ -49,9 +51,11 @@ public class InputMapManager : MonoBehaviour
 
         DialogueBox.OnDialogueOpen += HandleDialogueOpen;
         DialogueBox.OnDialogueClose += HandleDialogueClose;
+
+        SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
-    private void OnDisable ()
+    private void OnDisable()
     {
         RadialMenuController.OnRadialOpen -= HandleRadialOpen;
         RadialMenuController.OnRadialClose -= HandleRadialClose;
@@ -61,9 +65,24 @@ public class InputMapManager : MonoBehaviour
 
         //DialogueBox.OnDialogueOpen -= HandleDialogueOpen;
         //DialogueBox.OnDialogueClose -= HandleDialogueClose;
+
+        SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
-    private void Start ()
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        // Only reset counters if we are loading a whole new context (Single mode).
+        // If we are loading Additively (like Pause Menu), we should NOT reset, 
+        // as the new scene might register itself as UI immediately.
+        if (mode == LoadSceneMode.Single)
+        {
+            uiCounter = 0;
+            dialogueCounter = 0;
+            UpdateActionMap();
+        }
+    }
+
+    private void Start()
     {
         if (playerInput != null)
             UpdateActionMap();
@@ -71,62 +90,68 @@ public class InputMapManager : MonoBehaviour
             Debug.LogWarning("[InputManager] PlayerInput no asignado al iniciar.");
     }
 
-    public void SwitchToActionMap (string mapName)
+    public void SwitchToActionMap(string mapName)
     {
         if (playerInput == null) return;
         playerInput.SwitchCurrentActionMap(mapName);
         OnActionMapChanged?.Invoke(mapName);
     }
 
-    public void SwitchToActionMapSafe (string mapName)
+    public void SwitchToActionMapSafe(string mapName)
     {
         if (playerInput == null) return;
         StartCoroutine(SwitchCoroutine(mapName));
     }
 
-    private IEnumerator SwitchCoroutine (string mapName)
+    private IEnumerator SwitchCoroutine(string mapName)
     {
         yield return new WaitForEndOfFrame();
         SwitchToActionMap(mapName);
     }
 
-    public void HandleOpenUI ()
+    public void HandleOpenUI()
     {
         uiCounter++;
         UpdateActionMap();
     }
 
-    public void HandleCloseUI ()
+    public void HandleCloseUI()
     {
         uiCounter = Mathf.Max(0, uiCounter - 1);
         UpdateActionMap();
     }
 
-    public void HandleDialogueOpen ()
+    public void HandleDialogueOpen()
     {
         dialogueCounter++;
         UpdateActionMap();
     }
 
-    public void HandleDialogueClose ()
+    public void HandleDialogueClose()
     {
         dialogueCounter = Mathf.Max(0, dialogueCounter - 1);
         UpdateActionMap();
     }
 
-    private void HandleRadialOpen ()
+    private void HandleRadialOpen()
     {
-        CameraManager.Instance.LockCameraMovement();
-        CameraManager.Instance.UnlockCursor();
+        if (CameraManager.Instance != null)
+        {
+            CameraManager.Instance.LockCameraMovement();
+            CameraManager.Instance.UnlockCursor();
+        }
     }
 
-    private void HandleRadialClose ()
+    private void HandleRadialClose()
     {
-        CameraManager.Instance.UnlockCameraMovement();
-        CameraManager.Instance.LockCursor();
+        if (CameraManager.Instance != null)
+        {
+            CameraManager.Instance.UnlockCameraMovement();
+            CameraManager.Instance.LockCursor();
+        }
     }
 
-    private void UpdateActionMap ()
+    private void UpdateActionMap()
     {
         string newMap;
 
@@ -143,7 +168,7 @@ public class InputMapManager : MonoBehaviour
         }
     }
 
-    public string GetCurrentActionMap ()
+    public string GetCurrentActionMap()
     {
         return playerInput != null && playerInput.currentActionMap != null ? playerInput.currentActionMap.name : string.Empty;
     }

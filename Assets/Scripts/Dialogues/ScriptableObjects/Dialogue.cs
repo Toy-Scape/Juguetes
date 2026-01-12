@@ -13,7 +13,7 @@ public class Dialogue : ScriptableObject
         Thought
     }
 
-    public static Dialogue Load (string relativePath)
+    public static Dialogue Load(string relativePath)
     {
         return Resources.Load<Dialogue>($"Dialogues/{relativePath}");
     }
@@ -22,28 +22,33 @@ public class Dialogue : ScriptableObject
     public struct Line
     {
         public DialogueCharacter Character;
+
+        [Header("Localization")]
+        [Tooltip("Key from the Localization Database")]
+        public string Key;
+
         [TextArea] public string Text;
         public List<DialogueAction> Actions;
 
-        public string GetCharacterName ()
+        public string GetCharacterName()
         {
             return Character != null ? Character.DisplayName : "Unknown";
         }
 
-        public Color GetNameColor ()
+        public Color GetNameColor()
         {
             var color = Character != null ? Character.NameColor : Color.white;
             color.a = 1f;
             return color;
         }
 
-        public Sprite GetPortrait ()
+        public Sprite GetPortrait()
         {
             return Character != null ? Character.Portrait : null;
         }
     }
 
-    public void TriggerActions (int lineIndex, TriggerTiming timing, DialogueContext context)
+    public void TriggerActions(int lineIndex, TriggerTiming timing, DialogueContext context)
     {
         if (lineIndex < 0 || lineIndex >= Lines.Count)
             return;

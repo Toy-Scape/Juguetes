@@ -171,6 +171,27 @@ namespace Inventory
             return _inventory.Limbs.ToArray();
         }
 
+        public ItemData GetItemDataForLimb(LimbSO limb)
+        {
+            if (limb == null) return null;
+
+            // Search in Limbs
+            foreach (var item in _inventory.Limbs)
+            {
+                if (item.Data != null && item.Data.LimbSO == limb)
+                    return item.Data;
+            }
+
+            // Search in Items (just in case)
+            foreach (var item in _inventory.Items)
+            {
+                if (item.Data != null && item.Data.LimbSO == limb)
+                    return item.Data;
+            }
+
+            return null;
+        }
+
         #endregion
 
         #region Métodos Privados
