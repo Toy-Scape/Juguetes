@@ -8,7 +8,7 @@ using static UnityEngine.Rendering.DebugUI;
 [CreateAssetMenu(menuName = "Limb/Limb")]
 public class LimbSO : ScriptableObject
 {
-    public string LimbName;
+    // public string LimbName; // Removed to use Localization from ItemData
     public LimbSlot Slot;
     public Sprite LimbIcon;
     public GameObject LimbModel;
@@ -17,30 +17,31 @@ public class LimbSO : ScriptableObject
     [SerializeField] protected SecondaryAbilitySO secondaryAbility;
     [SerializeField] protected PassiveAbilitySO passiveAbility;
 
-    public void OnEquip (LimbContext context)
+    public void OnEquip(LimbContext context)
     {
         passiveAbility?.Apply(context);
     }
 
-    public void OnUnequip (LimbContext context)
+    public void OnUnequip(LimbContext context)
     {
         passiveAbility?.Remove(context);
     }
 
-    public void UseActive (LimbContext context)
+    public void UseActive(LimbContext context)
     {
-        Debug.Log($"Using active ability of limb: {LimbName}");
+        Debug.Log($"Using active ability of limb: {name}");
         activeAbility?.Execute(context);
     }
 
-    public void UseSecondary (LimbContext context)
+    public void UseSecondary(LimbContext context)
     {
-        Debug.Log($"Using active ability of limb: {LimbName}");
+        Debug.Log($"Using active ability of limb: {name}");
         if (secondaryAbility?.CanExecute(context) ?? false)
             secondaryAbility.Execute(context);
     }
 
-    public string SlotName {
+    public string SlotName
+    {
         get => GetSlotName();
     }
 
