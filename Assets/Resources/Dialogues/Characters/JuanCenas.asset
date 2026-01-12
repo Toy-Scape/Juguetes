@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2892dd447c33c124ba411385d0effbca, type: 3}
   m_Name: JuanCenas
   m_EditorClassIdentifier: Assembly-CSharp::DialogueCharacter
+  CharacterId: MMA_FIGHTER
   DisplayName: "Ju\xE1n el Cenas"
   Portrait: {fileID: 0}
   NameColor: {r: 0.15729372, g: 0.6698113, b: 0, a: 0}
