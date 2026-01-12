@@ -29,7 +29,7 @@ MonoBehaviour:
       solo que yo ya no puedo usarlos."
     Actions:
     - timing: 0
-      action: {fileID: 11400000, guid: 0a8ad60cc2802444ba9e055bbdc7a102, type: 2}
+      action: {fileID: 11400000, guid: 94587dff5e8c0ab40a4c7fb55cb32e12, type: 2}
     - timing: 1
       action: {fileID: 11400000, guid: 0a8ad60cc2802444ba9e055bbdc7a102, type: 2}
   - Character: {fileID: 11400000, guid: 42b78f4e58247f64fb0fc56d0c5d1796, type: 2}
