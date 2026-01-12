@@ -135,5 +135,17 @@ namespace UI_System.Menus
                 _pauseMenuPanel.SetActive(true);
             }
         }
+
+        public void HandleBackInput()
+        {
+            if (_optionsPanel.activeSelf)
+            {
+                BackFromOptions();
+            }
+            else if (_pauseMenuPanel.activeSelf)
+            {
+                ResumeGame();
+            }
+        }
     }
 }

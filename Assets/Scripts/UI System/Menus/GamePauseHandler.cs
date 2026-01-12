@@ -19,30 +19,62 @@ namespace UI_System.Menus
             }
         }
 
+        private bool _isLoading = false;
+        private float _lastToggleTime = 0f;
+        private const float ToggleCooldown = 0.2f;
+
         // Public method to be called via Unity Events or other scripts
         public void TogglePause()
         {
-            // If the menu is already loaded, do nothing (pause logic is usually handled by the menu itself to resume)
-            if (SceneManager.sceneCount > 1) return;
+            if (_isLoading || Time.unscaledTime < _lastToggleTime + ToggleCooldown) return;
+            _lastToggleTime = Time.unscaledTime;
 
-            Debug.Log("Game Paused");
-            Time.timeScale = 0f;
+            // Check if the menu scene is already loaded
+            Scene menuScene = SceneManager.GetSceneByName(_menuSceneName);
 
-            // Load the Menu Scene Additively
-            SceneManager.LoadSceneAsync(_menuSceneName, LoadSceneMode.Additive);
+            if (menuScene.isLoaded)
+            {
+                // If loaded, try to handle "Back" input via MenuManager
+                if (MenuManager.Instance != null)
+                {
+                    MenuManager.Instance.HandleBackInput();
+                }
+                else
+                {
+                    // Fallback
+                    _isLoading = true;
+                    SceneManager.UnloadSceneAsync(_menuSceneName);
+                }
+            }
+            else
+            {
+                Debug.Log("Game Paused");
+                Time.timeScale = 0f;
 
-            // Note: PlayerInput usually handles switching action maps if configured, 
-            // otherwise you might need to manually disable gameplay inputs here if strictly needed.
+                // Load the Menu Scene Additively
+                _isLoading = true;
+                SceneManager.LoadSceneAsync(_menuSceneName, LoadSceneMode.Additive);
+            }
         }
 
         private void OnEnable()
         {
             SceneManager.sceneUnloaded += OnSceneUnloaded;
+            SceneManager.sceneLoaded += OnSceneLoaded;
         }
 
         private void OnDisable()
         {
             SceneManager.sceneUnloaded -= OnSceneUnloaded;
+            SceneManager.sceneLoaded -= OnSceneLoaded;
+        }
+
+        private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+        {
+            if (scene.name == _menuSceneName)
+            {
+                _isLoading = false;
+            }
         }
 
         private void OnSceneUnloaded(Scene scene)
@@ -51,6 +83,12 @@ namespace UI_System.Menus
             {
                 Debug.Log("Game Resumed");
                 Time.timeScale = 1f;
+
+                // Restore Player controls and Lock Cursor
+                if (InputMapManager.Instance != null)
+                {
+                    InputMapManager.Instance.SwitchToActionMap(ActionMaps.Player);
+                }
             }
         }
     }
