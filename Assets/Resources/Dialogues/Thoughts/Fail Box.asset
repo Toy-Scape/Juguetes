@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Dialogue
   Lines:
   - character: 0
-    Text: No puedo agarrarlo, pesa demasiado.
+    Key: thought-fail-box
   Type: 1

@@ -25,19 +25,19 @@ public class RadialMenu : MonoBehaviour
     private bool isOpen = false;
     private LimbSO lastSelection;
 
-    void Start ()
+    void Start()
     {
         PopulateMenu();
         Hide();
     }
 
-    public bool CanBeOpened ()
+    public bool CanBeOpened()
     {
         var limbs = limbManager.GetAvailableLimbs();
         return limbs.Count > 1;
     }
 
-    public void Show ()
+    public void Show()
     {
         PopulateMenu();
 
@@ -45,13 +45,13 @@ public class RadialMenu : MonoBehaviour
         gameObject.SetActive(true);
     }
 
-    public void Hide ()
+    public void Hide()
     {
         isOpen = false;
         gameObject.SetActive(false);
     }
 
-    public void PopulateMenu ()
+    public void PopulateMenu()
     {
         foreach (var obj in buttons)
             Destroy(obj);
@@ -96,21 +96,21 @@ public class RadialMenu : MonoBehaviour
         }
     }
 
-    public void SelectWithMouse (Vector2 mousePos, Vector2 center)
+    public void SelectWithMouse(Vector2 mousePos, Vector2 center)
     {
         var limbs = limbManager.GetAvailableLimbs();
         currentSelection = GetSelectionFromMouse(mousePos, center, limbs);
         HighlightSelection(currentSelection);
     }
 
-    public void SelectWithJoystick (Vector2 input)
+    public void SelectWithJoystick(Vector2 input)
     {
         var limbs = limbManager.GetAvailableLimbs();
         currentSelection = GetSelectionFromJoystick(input, limbs);
         HighlightSelection(currentSelection);
     }
 
-    public void ConfirmSelection ()
+    public void ConfirmSelection()
     {
         if (isOpen && currentSelection != null)
         {
@@ -118,7 +118,7 @@ public class RadialMenu : MonoBehaviour
         }
     }
 
-    private LimbSO GetSelectionFromMouse (Vector2 mousePos, Vector2 center, List<LimbSO> limbs)
+    private LimbSO GetSelectionFromMouse(Vector2 mousePos, Vector2 center, List<LimbSO> limbs)
     {
         if (limbs.Count == 0) return null;
 
@@ -137,7 +137,7 @@ public class RadialMenu : MonoBehaviour
         return limbs[index];
     }
 
-    private LimbSO GetSelectionFromJoystick (Vector2 input, List<LimbSO> limbs, float deadzone = 0.2f)
+    private LimbSO GetSelectionFromJoystick(Vector2 input, List<LimbSO> limbs, float deadzone = 0.2f)
     {
         if (limbs.Count == 0) return null;
 
@@ -155,7 +155,7 @@ public class RadialMenu : MonoBehaviour
         return lastSelection;
     }
 
-    private void HighlightSelection (LimbSO selection)
+    private void HighlightSelection(LimbSO selection)
     {
         var limbs = limbManager.GetAvailableLimbs();
         for (int i = 0; i < buttons.Count; i++)
@@ -169,6 +169,62 @@ public class RadialMenu : MonoBehaviour
         }
 
         if (centerLabel != null)
-            centerLabel.text = selection != null ? selection.LimbName : "";
+        {
+            string displayedName = "";
+            if (selection != null)
+            {
+                // Try to find ItemData for this Limb
+                Inventory.ItemData matchedItem = null;
+
+                // Check if it's the default limb
+                if (selection == limbManager.GetAvailableLimbs()[0] || selection == limbManager.GetDefaultLimbData()?.LimbSO)
+                {
+                    // Note: GetAvailableLimbs()[0] is DefaultLimb. 
+                    // But strictly speaking we should check equality or reference
+                    // Let's rely on LimbManager
+                    matchedItem = limbManager.GetDefaultLimbData();
+                }
+
+                // If not found or not default, check inventory (RadialMenu has reference to LimbManager which has Inventory?)
+                // RadialMenu doesn't have reference to PlayerInventory, but LimbManager does. 
+                // However LimbManager's inventory field is private.
+                // We added a getter helper to PlayerInventory, but we need access to PlayerInventory instance.
+                // Let's assume we can find PlayerInventory or LimbManager exposes it?
+                // LimbManager does not expose Inventory.
+
+                // Better approach: Use FindFirstObjectByType<PlayerInventory> if needed, or ask LimbManager?
+                // Wait, I can't easily access PlayerInventory from here cleanly without a reference.
+                // But I can assume PlayerInventory is singleton-ish or I can find it.
+
+                if (matchedItem == null)
+                {
+                    var playerInv = FindFirstObjectByType<Inventory.PlayerInventory>();
+                    if (playerInv != null)
+                    {
+                        matchedItem = playerInv.GetItemDataForLimb(selection);
+                    }
+                }
+
+                // Fallback for Default Limb if lookup failed but we know it matches default
+                if (matchedItem == null && limbManager.GetAvailableLimbs().Contains(selection) && selection == limbManager.GetAvailableLimbs()[0])
+                {
+                    matchedItem = limbManager.GetDefaultLimbData();
+                }
+
+                if (matchedItem != null)
+                {
+                    if (Localization.LocalizationManager.Instance != null)
+                        displayedName = Localization.LocalizationManager.Instance.GetLocalizedValue(matchedItem.NameKey);
+                    else
+                        displayedName = matchedItem.NameKey;
+                }
+                else
+                {
+                    // Fallback absolute
+                    displayedName = selection.name;
+                }
+            }
+            centerLabel.text = displayedName;
+        }
     }
 }

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Dialogue
   Lines:
   - character: 0
-    Text: Que haces?
+    Key: 
   - character: 1
-    Text: Tomando el sol.
+    Key: 
   Type: 0

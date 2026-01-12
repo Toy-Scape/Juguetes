@@ -12,38 +12,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29b2a5239966e17419732012e75791f3, type: 3}
   m_Name: Tutorial
   m_EditorClassIdentifier: Assembly-CSharp::Dialogue
-  Type: 0
   Lines:
-  - Character: {fileID: 11400000, guid: 42b78f4e58247f64fb0fc56d0c5d1796, type: 2}
-    Text: "\xBFEst\xE1s bien? Te ves\u2026 incompleto."
-    Actions: []
-  - Character: {fileID: 11400000, guid: 7832fc3c6197f2144b2802326c6977e5, type: 2}
-    Text: "Hehe\u2026 incompleto dice. Me faltan los brazos, chaval. As\xED no puedo
-      moverme ni defenderme."
-    Actions: []
-  - Character: {fileID: 11400000, guid: 42b78f4e58247f64fb0fc56d0c5d1796, type: 2}
-    Text: "\xBFQuieres que los busque?"
-    Actions: []
-  - Character: {fileID: 11400000, guid: 7832fc3c6197f2144b2802326c6977e5, type: 2}
-    Text: "No hace falta. Mejor ll\xE9vatelos t\xFA. Mis brazos a\xFAn funcionan\u2026
-      solo que yo ya no puedo usarlos."
-    Actions:
-    - timing: 0
-      action: {fileID: 11400000, guid: 94587dff5e8c0ab40a4c7fb55cb32e12, type: 2}
-    - timing: 1
-      action: {fileID: 11400000, guid: 0a8ad60cc2802444ba9e055bbdc7a102, type: 2}
-  - Character: {fileID: 11400000, guid: 42b78f4e58247f64fb0fc56d0c5d1796, type: 2}
-    Text: "\xBFQuieres que me ponga tus brazos?"
-    Actions: []
-  - Character: {fileID: 11400000, guid: 7832fc3c6197f2144b2802326c6977e5, type: 2}
-    Text: "Exacto. Te servir\xE1n para aprender a cambiar piezas. Adem\xE1s, ah\xED
-      en la mesa hay un destornillador. Con mis brazos podr\xE1s usarlo y abrir la
-      rejilla de ventilaci\xF3n."
-    Actions: []
-  - Character: {fileID: 11400000, guid: 42b78f4e58247f64fb0fc56d0c5d1796, type: 2}
-    Text: "\xBFY t\xFA? \xBFQu\xE9 har\xE1s?"
-    Actions: []
-  - Character: {fileID: 11400000, guid: 7832fc3c6197f2144b2802326c6977e5, type: 2}
-    Text: "Yo no tengo escapatoria, Robot\xEDn. Pero t\xFA s\xED. As\xED que ve.
-      Esc\xE1pate por los dos."
-    Actions: []
+  - character: 0
+    Key: tutorial-robotin-dialogue-1
+  - character: 1
+    Key: tutorial-juan-dialogue-1
+  - character: 0
+    Key: tutorial-robotin-dialogue-2
+  - character: 1
+    Key: tutorial-juan-dialogue-2
+  - character: 0
+    Key: tutorial-robotin-dialogue-3
+  - character: 1
+    Key: tutorial-juan-dialogue-3
+  - character: 0
+    Key: tutorial-robotin-dialogue-4
+  - character: 1
+    Key: tutorial-juan-dialogue-4
+  Type: 0

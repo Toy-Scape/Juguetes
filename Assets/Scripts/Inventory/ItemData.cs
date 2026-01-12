@@ -1,5 +1,5 @@
 ﻿using Unity.VisualScripting;
- using UnityEngine;
+using UnityEngine;
 
 namespace Inventory
 {
@@ -14,48 +14,53 @@ namespace Inventory
         private const int DefaultStackSize = 1;
 
         [Header("Información Básica")]
-        [SerializeField] private string itemName;
-        [SerializeField, TextArea(3, 5)] private string description;
-        
+        [Header("Localization Keys")]
+        [SerializeField] private string nameKey;
+        [SerializeField] private string descriptionKey;
+
         [Header("Visual")]
         [SerializeField] private Sprite icon;
-        
+
         [Header("Configuración de Stack")]
-        [SerializeField, Min(MinStackSize)] 
+        [SerializeField, Min(MinStackSize)]
         private int maxStackSize = DefaultStackSize;
-        
+
         [Header("Categoría")]
         [SerializeField] private bool isLimb;
-        
+
         [Header("Limb SO")]
         [SerializeField] private LimbSO limbSO;
 
-        /// <summary>Nombre del ítem que se muestra en la UI</summary>
-        public string ItemName => itemName;
-        
-        /// <summary>Descripción detallada del ítem</summary>
-        public string Description => description;
-        
+        /// <summary>Clave de localización para el nombre</summary>
+        public string NameKey => nameKey;
+
+        /// <summary>Clave de localización para la descripción</summary>
+        public string DescriptionKey => descriptionKey;
+
+        // Propiedades antiguas marcadas como obsoletas o redirigiendo a la key (temporalmente)
+        public string ItemName => nameKey;
+        public string Description => descriptionKey;
+
         /// <summary>Icono visual del ítem para la UI</summary>
         public Sprite Icon => icon;
-        
+
         /// <summary>Cantidad máxima que puede apilarse en un slot</summary>
         public int MaxStackSize => maxStackSize;
-        
+
         /// <summary>Indica si el ítem es una extremidad (limb)</summary>
         public bool IsLimb => isLimb;
 
         private void OnValidate()
         {
             maxStackSize = Mathf.Max(MinStackSize, maxStackSize);
-            
+
             // Limpiar limbSO si isLimb es false
             if (!isLimb)
             {
                 limbSO = null;
             }
         }
-        
+
         public LimbSO LimbSO => limbSO;
     }
 }
