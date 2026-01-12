@@ -4514,7 +4514,7 @@ MonoBehaviour:
   _mainMenuPanel: {fileID: 239167472}
   _pauseMenuPanel: {fileID: 1723403374}
   _optionsPanel: {fileID: 1846233473}
-  _gameSceneName: SC_TutorialMenuExample
+  _gameSceneName: SC_MMAFighter
 --- !u!4 &2111212320
 Transform:
   m_ObjectHideFlags: 0

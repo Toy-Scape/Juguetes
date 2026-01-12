@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2892dd447c33c124ba411385d0effbca, type: 3}
   m_Name: Robotin
   m_EditorClassIdentifier: Assembly-CSharp::DialogueCharacter
+  CharacterId: MMA_FIGHTER
   DisplayName: "Robot\xEDn"
   Portrait: {fileID: 0}
   NameColor: {r: 0.2981043, g: 0.8207547, b: 0.7217767, a: 0}

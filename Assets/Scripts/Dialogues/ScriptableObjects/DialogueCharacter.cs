@@ -3,6 +3,7 @@
 [CreateAssetMenu(menuName = "Dialogue System/Character")]
 public class DialogueCharacter : ScriptableObject
 {
+    public string CharacterId;
     public string DisplayName;
     public Sprite Portrait;
     public Color NameColor;

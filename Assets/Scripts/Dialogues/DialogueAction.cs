@@ -9,7 +9,7 @@ public class DialogueAction
     public TriggerTiming Timing => timing;
     public ActionBase Action => action;
 
-    public void Execute (DialogueContext context)
+    public virtual void Execute (DialogueContext context)
     {
         action?.Execute(context);
     }
