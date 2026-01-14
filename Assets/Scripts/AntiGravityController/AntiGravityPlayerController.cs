@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using TMPro;
+using AntigravityGrab;
 
 namespace Assets.Scripts.AntiGravityController
 {
@@ -12,6 +13,7 @@ namespace Assets.Scripts.AntiGravityController
         [SerializeField] private Transform cameraTransform;
         [SerializeField] private TMP_Text TMPPlayerState;
         [SerializeField] private Animator playerAnimator;
+        [SerializeField] private AntigravityGrabber antigravityGrabber;
 
         // Components
         public CharacterController CharacterController { get; private set; }
@@ -39,6 +41,8 @@ namespace Assets.Scripts.AntiGravityController
             
             if (playerAnimator != null)
                 playerAnimator.applyRootMotion = false; // Ensure code drives movement
+            
+            if (antigravityGrabber == null) antigravityGrabber = GetComponent<AntigravityGrabber>();
         }
 
         void Start()
@@ -80,7 +84,23 @@ namespace Assets.Scripts.AntiGravityController
         {
             if (CharacterController.enabled)
             {
-                CharacterController.Move(Context.Velocity * Time.deltaTime);
+                Vector3 movement = Context.Velocity * Time.deltaTime;
+
+                if (antigravityGrabber != null && antigravityGrabber.IsGrabbing)
+                {
+                    if (!antigravityGrabber.CheckMove(movement))
+                    {
+                        movement = Vector3.zero;
+                        Context.Velocity = Vector3.zero;
+                    }
+                }
+
+                CharacterController.Move(movement);
+
+                if (antigravityGrabber != null && antigravityGrabber.IsGrabbing)
+                {
+                    antigravityGrabber.UpdateObjectPosition();
+                }
                 // Debug.Log($"Velocity: {Context.Velocity}, Grounded: {CharacterController.isGrounded}");
             }
         }
@@ -107,43 +127,126 @@ namespace Assets.Scripts.AntiGravityController
             Vector2 inputDir = Context.MoveInput;
             // Debug.Log($"MoveInput: {inputDir}"); // Uncomment to debug input
 
-            Vector3 forward = cameraTransform.forward;
-            Vector3 right = cameraTransform.right;
-            forward.y = 0; right.y = 0;
-            forward.Normalize(); right.Normalize();
-
-            Vector3 moveDirection = (forward * inputDir.y + right * inputDir.x).normalized;
-
-            // Grab Logic: Face Target & Limit Distance (REMOVED as per user request)
-            if (moveDirection.magnitude > 0.1f)
+            if (antigravityGrabber != null && antigravityGrabber.IsGrabbing && antigravityGrabber.GrabbedObjectTransform != null)
             {
-                // Smooth Rotation
-                float targetAngle = Mathf.Atan2(moveDirection.x, moveDirection.z) * Mathf.Rad2Deg;
-                float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref _turnSmoothVelocity, Config.TurnSmoothTime);
-                transform.rotation = Quaternion.Euler(0f, angle, 0f);
-            }
+                // Grab Movement Logic: Orbit around object
+                
+                // 1. Rotation (Input X)
+                float rotationInput = inputDir.x;
+                if (Mathf.Abs(rotationInput) > 0.01f)
+                {
+                    // Calculate radius (distance from player to object pivot)
+                    float radius = Vector3.Distance(transform.position, antigravityGrabber.GrabbedObjectTransform.position);
+                    
+                    // Calculate linear speed (affected by resistance)
+                    float linearSpeed = targetSpeed * _pushSpeedMultiplier;
+                    
+                    // Calculate angular speed (v = w * r  =>  w = v / r)
+                    // We use Mathf.Max(radius, 0.5f) to avoid super fast rotation if very close
+                    float angularSpeed = (linearSpeed / Mathf.Max(radius, 0.5f)) * Mathf.Rad2Deg;
+                    
+                    // Calculate rotation amount (Inverted direction as requested)
+                    // Calculate rotation amount (Inverted direction as requested -> Fixed: removed negative sign)
+                    float rotationAmount = rotationInput * angularSpeed * Time.deltaTime;
 
-            // Apply resistance multiplier
-            float finalTargetSpeed = targetSpeed * _pushSpeedMultiplier;
+                    // Validate Rotation and get effective pivot (handling collisions)
+                    antigravityGrabber.ValidateRotation(rotationAmount, transform.position, out float allowedAngle, out Vector3 effectivePivot);
+                    
+                    // If effectivePivot is zero (default return when not grabbing), fallback to object position
+                    if (effectivePivot == Vector3.zero) effectivePivot = antigravityGrabber.GrabbedObjectTransform.position;
 
-            // Simple acceleration/deceleration
-            float currentSpeed = new Vector3(Context.Velocity.x, 0, Context.Velocity.z).magnitude;
-            float speed = Mathf.MoveTowards(currentSpeed, finalTargetSpeed, (finalTargetSpeed > currentSpeed ? config.Acceleration : config.Deceleration) * Time.deltaTime);
-            
-            if (moveDirection.magnitude > 0.1f)
-            {
-                 Vector3 targetVelocity = moveDirection * speed;
-                 Context.Velocity = new Vector3(targetVelocity.x, Context.Velocity.y, targetVelocity.z);
+                    // Calculate new position after rotation around effective pivot
+                    Vector3 dir = transform.position - effectivePivot;
+                    Quaternion rotQ = Quaternion.Euler(0, allowedAngle, 0);
+                    Vector3 newDir = rotQ * dir;
+                    Vector3 targetPos = effectivePivot + newDir;
+                    
+                    // Calculate target rotation
+                    Quaternion targetRot = transform.rotation * rotQ;
+
+                    // FINAL SAFETY CHECK: Does this configuration cause the box to penetrate?
+                    if (antigravityGrabber.IsConfigurationValid(targetPos, targetRot))
+                    {
+                        // Apply rotation to player
+                        transform.rotation = targetRot;
+                        
+                        // Calculate velocity needed to reach targetPos
+                        Vector3 tangentialVelocity = (targetPos - transform.position) / Time.deltaTime;
+                        
+                        // 2. Forward/Backward (Input Y)
+                        float finalTargetSpeed = targetSpeed * _pushSpeedMultiplier;
+                        Vector3 forwardVelocity = transform.forward * inputDir.y * finalTargetSpeed;
+                        
+                        Context.Velocity = tangentialVelocity + forwardVelocity;
+                    }
+                    else
+                    {
+                        // Collision detected! Block rotation.
+                        // We still allow forward/backward movement if possible?
+                         // For now, if rotation fails, we just don't rotate. 
+                         // But we should still allow forward/back.
+                        
+                        float finalTargetSpeed = targetSpeed * _pushSpeedMultiplier;
+                        Vector3 forwardVelocity = transform.forward * inputDir.y * finalTargetSpeed;
+                        Context.Velocity = forwardVelocity;
+                    }
+                }
+                else
+                {
+                    // No rotation, just forward/back
+                    float finalTargetSpeed = targetSpeed * _pushSpeedMultiplier;
+                    
+                    // Simple acceleration/deceleration
+                    float currentSpeed = new Vector3(Context.Velocity.x, 0, Context.Velocity.z).magnitude;
+                    float speed = Mathf.MoveTowards(currentSpeed, finalTargetSpeed, (finalTargetSpeed > currentSpeed ? config.Acceleration : config.Deceleration) * Time.deltaTime);
+                    
+                    Vector3 targetVelocity = transform.forward * inputDir.y * speed;
+                    Context.Velocity = new Vector3(targetVelocity.x, Context.Velocity.y, targetVelocity.z);
+                }
             }
             else
             {
-                // Deceleration
-                Vector3 horizontalVelocity = new Vector3(Context.Velocity.x, 0, Context.Velocity.z);
-                horizontalVelocity = Vector3.MoveTowards(horizontalVelocity, Vector3.zero, config.Deceleration * Time.deltaTime);
-                Context.Velocity = new Vector3(horizontalVelocity.x, Context.Velocity.y, horizontalVelocity.z);
+                // Standard Movement Logic
+                Vector3 forward = cameraTransform.forward;
+                Vector3 right = cameraTransform.right;
+                forward.y = 0; right.y = 0;
+                forward.Normalize(); right.Normalize();
+
+                Vector3 moveDirection = (forward * inputDir.y + right * inputDir.x).normalized;
+
+                if (moveDirection.magnitude > 0.1f)
+                {
+                    // Smooth Rotation
+                    float targetAngle = Mathf.Atan2(moveDirection.x, moveDirection.z) * Mathf.Rad2Deg;
+                    float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref _turnSmoothVelocity, Config.TurnSmoothTime);
+                    transform.rotation = Quaternion.Euler(0f, angle, 0f);
+                }
+
+                // Apply resistance multiplier (should be 1f if not grabbing)
+                float finalTargetSpeed = targetSpeed * _pushSpeedMultiplier;
+
+                // Simple acceleration/deceleration
+                float currentSpeed = new Vector3(Context.Velocity.x, 0, Context.Velocity.z).magnitude;
+                float speed = Mathf.MoveTowards(currentSpeed, finalTargetSpeed, (finalTargetSpeed > currentSpeed ? config.Acceleration : config.Deceleration) * Time.deltaTime);
+                
+                if (moveDirection.magnitude > 0.1f)
+                {
+                     Vector3 targetVelocity = moveDirection * speed;
+                     Context.Velocity = new Vector3(targetVelocity.x, Context.Velocity.y, targetVelocity.z);
+                }
+                else
+                {
+                    // Deceleration
+                    Vector3 horizontalVelocity = new Vector3(Context.Velocity.x, 0, Context.Velocity.z);
+                    horizontalVelocity = Vector3.MoveTowards(horizontalVelocity, Vector3.zero, config.Deceleration * Time.deltaTime);
+                    Context.Velocity = new Vector3(horizontalVelocity.x, Context.Velocity.y, horizontalVelocity.z);
+                }
             }
         }
-
+        public void ClimbEnd ()
+        {
+            FinishLedgeClimb();
+        }
         #region Input Handling 
         public void OnMove(InputValue value) 
         {
@@ -154,7 +257,25 @@ namespace Assets.Scripts.AntiGravityController
         public void OnSprint(InputValue value) => Context.IsSprinting = value.isPressed;
         public void OnJump(InputValue value) => Context.IsJumping = value.isPressed;
         public void OnCrouch(InputValue value) => Context.IsCrouching = value.isPressed;
-        public void OnGrab(InputValue value) => Context.IsGrabbing = value.isPressed;
+        public void OnGrab(InputValue value)
+        {
+            Context.IsGrabbing = value.isPressed;
+            if (antigravityGrabber != null)
+            {
+                if (value.isPressed)
+                {
+                    if (antigravityGrabber.TryGrab())
+                    {
+                        SetGrabState(true, antigravityGrabber.CurrentResistance);
+                    }
+                }
+                else
+                {
+                    antigravityGrabber.ReleaseGrab();
+                    SetGrabState(false, 1f);
+                }
+            }
+        }
         #endregion
 
         #region Ledge Detection

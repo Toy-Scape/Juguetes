@@ -1,4 +1,3 @@
-using System.Linq;
 using InteractionSystem.Interfaces;
 using UnityEngine;
 
@@ -9,78 +8,68 @@ public class Grabbable : MonoBehaviour, IGrabbable
     [SerializeField] private Dialogue failThought;
 
     private Rigidbody rb;
-    private ConfigurableJoint joint;
+    private Rigidbody anchorRb;
+    private bool isGrabbed;
+    private Vector3 grabOffset;
 
     public float MoveResistance => moveResistance;
+    public Dialogue GetFailThought () => failThought;
 
-    public Dialogue GetFailThought() => failThought;
-
-    private void Awake()
+    private void Awake ()
     {
         rb = GetComponent<Rigidbody>();
-        rb.isKinematic = true;
         rb.interpolation = RigidbodyInterpolation.Interpolate;
         rb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
+        rb.isKinematic = false;
     }
 
-    public bool CanBeGrabbed()
+    public bool CanBeGrabbed ()
     {
         if (grabConditions == null || grabConditions.Length == 0) return true;
-        return grabConditions.All(c => c != null && c.ConditionIsMet());
+
+        foreach (var c in grabConditions)
+        {
+            if (c != null && !c.ConditionIsMet())
+                return false;
+        }
+
+        return true;
     }
 
-    public void StartGrab(Rigidbody grabAnchorRb, Vector3 grabPoint)
+    public void StartGrab (Rigidbody grabAnchorRb, Vector3 grabPoint)
     {
         if (!CanBeGrabbed()) return;
 
-        rb.isKinematic = false;
-        if (joint != null)
-            Destroy(joint);
+        anchorRb = grabAnchorRb;
+        grabOffset = rb.position - grabPoint;
 
-        joint = gameObject.AddComponent<ConfigurableJoint>();
-        joint.connectedBody = grabAnchorRb;
-        joint.autoConfigureConnectedAnchor = false;
+        rb.linearVelocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+        //rb.isKinematic = true;
 
-        Vector3 localAnchor = transform.InverseTransformPoint(grabPoint);
-        joint.anchor = localAnchor;
-        joint.connectedAnchor = Vector3.zero;
-
-        joint.xMotion = ConfigurableJointMotion.Limited;
-        joint.yMotion = ConfigurableJointMotion.Limited;
-        joint.zMotion = ConfigurableJointMotion.Limited;
-
-        joint.angularXMotion = ConfigurableJointMotion.Locked;
-        joint.angularYMotion = ConfigurableJointMotion.Locked;
-        joint.angularZMotion = ConfigurableJointMotion.Locked;
-
-        float resistance = Mathf.Clamp(moveResistance, 0.1f, 10f);
-
-        JointDrive drive = new JointDrive
-        {
-            positionSpring = 300f / resistance,
-            positionDamper = 50f / resistance,
-            maximumForce = 2000f / resistance
-        };
-
-        joint.xDrive = drive;
-        joint.yDrive = drive;
-        joint.zDrive = drive;
-
-        JointDrive angDrive = new JointDrive
-        {
-            positionSpring = 200,
-            positionDamper = 20,
-            maximumForce = 5000
-        };
-
-        joint.angularXDrive = angDrive;
-        joint.angularYZDrive = angDrive;
+        isGrabbed = true;
     }
 
-    public void StopGrab()
+    public void StopGrab ()
     {
-        rb.isKinematic = true;
-        if (joint != null)
-            Destroy(joint);
+        isGrabbed = false;
+        anchorRb = null;
+
+        //rb.isKinematic = false;
+        rb.linearVelocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+    }
+
+    private void FixedUpdate ()
+    {
+        if (!isGrabbed || anchorRb == null) return;
+
+        float resistance = Mathf.Max(0.1f, moveResistance);
+        float speed = 5f / resistance;
+
+        Vector3 targetPos = anchorRb.position + grabOffset;
+        Vector3 newPos = Vector3.MoveTowards(rb.position, targetPos, speed * Time.fixedDeltaTime);
+
+        rb.MovePosition(newPos);
     }
 }

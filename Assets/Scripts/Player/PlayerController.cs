@@ -1,4 +1,5 @@
 using InteractionSystem.Core;
+using AntigravityGrab;
 using TMPro;
 using Unity.Cinemachine;
 using UnityEngine;
@@ -12,7 +13,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform cameraTransform;
     [SerializeField] private TMP_Text TMPPlayerState;
     [SerializeField] private PlayerInteractor playerInteractor;
-    [SerializeField] private GrabInteractor grabInteractor;
+    [SerializeField] private AntigravityGrabber antigravityGrabber;
     [SerializeField] private GamepadVibration gamepadVibration;
     [SerializeField] private CinemachineImpulseSource landingImpulseSource; // Camera Shake
 
@@ -58,6 +59,8 @@ public class PlayerController : MonoBehaviour
         physicsHandler = new PlayerPhysicsHandler(physicsConfig);
         ledgeGrabHandler = new PlayerLedgeGrabHandler(config, transform);
         wallHandler = new WallDetectionHandler(transform); // NUEVO
+        
+        if (antigravityGrabber == null) antigravityGrabber = GetComponent<AntigravityGrabber>();
     }
 
     void Update()
@@ -95,6 +98,16 @@ public class PlayerController : MonoBehaviour
             playerContext.Velocity = physicsHandler.ApplyGravity(CurrentState, playerContext.Velocity, playerContext.IsGrounded);
 
             var movement = movementHandler.GetFinalMove(playerContext.Velocity) * Time.deltaTime;
+
+            if (antigravityGrabber != null && antigravityGrabber.IsGrabbing)
+            {
+                if (!antigravityGrabber.CheckMove(movement))
+                {
+                    movement = Vector3.zero;
+                    playerContext.Velocity = Vector3.zero;
+                }
+            }
+
             controller.Move(movement);
 
             if (new Vector3(movement.x, 0, movement.z).AlmostZero())
@@ -201,7 +214,25 @@ public class PlayerController : MonoBehaviour
 
     void OnInteract() => playerContext.IsInteracting = true;
 
-    void OnGrab(InputValue value) => playerContext.IsGrabbing = value.isPressed;
+    void OnGrab(InputValue value)
+    {
+        playerContext.IsGrabbing = value.isPressed;
+        if (antigravityGrabber != null)
+        {
+            if (value.isPressed)
+            {
+                if (antigravityGrabber.TryGrab())
+                {
+                    SetGrabState(true, antigravityGrabber.CurrentResistance);
+                }
+            }
+            else
+            {
+                antigravityGrabber.ReleaseGrab();
+                SetGrabState(false, 1f);
+            }
+        }
+    }
 
     void OnNext() => playerContext.NextLimb = true;
 

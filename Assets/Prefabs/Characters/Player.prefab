@@ -25,7 +25,7 @@ Transform:
   m_GameObject: {fileID: 244548135522618819}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -60,7 +60,7 @@ Transform:
   m_GameObject: {fileID: 2035552756773601392}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -150,7 +150,7 @@ Transform:
   m_GameObject: {fileID: 3443757581722524635}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -233,7 +233,7 @@ Transform:
   m_GameObject: {fileID: 5070382226027974490}
   serializedVersion: 2
   m_LocalRotation: {x: -0.60507476, y: -0.64886296, z: -0.33742437, w: 0.3146527}
-  m_LocalPosition: {x: 0, y: 1, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0.625}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -264,7 +264,7 @@ Transform:
   m_GameObject: {fileID: 5323054587820962801}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -292,6 +292,9 @@ GameObject:
   - component: {fileID: 4732019926696608271}
   - component: {fileID: 2607587796172180171}
   - component: {fileID: 4688945857383318680}
+  - component: {fileID: 7519862060717179635}
+  - component: {fileID: 7245646265383527828}
+  - component: {fileID: 3482073199185017285}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -338,12 +341,12 @@ CharacterController:
   m_Enabled: 1
   serializedVersion: 3
   m_Height: 2
-  m_Radius: 0.5
+  m_Radius: 0.25
   m_SlopeLimit: 45
   m_StepOffset: 0.1
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 1, z: 0}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &8163815884479273772
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -361,8 +364,8 @@ MonoBehaviour:
   - {fileID: 6619199756086640652}
   - {fileID: 1791234450755725513}
   - {fileID: 3594469534484337386}
-  outlineColor: {r: 1, g: 0.09411765, b: 0.7960785, a: 1}
-  outlineWidth: 10
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 3
   outlineMode: 1
   interactionPrompt: {fileID: 0}
   interactionPromptText: {fileID: 0}
@@ -609,6 +612,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LimbManager
   contextVariables: {fileID: 11400000, guid: 702be583fc2e0c74b9f1138c0c183447, type: 2}
   DefaultLimb: {fileID: 11400000, guid: a9c84fbcd3b88034a823714ce8e96172, type: 2}
+  DefaultLimbData: {fileID: 0}
   inventory: {fileID: 7956428153845167614}
   limbSockets: []
 --- !u!114 &3434473845669599158
@@ -725,36 +729,36 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Assets.Scripts.AntiGravityController.AntiGravityPlayerController
   config:
-    walkSpeed: 4
-    sprintSpeed: 8
+    walkSpeed: 6
+    sprintSpeed: 11
     crouchSpeed: 2
     swimSpeed: 3
     diveSpeed: 2
     wallWalkSpeed: 3
     rotationSpeed: 720
-    lookSensitivity: 1
-    acceleration: 10
-    deceleration: 10
-    inputSmoothing: 10
+    lookSensitivity: 2
+    acceleration: 20
+    deceleration: 30
+    inputSmoothing: 93.77
     turnSmoothTime: 0.1
-    jumpVibration: {x: 0.02, y: 0.05, z: 0.1}
-    landVibration: {x: 0.15, y: 0.05, z: 0.15}
-    interactVibration: {x: 0.05, y: 0.05, z: 0.1}
-    dragVibration: {x: 0.1, y: 0, z: 0}
-    minFallForceForFeedback: 8
-    jumpHeight: 2
-    gravity: -9.81
+    jumpVibration: {x: 0, y: 0.01, z: 0.1}
+    landVibration: {x: 0, y: 0.05, z: 0.15}
+    interactVibration: {x: 0, y: 0.05, z: 0.1}
+    dragVibration: {x: 0.05, y: 0, z: 0}
+    minFallForceForFeedback: 20
+    jumpHeight: 1
+    gravity: -16.8
     coyoteTime: 0.15
     jumpBufferTime: 0.1
     standingHeight: 2
     crouchingHeight: 1
-    ledgeDetectionDistance: 0.5
-    ledgeGrabHeight: 1
-    ledgeClimbUpSpeed: 5
+    ledgeDetectionDistance: 1
+    ledgeGrabHeight: 2
+    ledgeClimbUpSpeed: 13
     ledgeSnapSpeed: 10
-    ledgeSnapOffsetY: 0.5
-    ledgeForwardOffset: 0.5
-    ledgeGrabCooldown: 0.5
+    ledgeSnapOffsetY: 2.3
+    ledgeForwardOffset: 1
+    ledgeGrabCooldown: 1
     climbDuration: 1
   cameraTransform: {fileID: 0}
   TMPPlayerState: {fileID: 0}
@@ -768,8 +772,8 @@ Animator:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6641168232080197241}
   m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: ef790e509990c0841bebf225481705ac, type: 2}
+  m_Avatar: {fileID: 9000000, guid: 7f99841ca396283488de13fd8c4a1a81, type: 3}
+  m_Controller: {fileID: 9100000, guid: 71864f47ddb3104409d8d257d4e9fb8f, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -781,6 +785,83 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &7519862060717179635
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6641168232080197241}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49faa08c9170e724cbbafae06e867807, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CheckpointSystem.PlayerRespawn
+--- !u!114 &7245646265383527828
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6641168232080197241}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 180ecf9b41d478f468eb3e9083753217, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineImpulseSource
+  ImpulseDefinition:
+    ImpulseChannel: 1
+    ImpulseShape: 2
+    CustomImpulseShape:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    ImpulseDuration: 0.2
+    ImpulseType: 0
+    DissipationRate: 0.25
+    RawSignal: {fileID: 0}
+    AmplitudeGain: 1
+    FrequencyGain: 1
+    RepeatMode: 0
+    Randomize: 1
+    TimeEnvelope:
+      AttackShape:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      DecayShape:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      AttackTime: 0
+      SustainTime: 0.2
+      DecayTime: 0.7
+      ScaleWithImpact: 1
+      HoldForever: 0
+    ImpactRadius: 100
+    DirectionMode: 0
+    DissipationMode: 2
+    DissipationDistance: 100
+    PropagationSpeed: 343
+  DefaultVelocity: {x: 0, y: -0.3, z: 0}
+--- !u!114 &3482073199185017285
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6641168232080197241}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49faa08c9170e724cbbafae06e867807, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CheckpointSystem.PlayerRespawn
 --- !u!1 &8468029186425840670
 GameObject:
   m_ObjectHideFlags: 0

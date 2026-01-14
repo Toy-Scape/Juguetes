@@ -4,7 +4,6 @@ namespace Assets.Scripts.AntiGravityController
 {
     public class PlayerLedgeClimbState : PlayerBaseState
     {
-        private float _safetyTimer = 0f;
 
         public PlayerLedgeClimbState(AntiGravityPlayerController currentContext, PlayerStateFactory playerStateFactory)
             : base(currentContext, playerStateFactory) { }
@@ -14,22 +13,11 @@ namespace Assets.Scripts.AntiGravityController
             _ctx.Animator.SetBool("IsClimbing", true);
             _ctx.CharacterController.enabled = false;
             _ctx.Animator.applyRootMotion = false; // Prevent animation from moving the transform
-            _safetyTimer = 0f;
         }
 
         public override void UpdateState()
         {
-            _safetyTimer += Time.deltaTime;
-
-            // We now rely on the Animation Event "FinishLedgeClimb" to call FinishClimb()
-            
-            // Fallback: Safety timer in case the event is missing or fails
-            // Set to a generous duration (e.g., config duration + 1s)
-            if (_safetyTimer >= _ctx.Config.ClimbDuration + 2.0f)
-            {
-                Debug.LogWarning("Climb Safety Timer triggered! Did you forget the 'FinishLedgeClimb' animation event?");
-                FinishClimb();
-            }
+           
         }
 
         public void FinishClimb()
