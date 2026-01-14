@@ -11,7 +11,7 @@ namespace CheckpointSystem
         public static CheckpointManager Instance { get; private set; }
 
         [Header("Settings")]
-        [SerializeField] private bool autoSave = true;
+        //[SerializeField] private bool autoSave = true;
         [SerializeField] private string saveKey = "PlayerSaveData";
         [SerializeField] private DeadZone deadZone;
 

@@ -584,9 +584,9 @@ namespace BuildingMakerToolset.PropPlacer
             }
 
 
-            List<T> allObjects = FindObjectsOfType<T>().ToList();
+            List<T> allObjects = FindObjectsByType<T>(FindObjectsInactive.Exclude, FindObjectsSortMode.None).ToList();
 
-            List<RowPropPlacer> rppList = FindObjectsOfType<T>().Where(x => x.GetComponent<RowPropPlacer>() != null).Select(x => x.GetComponent<RowPropPlacer>()).ToList();
+            List<RowPropPlacer> rppList = FindObjectsByType<T>(FindObjectsInactive.Exclude, FindObjectsSortMode.None).Where(x => x.GetComponent<RowPropPlacer>() != null).Select(x => x.GetComponent<RowPropPlacer>()).ToList();
             List<RowPropPlacer> neighborObjects = SortedNeighbors( ref rppList, this);
             return neighborObjects;
         }

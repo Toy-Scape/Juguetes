@@ -123,7 +123,7 @@ namespace AntigravityGrab
             {
                 if (hit.transform == transform) continue;
 
-                Vector3 pt = hit.ClosestPoint(playerPosition);
+                Vector3 pt = GetClosestPointSafe(hit, playerPosition);
                 float d = Vector3.SqrMagnitude(pt - playerPosition);
                 if (d < closestDist)
                 {
@@ -164,6 +164,19 @@ namespace AntigravityGrab
 
             allowedAngle = proposedAngle * minRatio;
             if (minRatio < 1f) allowedAngle *= 0.9f;
+        }
+
+        private Vector3 GetClosestPointSafe(Collider col, Vector3 point)
+        {
+            // Physics.ClosestPoint works for Box, Sphere, Capsule, and Convex Mesh colliders.
+            // For non-convex MeshColliders, it throws an error.
+            if (col is BoxCollider || col is SphereCollider || col is CapsuleCollider || (col is MeshCollider mc && mc.convex))
+            {
+                return col.ClosestPoint(point);
+            }
+            
+            // Fallback for non-convex colliders or other types
+            return col.ClosestPointOnBounds(point);
         }
 
         private Vector3[] GetBoxCorners ()

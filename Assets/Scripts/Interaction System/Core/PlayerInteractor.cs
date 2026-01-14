@@ -29,7 +29,7 @@ namespace InteractionSystem.Core
 
         [Header("Prompt Positioning")]
         [SerializeField] private Vector3 promptWorldOffset = new Vector3(0f, 1.5f, 0f);
-        [SerializeField, Range(0.01f, 20f)] private float promptFollowSpeed = 10f;
+        //[SerializeField, Range(0.01f, 20f)] private float promptFollowSpeed = 10f;
 
         private IInteractable focusedInteractable;
         private GameObject focusedGameObject;

@@ -89,7 +89,9 @@ public class PlayerController : MonoBehaviour
             // Logic for Jump Vibration & Execution
             bool wasGrounded = playerContext.IsGrounded;
             Vector3 currentVelocity = playerContext.Velocity;
-            bool jumped = jumpHandler.HandleJump(CurrentState, ref currentVelocity, playerContext.IsInWater, playerContext.IsGrounded, playerContext.IsPushing);
+
+            bool isGrabbing = playerContext.IsPushing || (antigravityGrabber != null && antigravityGrabber.IsGrabbing);
+            bool jumped = jumpHandler.HandleJump(CurrentState, ref currentVelocity, playerContext.IsInWater, playerContext.IsGrounded, isGrabbing);
             playerContext.Velocity = currentVelocity;
 
             if (jumped && gamepadVibration != null)

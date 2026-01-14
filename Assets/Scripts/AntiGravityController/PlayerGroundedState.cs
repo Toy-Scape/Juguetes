@@ -37,7 +37,7 @@ namespace Assets.Scripts.AntiGravityController
 
         public override void CheckSwitchStates()
         {
-            if (_ctx.Context.IsJumping && !_ctx.Context.IsCrouching)
+            if (_ctx.Context.IsJumping && !_ctx.Context.IsCrouching && !_ctx.Context.IsGrabbing)
             {
                 SwitchState(_factory.Air());
             }
