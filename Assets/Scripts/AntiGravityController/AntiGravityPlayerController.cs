@@ -266,17 +266,33 @@ namespace Assets.Scripts.AntiGravityController
             Context.IsGrabbing = value.isPressed;
             if (antigravityGrabber != null)
             {
-                if (value.isPressed)
+                if (!value.isPressed)
                 {
-                    if (antigravityGrabber.TryGrab())
+                    // Button released: only stop grabbing (not picking!)
+                    if (antigravityGrabber.IsGrabbing)
                     {
-                        SetGrabState(true, antigravityGrabber.CurrentResistance);
+                        antigravityGrabber.ReleaseGrab();
+                        SetGrabState(false, 1f);
                     }
+                    return;
                 }
-                else
+
+                // Button pressed: check if already holding picked object to drop it
+                if (antigravityGrabber.IsPicking)
                 {
-                    antigravityGrabber.ReleaseGrab();
-                    SetGrabState(false, 1f);
+                    antigravityGrabber.DropPicked();
+                    SetPickState(false);
+                    return;
+                }
+
+                // Try pick first, then grab
+                if (antigravityGrabber.TryPick())
+                {
+                    SetPickState(true);
+                }
+                else if (antigravityGrabber.TryGrab())
+                {
+                    SetGrabState(true, antigravityGrabber.CurrentResistance);
                 }
             }
         }

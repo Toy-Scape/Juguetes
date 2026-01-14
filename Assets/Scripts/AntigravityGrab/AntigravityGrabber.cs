@@ -10,7 +10,9 @@ namespace AntigravityGrab
         [SerializeField] private Transform holdPoint;
 
         private AntigravityGrabbable currentGrabbable;
+        private AntigravityPickable currentPickable;
         private bool isGrabbing;
+        private bool isPicking;
         private Vector3 grabOffset;
         private Quaternion grabRotationOffset;
 
@@ -25,11 +27,84 @@ namespace AntigravityGrab
         }
 
         public bool IsGrabbing => isGrabbing;
+        public bool IsPicking => isPicking;
         public float CurrentResistance => currentGrabbable != null ? currentGrabbable.MoveResistance : 0f;
         public Transform GrabbedObjectTransform => currentGrabbable != null ? currentGrabbable.transform : null;
 
+        public bool TryPick()
+        {
+            if (isPicking || isGrabbing) return false;
+
+            Collider[] hits = Physics.OverlapSphere(grabOrigin.position, grabRadius, grabLayer);
+            float closestDist = float.MaxValue;
+            AntigravityPickable bestTarget = null;
+
+            foreach (var hit in hits)
+            {
+                var pickable = hit.GetComponentInParent<AntigravityPickable>();
+                if (pickable != null)
+                {
+                    Vector3 closestPoint = hit.ClosestPoint(grabOrigin.position);
+                    float d = Vector3.SqrMagnitude(closestPoint - grabOrigin.position);
+                    if (d < closestDist)
+                    {
+                        closestDist = d;
+                        bestTarget = pickable;
+                    }
+                }
+            }
+
+            if (bestTarget != null && bestTarget.CanBePicked())
+            {
+                StartPick(bestTarget);
+                return true;
+            }
+
+            return false;
+        }
+
+        public void DropPicked()
+        {
+            if (!isPicking) return;
+
+            if (currentPickable != null)
+            {
+                var pickedColliders = currentPickable.GetComponentsInChildren<Collider>();
+                foreach (var pc in playerColliders)
+                    foreach (var oc in pickedColliders)
+                        Physics.IgnoreCollision(pc, oc, false);
+
+                if (characterController != null)
+                    foreach (var oc in pickedColliders)
+                        Physics.IgnoreCollision(characterController, oc, false);
+
+                currentPickable.Drop();
+            }
+
+            currentPickable = null;
+            isPicking = false;
+        }
+
+        private void StartPick(AntigravityPickable pickable)
+        {
+            currentPickable = pickable;
+            isPicking = true;
+
+            currentPickable.Pick(holdPoint);
+
+            var pickedColliders = currentPickable.GetComponentsInChildren<Collider>();
+            foreach (var pc in playerColliders)
+                foreach (var oc in pickedColliders)
+                    Physics.IgnoreCollision(pc, oc, true);
+
+            if (characterController != null)
+                foreach (var oc in pickedColliders)
+                    Physics.IgnoreCollision(characterController, oc, true);
+        }
+
         public bool TryGrab ()
         {
+            if (isPicking) return false;
             if (isGrabbing) return false;
 
             Collider[] hits = Physics.OverlapSphere(grabOrigin.position, grabRadius, grabLayer);
@@ -123,7 +198,7 @@ namespace AntigravityGrab
             if (!currentGrabbable.ValidateMovement(movement))
                 return false;
 
-            // Adem·s, validar la configuraciÛn final (rotaciÛn + movimiento)
+            // Adem√°s, validar la configuraci√≥n final (rotaci√≥n + movimiento)
             Vector3 targetPos = transform.TransformPoint(grabOffset) + movement;
             Quaternion targetRot = transform.rotation * grabRotationOffset;
 
