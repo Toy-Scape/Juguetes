@@ -177,7 +177,10 @@ namespace Assets.Scripts.AntiGravityController
                         float finalTargetSpeed = targetSpeed * _pushSpeedMultiplier;
                         Vector3 forwardVelocity = transform.forward * inputDir.y * finalTargetSpeed;
                         
+                        // PRESERVE Y VELOCITY to maintain grounding/gravity
+                        float existingYVelocity = Context.Velocity.y;
                         Context.Velocity = tangentialVelocity + forwardVelocity;
+                        Context.Velocity = new Vector3(Context.Velocity.x, existingYVelocity, Context.Velocity.z);
                     }
                     else
                     {
@@ -188,7 +191,8 @@ namespace Assets.Scripts.AntiGravityController
                         
                         float finalTargetSpeed = targetSpeed * _pushSpeedMultiplier;
                         Vector3 forwardVelocity = transform.forward * inputDir.y * finalTargetSpeed;
-                        Context.Velocity = forwardVelocity;
+                        // PRESERVE Y VELOCITY
+                        Context.Velocity = new Vector3(forwardVelocity.x, Context.Velocity.y, forwardVelocity.z);
                     }
                 }
                 else
