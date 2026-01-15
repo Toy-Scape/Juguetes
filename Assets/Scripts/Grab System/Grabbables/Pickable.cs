@@ -1,10 +1,12 @@
 using UnityEngine;
 using InteractionSystem.Interfaces;
+using System;
 
 public class Pickable : MonoBehaviour, IPickable
 {
     [SerializeField] private Transform gripPoint;
     [SerializeField] private GenericConditionSO[] pickConditions;
+    [SerializeField] private Dialogue failThought;
 
     public bool IsPicked { get; private set; }
 
@@ -43,4 +45,5 @@ public class Pickable : MonoBehaviour, IPickable
         transform.SetParent(null);
         rb.isKinematic = false;
     }
+    public Dialogue GetFailThought () => failThought;
 }

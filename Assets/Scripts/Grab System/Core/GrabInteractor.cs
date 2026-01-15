@@ -54,7 +54,15 @@ public class GrabInteractor : MonoBehaviour
             }
         }
 
-        if (bestTarget == null || !bestTarget.CanBePicked()) return false;
+        if (bestTarget == null) return false;
+
+        if (!bestTarget.CanBePicked())
+        {
+            var failThought = bestTarget.GetFailThought();
+            if (failThought != null && DialogueBox.Instance != null && !DialogueBox.Instance.IsOpen)
+                DialogueBox.Instance.StartDialogue(failThought);
+            return false;
+        }
 
         currentPickable = bestTarget;
         isPicking = true;

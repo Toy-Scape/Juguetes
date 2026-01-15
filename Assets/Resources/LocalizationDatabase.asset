@@ -128,3 +128,7 @@ MonoBehaviour:
     english: Hook on and swing through the air.
     spanish: "Eng\xE1nchate y balanc\xE9ate por el aire."
     basque: Konektatu eta airean pendulatu.
+  - key: test-key
+    english: Test key
+    spanish: Clave test
+    basque: Testeozko klabea
