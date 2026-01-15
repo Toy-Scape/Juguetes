@@ -1,5 +1,5 @@
-using InteractionSystem.Interfaces;
 using UnityEngine;
+using InteractionSystem.Interfaces;
 
 public class Pickable : MonoBehaviour, IPickable
 {
@@ -32,7 +32,6 @@ public class Pickable : MonoBehaviour, IPickable
         rb.isKinematic = true;
         transform.SetParent(hand);
 
-        // Ajuste de posición y rotación
         transform.localPosition = -gripPoint.localPosition;
         transform.localRotation = Quaternion.identity;
     }

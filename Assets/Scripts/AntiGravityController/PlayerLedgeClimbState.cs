@@ -35,7 +35,7 @@ namespace Assets.Scripts.AntiGravityController
             {
                 finalPos += Vector3.up * 0.1f; // Fallback
             }
-            
+            finalPos.y++;
             _ctx.transform.position = finalPos;
             
             SwitchState(_factory.Grounded());

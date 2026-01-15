@@ -7,7 +7,7 @@ namespace InteractionSystem.Interfaces
         bool CanBeGrabbed();
         float MoveResistance { get; }
         Dialogue GetFailThought();
-        void StartGrab(Rigidbody grabAnchorRb, Vector3 grabPoint);
+        void StartGrab();
         void StopGrab();
     }
 }
