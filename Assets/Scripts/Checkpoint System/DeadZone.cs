@@ -11,8 +11,8 @@ namespace CheckpointSystem
             // 1. Check for Player
             if (other.GetComponent<PlayerController>() != null || 
                 other.GetComponentInParent<PlayerController>() != null ||
-                other.GetComponent<AntiGravityPlayerController>() != null ||
-                other.GetComponentInParent<AntiGravityPlayerController>() != null)
+                other.GetComponent<PlayerController>() != null ||
+                other.GetComponentInParent<PlayerController>() != null)
             {
                 CheckpointManager.Instance.RespawnPlayer();
                 return;

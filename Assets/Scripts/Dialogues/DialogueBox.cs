@@ -1,4 +1,4 @@
-using Assets.Scripts.AntiGravityController;
+using Assets.Scripts.PlayerController;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -63,7 +63,7 @@ public class DialogueBox : MonoBehaviour
 
         if (player == null)
         {
-            var controller = FindFirstObjectByType<AntiGravityPlayerController>();
+            var controller = FindFirstObjectByType<PlayerController>();
             if (controller != null)
                 player = controller.gameObject;
         }

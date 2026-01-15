@@ -5114,14 +5114,23 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 6
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 2607587796172180171, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 6641168232080197241, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1728560832}
+    - targetCorrespondingSourceObject: {fileID: 6641168232080197241, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1728560842}
   m_SourcePrefab: {fileID: 100100000, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
+--- !u!95 &1580724419 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 4688945857383318680, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
+  m_PrefabInstance: {fileID: 1580724418}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1609681451
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5633,6 +5642,54 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25f32cad0f68e5047bd98566d2b4ee4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GrabInteractor
+--- !u!114 &1728560842
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 615313555}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90d1dd766d4676c438f59d8190a23234, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerController
+  config:
+    walkSpeed: 4
+    sprintSpeed: 8
+    crouchSpeed: 2
+    swimSpeed: 3
+    diveSpeed: 2
+    wallWalkSpeed: 3
+    rotationSpeed: 720
+    lookSensitivity: 2
+    acceleration: 20
+    deceleration: 30
+    inputSmoothing: 94
+    turnSmoothTime: 0.1
+    jumpVibration: {x: 0, y: 0.01, z: 0.1}
+    landVibration: {x: 0, y: 0.05, z: 0.15}
+    interactVibration: {x: 0, y: 0.05, z: 0.1}
+    dragVibration: {x: 0.05, y: 0, z: 0}
+    minFallForceForFeedback: 20
+    jumpHeight: 1
+    gravity: -16.8
+    coyoteTime: 0.15
+    jumpBufferTime: 0.1
+    standingHeight: 2
+    crouchingHeight: 1
+    ledgeDetectionDistance: 1
+    ledgeGrabHeight: 1
+    ledgeClimbUpSpeed: 5
+    ledgeSnapSpeed: 10
+    ledgeSnapOffsetY: 1.1
+    ledgeForwardOffset: 1
+    ledgeGrabCooldown: 1
+    climbDuration: 1
+  cameraTransform: {fileID: 1658184139}
+  TMPPlayerState: {fileID: 0}
+  playerAnimator: {fileID: 1580724419}
+  grabInteractor: {fileID: 1728560841}
 --- !u!1 &1730512417
 GameObject:
   m_ObjectHideFlags: 0

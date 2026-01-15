@@ -113,7 +113,7 @@ namespace InteractionSystem.Core
                 }
                 else
                 {
-                    var agPc = GetComponent<AntiGravityPlayerController>();
+                    var agPc = GetComponent<PlayerController>();
                     if (agPc != null) config = agPc.Config;
                 }
             }
