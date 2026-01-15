@@ -20,7 +20,7 @@ namespace MissionSystem.Runtime
             base.Start();
 
             // Initial check
-            var playerInventory = GameObject.FindObjectOfType<PlayerInventory>();
+            var playerInventory = GameObject.FindFirstObjectByType<PlayerInventory>();
             if (playerInventory != null)
             {
                 _currentAmount = playerInventory.GetItemCount(_def.TargetItem);
@@ -43,7 +43,7 @@ namespace MissionSystem.Runtime
             if (State == ObjectiveState.Completed) return;
             if (item != _def.TargetItem) return;
 
-            _currentAmount = GameObject.FindObjectOfType<PlayerInventory>().GetItemCount(_def.TargetItem);
+            _currentAmount = GameObject.FindFirstObjectByType<PlayerInventory>().GetItemCount(_def.TargetItem);
             UpdateProgress((float)_currentAmount / _def.TargetQuantity);
             CheckCompletion();
         }
@@ -53,7 +53,7 @@ namespace MissionSystem.Runtime
             if (State == ObjectiveState.Completed) return;
             if (item != _def.TargetItem) return;
 
-            _currentAmount = GameObject.FindObjectOfType<PlayerInventory>().GetItemCount(_def.TargetItem);
+            _currentAmount = GameObject.FindFirstObjectByType<PlayerInventory>().GetItemCount(_def.TargetItem);
             UpdateProgress((float)_currentAmount / _def.TargetQuantity);
         }
 
@@ -63,7 +63,7 @@ namespace MissionSystem.Runtime
             {
                 Complete();
                 // Cleanup listeners
-                var playerInventory = GameObject.FindObjectOfType<PlayerInventory>();
+                var playerInventory = GameObject.FindFirstObjectByType<PlayerInventory>();
                 if (playerInventory != null)
                 {
                     playerInventory.onItemAdded.RemoveListener(OnItemAdded);

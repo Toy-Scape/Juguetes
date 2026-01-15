@@ -12,7 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29b2a5239966e17419732012e75791f3, type: 3}
   m_Name: Fail Box
   m_EditorClassIdentifier: Assembly-CSharp::Dialogue
-  Lines:
-  - character: 0
-    Key: thought-fail-box
   Type: 1
+  Lines:
+  - Character: {fileID: 11400000, guid: 42b78f4e58247f64fb0fc56d0c5d1796, type: 2}
+    Key: thought-fail-box
+    Text: 
+    Actions: []

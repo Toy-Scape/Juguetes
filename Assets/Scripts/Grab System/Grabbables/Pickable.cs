@@ -1,6 +1,5 @@
-using System.Linq;
-using InteractionSystem.Interfaces;
 using UnityEngine;
+using InteractionSystem.Interfaces;
 
 public class Pickable : MonoBehaviour, IPickable
 {
@@ -11,43 +10,37 @@ public class Pickable : MonoBehaviour, IPickable
 
     private Rigidbody rb;
 
-    private void Awake()
+    private void Awake ()
     {
         rb = GetComponent<Rigidbody>();
         if (gripPoint == null) gripPoint = transform;
     }
 
-    public bool CanBePicked()
+    public bool CanBePicked ()
     {
         if (pickConditions == null || pickConditions.Length == 0) return true;
-        return pickConditions.All(c => c != null && c.ConditionIsMet());
+        foreach (var c in pickConditions)
+            if (c != null && !c.ConditionIsMet())
+                return false;
+        return true;
     }
 
-
-    public void Pick(Transform hand)
+    public void Pick (Transform hand)
     {
-        if (!CanBePicked()) return;
         IsPicked = true;
+
         rb.isKinematic = true;
-        rb.interpolation = RigidbodyInterpolation.None;
-
-        foreach (var collider in GetComponentsInChildren<Collider>())
-            collider.enabled = false;
-
         transform.SetParent(hand);
-        transform.rotation = hand.rotation;
-        transform.position = hand.position - (gripPoint.position - transform.position);
+
+        transform.localPosition = -gripPoint.localPosition;
+        transform.localRotation = Quaternion.identity;
     }
 
-    public void Drop()
+    public void Drop ()
     {
         IsPicked = false;
+
         transform.SetParent(null);
-
-        foreach (var collider in GetComponentsInChildren<Collider>())
-            collider.enabled = true;
-
         rb.isKinematic = false;
-        rb.interpolation = RigidbodyInterpolation.Interpolate;
     }
 }
