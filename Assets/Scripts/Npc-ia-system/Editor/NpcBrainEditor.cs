@@ -3,7 +3,7 @@ using UnityEngine;
 using Domain;
 using Infrastructure;
 
-namespace Editor
+namespace NpcAI.Editor
 {
     [CustomEditor(typeof(NpcBrain))]
     public class NpcBrainEditor : UnityEditor.Editor

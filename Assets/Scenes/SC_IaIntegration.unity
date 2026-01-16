@@ -1253,6 +1253,30 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 236154774903565491, guid: bbf81c367bb664e419e76eed27ae70be, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 236154774903565491, guid: bbf81c367bb664e419e76eed27ae70be, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 236154774903565491, guid: bbf81c367bb664e419e76eed27ae70be, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 236154774903565491, guid: bbf81c367bb664e419e76eed27ae70be, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 236154774903565491, guid: bbf81c367bb664e419e76eed27ae70be, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 236154774903565491, guid: bbf81c367bb664e419e76eed27ae70be, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3234173210603950756, guid: bbf81c367bb664e419e76eed27ae70be, type: 3}
       propertyPath: m_LocalPosition.x
       value: -8.69674
@@ -1309,6 +1333,14 @@ PrefabInstance:
       propertyPath: playerInventory
       value: 
       objectReference: {fileID: 1728560816}
+    - target: {fileID: 9187228469099015403, guid: bbf81c367bb664e419e76eed27ae70be, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9187228469099015403, guid: bbf81c367bb664e419e76eed27ae70be, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1535,8 +1567,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp-firstpass::Outline
   outlineMode: 1
-  outlineColor: {r: 1, g: 0.09411765, b: 0.7960785, a: 1}
-  outlineWidth: 10
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 3
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
@@ -2013,8 +2045,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp-firstpass::Outline
   outlineMode: 1
-  outlineColor: {r: 1, g: 0.09411765, b: 0.7960785, a: 1}
-  outlineWidth: 10
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 3
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
@@ -2429,19 +2461,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8040803963412535677, guid: 6cdab5b0b0234a5478f65b4a6b2a5bf5, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.99730814
+      value: 0.9995862
       objectReference: {fileID: 0}
     - target: {fileID: 8040803963412535677, guid: 6cdab5b0b0234a5478f65b4a6b2a5bf5, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.073324785
+      value: -0.028765228
       objectReference: {fileID: 0}
     - target: {fileID: 8040803963412535677, guid: 6cdab5b0b0234a5478f65b4a6b2a5bf5, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -5.2733746e-16
+      value: 0.000000003516237
       objectReference: {fileID: 0}
     - target: {fileID: 8040803963412535677, guid: 6cdab5b0b0234a5478f65b4a6b2a5bf5, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 9.057999e-19
+      value: 1.0118728e-10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
@@ -4572,6 +4604,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1143079539005282384, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
+      propertyPath: cameraTransform
+      value: 
+      objectReference: {fileID: 1658184139}
     - target: {fileID: 1688514977732223978, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
       propertyPath: radialMenu
       value: 
@@ -5045,8 +5081,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1658184136}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.0733598, y: -0.000000030636762, z: 0.000000002253579, w: 0.9973056}
-  m_LocalPosition: {x: 18.999279, y: -8.685263, z: -79.59898}
+  m_LocalRotation: {x: -0.028757017, y: 0.000000003978757, z: 1.1446452e-10, w: 0.99958646}
+  m_LocalPosition: {x: 18.999279, y: -8.191538, z: -79.59898}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5810,6 +5846,7 @@ MonoBehaviour:
   gripPoint: {fileID: 463563179}
   pickConditions:
   - {fileID: 11400000, guid: b6aca484fd4ac2244b6a4cf6ae02475e, type: 2}
+  failThought: {fileID: 0}
 --- !u!54 &1946445651
 Rigidbody:
   m_ObjectHideFlags: 0

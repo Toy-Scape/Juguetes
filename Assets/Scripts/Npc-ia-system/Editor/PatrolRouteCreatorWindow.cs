@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using SO;
 
-namespace Editor
+namespace NpcAI.Editor
 {
     public class PatrolRouteCreatorWindow : EditorWindow
     {

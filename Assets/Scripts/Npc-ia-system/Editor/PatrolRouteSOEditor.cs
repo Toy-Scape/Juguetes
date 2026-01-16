@@ -3,7 +3,7 @@ using UnityEditor;
 using UnityEngine;
 using SO;
 
-namespace Editor
+namespace NpcAI.Editor
 {
     [CustomEditor(typeof(PatrolRouteSO))]
     public class PatrolRouteSoEditor : UnityEditor.Editor
