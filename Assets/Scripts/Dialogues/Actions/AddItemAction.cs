@@ -12,7 +12,11 @@ public class AddItemAction : ActionBase
         var inventory = context.Player.GetComponent<PlayerInventory>();
         if (inventory != null)
         {
-            inventory.AddItem(item, amount);
+            //TODO:: Cada objeto debería tener una cantidad máxima.
+            // Actualmente esto solo sirve para evitar duplicados en inventarios de objetos únicos.
+            // Pero si un NPC nos da 5 de un objeto que ya tenemos, no recibiremos ninguno.
+            var itemAdded = inventory.GetItemCount(item) < 1 ? inventory.AddItem(item, amount): false;
+            Debug.Log($"[AddItemAction] Item '{item.name}' added: {itemAdded}");
         }
     }
 }

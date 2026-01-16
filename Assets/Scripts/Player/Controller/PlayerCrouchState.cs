@@ -10,9 +10,18 @@ namespace Assets.Scripts.PlayerController
         public override void EnterState()
         {
             _ctx.Animator.SetBool("IsCrouching", true);
-            _ctx.CharacterController.height = _ctx.Config.CrouchingHeight;
-            _ctx.CharacterController.center = new Vector3(0, _ctx.Config.CrouchingHeight / 2, 0);
+
+            float oldHeight = _ctx.Config.StandingHeight;
+            float newHeight = _ctx.Config.CrouchingHeight;
+
+            float delta = (oldHeight - newHeight) / 2f;
+
+            _ctx.CharacterController.height = newHeight;
+            _ctx.CharacterController.center -= new Vector3(0, delta, 0);
+
+            _ctx.CharacterController.Move(Vector3.zero);
         }
+
 
         public override void UpdateState()
         {
@@ -25,9 +34,18 @@ namespace Assets.Scripts.PlayerController
         public override void ExitState()
         {
             _ctx.Animator.SetBool("IsCrouching", false);
-            _ctx.CharacterController.height = _ctx.Config.StandingHeight;
-            _ctx.CharacterController.center = new Vector3(0, _ctx.Config.StandingHeight / 2, 0);
+
+            float oldHeight = _ctx.Config.CrouchingHeight;
+            float newHeight = _ctx.Config.StandingHeight;
+
+            float delta = (newHeight - oldHeight) / 2f;
+
+            _ctx.CharacterController.height = newHeight;
+            _ctx.CharacterController.center += new Vector3(0, delta, 0);
+
+            _ctx.CharacterController.Move(Vector3.zero);
         }
+
 
         public override void CheckSwitchStates()
         {

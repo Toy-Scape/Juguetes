@@ -175,6 +175,7 @@ public class DialogueBox : MonoBehaviour
         var line = activeDialogue.Lines[dialogueIndex];
 
         nameText.text = line.GetCharacterName();
+        nameText.color = line.GetNameColor();
 
         // Fetch text from Localization System
         if (Localization.LocalizationManager.Instance != null)
