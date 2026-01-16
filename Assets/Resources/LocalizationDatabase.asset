@@ -1,0 +1,134 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7728d7534433d742a587d8a6e37c1dd, type: 3}
+  m_Name: LocalizationDatabase
+  m_EditorClassIdentifier: Assembly-CSharp::Localization.LocalizationDatabase
+  _entries:
+  - key: play-button
+    english: Play
+    spanish: Jugar
+    basque: Jolastu
+  - key: options-button
+    english: Options
+    spanish: Opciones
+    basque: Ezarpenak
+  - key: exit-button
+    english: Exit
+    spanish: Salir
+    basque: Atera
+  - key: resume-button
+    english: Resume
+    spanish: Reanudar
+    basque: Jarraitu
+  - key: main-menu-button
+    english: Main menu
+    spanish: Menu principal
+    basque: Menu nagusia
+  - key: back-button
+    english: Back
+    spanish: Atras
+    basque: Atzera
+  - key: thought-fail-box
+    english: "I can\u2019t grab the box, I need more strength."
+    spanish: No puedo agarrar la caja, necesito mas fuerza.
+    basque: Kutxa ezin dut hartu, indar gehiago behar dut.
+  - key: tutorial-robotin-dialogue-1
+    english: "Are you okay? You look\u2026 incomplete.\n"
+    spanish: "\xBFEst\xE1s bien? Te ves\u2026 incompleto."
+    basque: "Ondo zaude?\u2026 osatu gabe ikusten zaitut.\n"
+  - key: tutorial-robotin-dialogue-2
+    english: 'Do you want me to look for them?
+
+'
+    spanish: "\xBFQuieres que los busque?\n"
+    basque: 'Bilatu nahi dituzu?
+
+'
+  - key: tutorial-robotin-dialogue-3
+    english: 'Do you want me to put on your arms?
+
+'
+    spanish: "\xBFQuieres que me ponga tus brazos?\n"
+    basque: 'Zure besoak jantzi nahi dituzu?
+
+'
+  - key: tutorial-robotin-dialogue-4
+    english: 'And you? What will you do?
+
+'
+    spanish: "\xBFY t\xFA? \xBFQu\xE9 har\xE1s?\n"
+    basque: 'Eta zu? Zer egingo duzu?
+
+'
+  - key: tutorial-juan-dialogue-1
+    english: "Hehe\u2026 incomplete, he says. I\u2019m missing my arms, kid. Without
+      them I can\u2019t move or defend myself.\n"
+    spanish: "Hehe\u2026 incompleto dice. Me faltan los brazos, chaval. As\xED no
+      puedo moverme ni defenderme.\n"
+    basque: "Hehe\u2026 osatu gabe, dio. Besoak falta zaizkit, mutil. Horrela ezin
+      naiz mugitu ezta defendatu ere.\n"
+  - key: tutorial-juan-dialogue-2
+    english: "No need. You\u2019d better take them yourself. My arms still work\u2026
+      it\u2019s just that I can\u2019t use them anymore.\n"
+    spanish: "No hace falta. Mejor ll\xE9vatelos t\xFA. Mis brazos a\xFAn funcionan\u2026
+      solo que yo ya no puedo usarlos.\n"
+    basque: "Ez da beharrezkoa. Hobe zuk eramatea. Nire besoek oraindik funtzionatzen
+      dute\u2026 nik erabiltzerik ez dudan arren.\n"
+  - key: tutorial-juan-dialogue-3
+    english: "Exactly. They\u2019ll help you learn how to swap parts. Also, there\u2019s
+      a screwdriver on the table over there. With my arms you\u2019ll be able to
+      use it and open the ventilation grate.\n"
+    spanish: "Exacto. Te servir\xE1n para aprender a cambiar piezas. Adem\xE1s, ah\xED
+      en la mesa hay un destornillador. Con mis brazos podr\xE1s usarlo y abrir la
+      rejilla de ventilaci\xF3n."
+    basque: "Hori da. Piezen aldaketa ikasteko balioko dizute. Gainera, mahai gainean
+      han destornilladore bat dago. Nire besoekin erabili ahal izango duzu eta aireztapen\u2011sarea
+      ireki.\n"
+  - key: tutorial-juan-dialogue-4
+    english: "I have no way out, Robot\xEDn. But you do. So go. Escape for both of
+      us."
+    spanish: "Yo no tengo escapatoria, Robot\xEDn. Pero t\xFA s\xED. As\xED que ve.
+      Esc\xE1pate por los dos."
+    basque: "Nik ez dut ihesbiderik, Robot\xEDn. Baina zuk bai. Beraz, zoaz. Ihes
+      egin bion ordez."
+  - key: thought-ventilacion
+    english: "I can\u2019t open the ventilation duct without the screwdriver."
+    spanish: "No puedo abrir el conducto de ventilaci\xF3n sin el destornillador."
+    basque: "Aireztapen\u2011sarea ezin dut ireki destornilladorerik gabe."
+  - key: strong-arm-item-name
+    english: Strong arm
+    spanish: Brazo fuerte
+    basque: Beso indartsu
+  - key: strong-arm-item-description
+    english: Allows you to lift heavy objects.
+    spanish: Permite levantar objetos pesados.
+    basque: Objektu astunak altxatzeko aukera ematen du.
+  - key: cubo-item-name
+    english: Cube
+    spanish: Cubo
+    basque: Kubo
+  - key: cubo-item-description
+    english: Just a cube
+    spanish: Simplemente un cubo
+    basque: Besterik gabe, kubo bat
+  - key: hook-item-name
+    english: Hook
+    spanish: Gancho
+    basque: Azkoin
+  - key: hook-item-description
+    english: Hook on and swing through the air.
+    spanish: "Eng\xE1nchate y balanc\xE9ate por el aire."
+    basque: Konektatu eta airean pendulatu.
+  - key: test-key
+    english: Test key
+    spanish: Clave test
+    basque: Testeozko klabea

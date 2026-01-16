@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 639d2f37fe394d8696991a99ca6c7eac, type: 3}
   m_Name: Hook Arm
   m_EditorClassIdentifier: Assembly-CSharp::Inventory.ItemData
-  itemName: Gancho
-  description: Puedes lanzar el gancho para colgarte.
+  nameKey: hook-item-name
+  descriptionKey: hook-item-description
   icon: {fileID: 21300000, guid: c9441e6ead152a64d88ccdfcd241ea8f, type: 3}
   maxStackSize: 1
   isLimb: 1

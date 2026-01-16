@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Dialogue
   Lines:
   - character: 0
-    Text: Necesito un destornillador para abrir la ventilacion.
+    Key: thought-ventilacion
   Type: 1

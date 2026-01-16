@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Assets.Scripts.PlayerController;
 using Inventory; // Access to PlayerInventory and ItemData
 using UnityEngine;
 
@@ -10,7 +11,7 @@ namespace CheckpointSystem
         public static CheckpointManager Instance { get; private set; }
 
         [Header("Settings")]
-        [SerializeField] private bool autoSave = true;
+        //[SerializeField] private bool autoSave = true;
         [SerializeField] private string saveKey = "PlayerSaveData";
         [SerializeField] private DeadZone deadZone;
 
@@ -27,6 +28,7 @@ namespace CheckpointSystem
             }
 
             Instance = this;
+            transform.SetParent(null);
             DontDestroyOnLoad(gameObject);
 
             currentGameData = new GameData();

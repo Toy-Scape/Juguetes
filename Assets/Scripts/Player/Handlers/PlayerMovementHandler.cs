@@ -88,16 +88,7 @@ public class PlayerMovementHandler
         if (playerContext.IsPushing)
         {
             appliedSpeed *= playerContext.PushSpeedMultiplier;
-            // Strafe rotation
-            if (forward.sqrMagnitude > 0.001f)
-            {
-                Quaternion targetRotation = Quaternion.LookRotation(forward);
-                playerTransform.rotation = Quaternion.RotateTowards(
-                    playerTransform.rotation,
-                    targetRotation,
-                    config.rotationSpeed * playerContext.PushSpeedMultiplier * Time.deltaTime
-                );
-            }
+            // Rotation is locked by AntigravityGrabber
         }
         else if (moveDirection.magnitude > 0.01f) // Rotate only if we have significant move direction
         {

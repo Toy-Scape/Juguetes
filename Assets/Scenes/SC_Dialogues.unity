@@ -237,7 +237,7 @@ PrefabInstance:
     - target: {fileID: 8163815884479273772, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
       propertyPath: interactionPrompt
       value: 
-      objectReference: {fileID: 906598989}
+      objectReference: {fileID: 0}
     - target: {fileID: 8163815884479273772, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
       propertyPath: rayOrigins.Array.size
       value: 1
@@ -623,11 +623,6 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_RenderingLayers: 1
   m_ShadowRenderingLayers: 1
---- !u!1 &906598989 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5750158467458462380, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
-  m_PrefabInstance: {fileID: 546033687}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1160584093
 GameObject:
   m_ObjectHideFlags: 0

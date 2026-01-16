@@ -46,7 +46,7 @@ namespace Inventory.UI
         public static event Action OnInventoryOpened;
         public static event Action OnInventoryClosed;
 
-        private void Awake ()
+        private void Awake()
         {
             // Registrar esta instancia en el registro central
             InventoryUIRegistry.Register(this);
@@ -69,7 +69,7 @@ namespace Inventory.UI
             }
         }
 
-        void Start ()
+        void Start()
         {
             // Inicializar slots en Start para garantizar que PlayerInventory.Awake() ya se ejecutó
             InitializeSlots();
@@ -82,7 +82,7 @@ namespace Inventory.UI
             }
         }
 
-        private void OnEnable ()
+        private void OnEnable()
         {
             if (playerInventory == null)
             {
@@ -103,7 +103,7 @@ namespace Inventory.UI
             }
         }
 
-        private void OnDisable ()
+        private void OnDisable()
         {
             if (playerInventory != null)
             {
@@ -113,19 +113,19 @@ namespace Inventory.UI
             // No hacemos Instance = null aquí ya que OnDestroy se encargará.
         }
 
-        private void OnDestroy ()
+        private void OnDestroy()
         {
             InventoryUIRegistry.Unregister(this);
         }
 
         #region Input Messages
 
-        void OnToggleInventory ()
+        void OnToggleInventory()
         {
             ToggleInventory();
         }
 
-        public void HandleNavigation (Vector2 input)
+        public void HandleNavigation(Vector2 input)
         {
             if (!_isInventoryOpen) return;
 
@@ -141,7 +141,7 @@ namespace Inventory.UI
             }
         }
 
-        private void MoveSelection (Vector2 direction)
+        private void MoveSelection(Vector2 direction)
         {
             // Si no hay nada seleccionado, seleccionar el primero
             if (_selectedSlot == null)
@@ -244,7 +244,7 @@ namespace Inventory.UI
             }
         }
 
-        private void SelectSlot (InventorySlotUI slot)
+        private void SelectSlot(InventorySlotUI slot)
         {
             if (slot == null) return;
 
@@ -279,7 +279,7 @@ namespace Inventory.UI
 
         #region Inicialización
 
-        private void InitializeSlots ()
+        private void InitializeSlots()
         {
             // Verificar que todo esté listo antes de crear slots
             if (playerInventory == null || playerInventory.Inventory == null)
@@ -340,7 +340,7 @@ namespace Inventory.UI
             RefreshUI();
         }
 
-        private void CreateSlots (Transform container, List<InventorySlotUI> slotList, int count)
+        private void CreateSlots(Transform container, List<InventorySlotUI> slotList, int count)
         {
             if (container == null)
             {
@@ -391,7 +391,7 @@ namespace Inventory.UI
         /// <summary>
         /// Refresca toda la interfaz del inventario para mostrar los items actuales.
         /// </summary>
-        public void RefreshUI ()
+        public void RefreshUI()
         {
             if (playerInventory == null || playerInventory.Inventory == null)
                 return;
@@ -400,7 +400,7 @@ namespace Inventory.UI
             RefreshLimbsTab();
         }
 
-        private void RefreshItemsTab ()
+        private void RefreshItemsTab()
         {
             var items = playerInventory.Inventory.Items;
 
@@ -422,7 +422,7 @@ namespace Inventory.UI
             }
         }
 
-        private void RefreshLimbsTab ()
+        private void RefreshLimbsTab()
         {
             var limbs = playerInventory.Inventory.Limbs;
 
@@ -453,7 +453,7 @@ namespace Inventory.UI
 
         #region Eventos
 
-        private void OnSlotClicked (InventorySlotUI slot)
+        private void OnSlotClicked(InventorySlotUI slot)
         {
             if (slot == null || slot.IsEmpty)
                 return;
@@ -467,7 +467,7 @@ namespace Inventory.UI
             _selectedSlot.SetSelected(true);
         }
 
-        private void OnInventoryChanged (ItemData itemData, int quantity)
+        private void OnInventoryChanged(ItemData itemData, int quantity)
         {
             RefreshUI();
         }
@@ -476,7 +476,7 @@ namespace Inventory.UI
 
         #region Control de Visibilidad
 
-        public void ToggleInventory ()
+        public void ToggleInventory()
         {
             if (inventoryPanel == null)
                 return;
@@ -493,7 +493,7 @@ namespace Inventory.UI
             }
         }
 
-        public void OpenInventory ()
+        public void OpenInventory()
         {
             if (inventoryPanel == null)
                 return;
@@ -504,7 +504,7 @@ namespace Inventory.UI
             OnInventoryOpened?.Invoke();
         }
 
-        public void CloseInventory ()
+        public void CloseInventory()
         {
             if (inventoryPanel == null)
                 return;
@@ -524,16 +524,26 @@ namespace Inventory.UI
 
         #region Tooltip
 
-        public void ShowTooltip (InventoryItem item, Vector2 screenPosition)
+        public void ShowTooltip(InventoryItem item, Vector2 screenPosition)
         {
             if (tooltipPanel == null || item == null || item.Data == null)
                 return;
 
             if (tooltipNameText != null)
-                tooltipNameText.text = item.Data.ItemName;
+            {
+                if (Localization.LocalizationManager.Instance != null)
+                    tooltipNameText.text = Localization.LocalizationManager.Instance.GetLocalizedValue(item.Data.NameKey);
+                else
+                    tooltipNameText.text = item.Data.NameKey;
+            }
 
             if (tooltipDescriptionText != null)
-                tooltipDescriptionText.text = item.Data.Description;
+            {
+                if (Localization.LocalizationManager.Instance != null)
+                    tooltipDescriptionText.text = Localization.LocalizationManager.Instance.GetLocalizedValue(item.Data.DescriptionKey);
+                else
+                    tooltipDescriptionText.text = item.Data.DescriptionKey;
+            }
 
             tooltipPanel.SetActive(true);
 
@@ -553,7 +563,7 @@ namespace Inventory.UI
             }
         }
 
-        public void HideTooltip ()
+        public void HideTooltip()
         {
             if (tooltipPanel != null)
                 tooltipPanel.SetActive(false);
