@@ -571,11 +571,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 163683977}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
---- !u!95 &184561822 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: 961b023786da0a34897a537b56ab9c5d, type: 3}
-  m_PrefabInstance: {fileID: 1655695272}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &184561823 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 961b023786da0a34897a537b56ab9c5d, type: 3}
@@ -80503,7 +80498,7 @@ PrefabInstance:
     - target: {fileID: 1143079539005282384, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
       propertyPath: playerAnimator
       value: 
-      objectReference: {fileID: 184561822}
+      objectReference: {fileID: 1728560851}
     - target: {fileID: 1143079539005282384, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
       propertyPath: cameraTransform
       value: 
@@ -80623,7 +80618,7 @@ PrefabInstance:
     - target: {fileID: 4688945857383318680, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 9100000, guid: 71864f47ddb3104409d8d257d4e9fb8f, type: 2}
     - target: {fileID: 6629819060316150005, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
       propertyPath: cameraTransform
       value: 
@@ -81088,8 +81083,9 @@ PrefabInstance:
     - target: {fileID: 5866666021909216657, guid: 961b023786da0a34897a537b56ab9c5d, type: 3}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 9100000, guid: 71864f47ddb3104409d8d257d4e9fb8f, type: 2}
-    m_RemovedComponents: []
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 5866666021909216657, guid: 961b023786da0a34897a537b56ab9c5d, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -81314,6 +81310,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49faa08c9170e724cbbafae06e867807, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CheckpointSystem.PlayerRespawn
+--- !u!95 &1728560851 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 4688945857383318680, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
+  m_PrefabInstance: {fileID: 1580724418}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1730512417
 GameObject:
   m_ObjectHideFlags: 0
