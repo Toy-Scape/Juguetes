@@ -2554,11 +2554,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8040803963412535677, guid: 6cdab5b0b0234a5478f65b4a6b2a5bf5, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 44.38272
+      value: -25.321281
       objectReference: {fileID: 0}
     - target: {fileID: 8040803963412535677, guid: 6cdab5b0b0234a5478f65b4a6b2a5bf5, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.6749891
+      value: 1.6949891
       objectReference: {fileID: 0}
     - target: {fileID: 8040803963412535677, guid: 6cdab5b0b0234a5478f65b4a6b2a5bf5, type: 3}
       propertyPath: m_LocalPosition.z
@@ -2566,19 +2566,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8040803963412535677, guid: 6cdab5b0b0234a5478f65b4a6b2a5bf5, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.9962789
+      value: 0.9962763
       objectReference: {fileID: 0}
     - target: {fileID: 8040803963412535677, guid: 6cdab5b0b0234a5478f65b4a6b2a5bf5, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.08534283
+      value: 0.08534248
       objectReference: {fileID: 0}
     - target: {fileID: 8040803963412535677, guid: 6cdab5b0b0234a5478f65b4a6b2a5bf5, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.01200171
+      value: -0.012211653
       objectReference: {fileID: 0}
     - target: {fileID: 8040803963412535677, guid: 6cdab5b0b0234a5478f65b4a6b2a5bf5, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.0010280854
+      value: 0.0010460682
       objectReference: {fileID: 0}
     - target: {fileID: 8529511733941135029, guid: 6cdab5b0b0234a5478f65b4a6b2a5bf5, type: 3}
       propertyPath: playerInput
@@ -3219,13 +3219,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5d693a9da46a334abd2a65e67083b54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AntigravityGrab.AntigravityGrabbable
-  moveResistance: 2
-  grabConditions:
-  - {fileID: 11400000, guid: b6aca484fd4ac2244b6a4cf6ae02475e, type: 2}
-  failThought: {fileID: 11400000, guid: 6519da417d9f74e4aa335534f5ca3ab9, type: 2}
-  collisionLayer:
-    serializedVersion: 2
-    m_Bits: 4294967295
 --- !u!1 &1150505108
 GameObject:
   m_ObjectHideFlags: 0
@@ -3370,13 +3363,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5d693a9da46a334abd2a65e67083b54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AntigravityGrab.AntigravityGrabbable
-  moveResistance: 2
-  grabConditions:
-  - {fileID: 11400000, guid: b6aca484fd4ac2244b6a4cf6ae02475e, type: 2}
-  failThought: {fileID: 11400000, guid: 6519da417d9f74e4aa335534f5ca3ab9, type: 2}
-  collisionLayer:
-    serializedVersion: 2
-    m_Bits: 55
 --- !u!1 &1177727054 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8699495499050405152, guid: 235dc7df742c7214b97d4cd100b29707, type: 3}
@@ -3394,13 +3380,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5d693a9da46a334abd2a65e67083b54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AntigravityGrab.AntigravityGrabbable
-  moveResistance: 2
-  grabConditions:
-  - {fileID: 11400000, guid: b6aca484fd4ac2244b6a4cf6ae02475e, type: 2}
-  failThought: {fileID: 11400000, guid: 6519da417d9f74e4aa335534f5ca3ab9, type: 2}
-  collisionLayer:
-    serializedVersion: 2
-    m_Bits: 55
 --- !u!1 &1212919733
 GameObject:
   m_ObjectHideFlags: 0
@@ -3442,11 +3421,6 @@ Transform:
   - {fileID: 160999913}
   m_Father: {fileID: 790085837}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &1226715314 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 2526417371357686982, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
-  m_PrefabInstance: {fileID: 1580724418}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1268721946 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7702506591332752022, guid: ca8b7e8a6301dbe47a9da754fd52abea, type: 3}
@@ -3689,13 +3663,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5d693a9da46a334abd2a65e67083b54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AntigravityGrab.AntigravityGrabbable
-  moveResistance: 2
-  grabConditions:
-  - {fileID: 11400000, guid: b6aca484fd4ac2244b6a4cf6ae02475e, type: 2}
-  failThought: {fileID: 11400000, guid: 6519da417d9f74e4aa335534f5ca3ab9, type: 2}
-  collisionLayer:
-    serializedVersion: 2
-    m_Bits: 4294967295
 --- !u!4 &1322402565 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 8abe7481dc38eb84f9a853df978f6fc3, type: 3}
@@ -3836,13 +3803,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5d693a9da46a334abd2a65e67083b54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AntigravityGrab.AntigravityGrabbable
-  moveResistance: 2
-  grabConditions:
-  - {fileID: 11400000, guid: b6aca484fd4ac2244b6a4cf6ae02475e, type: 2}
-  failThought: {fileID: 11400000, guid: 6519da417d9f74e4aa335534f5ca3ab9, type: 2}
-  collisionLayer:
-    serializedVersion: 2
-    m_Bits: 4294967295
 --- !u!1 &1362131712
 GameObject:
   m_ObjectHideFlags: 0
@@ -4752,11 +4712,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 883425338343852037, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 35.95
+      value: -33.754
       objectReference: {fileID: 0}
     - target: {fileID: 883425338343852037, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.96
+      value: 0.98
       objectReference: {fileID: 0}
     - target: {fileID: 883425338343852037, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
       propertyPath: m_LocalPosition.z
@@ -5131,6 +5091,93 @@ Animator:
   m_CorrespondingSourceObject: {fileID: 4688945857383318680, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
   m_PrefabInstance: {fileID: 1580724418}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &1581515004
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: 46c828ef073c13e4d97ed64c2dc52cb7, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -33.02358
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 46c828ef073c13e4d97ed64c2dc52cb7, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.00000023841858
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 46c828ef073c13e4d97ed64c2dc52cb7, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -36.477493
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 46c828ef073c13e4d97ed64c2dc52cb7, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 46c828ef073c13e4d97ed64c2dc52cb7, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 46c828ef073c13e4d97ed64c2dc52cb7, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 46c828ef073c13e4d97ed64c2dc52cb7, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 46c828ef073c13e4d97ed64c2dc52cb7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 46c828ef073c13e4d97ed64c2dc52cb7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 46c828ef073c13e4d97ed64c2dc52cb7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 46c828ef073c13e4d97ed64c2dc52cb7, type: 3}
+      propertyPath: m_Name
+      value: Juguete Export Unity
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 46c828ef073c13e4d97ed64c2dc52cb7, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1581515006}
+  m_SourcePrefab: {fileID: 100100000, guid: 46c828ef073c13e4d97ed64c2dc52cb7, type: 3}
+--- !u!1 &1581515005 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 46c828ef073c13e4d97ed64c2dc52cb7, type: 3}
+  m_PrefabInstance: {fileID: 1581515004}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &1581515006
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1581515005}
+  m_Enabled: 1
+  m_Avatar: {fileID: 9000000, guid: 7f99841ca396283488de13fd8c4a1a81, type: 3}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 1
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 1
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1001 &1609681451
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5492,8 +5539,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1658184136}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.08534284, y: -0.012001713, z: 0.0010280858, w: 0.9962789}
-  m_LocalPosition: {x: 19.03928, y: -9.134201, z: -81.02858}
+  m_LocalRotation: {x: 0.0853423, y: -0.012211652, z: 0.0010460658, w: 0.9962763}
+  m_LocalPosition: {x: -50.664722, y: -10.406935, z: -76.92854}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5625,12 +5672,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5fd0d0f9c9e701479f49c9033dad52d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AntigravityGrab.AntigravityGrabber
-  grabRadius: 1
-  grabOrigin: {fileID: 1425050362}
-  grabLayer:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  holdPoint: {fileID: 1226715314}
 --- !u!114 &1728560841 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3434473845669599158, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
@@ -5968,13 +6009,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5d693a9da46a334abd2a65e67083b54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AntigravityGrab.AntigravityGrabbable
-  moveResistance: 2
-  grabConditions:
-  - {fileID: 11400000, guid: b6aca484fd4ac2244b6a4cf6ae02475e, type: 2}
-  failThought: {fileID: 11400000, guid: 6519da417d9f74e4aa335534f5ca3ab9, type: 2}
-  collisionLayer:
-    serializedVersion: 2
-    m_Bits: 4294967295
 --- !u!1 &1857554852 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8699495499050405152, guid: 235dc7df742c7214b97d4cd100b29707, type: 3}
@@ -5992,13 +6026,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5d693a9da46a334abd2a65e67083b54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AntigravityGrab.AntigravityGrabbable
-  moveResistance: 2
-  grabConditions:
-  - {fileID: 11400000, guid: b6aca484fd4ac2244b6a4cf6ae02475e, type: 2}
-  failThought: {fileID: 11400000, guid: 6519da417d9f74e4aa335534f5ca3ab9, type: 2}
-  collisionLayer:
-    serializedVersion: 2
-    m_Bits: 4294967295
 --- !u!4 &1862434696 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1997857997583707999, guid: 235dc7df742c7214b97d4cd100b29707, type: 3}
@@ -6105,13 +6132,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5d693a9da46a334abd2a65e67083b54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AntigravityGrab.AntigravityGrabbable
-  moveResistance: 2
-  grabConditions:
-  - {fileID: 11400000, guid: b6aca484fd4ac2244b6a4cf6ae02475e, type: 2}
-  failThought: {fileID: 11400000, guid: 6519da417d9f74e4aa335534f5ca3ab9, type: 2}
-  collisionLayer:
-    serializedVersion: 2
-    m_Bits: 4294967295
 --- !u!4 &1888221207 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1997857997583707999, guid: 235dc7df742c7214b97d4cd100b29707, type: 3}
@@ -6129,13 +6149,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5d693a9da46a334abd2a65e67083b54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AntigravityGrab.AntigravityGrabbable
-  moveResistance: 2
-  grabConditions:
-  - {fileID: 11400000, guid: b6aca484fd4ac2244b6a4cf6ae02475e, type: 2}
-  failThought: {fileID: 11400000, guid: 6519da417d9f74e4aa335534f5ca3ab9, type: 2}
-  collisionLayer:
-    serializedVersion: 2
-    m_Bits: 55
 --- !u!1001 &1914159329
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6352,9 +6365,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d52b7802d1faba24984402ee115f6bfa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AntigravityGrab.AntigravityPickable
-  gripPoint: {fileID: 463563179}
-  pickConditions:
-  - {fileID: 11400000, guid: b6aca484fd4ac2244b6a4cf6ae02475e, type: 2}
 --- !u!1001 &1967955350
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6456,13 +6466,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5d693a9da46a334abd2a65e67083b54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AntigravityGrab.AntigravityGrabbable
-  moveResistance: 2
-  grabConditions:
-  - {fileID: 11400000, guid: b6aca484fd4ac2244b6a4cf6ae02475e, type: 2}
-  failThought: {fileID: 11400000, guid: 6519da417d9f74e4aa335534f5ca3ab9, type: 2}
-  collisionLayer:
-    serializedVersion: 2
-    m_Bits: 4294967295
 --- !u!1 &2086388672
 GameObject:
   m_ObjectHideFlags: 0
@@ -6591,13 +6594,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5d693a9da46a334abd2a65e67083b54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AntigravityGrab.AntigravityGrabbable
-  moveResistance: 2
-  grabConditions:
-  - {fileID: 11400000, guid: b6aca484fd4ac2244b6a4cf6ae02475e, type: 2}
-  failThought: {fileID: 11400000, guid: 6519da417d9f74e4aa335534f5ca3ab9, type: 2}
-  collisionLayer:
-    serializedVersion: 2
-    m_Bits: 4294967295
 --- !u!1 &2118287598 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8699495499050405152, guid: 235dc7df742c7214b97d4cd100b29707, type: 3}
@@ -6615,13 +6611,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5d693a9da46a334abd2a65e67083b54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AntigravityGrab.AntigravityGrabbable
-  moveResistance: 2
-  grabConditions:
-  - {fileID: 11400000, guid: b6aca484fd4ac2244b6a4cf6ae02475e, type: 2}
-  failThought: {fileID: 11400000, guid: 6519da417d9f74e4aa335534f5ca3ab9, type: 2}
-  collisionLayer:
-    serializedVersion: 2
-    m_Bits: 4294967295
 --- !u!1 &2136049881 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8699495499050405152, guid: 235dc7df742c7214b97d4cd100b29707, type: 3}
@@ -6639,13 +6628,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5d693a9da46a334abd2a65e67083b54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AntigravityGrab.AntigravityGrabbable
-  moveResistance: 2
-  grabConditions:
-  - {fileID: 11400000, guid: b6aca484fd4ac2244b6a4cf6ae02475e, type: 2}
-  failThought: {fileID: 11400000, guid: 6519da417d9f74e4aa335534f5ca3ab9, type: 2}
-  collisionLayer:
-    serializedVersion: 2
-    m_Bits: 4294967295
 --- !u!1 &2139292600
 GameObject:
   m_ObjectHideFlags: 0
@@ -6911,3 +6893,4 @@ SceneRoots:
   - {fileID: 1643892808}
   - {fileID: 6739438036025674557}
   - {fileID: 1381359843}
+  - {fileID: 1581515004}
