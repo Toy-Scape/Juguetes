@@ -913,6 +913,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PickableObject
   gripPoint: {fileID: 488117591}
+  pickConditions: []
 --- !u!54 &420676472
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1388,6 +1389,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GrabbableObject
   moveResistance: 2
+  grabConditions: []
+  failThought: {fileID: 0}
 --- !u!54 &706793085
 Rigidbody:
   m_ObjectHideFlags: 0
