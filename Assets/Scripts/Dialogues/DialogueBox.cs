@@ -175,6 +175,7 @@ public class DialogueBox : MonoBehaviour
         var line = activeDialogue.Lines[dialogueIndex];
 
         nameText.text = line.GetCharacterName();
+        nameText.color = line.GetNameColor();
 
         // Fetch text from Localization System
         if (Localization.LocalizationManager.Instance != null)
@@ -183,8 +184,17 @@ public class DialogueBox : MonoBehaviour
         }
         else
         {
-            fullText = line.Key; // Fallback to key if no manager
+            var db = Resources.Load<Localization.LocalizationDatabase>("LocalizationDatabase");
+            if (db != null)
+            {
+                fullText = db.GetValue(line.Key, Localization.Language.Spanish); // idioma por defecto
+            }
+            else
+            {
+                fullText = line.Key; // fallback final
+            }
         }
+
         currentSpeaker = CharacterManager.Instance.GetModel(line.Character.CharacterId);
 
         var context = new DialogueContext(player, currentSpeaker);
