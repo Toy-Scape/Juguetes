@@ -364,6 +364,6 @@ MonoBehaviour:
   startAngle: 0
   endAngle: 60
   segments: 32
-  dividerThickness: 4
-  dividerColor: {r: 0.5, g: 0.5, b: 0.5, a: 0}
   hoverColor: {r: 0, g: 0.74262595, b: 1, a: 1}
+  dividerColor: {r: 0.5, g: 0.5, b: 0.5, a: 0}
+  dividerThickness: 4

@@ -483,7 +483,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-  player: {fileID: 0}
 --- !u!1 &7504158356481199063
 GameObject:
   m_ObjectHideFlags: 0
