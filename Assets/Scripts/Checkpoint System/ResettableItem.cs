@@ -6,6 +6,7 @@ namespace CheckpointSystem
     {
         [SerializeField] private Vector3 resetOffset = new Vector3(0, 1, 0);
         [SerializeField] private Vector3 resetRotation = Vector3.zero;
+        public bool IsTouchingCheckpoint { get; set; }
 
         public void ResetState()
         {
