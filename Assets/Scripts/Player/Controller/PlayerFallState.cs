@@ -25,10 +25,14 @@ namespace Assets.Scripts.PlayerController
             _ctx.Animator.SetBool("IsFalling", false);
         }
 
-        public override void CheckSwitchStates()
+        public override void CheckSwitchStates ()
         {
-            // Grounded check is handled by AirState
+            if (_ctx.Context.Velocity.y == Mathf.Epsilon && !_ctx.Context.IsGrounded)
+            {
+                SwitchState(_factory.LedgeGrab());
+            }
         }
+
 
         public override void InitializeSubState() { }
     }

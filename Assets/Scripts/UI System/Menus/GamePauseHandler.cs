@@ -9,6 +9,15 @@ namespace UI_System.Menus
         [Header("Configuration")]
         [SerializeField] private string _menuSceneName = "SC_Menus";
 
+        // Static property to check if the game is paused
+        public static bool IsPaused { get; private set; }
+
+        private void Awake()
+        {
+            // Reset pause state when this component (usually in the main scene) loads
+            IsPaused = false;
+        }
+
         // This method is called by PlayerInput via "Send Messages" 
         // Ensure "Behavior" in PlayerInput is set to "Send Messages" or use Unity Events and link to TogglePause
         public void OnPause(InputValue value)
@@ -49,6 +58,7 @@ namespace UI_System.Menus
             else
             {
                 Debug.Log("Game Paused");
+                IsPaused = true;
                 Time.timeScale = 0f;
 
                 // Load the Menu Scene Additively
@@ -73,6 +83,10 @@ namespace UI_System.Menus
             SceneManager.sceneLoaded -= OnSceneLoaded;
 
             UnsubscribeFromInput();
+
+            // Ensure IsPaused is reset if this component is disabled
+            // This might happen on scene transitions
+            IsPaused = false;
         }
 
         private void SubscribeToInput()
@@ -109,6 +123,7 @@ namespace UI_System.Menus
             if (scene.name == _menuSceneName)
             {
                 _isLoading = false;
+                IsPaused = true; // Ensure it is true when menu is loaded
             }
         }
 
@@ -117,6 +132,7 @@ namespace UI_System.Menus
             if (scene.name == _menuSceneName)
             {
                 Debug.Log("Game Resumed");
+                IsPaused = false;
                 Time.timeScale = 1f;
 
                 // Restore Player controls and Lock Cursor

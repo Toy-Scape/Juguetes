@@ -21,15 +21,15 @@ namespace Assets.Scripts.PlayerController
             _ctx.Context.IsGrabbingLedge = true;
             _ctx.CharacterController.enabled = false;
 
-            _targetPos = new Vector3(_ctx.LedgePosition.x, _ctx.LedgePosition.y - _ctx.Config.LedgeSnapOffsetY, _ctx.LedgePosition.z);
+            _targetPos = new Vector3(_ctx.LedgePosition.x, _ctx.LedgePosition.y - _ctx.Config.LedgeSnapOffsetY, _ctx.LedgePosition.z - _ctx.Config.LedgeForwardOffset);
             _targetRot = Quaternion.LookRotation(-_ctx.LedgeNormal, Vector3.up);
         }
 
         public override void UpdateState()
         {
             // Snap to ledge
-            _ctx.transform.position = Vector3.Lerp(_ctx.transform.position, _targetPos, _ctx.Config.LedgeSnapSpeed * Time.deltaTime);
             _ctx.transform.rotation = Quaternion.Slerp(_ctx.transform.rotation, _targetRot, _ctx.Config.LedgeSnapSpeed * Time.deltaTime);
+            _ctx.transform.position = Vector3.Lerp(_ctx.transform.position, _targetPos, _ctx.Config.LedgeSnapSpeed * Time.deltaTime);
 
             CheckSwitchStates();
         }
@@ -57,7 +57,9 @@ namespace Assets.Scripts.PlayerController
             }
             else if (_ctx.Context.IsCrouching)
             {
-                _ctx.SetLedgeGrabCooldown(_ctx.Config.LedgeGrabCooldown);
+                _ctx.FreezeNearbyGrabbables(0.4f);
+
+                _ctx.SetLedgeGrabCooldown  (_ctx.Config.LedgeGrabCooldown);
                 SwitchState(_factory.Air()); // Switch to Air to apply gravity immediately
             }
         }

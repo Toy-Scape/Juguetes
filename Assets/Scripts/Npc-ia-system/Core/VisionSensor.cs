@@ -97,9 +97,14 @@ namespace Core
             if (Vector3.Angle(forward, dirToTarget) > viewAngle / 2f) return false;
 
             // Occlusion check
-            if (Physics.Raycast(eyePos, dirToTarget.normalized, distance, obstacleMask))
+            if (Physics.Raycast(eyePos, dirToTarget.normalized, out RaycastHit hit, distance, obstacleMask))
             {
-                return false;
+                // Verify if the hit object is part of the target
+                if (hit.collider.transform == target.Transform || hit.collider.transform.IsChildOf(target.Transform))
+                {
+                    return true; // We hit the target, so it is visible
+                }
+                return false; // We hit something else, so it is occluded
             }
 
             return true;

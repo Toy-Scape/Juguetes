@@ -11,6 +11,10 @@ namespace Assets.Scripts.PlayerController
         public override void EnterState()
         {
             _ctx.Animator.SetBool("IsClimbing", true);
+            _ctx.Animator.SetBool("IsFalling", false);  // Clear conflicting state
+            _ctx.Animator.SetBool("IsJumping", false);  // Clear conflicting state
+            _ctx.Animator.SetBool("IsHanging", false);  // Clear conflicting state
+            _ctx.Animator.SetBool("IsGrounded", false); // Clear conflicting state
             _ctx.CharacterController.enabled = false;
             _ctx.Animator.applyRootMotion = false; // Prevent animation from moving the transform
         }
@@ -37,7 +41,7 @@ namespace Assets.Scripts.PlayerController
             }
             finalPos.y++;
             _ctx.transform.position = finalPos;
-            
+            _ctx.FreezeNearbyGrabbables(0.4f);
             SwitchState(_factory.Grounded());
         }
 
@@ -48,7 +52,8 @@ namespace Assets.Scripts.PlayerController
             _ctx.Animator.SetBool("IsClimbing", false);
             _ctx.CharacterController.enabled = true;
             _ctx.Animator.applyRootMotion = false; // Ensure code continues to drive movement
-            
+            _ctx.FreezeNearbyGrabbables(0.4f);
+
             if (_ctx.CharacterController.enabled)
             {
                 // Force a significant move down to ensure isGrounded updates immediately
