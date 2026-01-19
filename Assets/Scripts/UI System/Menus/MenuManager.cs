@@ -25,6 +25,23 @@ namespace UI_System.Menus
             }
             Instance = this;
 
+            // Cleanup duplicate EventSystem if loaded additively
+            if (SceneManager.sceneCount > 1)
+            {
+                var eventSystems = FindObjectsByType<UnityEngine.EventSystems.EventSystem>(FindObjectsSortMode.None);
+                if (eventSystems.Length > 1)
+                {
+                    foreach (var es in eventSystems)
+                    {
+                        // Destroy the EventSystem that belongs to this Menu scene
+                        if (es.gameObject.scene == gameObject.scene)
+                        {
+                            Destroy(es.gameObject);
+                        }
+                    }
+                }
+            }
+
             // Determine if we are in Main Menu mode or Pause Menu mode
             // If loaded alone -> Main Menu
             // If loaded additively -> Pause Menu

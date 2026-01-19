@@ -57,16 +57,51 @@ namespace UI_System.Menus
             }
         }
 
+        private InputAction _pauseAction;
+
         private void OnEnable()
         {
             SceneManager.sceneUnloaded += OnSceneUnloaded;
             SceneManager.sceneLoaded += OnSceneLoaded;
+
+            SubscribeToInput();
         }
 
         private void OnDisable()
         {
             SceneManager.sceneUnloaded -= OnSceneUnloaded;
             SceneManager.sceneLoaded -= OnSceneLoaded;
+
+            UnsubscribeFromInput();
+        }
+
+        private void SubscribeToInput()
+        {
+            if (_pauseAction != null) return;
+
+            // Try to find PlayerInput to get the action
+            var playerInput = FindFirstObjectByType<PlayerInput>();
+            if (playerInput == null) return;
+
+            _pauseAction = playerInput.actions["Pause"];
+            if (_pauseAction != null)
+            {
+                _pauseAction.performed += OnPausePerformed;
+            }
+        }
+
+        private void UnsubscribeFromInput()
+        {
+            if (_pauseAction != null)
+            {
+                _pauseAction.performed -= OnPausePerformed;
+                _pauseAction = null;
+            }
+        }
+
+        private void OnPausePerformed(InputAction.CallbackContext context)
+        {
+            TogglePause();
         }
 
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)

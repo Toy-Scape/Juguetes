@@ -8,9 +8,11 @@ TagManager:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - Floor
+  - 
   - Water
   - UI
+  - Detection layer
+  - Obstacle Layer
   - vlight
   - 
   - 
@@ -50,3 +52,27 @@ TagManager:
   - Light Layer 5
   - Light Layer 6
   - Light Layer 7
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 

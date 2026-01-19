@@ -5,7 +5,7 @@ using UnityEditor;
 
 namespace BuildingMakerToolset {
     [CustomEditor( typeof( BMTSetInstaller ) )]
-    public class BMTSetInstallerEditor : Editor
+    public class BMTSetInstallerEditor : UnityEditor.Editor
     {
         bool setup = false;
         BMTSetInstaller tgt;
