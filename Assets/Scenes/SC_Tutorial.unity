@@ -884,7 +884,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4516770763501526864, guid: 2f4d7066f79d04545846e2c72f98062b, type: 3}
       propertyPath: detectionMask.m_Bits
-      value: 4294967295
+      value: 64
       objectReference: {fileID: 0}
     - target: {fileID: 5526814190655303919, guid: 2f4d7066f79d04545846e2c72f98062b, type: 3}
       propertyPath: m_LocalPosition.z
@@ -80497,7 +80497,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6641168232080197241, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1728560831}
   m_SourcePrefab: {fileID: 100100000, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
 --- !u!1001 &1609681451
 PrefabInstance:
@@ -81080,6 +81083,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.InputSystem::UnityEngine.InputSystem.PlayerInput
+--- !u!114 &1728560831
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 615313555}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d5dba0901c075445a012b12e2af523f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Domain.PlayerTarget
+  targetCenter: {fileID: 1728560815}
+  isValid: 1
 --- !u!1 &1730512417
 GameObject:
   m_ObjectHideFlags: 0
