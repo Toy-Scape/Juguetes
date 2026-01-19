@@ -51,8 +51,12 @@ namespace Assets.Scripts.PlayerController
         {
             if (!_ctx.Context.IsCrouching)
             {
-                // Check overhead obstruction before standing up? (Optional for now)
                 SwitchState(_factory.Idle());
+            }
+
+            if (!_ctx.Context.IsGrounded)
+            {
+                SwitchState(_factory.Fall());
             }
         }
 
