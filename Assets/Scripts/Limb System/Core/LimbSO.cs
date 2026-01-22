@@ -12,10 +12,12 @@ public class LimbSO : ScriptableObject
     public LimbSlot Slot;
     public Sprite LimbIcon;
     public GameObject LimbModel;
+    public string LimbNameOnModel => limbNameOnModel;
 
     [SerializeField] protected ActiveAbilitySO activeAbility;
     [SerializeField] protected SecondaryAbilitySO secondaryAbility;
     [SerializeField] protected PassiveAbilitySO passiveAbility;
+    [SerializeField] protected string limbNameOnModel;
 
     public void OnEquip(LimbContext context)
     {
