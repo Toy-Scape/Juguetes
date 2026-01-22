@@ -12,5 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77af596769cbb1f45927ec2c36579835, type: 3}
   m_Name: Empty Limb SO
   m_EditorClassIdentifier: Assembly-CSharp::LimbSO
-  LimbName: 
+  Slot: 0
   LimbIcon: {fileID: 21300000, guid: 42e5e5bd02af72b4d83d31e4a2c80d1d, type: 3}
+  LimbModel: {fileID: 0}
+  activeAbility: {fileID: 0}
+  secondaryAbility: {fileID: 0}
+  passiveAbility: {fileID: 0}
+  limbNameOnModel: Retopologia Brazos
