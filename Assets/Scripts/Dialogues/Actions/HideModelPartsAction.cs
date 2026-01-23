@@ -15,7 +15,7 @@ public class HideModelPartsAction : ActionBase
 
         foreach (var partName in partsToHide)
         {
-            Transform part = FindDeep(context.Speaker.transform, partName);
+            Transform part = context.Speaker.transform.FindDeep(partName);
 
             if (part != null)
             {
@@ -29,17 +29,4 @@ public class HideModelPartsAction : ActionBase
         }
     }
 
-    private Transform FindDeep (Transform parent, string name)
-    {
-        foreach (Transform child in parent)
-        {
-            if (child.name == name)
-                return child;
-
-            var result = FindDeep(child, name);
-            if (result != null)
-                return result;
-        }
-        return null;
-    }
 }
