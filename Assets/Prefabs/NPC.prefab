@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 5167083982082586349}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.473, z: 0.449}
+  m_LocalPosition: {x: 0, y: 0.473, z: 0.549}
   m_LocalScale: {x: 0.71509, y: 0.27168682, z: 0.27579}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -127,6 +127,10 @@ GameObject:
   - component: {fileID: 8795068699015775753}
   - component: {fileID: 4516770763501526864}
   - component: {fileID: 1863336926729558518}
+  - component: {fileID: 2304157306887355946}
+  - component: {fileID: 7587230670772671524}
+  - component: {fileID: 5558968117910044075}
+  - component: {fileID: 4225896569323459967}
   m_Layer: 0
   m_Name: NPC
   m_TagString: Untagged
@@ -144,7 +148,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -6.002648, y: -2.0103045, z: -0.43219596}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 12.630718, y: 12.630718, z: 12.630718}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5526814190655303919}
@@ -245,7 +249,7 @@ NavMeshAgent:
   m_AngularSpeed: 120
   m_StoppingDistance: 0
   m_AutoTraverseOffMeshLink: 1
-  m_AutoBraking: 1
+  m_AutoBraking: 0
   m_AutoRepath: 1
   m_Height: 2
   m_BaseOffset: 1
@@ -264,12 +268,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   patrolRoutes:
-  - {fileID: 11400000, guid: 7b29c211b5bfe60409b48792ce1b38b2, type: 2}
+  - {fileID: 11400000, guid: 5e7b37f2a56ee104a8f3d829d412c0d2, type: 2}
   randomRouteOnStart: 1
+  patrolSpeed: 5
+  chaseSpeed: 8
+  approachSpeed: 9
+  searchSpeed: 4
   vision: {fileID: 4516770763501526864}
-  detectionTime: 0.51
-  searchDuration: 5
-  searchRadius: 5
+  hearing: {fileID: 4225896569323459967}
+  detectionTime: 0.7
+  searchDuration: 20
+  searchRadius: 40
   onStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -279,6 +288,25 @@ MonoBehaviour:
   onTargetLost:
     m_PersistentCalls:
       m_Calls: []
+  onNoiseHeard:
+    m_PersistentCalls:
+      m_Calls: []
+  onStartChasing:
+    m_PersistentCalls:
+      m_Calls: []
+  onStartSearching:
+    m_PersistentCalls:
+      m_Calls: []
+  onReturnToPatrol:
+    m_PersistentCalls:
+      m_Calls: []
+  onReachPatrolPoint:
+    m_PersistentCalls:
+      m_Calls: []
+  onTargetCaught:
+    m_PersistentCalls:
+      m_Calls: []
+  catchDistance: 1.5
 --- !u!114 &4516770763501526864
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -291,16 +319,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7da8e55f20259948bbd88628a1a4895, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  viewRadius: 10
-  viewAngle: 61
-  eyeTransform: {fileID: 0}
-  eyeOffset: {x: 0, y: 1.5, z: 0}
+  viewRadius: 40
+  viewAngle: 140
+  eyeTransform: {fileID: 5526814190655303919}
+  eyeOffset: {x: 0, y: 0, z: 0}
   detectionMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   obstacleMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4294967295
 --- !u!114 &1863336926729558518
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -313,3 +341,55 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 615f77bb768e98b4d8a405b5a5cf9187, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &2304157306887355946
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7466885678434644253}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45876174453f4696a4477883edf233d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Infrastructure.NavMeshAgentAdapter
+--- !u!114 &7587230670772671524
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7466885678434644253}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bdd9366745b17884fa0773b48ad2b1bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Core.HearingSensor
+  hearingSensitivity: 1
+  hearingThreshold: 2
+--- !u!114 &5558968117910044075
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7466885678434644253}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45876174453f4696a4477883edf233d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Infrastructure.NavMeshAgentAdapter
+--- !u!114 &4225896569323459967
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7466885678434644253}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bdd9366745b17884fa0773b48ad2b1bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Core.HearingSensor
+  hearingSensitivity: 1
+  hearingThreshold: 2

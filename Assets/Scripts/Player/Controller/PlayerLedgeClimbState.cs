@@ -10,9 +10,9 @@ namespace Assets.Scripts.PlayerController
 
         public override void EnterState()
         {
-            _ctx.Animator.SetBool("IsClimbing", true);
+            _ctx.Animator.SetTrigger("Climb");
             _ctx.CharacterController.enabled = false;
-            _ctx.Animator.applyRootMotion = false; 
+            _ctx.Animator.applyRootMotion = false;
         }
 
         public override void UpdateState()
@@ -22,31 +22,46 @@ namespace Assets.Scripts.PlayerController
 
         public void FinishClimb()
         {
-            Vector3 targetXZ = _ctx.LedgePosition + (-_ctx.LedgeNormal * _ctx.Config.LedgeForwardOffset);
-            Vector3 finalPos = targetXZ;
+            var cc = _ctx.CharacterController;
 
-            if (Physics.Raycast(targetXZ + Vector3.up * 1.0f, Vector3.down, out RaycastHit hit, 2.0f))
+            float radius = cc.radius;
+            float height = cc.height;
+            float skin = cc.skinWidth;
+
+            float forwardOffset = _ctx.Config.LedgeForwardOffset + radius + 0.02f;
+            float upOffset = height * 0.5f + 1f;
+
+            Vector3 basePos = _ctx.LedgePosition + (-_ctx.LedgeNormal * forwardOffset);
+
+            Vector3 rayStart = basePos + Vector3.up * upOffset;
+            Vector3 finalPos = basePos;
+
+            if (Physics.Raycast(rayStart, Vector3.down, out RaycastHit hit, upOffset + 1f))
             {
-                finalPos = hit.point; 
+                finalPos = hit.point;
+                finalPos += Vector3.up * (skin + 1.02f);
+                finalPos += -_ctx.LedgeNormal * 0.02f;
             }
             else
             {
-                finalPos += Vector3.up * 0.1f; 
+                finalPos += Vector3.up * 0.1f;
             }
-            finalPos.y++;
+
             _ctx.transform.position = finalPos;
-            
+            _ctx.FreezeNearbyGrabbables(0.4f);
             SwitchState(_factory.Grounded());
         }
+
+
 
         public override void FixedUpdateState() { }
 
         public override void ExitState()
         {
-            _ctx.Animator.SetBool("IsClimbing", false);
             _ctx.CharacterController.enabled = true;
             _ctx.Animator.applyRootMotion = false; 
-            
+            _ctx.FreezeNearbyGrabbables(0.4f);
+
             if (_ctx.CharacterController.enabled)
             {
                 _ctx.CharacterController.Move(Vector3.down * 0.1f);

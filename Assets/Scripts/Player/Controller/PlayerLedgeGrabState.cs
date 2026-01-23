@@ -7,15 +7,18 @@ namespace Assets.Scripts.PlayerController
         private Vector3 _targetPos;
         private Quaternion _targetRot;
 
+        private bool _isClimbing = false;
+
         public PlayerLedgeGrabState(global::PlayerController currentContext, PlayerStateFactory playerStateFactory)
             : base(currentContext, playerStateFactory) { }
 
         public override void EnterState()
         {
+            _isClimbing = false;
             _ctx.Animator.SetBool("IsHanging", true);
-            _ctx.Animator.SetBool("IsFalling", false); // Clear conflicting state
-            _ctx.Animator.SetBool("IsJumping", false); // Clear conflicting state
-            _ctx.Animator.SetBool("IsGrounded", false); // Clear conflicting state
+            _ctx.Animator.SetBool("IsFalling", false); 
+            _ctx.Animator.SetBool("IsJumping", false); 
+            _ctx.Animator.SetBool("IsGrounded", false);
             
             _ctx.Context.Velocity = Vector3.zero;
             _ctx.Context.IsGrabbingLedge = true;
@@ -28,8 +31,8 @@ namespace Assets.Scripts.PlayerController
         public override void UpdateState()
         {
             // Snap to ledge
-            _ctx.transform.position = Vector3.Lerp(_ctx.transform.position, _targetPos, _ctx.Config.LedgeSnapSpeed * Time.deltaTime);
             _ctx.transform.rotation = Quaternion.Slerp(_ctx.transform.rotation, _targetRot, _ctx.Config.LedgeSnapSpeed * Time.deltaTime);
+            _ctx.transform.position = Vector3.Lerp(_ctx.transform.position, _targetPos, _ctx.Config.LedgeSnapSpeed * Time.deltaTime);
 
             CheckSwitchStates();
         }
@@ -40,25 +43,35 @@ namespace Assets.Scripts.PlayerController
         {
             _ctx.Animator.SetBool("IsHanging", false);
             _ctx.Context.IsGrabbingLedge = false;
-            _ctx.CharacterController.enabled = true;
-
-            // Force a small move to update isGrounded immediately after enabling
-            if (_ctx.CharacterController.enabled)
+            
+            if (!_isClimbing)
             {
-                _ctx.CharacterController.Move(Vector3.down * 0.01f);
+                _ctx.CharacterController.enabled = true;
+
+                if (_ctx.CharacterController.enabled)
+                {
+                    _ctx.CharacterController.Move(Vector3.down * 0.01f);
+                }
             }
         }
 
         public override void CheckSwitchStates()
         {
-            if (_ctx.Context.IsJumping)
+            if (_ctx.Context.IsCrouching)
             {
-                SwitchState(_factory.LedgeClimb());
-            }
-            else if (_ctx.Context.IsCrouching)
-            {
+                _ctx.FreezeNearbyGrabbables(0.4f);
+
                 _ctx.SetLedgeGrabCooldown(_ctx.Config.LedgeGrabCooldown);
-                SwitchState(_factory.Air()); // Switch to Air to apply gravity immediately
+                SwitchState(_factory.Air());
+            }
+            else if (_ctx.Context.IsJumping)
+            {
+                float dist = Vector3.Distance(_ctx.transform.position, _targetPos);
+                if (dist < 0.1f)
+                {
+                    _isClimbing = true;
+                    SwitchState(_factory.LedgeClimb());
+                }
             }
         }
 
