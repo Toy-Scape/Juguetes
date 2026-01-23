@@ -12,7 +12,7 @@ namespace Assets.Scripts.PlayerController
         {
             _ctx.Animator.SetBool("IsClimbing", true);
             _ctx.CharacterController.enabled = false;
-            _ctx.Animator.applyRootMotion = false; // Prevent animation from moving the transform
+            _ctx.Animator.applyRootMotion = false; 
         }
 
         public override void UpdateState()
@@ -22,18 +22,16 @@ namespace Assets.Scripts.PlayerController
 
         public void FinishClimb()
         {
-            // Calculate target position (forward from ledge)
             Vector3 targetXZ = _ctx.LedgePosition + (-_ctx.LedgeNormal * _ctx.Config.LedgeForwardOffset);
             Vector3 finalPos = targetXZ;
 
-            // Raycast to find exact floor height to prevent bouncing/falling
             if (Physics.Raycast(targetXZ + Vector3.up * 1.0f, Vector3.down, out RaycastHit hit, 2.0f))
             {
-                finalPos = hit.point; // Snap exactly to floor
+                finalPos = hit.point; 
             }
             else
             {
-                finalPos += Vector3.up * 0.1f; // Fallback
+                finalPos += Vector3.up * 0.1f; 
             }
             finalPos.y++;
             _ctx.transform.position = finalPos;
@@ -47,16 +45,15 @@ namespace Assets.Scripts.PlayerController
         {
             _ctx.Animator.SetBool("IsClimbing", false);
             _ctx.CharacterController.enabled = true;
-            _ctx.Animator.applyRootMotion = false; // Ensure code continues to drive movement
+            _ctx.Animator.applyRootMotion = false; 
             
             if (_ctx.CharacterController.enabled)
             {
-                // Force a significant move down to ensure isGrounded updates immediately
                 _ctx.CharacterController.Move(Vector3.down * 0.1f);
             }
         }
 
-        public override void CheckSwitchStates() { } // No exit until climb finishes
+        public override void CheckSwitchStates() { } 
 
         public override void InitializeSubState() { }
     }

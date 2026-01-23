@@ -328,6 +328,29 @@ public class PlayerController : MonoBehaviour
     }
     #endregion
 
+    #region Wall Climb Detection
+    public Vector3 WallPosition { get; private set; }
+    public Vector3 WallNormal { get; private set; }
+
+    public bool CheckForWall()
+    {
+        if (Context.IsGrounded) return false;
+
+        Vector3 origin = transform.position + Vector3.up * 1f; // Check from center/chest height
+        
+        if (Physics.Raycast(origin, transform.forward, out RaycastHit hit, Config.WallClimbDetectionDistance))
+        {
+            if (hit.collider.GetComponent<ClimbableWall>() != null)
+            {
+                WallPosition = hit.point;
+                WallNormal = hit.normal;
+                return true;
+            }
+        }
+        return false;
+    }
+    #endregion
+
     #region Animation Events
     public void FinishLedgeClimb ()
     {

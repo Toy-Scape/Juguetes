@@ -46,6 +46,10 @@ namespace Assets.Scripts.PlayerController
             {
                 SwitchState(_factory.LedgeGrab());
             }
+            else if (_ctx.CheckForWall())
+            {
+                SwitchState(_factory.WallClimb());
+            }
         }
 
         public override void InitializeSubState()

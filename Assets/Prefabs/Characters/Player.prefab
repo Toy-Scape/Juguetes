@@ -289,11 +289,11 @@ GameObject:
   - component: {fileID: 3434473845669599158}
   - component: {fileID: 1800428321446316545}
   - component: {fileID: 6611762367846655109}
-  - component: {fileID: 4732019926696608271}
   - component: {fileID: 4688945857383318680}
   - component: {fileID: 7245646265383527828}
   - component: {fileID: 1143079539005282384}
   - component: {fileID: 7793382085548487143}
+  - component: {fileID: 6167294666727990222}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -403,6 +403,8 @@ MonoBehaviour:
     ledgeForwardOffset: 0.5
     ledgeGrabCooldown: 0.5
     climbDuration: 1
+    wallClimbSpeed: 3
+    wallClimbDetectionDistance: 0.6
   promptWorldOffset: {x: 0, y: 2.41, z: 0}
 --- !u!114 &8113327342456687462
 MonoBehaviour:
@@ -655,59 +657,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71961f7d71c87a04d9f50426eed98dbe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GamepadVibration
---- !u!114 &4732019926696608271
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6641168232080197241}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 180ecf9b41d478f468eb3e9083753217, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineImpulseSource
-  ImpulseDefinition:
-    ImpulseChannel: 1
-    ImpulseShape: 2
-    CustomImpulseShape:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    ImpulseDuration: 0.2
-    ImpulseType: 0
-    DissipationRate: 0.25
-    RawSignal: {fileID: 0}
-    AmplitudeGain: 1
-    FrequencyGain: 1
-    RepeatMode: 0
-    Randomize: 1
-    TimeEnvelope:
-      AttackShape:
-        serializedVersion: 2
-        m_Curve: []
-        m_PreInfinity: 2
-        m_PostInfinity: 2
-        m_RotationOrder: 4
-      DecayShape:
-        serializedVersion: 2
-        m_Curve: []
-        m_PreInfinity: 2
-        m_PostInfinity: 2
-        m_RotationOrder: 4
-      AttackTime: 0
-      SustainTime: 0.2
-      DecayTime: 0.7
-      ScaleWithImpact: 1
-      HoldForever: 0
-    ImpactRadius: 100
-    DirectionMode: 0
-    DissipationMode: 2
-    DissipationDistance: 100
-    PropagationSpeed: 343
-  DefaultVelocity: {x: 0, y: -0.3, z: 0}
 --- !u!95 &4688945857383318680
 Animator:
   serializedVersion: 7
@@ -827,6 +776,8 @@ MonoBehaviour:
     ledgeForwardOffset: 1
     ledgeGrabCooldown: 1
     climbDuration: 1
+    wallClimbSpeed: 3
+    wallClimbDetectionDistance: 0.6
   cameraTransform: {fileID: 0}
   TMPPlayerState: {fileID: 0}
   playerAnimator: {fileID: 4688945857383318680}
@@ -843,6 +794,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49faa08c9170e724cbbafae06e867807, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CheckpointSystem.PlayerRespawn
+--- !u!114 &6167294666727990222
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6641168232080197241}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d5dba0901c075445a012b12e2af523f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Domain.PlayerTarget
+  targetCenter: {fileID: 883425338343852037}
+  isValid: 1
 --- !u!1 &8468029186425840670
 GameObject:
   m_ObjectHideFlags: 0
@@ -882,10 +847,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8908092247317713429}
     m_Modifications:
-    - target: {fileID: 5866666021909216657, guid: 961b023786da0a34897a537b56ab9c5d, type: 3}
-      propertyPath: m_Controller
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 43ad4b06954007c40a89c88bb7ba7f09, type: 3}
       propertyPath: m_LocalRotation.w
       value: 1
@@ -921,6 +882,10 @@ PrefabInstance:
     - target: {fileID: 2776956682711762759, guid: 43ad4b06954007c40a89c88bb7ba7f09, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5866666021909216657, guid: 961b023786da0a34897a537b56ab9c5d, type: 3}
+      propertyPath: m_Controller
+      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 5866666021909216657, guid: 43ad4b06954007c40a89c88bb7ba7f09, type: 3}
