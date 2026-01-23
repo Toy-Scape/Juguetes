@@ -40,7 +40,7 @@ namespace Assets.Scripts.PlayerController
             {
                 SwitchState(_factory.LedgeGrab());
             }
-            else if (_ctx.CheckForWall())
+            else if (_ctx.CheckForWall() && _ctx.Context.MoveInput.y > 0.1f)
             {
                 SwitchState(_factory.WallClimb());
             }

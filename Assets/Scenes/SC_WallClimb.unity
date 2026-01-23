@@ -132,6 +132,7 @@ GameObject:
   - component: {fileID: 347904775}
   - component: {fileID: 347904774}
   - component: {fileID: 347904773}
+  - component: {fileID: 347904778}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -243,6 +244,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &347904778
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 347904772}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8053da89ceb9d3c42a4c57d885a47a91, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LedgeGrabSurface
 --- !u!114 &376145209 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8113327342456687462, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
@@ -711,6 +724,10 @@ PrefabInstance:
       propertyPath: radialMenu
       value: 
       objectReference: {fileID: 1572978466}
+    - target: {fileID: 4688945857383318680, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 6fc4b904bbe6d994089d9af0964c014c, type: 2}
     - target: {fileID: 6641168232080197241, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
       propertyPath: m_Name
       value: Player

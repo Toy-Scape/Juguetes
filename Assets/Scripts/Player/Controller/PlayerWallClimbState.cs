@@ -24,6 +24,9 @@ namespace Assets.Scripts.PlayerController
         {
             Vector2 input = _ctx.Context.MoveInput;
             
+            _ctx.Animator.SetFloat("ClimbHorizontal", input.x);
+            _ctx.Animator.SetFloat("ClimbVertical", input.y);
+            
             // Movement relative to wall
             Vector3 wallRight = Vector3.Cross(_ctx.WallNormal, Vector3.up).normalized;
             // Depending on wall normal, cross product direction might need flip.
