@@ -37,8 +37,7 @@ public class LimbManager : MonoBehaviour
             CanSwimVar = contextVariables.canSwimVar,
             IsAimingVar = contextVariables.isAimingVar
         };
-
-        RefreshVisuals();
+        equippedLimb = DefaultLimb;
     }
 
     public void EquipLimb(LimbSO newLimb)
@@ -48,48 +47,14 @@ public class LimbManager : MonoBehaviour
         if (equippedLimb != null)
         {
             equippedLimb.OnUnequip(context);
+            this.transform.FindDeep(equippedLimb.LimbNameOnModel)?.gameObject.SetActive(false);
             context.Reset();
         }
 
         equippedLimb = newLimb;
         equippedLimb.OnEquip(context);
+        this.transform.FindDeep(equippedLimb.LimbNameOnModel)?.gameObject.SetActive(true);
 
-        RefreshVisuals();
-    }
-
-    private void RefreshVisuals()
-    {
-        foreach (var socket in limbSockets)
-        {
-            LimbSO limbForSocket = socket.DefaultLimb;
-
-            if (equippedLimb != null && equippedLimb.Slot == socket.Slot)
-            {
-                limbForSocket = equippedLimb;
-            }
-
-            UpdateSocketModel(socket, limbForSocket);
-        }
-    }
-
-    private void UpdateSocketModel(LimbSocketDefinition socket, LimbSO limb)
-    {
-        if (spawnedLimbModels.ContainsKey(socket.Slot))
-        {
-            if (spawnedLimbModels[socket.Slot] != null)
-            {
-                Destroy(spawnedLimbModels[socket.Slot]);
-            }
-            spawnedLimbModels.Remove(socket.Slot);
-        }
-
-        LimbSO limbToSpawn = limb != null ? limb : socket.DefaultLimb;
-
-        if (limbToSpawn != null && limbToSpawn.LimbModel != null && socket.SocketTransform != null)
-        {
-            var model = Instantiate(limbToSpawn.LimbModel, socket.SocketTransform);
-            spawnedLimbModels[socket.Slot] = model;
-        }
     }
 
     public void UseActive() => equippedLimb?.UseActive(context);

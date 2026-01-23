@@ -67,6 +67,7 @@ namespace UI_System.Menus
             }
             // Fallback if InputMapManager is not present (e.g. testing Menu scene alone without bootstrap)
             // ... already handled above
+            FindFirstObjectByType<MenuMusicFader>()?.FadeIn();
         }
 
         private void OnDestroy()
@@ -115,6 +116,7 @@ namespace UI_System.Menus
         {
             // Unload this scene (SC_Menus) to resume the game
             // The GamePauseHandler in the game scene will detect the unload and resume time.
+            FindFirstObjectByType<MenuMusicFader>()?.FadeOutAndStop();
             SceneManager.UnloadSceneAsync(gameObject.scene);
         }
 

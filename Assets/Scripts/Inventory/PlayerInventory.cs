@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Inventory.UI;
+using UI_System.Menus;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
@@ -62,6 +63,8 @@ namespace Inventory
 
         private void OnToggleInventory()
         {
+            if (GamePauseHandler.IsPaused) return;
+
             if (DialogueBox.Instance != null && DialogueBox.Instance.IsOpen) return;
 
             if (TryGetOrCacheUI(out var ui))

@@ -1,4 +1,6 @@
 using Assets.Scripts.PlayerController;
+using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -259,7 +261,7 @@ public class PlayerController : MonoBehaviour
         {
             SetPickState(grabInteractor.IsPicking);
         }
-        else if (grabInteractor.TryGrab())
+        else if (Context.IsGrounded && grabInteractor.TryGrab())
         {
             SetGrabState(true, grabInteractor.CurrentResistance, grabInteractor.GrabbedObjectTransform);
         }
@@ -326,6 +328,52 @@ public class PlayerController : MonoBehaviour
         }
         return false;
     }
+
+
+    private Coroutine _freezeGrabbablesCoroutine;
+public void FreezeNearbyGrabbables(float duration)
+{
+    if (_freezeGrabbablesCoroutine != null)
+        StopCoroutine(_freezeGrabbablesCoroutine);
+    
+    _freezeGrabbablesCoroutine = StartCoroutine(FreezeGrabbablesCoroutine(duration));
+}
+private IEnumerator FreezeGrabbablesCoroutine(float duration)
+{
+    float radius = 2f; // Radio de detección
+    Collider[] hits = Physics.OverlapSphere(transform.position, radius);
+    
+    List<(Grabbable, bool)> frozenObjects = new List<(Grabbable, bool)>();
+    
+    foreach (var hit in hits)
+    {
+        var grabbable = hit.GetComponent<Grabbable>();
+        if (grabbable != null)
+        {
+            var rb = grabbable.GetComponent<Rigidbody>();
+            if (rb != null)
+            {
+                frozenObjects.Add((grabbable, rb.isKinematic));
+                
+                rb.isKinematic = true;
+            }
+        }
+    }
+    
+    yield return new WaitForSeconds(duration);
+    
+    // Restaurar constraints
+    foreach (var (grabbable, originalKinematic) in frozenObjects)
+    {
+        var rb = grabbable.GetComponent<Rigidbody>();
+        if (rb != null)
+        {
+            rb.isKinematic = originalKinematic;
+        }
+    }
+    
+    _freezeGrabbablesCoroutine = null;
+}
     #endregion
 
     #region Animation Events
