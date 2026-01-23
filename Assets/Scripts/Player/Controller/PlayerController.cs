@@ -353,7 +353,6 @@ private IEnumerator FreezeGrabbablesCoroutine(float duration)
             var rb = grabbable.GetComponent<Rigidbody>();
             if (rb != null)
             {
-                // Guardar constraints originales
                 frozenObjects.Add((grabbable, rb.isKinematic));
                 
                 rb.isKinematic = true;

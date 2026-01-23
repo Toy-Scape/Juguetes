@@ -7,15 +7,20 @@ namespace Assets.Scripts.PlayerController
         public PlayerFallState(global::PlayerController currentContext, PlayerStateFactory playerStateFactory)
             : base(currentContext, playerStateFactory) { }
 
+        private float _airSpeed;
+
         public override void EnterState()
         {
             _ctx.Animator.SetBool("IsFalling", true);
+            
+            float currentLimit = new Vector3(_ctx.Context.Velocity.x, 0, _ctx.Context.Velocity.z).magnitude;
+            _airSpeed = Mathf.Max(currentLimit, _ctx.Config.WalkSpeed);
         }
 
         public override void UpdateState()
         {
             CheckSwitchStates();
-            _ctx.HandleMovement(_ctx.Config.WalkSpeed); // Air control
+            _ctx.HandleMovement(_airSpeed); 
         }
 
         public override void FixedUpdateState() { }

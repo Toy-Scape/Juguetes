@@ -14,7 +14,8 @@ public static class TransformExtensions
             if (child.name == name)
                 return child;
 
-            var result = FindDeep(child, name);
+            var result = child.FindDeep(name);
+
             if (result != null)
                 return result;
         }
