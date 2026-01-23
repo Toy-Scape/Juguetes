@@ -1,7 +1,6 @@
 using UnityEngine;
 using UnityEditor;
 using UnityEditor.Animations;
-using System.Collections.Generic;
 
 namespace Assets.Scripts.PlayerController.Editor
 {
@@ -15,34 +14,40 @@ namespace Assets.Scripts.PlayerController.Editor
         private AnimationClip crouchIdleClip;
         private AnimationClip crouchWalkClip;
         private AnimationClip hangClip;
-        private AnimationClip climbClip;
-        private AnimationClip grabClip; // Push/Pull
-        private AnimationClip pickClip; // Carry
+        private AnimationClip standClip;
 
-        private string controllerName = "AntiGravityAnimator";
+        private AnimationClip grabIdleClip;
+        private AnimationClip grabPullClip;
+        private AnimationClip grabPushClip;
+
+        private AnimationClip pickIdleClip;
+        private AnimationClip pickWalkClip;
+        private AnimationClip pickRunClip;
+
+        private AnimationClip climbIdleClip;
+        private AnimationClip climbUpClip;
+        private AnimationClip climbDownClip;
+        private AnimationClip climbLeftClip;
+        private AnimationClip climbRightClip;
+
+        private string controllerName = "PlayerAnimator";
         private string savePath = "Assets";
         private RuntimeAnimatorController existingController;
 
-        [MenuItem("Tools/Create AntiGravity Animator")]
-        public static void ShowWindow()
+        [MenuItem("Tools/Create Animator")]
+        public static void ShowWindow ()
         {
             GetWindow<AnimatorCreator>("Animator Creator");
         }
 
-        private void OnGUI()
+        private void OnGUI ()
         {
-            GUILayout.Label("Create AntiGravity Animator Controller", EditorStyles.boldLabel);
-            
-            EditorGUILayout.Space();
-            GUILayout.Label("Load Existing (Optional)", EditorStyles.boldLabel);
+            GUILayout.Label("Create Animator Controller", EditorStyles.boldLabel);
+
             existingController = (RuntimeAnimatorController)EditorGUILayout.ObjectField("Existing Controller", existingController, typeof(RuntimeAnimatorController), false);
             if (GUILayout.Button("Load from Controller") && existingController != null)
-            {
                 LoadFromController();
-            }
 
-            EditorGUILayout.Space();
-            GUILayout.Label("Controller Settings", EditorStyles.boldLabel);
             controllerName = EditorGUILayout.TextField("Controller Name", controllerName);
 
             EditorGUILayout.BeginHorizontal();
@@ -53,211 +58,243 @@ namespace Assets.Scripts.PlayerController.Editor
                 if (!string.IsNullOrEmpty(absPath))
                 {
                     if (absPath.StartsWith(Application.dataPath))
-                    {
                         savePath = "Assets" + absPath.Substring(Application.dataPath.Length);
-                    }
-                    else
-                    {
-                        Debug.LogError("Please select a folder inside the Assets directory.");
-                    }
                 }
             }
             EditorGUILayout.EndHorizontal();
 
-            EditorGUILayout.Space();
             GUILayout.Label("Grounded (Blend Tree)", EditorStyles.boldLabel);
             idleClip = (AnimationClip)EditorGUILayout.ObjectField("Idle", idleClip, typeof(AnimationClip), false);
             walkClip = (AnimationClip)EditorGUILayout.ObjectField("Walk", walkClip, typeof(AnimationClip), false);
             runClip = (AnimationClip)EditorGUILayout.ObjectField("Run", runClip, typeof(AnimationClip), false);
 
-            EditorGUILayout.Space();
             GUILayout.Label("Crouch (Blend Tree)", EditorStyles.boldLabel);
             crouchIdleClip = (AnimationClip)EditorGUILayout.ObjectField("Crouch Idle", crouchIdleClip, typeof(AnimationClip), false);
             crouchWalkClip = (AnimationClip)EditorGUILayout.ObjectField("Crouch Walk", crouchWalkClip, typeof(AnimationClip), false);
 
-            EditorGUILayout.Space();
             GUILayout.Label("Air", EditorStyles.boldLabel);
             jumpClip = (AnimationClip)EditorGUILayout.ObjectField("Jump", jumpClip, typeof(AnimationClip), false);
             fallClip = (AnimationClip)EditorGUILayout.ObjectField("Fall", fallClip, typeof(AnimationClip), false);
 
-            EditorGUILayout.Space();
             GUILayout.Label("Ledge", EditorStyles.boldLabel);
             hangClip = (AnimationClip)EditorGUILayout.ObjectField("Hanging", hangClip, typeof(AnimationClip), false);
-            climbClip = (AnimationClip)EditorGUILayout.ObjectField("Climb", climbClip, typeof(AnimationClip), false);
+            standClip = (AnimationClip)EditorGUILayout.ObjectField("Standing", standClip, typeof(AnimationClip), false);
 
-            EditorGUILayout.Space();
-            GUILayout.Label("Interaction", EditorStyles.boldLabel);
-            grabClip = (AnimationClip)EditorGUILayout.ObjectField("Grab (Push/Pull)", grabClip, typeof(AnimationClip), false);
-            pickClip = (AnimationClip)EditorGUILayout.ObjectField("Pick (Carry)", pickClip, typeof(AnimationClip), false);
+            GUILayout.Label("Wall Climb (Blend Tree 2D)", EditorStyles.boldLabel);
+            climbIdleClip = (AnimationClip)EditorGUILayout.ObjectField("Climb Idle", climbIdleClip, typeof(AnimationClip), false);
+            climbUpClip = (AnimationClip)EditorGUILayout.ObjectField("Climb Up", climbUpClip, typeof(AnimationClip), false);
+            climbDownClip = (AnimationClip)EditorGUILayout.ObjectField("Climb Down", climbDownClip, typeof(AnimationClip), false);
+            climbLeftClip = (AnimationClip)EditorGUILayout.ObjectField("Climb Left", climbLeftClip, typeof(AnimationClip), false);
+            climbRightClip = (AnimationClip)EditorGUILayout.ObjectField("Climb Right", climbRightClip, typeof(AnimationClip), false);
 
-            EditorGUILayout.Space();
+            GUILayout.Label("Grab (Blend Tree)", EditorStyles.boldLabel);
+            grabIdleClip = (AnimationClip)EditorGUILayout.ObjectField("Grab Idle", grabIdleClip, typeof(AnimationClip), false);
+            grabPullClip = (AnimationClip)EditorGUILayout.ObjectField("Grab Pull", grabPullClip, typeof(AnimationClip), false);
+            grabPushClip = (AnimationClip)EditorGUILayout.ObjectField("Grab Push", grabPushClip, typeof(AnimationClip), false);
+
+            GUILayout.Label("Pick (Blend Tree)", EditorStyles.boldLabel);
+            pickIdleClip = (AnimationClip)EditorGUILayout.ObjectField("Pick Idle", pickIdleClip, typeof(AnimationClip), false);
+            pickWalkClip = (AnimationClip)EditorGUILayout.ObjectField("Pick Walk", pickWalkClip, typeof(AnimationClip), false);
+            pickRunClip = (AnimationClip)EditorGUILayout.ObjectField("Pick Run", pickRunClip, typeof(AnimationClip), false);
+
             if (GUILayout.Button("Generate Controller"))
-            {
                 CreateController();
-            }
         }
 
-        private void LoadFromController()
+        private void LoadFromController ()
         {
-            if (existingController == null) return;
-
             AnimatorController ac = existingController as AnimatorController;
-            if (ac == null)
-            {
-                Debug.LogError("Selected controller is not an AnimatorController asset.");
-                return;
-            }
+            if (ac == null) return;
 
-            controllerName = ac.name; // Auto-fill name
-            
-            // Assuming layer 0
+            controllerName = ac.name;
             if (ac.layers.Length == 0) return;
+
             AnimatorStateMachine sm = ac.layers[0].stateMachine;
 
-            foreach (var state in sm.states)
+            foreach (var s in sm.states)
             {
-                string name = state.state.name;
-                Motion motion = state.state.motion;
+                string name = s.state.name;
+                Motion m = s.state.motion;
 
-                if (name == "Jump") jumpClip = motion as AnimationClip;
-                else if (name == "Fall") fallClip = motion as AnimationClip;
-                else if (name == "Hanging") hangClip = motion as AnimationClip;
-                else if (name == "Climb") climbClip = motion as AnimationClip;
-                else if (name == "Grab") grabClip = motion as AnimationClip;
-                else if (name == "Pick") pickClip = motion as AnimationClip;
-                else if (name == "Grounded" && motion is BlendTree groundedTree)
+                if (name == "Jump") jumpClip = m as AnimationClip;
+                else if (name == "Fall") fallClip = m as AnimationClip;
+                else if (name == "Hanging") hangClip = m as AnimationClip;
+                else if (name == "Standing") standClip = m as AnimationClip;
+
+                else if (name == "Grounded" && m is BlendTree gt)
                 {
-                    var children = groundedTree.children;
-                    if (children.Length > 0) idleClip = children[0].motion as AnimationClip;
-                    if (children.Length > 1) walkClip = children[1].motion as AnimationClip;
-                    if (children.Length > 2) runClip = children[2].motion as AnimationClip;
+                    var c = gt.children;
+                    if (c.Length > 0) idleClip = c[0].motion as AnimationClip;
+                    if (c.Length > 1) walkClip = c[1].motion as AnimationClip;
+                    if (c.Length > 2) runClip = c[2].motion as AnimationClip;
                 }
-                else if (name == "Crouch" && motion is BlendTree crouchTree)
+
+                else if (name == "Crouch" && m is BlendTree ct)
                 {
-                    var children = crouchTree.children;
-                    if (children.Length > 0) crouchIdleClip = children[0].motion as AnimationClip;
-                    if (children.Length > 1) crouchWalkClip = children[1].motion as AnimationClip;
+                    var c = ct.children;
+                    if (c.Length > 0) crouchIdleClip = c[0].motion as AnimationClip;
+                    if (c.Length > 1) crouchWalkClip = c[1].motion as AnimationClip;
+                }
+
+                else if (name == "Grab" && m is BlendTree grabTree)
+                {
+                    foreach (var child in grabTree.children)
+                    {
+                        if (Mathf.Approximately(child.threshold, 0f)) grabIdleClip = child.motion as AnimationClip;
+                        else if (child.threshold < 0f) grabPullClip = child.motion as AnimationClip;
+                        else if (child.threshold > 0f) grabPushClip = child.motion as AnimationClip;
+                    }
+                }
+
+                else if (name == "Pick" && m is BlendTree pickTree)
+                {
+                    foreach (var child in pickTree.children)
+                    {
+                        if (Mathf.Approximately(child.threshold, 0f)) pickIdleClip = child.motion as AnimationClip;
+                        else if (Mathf.Approximately(child.threshold, 0.5f)) pickWalkClip = child.motion as AnimationClip;
+                        else if (Mathf.Approximately(child.threshold, 1f)) pickRunClip = child.motion as AnimationClip;
+                    }
+                }
+
+                else if (name == "Climb" && m is BlendTree climbTree)
+                {
+                    foreach (var child in climbTree.children)
+                    {
+                        Vector2 pos = child.position;
+
+                        if (pos == Vector2.zero) climbIdleClip = child.motion as AnimationClip;
+                        else if (pos == new Vector2(0f, 1f)) climbUpClip = child.motion as AnimationClip;
+                        else if (pos == new Vector2(0f, -1f)) climbDownClip = child.motion as AnimationClip;
+                        else if (pos == new Vector2(1f, 0f)) climbRightClip = child.motion as AnimationClip;
+                        else if (pos == new Vector2(-1f, 0f)) climbLeftClip = child.motion as AnimationClip;
+                    }
                 }
             }
-
-            Debug.Log("Loaded configuration from " + ac.name);
         }
 
-        private void CreateController()
+        private void CreateController ()
         {
             string path = $"{savePath}/{controllerName}.controller";
             AnimatorController controller = AnimatorController.CreateAnimatorControllerAtPath(path);
 
-            // Parameters
             controller.AddParameter("Speed", AnimatorControllerParameterType.Float);
+            controller.AddParameter("CarrySpeed", AnimatorControllerParameterType.Float);
+            controller.AddParameter("GrabSpeed", AnimatorControllerParameterType.Float);
             controller.AddParameter("IsGrounded", AnimatorControllerParameterType.Bool);
             controller.AddParameter("IsJumping", AnimatorControllerParameterType.Bool);
             controller.AddParameter("IsFalling", AnimatorControllerParameterType.Bool);
             controller.AddParameter("IsCrouching", AnimatorControllerParameterType.Bool);
             controller.AddParameter("IsHanging", AnimatorControllerParameterType.Bool);
-            controller.AddParameter("IsClimbing", AnimatorControllerParameterType.Bool);
             controller.AddParameter("IsGrabbing", AnimatorControllerParameterType.Bool);
             controller.AddParameter("IsPicking", AnimatorControllerParameterType.Bool);
+            controller.AddParameter("Climb", AnimatorControllerParameterType.Trigger);
+            controller.AddParameter("Stand", AnimatorControllerParameterType.Trigger);
+            controller.AddParameter("ClimbVertical", AnimatorControllerParameterType.Float);
+            controller.AddParameter("ClimbHorizontal", AnimatorControllerParameterType.Float);
 
-            // State Machine
-            AnimatorStateMachine rootStateMachine = controller.layers[0].stateMachine;
+            AnimatorStateMachine root = controller.layers[0].stateMachine;
 
-            // 1. Grounded Blend Tree
             BlendTree groundedTree;
             AnimatorState groundedState = controller.CreateBlendTreeInController("Grounded", out groundedTree);
             groundedTree.blendParameter = "Speed";
-            if (idleClip) groundedTree.AddChild(idleClip, 0);
-            if (walkClip) groundedTree.AddChild(walkClip, 4);
-            if (runClip) groundedTree.AddChild(runClip, 8);
+            groundedTree.AddChild(idleClip, 0f);
+            groundedTree.AddChild(walkClip, 4f);
+            groundedTree.AddChild(runClip, 8f);
 
-            // 2. Crouch Blend Tree
             BlendTree crouchTree;
             AnimatorState crouchState = controller.CreateBlendTreeInController("Crouch", out crouchTree);
             crouchTree.blendParameter = "Speed";
-            if (crouchIdleClip) crouchTree.AddChild(crouchIdleClip, 0);
-            if (crouchWalkClip) crouchTree.AddChild(crouchWalkClip, 2);
+            crouchTree.AddChild(crouchIdleClip, 0f);
+            crouchTree.AddChild(crouchWalkClip, 2f);
 
-            // 3. Air States
-            AnimatorState jumpState = rootStateMachine.AddState("Jump");
+            AnimatorState jumpState = root.AddState("Jump");
             jumpState.motion = jumpClip;
-            AnimatorState fallState = rootStateMachine.AddState("Fall");
+
+            AnimatorState fallState = root.AddState("Fall");
             fallState.motion = fallClip;
 
-            // 4. Ledge States
-            AnimatorState hangState = rootStateMachine.AddState("Hanging");
+            AnimatorState hangState = root.AddState("Hanging");
             hangState.motion = hangClip;
-            AnimatorState climbState = rootStateMachine.AddState("Climb");
-            climbState.motion = climbClip;
 
-            // 5. Interaction States
-            AnimatorState grabState = rootStateMachine.AddState("Grab");
-            grabState.motion = grabClip;
-            
-            AnimatorState pickState = rootStateMachine.AddState("Pick");
-            pickState.motion = pickClip;
+            BlendTree climbTree;
+            AnimatorState climbState = controller.CreateBlendTreeInController("Climb", out climbTree);
+            climbTree.blendType = BlendTreeType.FreeformDirectional2D;
+            climbTree.blendParameter = "ClimbHorizontal";
+            climbTree.blendParameterY = "ClimbVertical";
+            climbTree.AddChild(climbIdleClip, new Vector2(0f, 0f));
+            climbTree.AddChild(climbUpClip, new Vector2(0f, 1f));
+            climbTree.AddChild(climbDownClip, new Vector2(0f, -1f));
+            climbTree.AddChild(climbRightClip, new Vector2(1f, 0f));
+            climbTree.AddChild(climbLeftClip, new Vector2(-1f, 0f));
 
-            // --- Transitions ---
-            
-            // Grounded <-> Crouch
+            AnimatorState standState = root.AddState("Standing");
+            standState.motion = standClip;
+
+            BlendTree grabTree;
+            AnimatorState grabState = controller.CreateBlendTreeInController("Grab", out grabTree);
+            grabTree.blendParameter = "GrabSpeed";
+            grabTree.AddChild(grabPullClip, -1f);
+            grabTree.AddChild(grabIdleClip, 0f);
+            grabTree.AddChild(grabPushClip, 1f);
+
+            BlendTree pickTree;
+            AnimatorState pickState = controller.CreateBlendTreeInController("Pick", out pickTree);
+            pickTree.blendParameter = "CarrySpeed";
+            pickTree.AddChild(pickIdleClip, 0f);
+            pickTree.AddChild(pickWalkClip, 0.5f);
+            pickTree.AddChild(pickRunClip, 1f);
+
             AddTransition(groundedState, crouchState, "IsCrouching", true, 0.1f);
             AddTransition(crouchState, groundedState, "IsCrouching", false, 0.1f);
 
-            // Grounded -> Jump
             AddTransition(groundedState, jumpState, "IsJumping", true, 0.1f);
-            
-            // Grounded -> Fall (Walk off ledge)
             AddTransition(groundedState, fallState, "IsGrounded", false, 0.1f);
 
-            // Jump -> Fall
             AddTransition(jumpState, fallState, "IsFalling", true, 0.1f);
-
-            // Fall -> Grounded
             AddTransition(fallState, groundedState, "IsGrounded", true, 0.1f);
-            
-            // Any -> Hanging (Ledge Grab)
-            AnimatorStateTransition toHang = rootStateMachine.AddAnyStateTransition(hangState);
-            toHang.AddCondition(AnimatorConditionMode.If, 0, "IsHanging");
-            toHang.duration = 0.1f;
-            toHang.hasExitTime = false;
 
-            // Hanging -> Climb
-            AddTransition(hangState, climbState, "IsClimbing", true, 0.1f);
+            AddTransition(jumpState, hangState, "IsHanging", true, 0.1f);
+            AddTransition(fallState, hangState, "IsHanging", true, 0.1f);
 
-            // Hanging -> Fall (Drop)
-            AnimatorStateTransition dropTrans = hangState.AddTransition(fallState);
-            dropTrans.AddCondition(AnimatorConditionMode.IfNot, 0, "IsHanging");
-            dropTrans.AddCondition(AnimatorConditionMode.IfNot, 0, "IsClimbing"); // Don't drop if we are climbing
-            dropTrans.duration = 0.1f;
-            dropTrans.hasExitTime = false;
+            AddTransitionWithTrigger(hangState, climbState, "Climb", 0.1f);
 
-            // Climb -> Grounded (End of climb)
-            AddTransition(climbState, groundedState, "IsClimbing", false, 0.1f);
+            var drop = hangState.AddTransition(fallState);
+            drop.AddCondition(AnimatorConditionMode.IfNot, 0, "IsHanging");
+            drop.duration = 0.1f;
+            drop.hasExitTime = false;
 
-            // --- Interaction Transitions ---
+            AddTransitionWithTrigger(climbState, standState, "Stand", 0.1f);
 
-            // Grounded <-> Grab (Push/Pull)
+            var standToGrounded = standState.AddTransition(groundedState);
+            standToGrounded.hasExitTime = true;
+            standToGrounded.exitTime = 0.9f;
+            standToGrounded.duration = 0.1f;
+
             AddTransition(groundedState, grabState, "IsGrabbing", true, 0.1f);
             AddTransition(grabState, groundedState, "IsGrabbing", false, 0.1f);
 
-            // Grounded <-> Pick (Carry)
-            // Note: If Pick is a single clip, walking will look weird unless it's an upper body mask.
-            // But we implement the state transition here as requested.
             AddTransition(groundedState, pickState, "IsPicking", true, 0.1f);
             AddTransition(pickState, groundedState, "IsPicking", false, 0.1f);
 
-            // Set Default
-            rootStateMachine.defaultState = groundedState;
+            root.defaultState = groundedState;
 
             AssetDatabase.SaveAssets();
-            Debug.Log($"Animator Controller created at {path}");
         }
 
-        private void AddTransition(AnimatorState from, AnimatorState to, string param, bool value, float duration)
+        private void AddTransition (AnimatorState from, AnimatorState to, string param, bool value, float duration)
         {
-            AnimatorStateTransition trans = from.AddTransition(to);
-            trans.AddCondition(value ? AnimatorConditionMode.If : AnimatorConditionMode.IfNot, 0, param);
-            trans.duration = duration;
-            trans.hasExitTime = false;
+            AnimatorStateTransition t = from.AddTransition(to);
+            t.AddCondition(value ? AnimatorConditionMode.If : AnimatorConditionMode.IfNot, 0, param);
+            t.duration = duration;
+            t.hasExitTime = false;
+        }
+
+        private void AddTransitionWithTrigger (AnimatorState from, AnimatorState to, string triggerParam, float duration)
+        {
+            AnimatorStateTransition t = from.AddTransition(to);
+            t.AddCondition(AnimatorConditionMode.If, 0, triggerParam);
+            t.duration = duration;
+            t.hasExitTime = false;
         }
     }
 }
