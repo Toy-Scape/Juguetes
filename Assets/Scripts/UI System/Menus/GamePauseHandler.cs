@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
+using UnityEngine.Audio;
 
 namespace UI_System.Menus
 {
@@ -9,6 +10,13 @@ namespace UI_System.Menus
         [Header("Configuration")]
         [SerializeField] private string _menuSceneName = "SC_Menus";
 
+        [Header("Audio Mixer")]
+        [SerializeField] private AudioMixer _audioMixer;
+        [SerializeField] private AudioMixerSnapshot _gameplaySnapshot;
+        [SerializeField] private AudioMixerSnapshot _pausedSnapshot;
+        [SerializeField] private float _snapshotTransitionTime = 0.2f;
+
+
         // Static property to check if the game is paused
         public static bool IsPaused { get; private set; }
 
@@ -16,6 +24,8 @@ namespace UI_System.Menus
         {
             // Reset pause state when this component (usually in the main scene) loads
             IsPaused = false;
+
+            _gameplaySnapshot?.TransitionTo(0f);
         }
 
         // This method is called by PlayerInput via "Send Messages" 
@@ -64,6 +74,8 @@ namespace UI_System.Menus
                 // Load the Menu Scene Additively
                 _isLoading = true;
                 SceneManager.LoadSceneAsync(_menuSceneName, LoadSceneMode.Additive);
+
+                _pausedSnapshot?.TransitionTo(_snapshotTransitionTime);
             }
         }
 
@@ -134,6 +146,8 @@ namespace UI_System.Menus
                 Debug.Log("Game Resumed");
                 IsPaused = false;
                 Time.timeScale = 1f;
+
+                _gameplaySnapshot?.TransitionTo(_snapshotTransitionTime);
 
                 // Restore Player controls and Lock Cursor
                 if (InputMapManager.Instance != null)
