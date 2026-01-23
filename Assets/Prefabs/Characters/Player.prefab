@@ -233,7 +233,7 @@ Transform:
   m_GameObject: {fileID: 5070382226027974490}
   serializedVersion: 2
   m_LocalRotation: {x: -0.60507476, y: -0.64886296, z: -0.33742437, w: 0.3146527}
-  m_LocalPosition: {x: 0, y: 0.5, z: 0.625}
+  m_LocalPosition: {x: 0.02, y: 0.24, z: 0.49}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -294,6 +294,9 @@ GameObject:
   - component: {fileID: 7245646265383527828}
   - component: {fileID: 1143079539005282384}
   - component: {fileID: 7793382085548487143}
+  - component: {fileID: 5459647364194880392}
+  - component: {fileID: 6389144635642634702}
+  - component: {fileID: 2193080869082398420}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -631,6 +634,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4294967295
   holdPoint: {fileID: 2526417371357686982}
+  grabSnapDistance: 0.8
 --- !u!114 &1800428321446316545
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -718,7 +722,7 @@ Animator:
   m_GameObject: {fileID: 6641168232080197241}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 961b023786da0a34897a537b56ab9c5d, type: 3}
-  m_Controller: {fileID: 9100000, guid: 71864f47ddb3104409d8d257d4e9fb8f, type: 2}
+  m_Controller: {fileID: 9100000, guid: f9643d978c01f114b812b56bec69087d, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -824,7 +828,7 @@ MonoBehaviour:
     ledgeClimbUpSpeed: 5
     ledgeSnapSpeed: 10
     ledgeSnapOffsetY: 1.1
-    ledgeForwardOffset: 1
+    ledgeForwardOffset: 0
     ledgeGrabCooldown: 1
     climbDuration: 1
   cameraTransform: {fileID: 0}
@@ -843,6 +847,48 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49faa08c9170e724cbbafae06e867807, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CheckpointSystem.PlayerRespawn
+--- !u!114 &5459647364194880392
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6641168232080197241}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d5dba0901c075445a012b12e2af523f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Domain.PlayerTarget
+  targetCenter: {fileID: 883425338343852037}
+  isValid: 1
+--- !u!114 &6389144635642634702
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6641168232080197241}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d5dba0901c075445a012b12e2af523f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Domain.PlayerTarget
+  targetCenter: {fileID: 883425338343852037}
+  isValid: 1
+--- !u!114 &2193080869082398420
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6641168232080197241}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d5dba0901c075445a012b12e2af523f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Domain.PlayerTarget
+  targetCenter: {fileID: 883425338343852037}
+  isValid: 1
 --- !u!1 &8468029186425840670
 GameObject:
   m_ObjectHideFlags: 0
@@ -882,10 +928,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8908092247317713429}
     m_Modifications:
-    - target: {fileID: 5866666021909216657, guid: 961b023786da0a34897a537b56ab9c5d, type: 3}
-      propertyPath: m_Controller
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 43ad4b06954007c40a89c88bb7ba7f09, type: 3}
       propertyPath: m_LocalRotation.w
       value: 1
@@ -921,6 +963,10 @@ PrefabInstance:
     - target: {fileID: 2776956682711762759, guid: 43ad4b06954007c40a89c88bb7ba7f09, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5866666021909216657, guid: 961b023786da0a34897a537b56ab9c5d, type: 3}
+      propertyPath: m_Controller
+      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 5866666021909216657, guid: 43ad4b06954007c40a89c88bb7ba7f09, type: 3}

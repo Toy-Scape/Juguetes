@@ -10,17 +10,15 @@ namespace Assets.Scripts.PlayerController
         public override void EnterState()
         {
             _ctx.Context.IsGrounded = true;
-            _ctx.Context.Velocity = new Vector3(_ctx.Context.Velocity.x, -2f, _ctx.Context.Velocity.z); // Stick to ground
+            _ctx.Context.Velocity = new Vector3(_ctx.Context.Velocity.x, -2f, _ctx.Context.Velocity.z); 
             _ctx.Animator.SetBool("IsGrounded", true);
-            _ctx.Animator.SetBool("IsFalling", false); // Ensure falling is off
-            _ctx.Animator.SetBool("IsJumping", false); // Ensure jumping is off
+            _ctx.Animator.SetBool("IsFalling", false);
             
-            InitializeSubState(); // <--- CRITICAL FIX
+            InitializeSubState(); 
         }
 
         public override void UpdateState()
         {
-            // Force stick to ground every frame
             _ctx.Context.Velocity = new Vector3(_ctx.Context.Velocity.x, -5f, _ctx.Context.Velocity.z);
             
             CheckSwitchStates();
@@ -43,20 +41,15 @@ namespace Assets.Scripts.PlayerController
             }
             else if (!_ctx.CharacterController.isGrounded)
             {
-                // Add tolerance (Coyote Time for falling) to prevent flickering on uneven ground
                 _ungroundedTimer += Time.deltaTime;
-                if (_ungroundedTimer > 0.1f) // 0.1s tolerance
+                if (_ungroundedTimer > 0.1f) 
                 {
                     SwitchState(_factory.Air());
                 }
             }
             else
             {
-                _ungroundedTimer = 0f; // Reset timer if grounded
-                
-                // Crouch logic is handled by sub-states (Idle/Walk/Run -> Crouch)
-                // But if we want to support direct transition from Grounded super-state logic:
-                // For now, let's leave it to sub-states to handle crouch switching.
+                _ungroundedTimer = 0f; 
             }
         }
 
