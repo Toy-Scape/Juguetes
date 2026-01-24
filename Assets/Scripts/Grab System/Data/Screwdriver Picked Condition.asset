@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 48b017829800d2d45a105b4d2bbfe238, type: 3}
-  m_Name: New Generic Condition SO
+  m_Name: Screwdriver Picked Condition
   m_EditorClassIdentifier: Assembly-CSharp::GenericConditionSO
-  variableType: 0
-  floatVar: {fileID: 0}
-  intVar: {fileID: 0}
-  boolVar: {fileID: 0}
-  stringVar: {fileID: 0}
+  keyType: 1
+  limbKey: 0
+  inventoryKey: 0
   comparison: 0
-  valueA: 
-  valueB: 
-  boolValue: 0
+  intParamA: 0
+  intParamB: 0
+  boolValue: 1
   stringValue: 
+  itemDataValue: {fileID: 11400000, guid: 271dd0cc060c8374c8ed1b2a3d22ee62, type: 2}
+  conditionFailedText: {fileID: 11400000, guid: 0a9c78da47900cc47bf2fcf106d2aaa1, type: 2}

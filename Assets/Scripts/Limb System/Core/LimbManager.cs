@@ -13,9 +13,8 @@ public class LimbManager : MonoBehaviour
         public LimbSO DefaultLimb;
     }
 
-    [SerializeField] private ContextVariablesSO contextVariables;
     [SerializeField] private LimbSO DefaultLimb;
-    [SerializeField] private ItemData DefaultLimbData; // For Localization Name
+    [SerializeField] private ItemData DefaultLimbData;
     [SerializeField] private PlayerInventory inventory;
     [SerializeField] private List<LimbSocketDefinition> limbSockets;
 
@@ -25,36 +24,31 @@ public class LimbManager : MonoBehaviour
 
     private void Awake()
     {
-        contextVariables.canLiftHeavyObjectsVar.Value = false;
-        contextVariables.canClimbWallsVar.Value = false;
-        contextVariables.canSwimVar.Value = false;
-        contextVariables.isAimingVar.Value = false;
+        // El contexto ya no depende de ScriptableObjects
+        context = GetComponent<LimbContext>();
 
-        context = new LimbContext
-        {
-            CanLiftHeavyObjectsVar = contextVariables.canLiftHeavyObjectsVar,
-            CanClimbWallsVar = contextVariables.canClimbWallsVar,
-            CanSwimVar = contextVariables.canSwimVar,
-            IsAimingVar = contextVariables.isAimingVar
-        };
+        // Equipamos la extremidad por defecto
         equippedLimb = DefaultLimb;
+
+        // Activamos el modelo inicial si existe
+        this.transform.FindDeep(DefaultLimb.LimbNameOnModel)?.gameObject.SetActive(true);
     }
 
     public void EquipLimb(LimbSO newLimb)
     {
         if (newLimb == null) return;
 
+        // Desactivar la extremidad anterior
         if (equippedLimb != null)
         {
             equippedLimb.OnUnequip(context);
             this.transform.FindDeep(equippedLimb.LimbNameOnModel)?.gameObject.SetActive(false);
-            context.Reset();
         }
 
+        // Equipar la nueva
         equippedLimb = newLimb;
         equippedLimb.OnEquip(context);
         this.transform.FindDeep(equippedLimb.LimbNameOnModel)?.gameObject.SetActive(true);
-
     }
 
     public void UseActive() => equippedLimb?.UseActive(context);
@@ -63,5 +57,10 @@ public class LimbManager : MonoBehaviour
     public LimbContext GetContext() => context;
     public LimbSO GetEquippedLimb() => equippedLimb;
     public ItemData GetDefaultLimbData() => DefaultLimbData;
-    public List<LimbSO> GetAvailableLimbs() => inventory.GetAllLimbs().Select(p => p.LimbSO).Prepend(DefaultLimb).ToList();
+
+    public List<LimbSO> GetAvailableLimbs() =>
+        inventory.GetAllLimbs()
+                 .Select(p => p.LimbSO)
+                 .Prepend(DefaultLimb)
+                 .ToList();
 }

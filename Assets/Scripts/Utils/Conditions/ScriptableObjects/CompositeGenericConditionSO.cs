@@ -7,14 +7,15 @@ public enum CompositeType
 }
 
 [CreateAssetMenu(menuName = "Conditions/Composite")]
-public class CompositeGenericConditionSO : GenericCondition
+public class CompositeConditionSO : ConditionSO
 {
     [SerializeField] private CompositeType compositeType;
-    [SerializeField] private GenericConditionSO[] conditions;
+    [SerializeField] private ConditionSO[] conditions;
 
-    public override bool ConditionIsMet()
+    public override bool Evaluate(IValueProvider provider)
     {
-        if (conditions == null || conditions.Length == 0) return true;
+        if (conditions == null || conditions.Length == 0)
+            return true;
 
         switch (compositeType)
         {
@@ -22,7 +23,8 @@ public class CompositeGenericConditionSO : GenericCondition
                 foreach (var c in conditions)
                 {
                     if (c == null) continue;
-                    if (!c.ConditionIsMet()) return false;
+                    if (!c.Evaluate(provider))
+                        return false;
                 }
                 return true;
 
@@ -30,7 +32,8 @@ public class CompositeGenericConditionSO : GenericCondition
                 foreach (var c in conditions)
                 {
                     if (c == null) continue;
-                    if (c.ConditionIsMet()) return true;
+                    if (c.Evaluate(provider))
+                        return true;
                 }
                 return false;
 
@@ -38,4 +41,44 @@ public class CompositeGenericConditionSO : GenericCondition
                 return false;
         }
     }
+
+    public override bool TryEvaluate(IValueProvider provider, out Dialogue failureMessage)
+    {
+        failureMessage = null;
+
+        if (conditions == null || conditions.Length == 0)
+            return true;
+
+        switch (compositeType)
+        {
+            case CompositeType.And:
+                foreach (var c in conditions)
+                {
+                    if (c == null) continue;
+
+                    if (!c.TryEvaluate(provider, out failureMessage))
+                        return false;
+                }
+                return true;
+
+            case CompositeType.Or:
+                Dialogue lastFailure = null;
+                foreach (var c in conditions)
+                {
+                    if (c == null) continue;
+
+                    if (c.TryEvaluate(provider, out failureMessage))
+                        return true;
+
+                    lastFailure = failureMessage;
+                }
+
+                failureMessage = lastFailure;
+                return false;
+
+            default:
+                return false;
+        }
+    }
+
 }
