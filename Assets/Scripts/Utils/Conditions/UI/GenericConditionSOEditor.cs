@@ -2,97 +2,110 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Inventory
+[CustomEditor(typeof(GenericConditionSO))]
+public class GenericConditionSOEditor : Editor
 {
-    [CustomEditor(typeof(GenericConditionSO))]
-    public class GenericConditionSOEditor : Editor
+    public override void OnInspectorGUI()
     {
-        public override void OnInspectorGUI ()
+        serializedObject.Update();
+
+        var keyTypeProp = serializedObject.FindProperty("keyType");
+        EditorGUILayout.PropertyField(keyTypeProp);
+
+        var keyType = (ConditionKeyType)keyTypeProp.enumValueIndex;
+
+        SerializedProperty limbKeyProp = serializedObject.FindProperty("limbKey");
+        SerializedProperty inventoryKeyProp = serializedObject.FindProperty("inventoryKey");
+
+        // Mostrar clave según categoría
+        switch (keyType)
         {
-            serializedObject.Update();
+            case ConditionKeyType.Limb:
+                EditorGUILayout.PropertyField(limbKeyProp);
+                break;
 
-            // Dibujar todos los campos hasta isLimb
-            SerializedProperty iterator = serializedObject.GetIterator();
-            iterator.NextVisible(true);
-
-            while (iterator.NextVisible(false))
-            {
-                if (iterator.name == "floatVar")
-                {
-                    SerializedProperty variableTypeProp = serializedObject.FindProperty("variableType");
-                    if ((VariableType)variableTypeProp.enumValueIndex == VariableType.Float)
-                    {
-                        EditorGUILayout.PropertyField(iterator, true);
-                    }
-                }
-                else if (iterator.name == "intVar")
-                {
-                    SerializedProperty variableTypeProp = serializedObject.FindProperty("variableType");
-                    if ((VariableType)variableTypeProp.enumValueIndex == VariableType.Int)
-                    {
-                        EditorGUILayout.PropertyField(iterator, true);
-                    }
-                }
-                else if (iterator.name == "comparison")
-                {
-                    SerializedProperty variableTypeProp = serializedObject.FindProperty("variableType");
-                    if ((VariableType)variableTypeProp.enumValueIndex == VariableType.Int || (VariableType)variableTypeProp.enumValueIndex == VariableType.Float)
-                    {
-                        EditorGUILayout.PropertyField(iterator, true);
-                    }
-                }
-                else if (iterator.name == "boolVar")
-                {
-                    SerializedProperty variableTypeProp = serializedObject.FindProperty("variableType");
-                    if ((VariableType)variableTypeProp.enumValueIndex == VariableType.Bool)
-                    {
-                        EditorGUILayout.PropertyField(iterator, true);
-                    }
-                }
-                else if (iterator.name == "boolVar" || iterator.name == "boolValue")
-                {
-                    SerializedProperty variableTypeProp = serializedObject.FindProperty("variableType");
-                    if ((VariableType)variableTypeProp.enumValueIndex == VariableType.Bool)
-                    {
-                        EditorGUILayout.PropertyField(iterator, true);
-                    }
-                }
-                else if (iterator.name == "valueA")
-                {
-                    SerializedProperty variableTypeProp = serializedObject.FindProperty("variableType");
-                    if ((VariableType)variableTypeProp.enumValueIndex == VariableType.Int || (VariableType)variableTypeProp.enumValueIndex == VariableType.Float)
-                    {
-                        EditorGUILayout.PropertyField(iterator, true);
-                    }
-                }
-                else if (iterator.name == "valueB")
-                {
-                    SerializedProperty variableTypeProp = serializedObject.FindProperty("variableType");
-                    SerializedProperty comparisonTypeProp = serializedObject.FindProperty("comparison");
-                    if (
-                        ((VariableType)variableTypeProp.enumValueIndex == VariableType.Int || (VariableType)variableTypeProp.enumValueIndex == VariableType.Float) 
-                        && (ComparisonType) comparisonTypeProp.enumValueIndex == ComparisonType.Between)
-                    {
-                        EditorGUILayout.PropertyField(iterator, true);
-                    }
-                }
-                else if (iterator.name == "stringValue" || iterator.name == "stringVar")
-                {
-                    SerializedProperty variableTypeProp = serializedObject.FindProperty("variableType");
-                    if ((VariableType)variableTypeProp.enumValueIndex == VariableType.String)
-                    {
-                        EditorGUILayout.PropertyField(iterator, true);
-                    }
-                }
-                else
-                {
-                    EditorGUILayout.PropertyField(iterator, true);
-                }
-            }
-
-            serializedObject.ApplyModifiedProperties();
+            case ConditionKeyType.Inventory:
+                EditorGUILayout.PropertyField(inventoryKeyProp);
+                break;
         }
+
+        EditorGUILayout.Space();
+
+        // Detectar tipo de dato según la clave seleccionada
+        System.Type valueType = GetValueType(keyType, limbKeyProp, inventoryKeyProp);
+
+        // Detectar si requiere parámetro (ItemData)
+        bool requiresItemData = RequiresItemData(keyType, inventoryKeyProp);
+
+        // Mostrar parámetro si hace falta
+        if (requiresItemData)
+        {
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("itemDataValue"));
+        }
+
+        // Mostrar campos según tipo real
+        if (valueType == typeof(bool))
+        {
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("boolValue"));
+        }
+        else if (valueType == typeof(int))
+        {
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("comparison"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("intParamA"));
+
+            var comparisonProp = serializedObject.FindProperty("comparison");
+            var comparison = (ComparisonType)comparisonProp.enumValueIndex;
+
+            if (comparison == ComparisonType.Between)
+            {
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("intParamB"));
+            }
+        }
+        else if (valueType == typeof(string))
+        {
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("stringValue"));
+        }
+
+        EditorGUILayout.Space();
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("conditionFailedText"));
+
+        serializedObject.ApplyModifiedProperties();
+    }
+
+    // --- Helpers ---
+
+    private System.Type GetValueType(ConditionKeyType keyType, SerializedProperty limbKeyProp, SerializedProperty inventoryKeyProp)
+    {
+        switch (keyType)
+        {
+            case ConditionKeyType.Limb:
+                var limbKey = (LimbConditionKey)limbKeyProp.enumValueIndex;
+                return typeof(bool); // todas las limb conditions devuelven bool
+
+            case ConditionKeyType.Inventory:
+                var invKey = (InventoryConditionKey)inventoryKeyProp.enumValueIndex;
+                switch (invKey)
+                {
+                    case InventoryConditionKey.HasItem:
+                        return typeof(bool);
+
+                    case InventoryConditionKey.ItemCount:
+                        return typeof(int);
+                }
+                break;
+        }
+
+        return typeof(bool);
+    }
+
+    private bool RequiresItemData(ConditionKeyType keyType, SerializedProperty inventoryKeyProp)
+    {
+        if (keyType != ConditionKeyType.Inventory)
+            return false;
+
+        var invKey = (InventoryConditionKey)inventoryKeyProp.enumValueIndex;
+
+        return invKey == InventoryConditionKey.HasItem || invKey == InventoryConditionKey.ItemCount;
     }
 }
 #endif
-

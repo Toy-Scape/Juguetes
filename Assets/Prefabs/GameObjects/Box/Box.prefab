@@ -167,9 +167,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Grabbable
   moveResistance: 2
-  grabConditions:
+  conditions:
   - {fileID: 11400000, guid: b6aca484fd4ac2244b6a4cf6ae02475e, type: 2}
-  failThought: {fileID: 11400000, guid: 6519da417d9f74e4aa335534f5ca3ab9, type: 2}
+  failureMessage: {fileID: 0}
+  collisionLayer:
+    serializedVersion: 2
+    m_Bits: 4294967295
 --- !u!208 &-4171990098250736426
 NavMeshObstacle:
   m_ObjectHideFlags: 0

@@ -12,13 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 48b017829800d2d45a105b4d2bbfe238, type: 3}
   m_Name: StrengthCondition
   m_EditorClassIdentifier: Assembly-CSharp::GrabConditionSO
-  variableType: 2
-  floatVar: {fileID: 0}
-  intVar: {fileID: 0}
-  boolVar: {fileID: 11400000, guid: 99be5174a42a6fa42847a7dcb0aa81cd, type: 2}
-  stringVar: {fileID: 0}
-  comparison: 0
-  valueA: 
-  valueB: 
+  keyType: 0
+  limbKey: 0
+  inventoryKey: 1
+  comparison: 5
+  intParamA: 0
+  intParamB: 0
   boolValue: 1
   stringValue: 
+  itemDataValue: {fileID: 0}
+  conditionFailedText: {fileID: 11400000, guid: c5b1e7cd7183b1b45a3b638e621ff62b, type: 2}

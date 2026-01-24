@@ -1,13 +1,6 @@
-﻿using System;
+﻿using Inventory;
+using System;
 using UnityEngine;
-
-public enum VariableType
-{
-    Float,
-    Int,
-    Bool,
-    String
-}
 
 public enum ComparisonType
 {
@@ -19,72 +12,92 @@ public enum ComparisonType
     Between
 }
 
-[CreateAssetMenu(menuName = "Conditions/Generic Comparison")]
-public class GenericConditionSO : GenericCondition
+public enum ConditionKeyType
 {
-    [SerializeField] private VariableType variableType;
+    Limb,
+    Inventory,
+    Player,
+}
 
-    [SerializeField] private FloatVariableSO floatVar;
-    [SerializeField] private IntVariableSO intVar;
-    [SerializeField] private BoolVariableSO boolVar;
-    [SerializeField] private StringVariableSO stringVar;
+[CreateAssetMenu(menuName = "Conditions/Generic Comparison")]
+public class GenericConditionSO : ConditionSO
+{
+    [Header("Key Selection")]
+    public ConditionKeyType keyType;
 
-    [SerializeField] private ComparisonType comparison;
-    [SerializeField] private string valueA; 
-    [SerializeField] private string valueB;
+    public LimbConditionKey limbKey;
+    public InventoryConditionKey inventoryKey;
 
-    [SerializeField] private bool boolValue;
-    [SerializeField] private string stringValue;
+    [Header("Condition Setup")]
+    public ComparisonType comparison;
 
-    public override bool ConditionIsMet()
+    public int intParamA;
+    public int intParamB;
+
+    public bool boolValue;
+    public string stringValue;
+    public ItemData itemDataValue;
+
+    //[SerializeField] private Dialogue conditionFailedText;
+    
+
+    public override bool Evaluate(IValueProvider provider)
     {
-        switch (variableType)
+        string keyName = GetKeyName();
+        if (keyName == null)
+            return false;
+
+        object param = GetParam();
+
+        // 1) BOOL
+        if (provider.TryGetBool(keyName, param, out bool b))
+            return b == boolValue;
+
+        // 2) INT
+        if (provider.TryGetInt(keyName, param, out int i))
+            return Compare(i, intParamA, intParamB);
+
+        // 3) STRING
+        if (provider.TryGetString(keyName, param, out string s))
+            return s == stringValue;
+
+        // 4) FLOAT (si algún día lo usas)
+        if (provider.TryGetFloat(keyName, param, out float f))
+            return Compare(f, intParamA, intParamB);
+
+        return false;
+    }
+
+    private string GetKeyName()
+    {
+        return keyType switch
         {
-            case VariableType.Float:
-                if (floatVar == null) return false;
-                return Compare(floatVar.Value, float.Parse(valueA), float.Parse(valueB));
+            ConditionKeyType.Limb => limbKey.ToString(),
+            ConditionKeyType.Inventory => inventoryKey.ToString(),
+            _ => null
+        };
+    }
 
-            case VariableType.Int:
-                if (intVar == null) return false;
-                return Compare(intVar.Value, int.Parse(valueA), int.Parse(valueB));
+    private object GetParam()
+    {
+        // Solo Inventory necesita parámetros (ItemData)
+        if (keyType == ConditionKeyType.Inventory)
+            return itemDataValue;
 
-            case VariableType.Bool:
-                if (boolVar == null) return false;
-                return boolVar.Value == boolValue;
-
-            case VariableType.String:
-                if (stringVar == null) return false;
-                return stringVar.Value == stringValue;
-
-            default:
-                return false;
-        }
+        return null;
     }
 
     private bool Compare<T>(T current, T a, T b) where T : IComparable<T>
     {
-        switch (comparison)
+        return comparison switch
         {
-            case ComparisonType.EqualTo:
-                return current.CompareTo(a) == 0;
-
-            case ComparisonType.GreaterThan:
-                return current.CompareTo(a) > 0;
-
-            case ComparisonType.GreaterOrEqualThan:
-                return current.CompareTo(a) >= 0;
-
-            case ComparisonType.LessThan:
-                return current.CompareTo(a) < 0;
-
-            case ComparisonType.LessOrEqualThan:
-                return current.CompareTo(a) <= 0;
-
-            case ComparisonType.Between:
-                return current.CompareTo(a) >= 0 && current.CompareTo(b) <= 0;
-
-            default:
-                return false;
-        }
+            ComparisonType.EqualTo => current.CompareTo(a) == 0,
+            ComparisonType.GreaterThan => current.CompareTo(a) > 0,
+            ComparisonType.GreaterOrEqualThan => current.CompareTo(a) >= 0,
+            ComparisonType.LessThan => current.CompareTo(a) < 0,
+            ComparisonType.LessOrEqualThan => current.CompareTo(a) <= 0,
+            ComparisonType.Between => current.CompareTo(a) >= 0 && current.CompareTo(b) <= 0,
+            _ => false,
+        };
     }
 }
