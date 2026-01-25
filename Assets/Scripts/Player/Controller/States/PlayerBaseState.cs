@@ -43,11 +43,7 @@ namespace Assets.Scripts.PlayerController
 
         protected void SwitchState(PlayerBaseState newState)
         {
-            // Exit current state
             ExitState();
-
-            // Enter new state
-            // newState.EnterState(); // Removed: SetSubState calls EnterState, or we call it manually if root
 
             if (_currentSuperState != null)
             {
@@ -55,9 +51,8 @@ namespace Assets.Scripts.PlayerController
             }
             else if (_ctx.CurrentState == this)
             {
-                // If we are the root state, update context
                 _ctx.CurrentState = newState;
-                newState.EnterState(); // Only call if no super state handles it
+                newState.EnterState(); 
             }
         }
 

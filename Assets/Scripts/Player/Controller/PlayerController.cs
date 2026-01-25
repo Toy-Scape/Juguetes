@@ -278,7 +278,7 @@ public class PlayerController : MonoBehaviour
         _ledgeGrabCooldownTimer = duration;
     }
 
-    public bool CheckForLedge ()
+    public bool CheckForLedge (bool ignoreVerticalVelocity = false)
     {
         if (Context.IsPicking) return false;
 
@@ -288,8 +288,11 @@ public class PlayerController : MonoBehaviour
             return false;
         }
 
-        if (Context.IsGrounded || Context.Velocity.y >= 0) return false;
+        if (!ignoreVerticalVelocity)
+        {
+            if (Context.IsGrounded || (Context.Velocity.y >= 0)) return false;
         if (Context.Velocity.y > -0.3f) return false;
+        }
 
         Vector3 origin = transform.position + Vector3.up * config.LedgeGrabHeight;
 
@@ -317,8 +320,8 @@ public class PlayerController : MonoBehaviour
         Vector3 checkAbove = hitPoint + Vector3.up * 0.3f - hitNormal * 0.1f;
         if (Physics.Raycast(checkAbove, Vector3.up, 0.5f)) return false;
 
-        Vector3 checkTop = hitPoint + Vector3.up * 0.1f - hitNormal * 0.2f;
-        if (Physics.Raycast(checkTop, Vector3.down, out RaycastHit topHit, 0.3f))
+        Vector3 checkTop = hitPoint + Vector3.up * 1.0f - hitNormal * 0.2f;
+        if (Physics.Raycast(checkTop, Vector3.down, out RaycastHit topHit, 1.5f))
         {
             if (Vector3.Dot(topHit.normal, Vector3.up) > 0.7f)
             {
@@ -340,7 +343,7 @@ public void FreezeNearbyGrabbables(float duration)
 }
 private IEnumerator FreezeGrabbablesCoroutine(float duration)
 {
-    float radius = 2f; // Radio de detección
+    float radius = 2f; // Radio de detecciï¿½n
     Collider[] hits = Physics.OverlapSphere(transform.position, radius);
     
     List<(Grabbable, bool)> frozenObjects = new List<(Grabbable, bool)>();
@@ -388,7 +391,8 @@ private IEnumerator FreezeGrabbablesCoroutine(float duration)
         
         if (Physics.Raycast(origin, transform.forward, out RaycastHit hit, Config.WallClimbDetectionDistance))
         {
-            if (hit.collider.GetComponent<ClimbableWall>() != null)
+            var climbable = hit.collider.GetComponent<ClimbableWall>(); 
+            if (climbable != null && climbable.CanBeClimbed())
             {
                 WallPosition = hit.point;
                 WallNormal = hit.normal;
@@ -397,6 +401,7 @@ private IEnumerator FreezeGrabbablesCoroutine(float duration)
         }
         return false;
     }
+
     #endregion
 
     #region Animation Events
