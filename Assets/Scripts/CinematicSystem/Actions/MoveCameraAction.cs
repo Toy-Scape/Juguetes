@@ -4,10 +4,11 @@ using UnityEngine;
 
 namespace CinematicSystem.Actions
 {
-    [CreateAssetMenu(fileName = "MoveCameraAction", menuName = "Cinematic System/Actions/Move Camera")]
+    [System.Serializable]
     public class MoveCameraAction : CinematicAction
     {
         [Tooltip("ID of the transform defined in SceneReferenceResolver")]
+        [SceneReferenceID]
         public string targetId;
         public float moveDuration = 2f;
         public bool smooth = true;

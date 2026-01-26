@@ -38,15 +38,14 @@ Las acciones NO guardan referencias directas a objetos de la escena (para que se
 
 Las cinemáticas son archivos `.asset` que contienen una lista de acciones.
 
-1.  **Crear Acciones**:
-    *   Click derecho en Project -> `Create` -> `Cinematic System` -> `Actions`.
-    *   Elige el tipo de acción (ej: `Move Camera`, `Wait`, `Look At`).
-    *   Configura sus parámetros (ej: `Target Id` = "CameraPos1", `Duration` = 2).
-2.  **Crear la Cinemática**:
+1.  **Crear el Cinemático**:
     *   Click derecho en Project -> `Create` -> `Cinematic System` -> `Cinematic Asset`.
     *   Selecciona el asset creado.
-    *   En la lista `Actions`, añade las acciones que creaste en el paso anterior.
-    *   Puedes reordenarlas arrastrando.
+2.  **Añadir Acciones**:
+    *   En el Inspector del `Cinematic Asset`, verás la lista `Actions`.
+    *   Pulsa el botón `+` (Add) y selecciona el tipo de acción que deseas (ej. `Move Camera Action`, `Wait Action`).
+    *   Configura los parámetros directamente ahí.
+    *   Puedes reordenar las acciones arrastrándolas en la lista.
 
 ## 5. Reproducir una Cinemática
 
@@ -81,14 +80,15 @@ Para añadir nuevas funcionalidades (ej. reproducir sonido, animar UI, mover NPC
 
 1.  Crea un nuevo script C# en `Assets/Scripts/CinematicSystem/Actions`.
 2.  Hereda de `CinematicAction`.
-3.  Implementa el método `Execute`:
+3.  Añade el atributo `[System.Serializable]`.
+4.  Implementa el método `Execute`.
 
 ```csharp
 using CinematicSystem.Core;
 using UnityEngine;
 using System.Collections;
 
-[CreateAssetMenu(menuName = "Cinematic System/Actions/My Custom Action")]
+[System.Serializable]
 public class MyCustomAction : CinematicAction
 {
     public string message;

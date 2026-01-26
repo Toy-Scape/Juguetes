@@ -13,13 +13,28 @@ namespace CinematicSystem.Infrastructure
             public Transform target;
         }
 
-        [SerializeField] private List<ReferenceEntry> references = new List<ReferenceEntry>();
+        [SerializeField] public List<ReferenceEntry> references = new List<ReferenceEntry>();
 
         private Dictionary<string, Transform> _cache;
 
         private void Awake()
         {
             InitializeCache();
+        }
+
+        private void OnValidate()
+        {
+            if (references == null) return;
+
+            for (int i = 0; i < references.Count; i++)
+            {
+                var entry = references[i];
+                if (entry.target != null && string.IsNullOrEmpty(entry.id))
+                {
+                    entry.id = entry.target.name;
+                    references[i] = entry;
+                }
+            }
         }
 
         private void InitializeCache()

@@ -3,13 +3,13 @@ using UnityEngine;
 
 namespace CinematicSystem.Core
 {
-    public abstract class CinematicAction : ScriptableObject
+    [System.Serializable]
+    public abstract class CinematicAction
     {
         [Tooltip("If true, the cinematic player waits for this action to finish before starting the next one.")]
         public bool waitForCompletion = true;
-
-        [TextArea]
-        public string description;
+        [Tooltip("If true, pauses the cinematic after this action finishes, until Advance (e.g. Dialogue Next) is called.")]
+        public bool holdAtEnd = false;
 
         /// <summary>
         /// Executes the action logic.

@@ -57,11 +57,36 @@ namespace CinematicSystem.Application
                 _currentCoroutine = null;
             }
 
-            EndCinematic();
+            EndCinematic(false); // Forced stop might imply cut? Let's default to blend unless user wants cut. Default false.
+        }
+
+        private bool _skipRequested;
+
+        public void Advance()
+        {
+            if (IsPlaying)
+            {
+                _skipRequested = true;
+            }
+        }
+
+        // Backward compatibility if needed, or just alias it
+        public void Skip() => Advance();
+
+        public IEnumerator Wait(float duration)
+        {
+             float timer = 0f;
+             while (timer < duration)
+             {
+                 if (_skipRequested) yield break; // Break the wait immediately if advanced
+                 timer += Time.unscaledDeltaTime; // Use unscaled time
+                 yield return null;
+             }
         }
 
         private IEnumerator PlayRoutine(CinematicAsset cinematic)
         {
+            _skipRequested = false;
             SetPlayerInput(!cinematic.blockPlayerInput);
 
             if (_cameraController != null)
@@ -69,11 +94,41 @@ namespace CinematicSystem.Application
 
             foreach (var action in cinematic.actions)
             {
+                // Reset skip flag at start of new action? 
+                // No, if user spammed skip, maybe we want to skip multiple?
+                // But for "Advance", we usually mean "Next Action".
+                // So we should consume the flag.
+                 _skipRequested = false;
+
                 if (action != null)
                 {
                     if (action.waitForCompletion)
                     {
+                        // Note: Actions usually return "WaitForSeconds" or similar.
+                        // We rely on the Action using context.Wait() to support interruption.
+                        // If the action uses "yield return new WaitForSeconds()", we can't interrupt it easily 
+                        // unless we run it in a sub-routine and monitor it.
+                        // Ideally, we refactor actions to use context.Wait().
                         yield return action.Execute(this);
+
+                        // If user skipped during execution, we continue to next logic.
+                        
+                        // Check HOLD AT END
+                        Debug.Log($"[CinematicPlayer] Action Finished. HoldAtEnd: {action.holdAtEnd}, AdvanceRequested: {_skipRequested}");
+                        
+                        if (action.holdAtEnd && !_skipRequested)
+                        {
+                            Debug.Log("[CinematicPlayer] Holding until Advance...");
+                            
+                            // Wait until next advance signal
+                            // Reset flag first just in case
+                            _skipRequested = false;
+                            while (!_skipRequested)
+                            {
+                                yield return null;
+                            }
+                            Debug.Log("[CinematicPlayer] Advanced from Hold.");
+                        }
                     }
                     else
                     {
@@ -82,15 +137,16 @@ namespace CinematicSystem.Application
                 }
             }
 
-            EndCinematic();
+            Debug.Log("[CinematicPlayer] Sequence Finished. Ending Cinematic.");
+            EndCinematic(cinematic.restoreCameraInstantly);
         }
 
-        private void EndCinematic()
+        private void EndCinematic(bool instant = false)
         {
             IsPlaying = false;
 
             if (_cameraController != null)
-                _cameraController.SetActive(false); // Reset to gameplay camera
+                _cameraController.SetActive(false, instant); // Reset to gameplay camera
 
             SetPlayerInput(true);
         }

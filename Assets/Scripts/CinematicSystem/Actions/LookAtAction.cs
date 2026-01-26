@@ -4,10 +4,11 @@ using UnityEngine;
 
 namespace CinematicSystem.Actions
 {
-    [CreateAssetMenu(fileName = "LookAtAction", menuName = "Cinematic System/Actions/Look At")]
+    [System.Serializable]
     public class LookAtAction : CinematicAction
     {
         [Tooltip("ID of the transform defined in SceneReferenceResolver")]
+        [SceneReferenceID]
         public string targetId;
         public float lookDuration = 1f;
 

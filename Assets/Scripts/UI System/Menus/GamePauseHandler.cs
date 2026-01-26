@@ -95,9 +95,12 @@ namespace UI_System.Menus
 
             // Try to find PlayerInput to get the action
             var playerInput = FindFirstObjectByType<PlayerInput>();
-            if (playerInput == null) return;
+            if (playerInput == null || playerInput.actions == null) return;
 
-            _pauseAction = playerInput.actions["Pause"];
+            // Prefer globally finding the action or fallback
+            // Try explicit map first if needed, but generic search is usually okay
+            _pauseAction = playerInput.actions.FindAction("Pause"); // safer than indexer
+            if (_pauseAction == null) _pauseAction = playerInput.actions["Pause"]; // Fallback
             if (_pauseAction != null)
             {
                 _pauseAction.performed += OnPausePerformed;

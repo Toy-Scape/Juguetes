@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace CinematicSystem.Actions
 {
-    [CreateAssetMenu(fileName = "WaitAction", menuName = "Cinematic System/Actions/Wait")]
+    [System.Serializable]
     public class WaitAction : CinematicAction
     {
         public float duration = 1f;

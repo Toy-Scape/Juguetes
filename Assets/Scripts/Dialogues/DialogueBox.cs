@@ -1,7 +1,7 @@
-using Assets.Scripts.PlayerController;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Assets.Scripts.PlayerController;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -73,7 +73,7 @@ public class DialogueBox : MonoBehaviour
         CloseImmediate();
     }
 
-    private void OnDestroy ()
+    private void OnDestroy()
     {
         if (nextDialogueAction?.action != null)
         {
@@ -85,7 +85,7 @@ public class DialogueBox : MonoBehaviour
     /// <summary>
     /// Abre el diálogo activo. No asume que el activeDialogue sea nulo.
     /// </summary>
-    public void Open ()
+    public void Open()
     {
         if (activeDialogue == null)
             return;
@@ -152,12 +152,19 @@ public class DialogueBox : MonoBehaviour
         IsTyping = false;
     }
 
-    private void OnNextDialogue (InputAction.CallbackContext ctx) => Next();
+    private void OnNextDialogue(InputAction.CallbackContext ctx) => Next();
 
-    public void Next ()
+    public void Next()
     {
         if (activeDialogue == null)
             return;
+
+        // SKIP CINEMATIC IF PLAYING
+        var cinematicPlayer = FindFirstObjectByType<CinematicSystem.Application.CinematicPlayer>();
+        if (cinematicPlayer != null && cinematicPlayer.IsPlaying)
+        {
+            cinematicPlayer.Advance();
+        }
 
         if (IsTyping)
         {
@@ -241,11 +248,12 @@ public class DialogueBox : MonoBehaviour
         activeDialogue = dialogue;
         dialogueIndex = 0;
         duringTriggeredLines.Clear();
+
         Open();
         Next();
     }
 
-    private IEnumerator TypeWriterEffectCoroutine (int lineIndex, DialogueContext context)
+    private IEnumerator TypeWriterEffectCoroutine(int lineIndex, DialogueContext context)
     {
         if (CurrentText == null)
             yield break;
@@ -312,7 +320,7 @@ public class DialogueBox : MonoBehaviour
         Close();
     }
 
-    private IEnumerator EnableNextDialogueAction ()
+    private IEnumerator EnableNextDialogueAction()
     {
         // esperar un frame para evitar race conditions con el InputSystem
         yield return null;
