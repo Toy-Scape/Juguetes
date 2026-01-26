@@ -151,7 +151,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8699495499050405152}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8053da89ceb9d3c42a4c57d885a47a91, type: 3}
+  m_Script: {fileID: 11500000, guid: 5f0ca327cad629843a76a9ddf067fa38, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LedgeGrabSurface
 --- !u!114 &6992158795375959285

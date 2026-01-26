@@ -571,6 +571,8 @@ MonoBehaviour:
     ledgeForwardOffset: 0
     ledgeGrabCooldown: 1
     climbDuration: 1
+    wallClimbSpeed: 3
+    wallClimbDetectionDistance: 0.6
   cameraTransform: {fileID: 0}
   TMPPlayerState: {fileID: 0}
   playerAnimator: {fileID: 4688945857383318680}
@@ -632,6 +634,8 @@ MonoBehaviour:
     ledgeForwardOffset: 0.5
     ledgeGrabCooldown: 0.5
     climbDuration: 1
+    wallClimbSpeed: 3
+    wallClimbDetectionDistance: 0.6
   promptWorldOffset: {x: 0, y: 2.41, z: 0}
 --- !u!114 &8113327342456687462
 MonoBehaviour:
@@ -918,9 +922,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -2549632214264001594, guid: 43ad4b06954007c40a89c88bb7ba7f09, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 43ad4b06954007c40a89c88bb7ba7f09, type: 3}
       propertyPath: m_Name
       value: Model
+      objectReference: {fileID: 0}
+    - target: {fileID: 2776956682711762759, guid: 43ad4b06954007c40a89c88bb7ba7f09, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 5866666021909216657, guid: 43ad4b06954007c40a89c88bb7ba7f09, type: 3}

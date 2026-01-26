@@ -22,6 +22,7 @@ namespace Assets.Scripts.PlayerController
         public PlayerBaseState Crouch() { return GetState("Crouch", () => new PlayerCrouchState(_context, this)); }
         public PlayerBaseState LedgeGrab() { return GetState("LedgeGrab", () => new PlayerLedgeGrabState(_context, this)); }
         public PlayerBaseState LedgeClimb() { return GetState("LedgeClimb", () => new PlayerLedgeClimbState(_context, this)); }
+        public PlayerBaseState WallClimb() { return GetState("WallClimb", () => new PlayerWallClimbState(_context, this)); }
         public PlayerBaseState LedgeStanding() { return GetState("LedgeStanding", () => new PlayerLedgeStandingState(_context, this)); }
 
         private PlayerBaseState GetState(string key, System.Func<PlayerBaseState> createMethod)
