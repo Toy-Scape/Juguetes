@@ -650,7 +650,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MenuMusicFader
   _audioSource: {fileID: 52496746}
-  _fadeOutDuration: 1.5
+  _fadeDuration: 1.5
 --- !u!1 &55710047
 GameObject:
   m_ObjectHideFlags: 0
@@ -4708,7 +4708,7 @@ MonoBehaviour:
   _mainMenuPanel: {fileID: 239167472}
   _pauseMenuPanel: {fileID: 1723403374}
   _optionsPanel: {fileID: 1846233473}
-  _gameSceneName: SC_Tutorial
+  _gameSceneName: SC_Ambient
 --- !u!4 &2111212320
 Transform:
   m_ObjectHideFlags: 0
