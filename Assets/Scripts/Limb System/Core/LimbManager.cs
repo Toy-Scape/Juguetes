@@ -3,6 +3,7 @@ using System.Linq;
 using Inventory;
 using UnityEngine;
 
+[RequireComponent(typeof(AudioSource))]
 public class LimbManager : MonoBehaviour
 {
     [System.Serializable]
@@ -13,48 +14,43 @@ public class LimbManager : MonoBehaviour
         public LimbSO DefaultLimb;
     }
 
-    [SerializeField] private ContextVariablesSO contextVariables;
     [SerializeField] private LimbSO DefaultLimb;
-    [SerializeField] private ItemData DefaultLimbData; // For Localization Name
+    [SerializeField] private ItemData DefaultLimbData;
     [SerializeField] private PlayerInventory inventory;
     [SerializeField] private List<LimbSocketDefinition> limbSockets;
+    [SerializeField] private GameObject PoofParticlesPrefab;
+    [SerializeField] private AudioSource PoofSoundEffect;
 
     private LimbContext context;
     private LimbSO equippedLimb;
-    private Dictionary<LimbSlot, GameObject> spawnedLimbModels = new();
 
     private void Awake()
     {
-        contextVariables.canLiftHeavyObjectsVar.Value = false;
-        contextVariables.canClimbWallsVar.Value = false;
-        contextVariables.canSwimVar.Value = false;
-        contextVariables.isAimingVar.Value = false;
-
-        context = new LimbContext
-        {
-            CanLiftHeavyObjectsVar = contextVariables.canLiftHeavyObjectsVar,
-            CanClimbWallsVar = contextVariables.canClimbWallsVar,
-            CanSwimVar = contextVariables.canSwimVar,
-            IsAimingVar = contextVariables.isAimingVar
-        };
+        context = GetComponent<LimbContext>();
         equippedLimb = DefaultLimb;
+        this.transform.FindDeep(DefaultLimb.LimbNameOnModel)?.gameObject.SetActive(true);
     }
 
     public void EquipLimb(LimbSO newLimb)
     {
-        if (newLimb == null) return;
+        if (newLimb == null || newLimb == equippedLimb) return;
 
         if (equippedLimb != null)
         {
             equippedLimb.OnUnequip(context);
             this.transform.FindDeep(equippedLimb.LimbNameOnModel)?.gameObject.SetActive(false);
-            context.Reset();
+        }
+
+        Instantiate(PoofParticlesPrefab, transform.position, Quaternion.identity);
+        if (PoofSoundEffect != null)
+        {
+            PoofSoundEffect.time = 0.12f;
+            PoofSoundEffect.Play();
         }
 
         equippedLimb = newLimb;
         equippedLimb.OnEquip(context);
         this.transform.FindDeep(equippedLimb.LimbNameOnModel)?.gameObject.SetActive(true);
-
     }
 
     public void UseActive() => equippedLimb?.UseActive(context);
@@ -63,5 +59,10 @@ public class LimbManager : MonoBehaviour
     public LimbContext GetContext() => context;
     public LimbSO GetEquippedLimb() => equippedLimb;
     public ItemData GetDefaultLimbData() => DefaultLimbData;
-    public List<LimbSO> GetAvailableLimbs() => inventory.GetAllLimbs().Select(p => p.LimbSO).Prepend(DefaultLimb).ToList();
+
+    public List<LimbSO> GetAvailableLimbs() =>
+        inventory.GetAllLimbs()
+                 .Select(p => p.LimbSO)
+                 .Prepend(DefaultLimb)
+                 .ToList();
 }

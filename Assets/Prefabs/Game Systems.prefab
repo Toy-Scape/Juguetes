@@ -1,5 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+<<<<<<< HEAD
 --- !u!1 &102598551526573589
 GameObject:
   m_ObjectHideFlags: 0
@@ -49,6 +50,8 @@ MonoBehaviour:
   _gameplaySnapshot: {fileID: -1511293616973409331, guid: 7bd7eaa6f125ab044b5eaece627b84a9, type: 2}
   _pausedSnapshot: {fileID: -7477047019274458235, guid: 7bd7eaa6f125ab044b5eaece627b84a9, type: 2}
   _snapshotTransitionTime: 0.2
+=======
+>>>>>>> develop
 --- !u!1 &1209707565026163393
 GameObject:
   m_ObjectHideFlags: 0
@@ -416,7 +419,7 @@ GameObject:
   - component: {fileID: 1095493241083116906}
   - component: {fileID: 1198831074440278550}
   m_Layer: 5
-  m_Name: Player State
+  m_Name: (Debug) Player State
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -540,6 +543,58 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+<<<<<<< HEAD
+=======
+--- !u!1 &3331723239619135342
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 9070179735435665394}
+  - component: {fileID: 1199089562050212375}
+  m_Layer: 0
+  m_Name: Pause Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &9070179735435665394
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3331723239619135342}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2549560417305310977}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1199089562050212375
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3331723239619135342}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e88d0f329110e2f41990b6d2f8a41c36, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UI_System.Menus.GamePauseHandler
+  _menuSceneName: SC_Menus
+  _audioMixer: {fileID: 0}
+  _gameplaySnapshot: {fileID: 0}
+  _pausedSnapshot: {fileID: 0}
+  _snapshotTransitionTime: 0.2
+>>>>>>> develop
 --- !u!1 &5217490459223722109
 GameObject:
   m_ObjectHideFlags: 0
@@ -697,7 +752,11 @@ Transform:
   - {fileID: 983692363642124849}
   - {fileID: 2955189896373635449}
   - {fileID: 4894171841776252251}
+<<<<<<< HEAD
   - {fileID: 7400332589642928323}
+=======
+  - {fileID: 9070179735435665394}
+>>>>>>> develop
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8046971763016656370

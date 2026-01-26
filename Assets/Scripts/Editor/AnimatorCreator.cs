@@ -14,7 +14,6 @@ namespace Assets.Scripts.PlayerController.Editor
         private AnimationClip crouchIdleClip;
         private AnimationClip crouchWalkClip;
         private AnimationClip hangClip;
-        private AnimationClip climbClip;
         private AnimationClip standClip;
 
         private AnimationClip grabIdleClip;
@@ -25,11 +24,19 @@ namespace Assets.Scripts.PlayerController.Editor
         private AnimationClip pickWalkClip;
         private AnimationClip pickRunClip;
 
+        private AnimationClip ledgeClimbClip;
+
+        private AnimationClip climbIdleClip;
+        private AnimationClip climbUpClip;
+        private AnimationClip climbDownClip;
+        private AnimationClip climbLeftClip;
+        private AnimationClip climbRightClip;
+
         private string controllerName = "PlayerAnimator";
         private string savePath = "Assets";
         private RuntimeAnimatorController existingController;
 
-        [MenuItem("Tools/Create AntiGravity Animator")]
+        [MenuItem("Tools/Create Animator")]
         public static void ShowWindow ()
         {
             GetWindow<AnimatorCreator>("Animator Creator");
@@ -37,7 +44,7 @@ namespace Assets.Scripts.PlayerController.Editor
 
         private void OnGUI ()
         {
-            GUILayout.Label("Create AntiGravity Animator Controller", EditorStyles.boldLabel);
+            GUILayout.Label("Create Animator Controller", EditorStyles.boldLabel);
 
             existingController = (RuntimeAnimatorController)EditorGUILayout.ObjectField("Existing Controller", existingController, typeof(RuntimeAnimatorController), false);
             if (GUILayout.Button("Load from Controller") && existingController != null)
@@ -73,8 +80,15 @@ namespace Assets.Scripts.PlayerController.Editor
 
             GUILayout.Label("Ledge", EditorStyles.boldLabel);
             hangClip = (AnimationClip)EditorGUILayout.ObjectField("Hanging", hangClip, typeof(AnimationClip), false);
-            climbClip = (AnimationClip)EditorGUILayout.ObjectField("Climb", climbClip, typeof(AnimationClip), false);
+            ledgeClimbClip = (AnimationClip)EditorGUILayout.ObjectField("Ledge Climb", ledgeClimbClip, typeof(AnimationClip), false);
             standClip = (AnimationClip)EditorGUILayout.ObjectField("Standing", standClip, typeof(AnimationClip), false);
+
+            GUILayout.Label("Wall Climb (Blend Tree 2D)", EditorStyles.boldLabel);
+            climbIdleClip = (AnimationClip)EditorGUILayout.ObjectField("Climb Idle", climbIdleClip, typeof(AnimationClip), false);
+            climbUpClip = (AnimationClip)EditorGUILayout.ObjectField("Climb Up", climbUpClip, typeof(AnimationClip), false);
+            climbDownClip = (AnimationClip)EditorGUILayout.ObjectField("Climb Down", climbDownClip, typeof(AnimationClip), false);
+            climbLeftClip = (AnimationClip)EditorGUILayout.ObjectField("Climb Left", climbLeftClip, typeof(AnimationClip), false);
+            climbRightClip = (AnimationClip)EditorGUILayout.ObjectField("Climb Right", climbRightClip, typeof(AnimationClip), false);
 
             GUILayout.Label("Grab (Blend Tree)", EditorStyles.boldLabel);
             grabIdleClip = (AnimationClip)EditorGUILayout.ObjectField("Grab Idle", grabIdleClip, typeof(AnimationClip), false);
@@ -108,8 +122,8 @@ namespace Assets.Scripts.PlayerController.Editor
                 if (name == "Jump") jumpClip = m as AnimationClip;
                 else if (name == "Fall") fallClip = m as AnimationClip;
                 else if (name == "Hanging") hangClip = m as AnimationClip;
-                else if (name == "Climb") climbClip = m as AnimationClip;
                 else if (name == "Standing") standClip = m as AnimationClip;
+                else if (name == "LedgeClimb") ledgeClimbClip = m as AnimationClip;
 
                 else if (name == "Grounded" && m is BlendTree gt)
                 {
@@ -145,6 +159,20 @@ namespace Assets.Scripts.PlayerController.Editor
                         else if (Mathf.Approximately(child.threshold, 1f)) pickRunClip = child.motion as AnimationClip;
                     }
                 }
+
+                else if (name == "WallClimb" && m is BlendTree climbTree)
+                {
+                    foreach (var child in climbTree.children)
+                    {
+                        Vector2 pos = child.position;
+
+                        if (pos == Vector2.zero) climbIdleClip = child.motion as AnimationClip;
+                        else if (pos == new Vector2(0f, 1f)) climbUpClip = child.motion as AnimationClip;
+                        else if (pos == new Vector2(0f, -1f)) climbDownClip = child.motion as AnimationClip;
+                        else if (pos == new Vector2(1f, 0f)) climbRightClip = child.motion as AnimationClip;
+                        else if (pos == new Vector2(-1f, 0f)) climbLeftClip = child.motion as AnimationClip;
+                    }
+                }
             }
         }
 
@@ -164,13 +192,17 @@ namespace Assets.Scripts.PlayerController.Editor
             controller.AddParameter("IsGrabbing", AnimatorControllerParameterType.Bool);
             controller.AddParameter("IsPicking", AnimatorControllerParameterType.Bool);
             controller.AddParameter("Climb", AnimatorControllerParameterType.Trigger);
+            controller.AddParameter("WallClimb", AnimatorControllerParameterType.Trigger);
             controller.AddParameter("Stand", AnimatorControllerParameterType.Trigger);
+            controller.AddParameter("ClimbVertical", AnimatorControllerParameterType.Float);
+            controller.AddParameter("ClimbHorizontal", AnimatorControllerParameterType.Float);
 
             AnimatorStateMachine root = controller.layers[0].stateMachine;
 
             BlendTree groundedTree;
             AnimatorState groundedState = controller.CreateBlendTreeInController("Grounded", out groundedTree);
             groundedTree.blendParameter = "Speed";
+            groundedTree.useAutomaticThresholds = false;
             groundedTree.AddChild(idleClip, 0f);
             groundedTree.AddChild(walkClip, 4f);
             groundedTree.AddChild(runClip, 8f);
@@ -178,6 +210,7 @@ namespace Assets.Scripts.PlayerController.Editor
             BlendTree crouchTree;
             AnimatorState crouchState = controller.CreateBlendTreeInController("Crouch", out crouchTree);
             crouchTree.blendParameter = "Speed";
+            crouchTree.useAutomaticThresholds = false;
             crouchTree.AddChild(crouchIdleClip, 0f);
             crouchTree.AddChild(crouchWalkClip, 2f);
 
@@ -190,8 +223,20 @@ namespace Assets.Scripts.PlayerController.Editor
             AnimatorState hangState = root.AddState("Hanging");
             hangState.motion = hangClip;
 
-            AnimatorState climbState = root.AddState("Climb");
-            climbState.motion = climbClip;
+            AnimatorState ledgeClimbState = root.AddState("LedgeClimb");
+            ledgeClimbState.motion = ledgeClimbClip;
+
+            BlendTree wallClimbTree;
+            AnimatorState wallClimbState = controller.CreateBlendTreeInController("WallClimb", out wallClimbTree);
+            wallClimbTree.blendType = BlendTreeType.FreeformDirectional2D;
+            wallClimbTree.blendParameter = "ClimbHorizontal";
+            wallClimbTree.blendParameterY = "ClimbVertical";
+            wallClimbTree.useAutomaticThresholds = false;
+            wallClimbTree.AddChild(climbIdleClip, new Vector2(0f, 0f));
+            wallClimbTree.AddChild(climbUpClip, new Vector2(0f, 1f));
+            wallClimbTree.AddChild(climbDownClip, new Vector2(0f, -1f));
+            wallClimbTree.AddChild(climbRightClip, new Vector2(1f, 0f));
+            wallClimbTree.AddChild(climbLeftClip, new Vector2(-1f, 0f));
 
             AnimatorState standState = root.AddState("Standing");
             standState.motion = standClip;
@@ -199,6 +244,7 @@ namespace Assets.Scripts.PlayerController.Editor
             BlendTree grabTree;
             AnimatorState grabState = controller.CreateBlendTreeInController("Grab", out grabTree);
             grabTree.blendParameter = "GrabSpeed";
+            grabTree.useAutomaticThresholds = false;
             grabTree.AddChild(grabPullClip, -1f);
             grabTree.AddChild(grabIdleClip, 0f);
             grabTree.AddChild(grabPushClip, 1f);
@@ -222,14 +268,20 @@ namespace Assets.Scripts.PlayerController.Editor
             AddTransition(jumpState, hangState, "IsHanging", true, 0.1f);
             AddTransition(fallState, hangState, "IsHanging", true, 0.1f);
 
-            AddTransitionWithTrigger(hangState, climbState, "Climb", 0.1f);
+            AddTransitionWithTrigger(hangState, ledgeClimbState, "Climb", 0.1f);
+
+            AddTransitionWithTrigger(jumpState, wallClimbState, "WallClimb", 0.1f);
+            AddTransitionWithTrigger(fallState, wallClimbState, "WallClimb", 0.1f);
+            AddTransitionWithTrigger(groundedState, wallClimbState, "WallClimb", 0.1f);
+            AddTransitionWithTrigger(crouchState, wallClimbState, "WallClimb", 0.1f);
+
 
             var drop = hangState.AddTransition(fallState);
             drop.AddCondition(AnimatorConditionMode.IfNot, 0, "IsHanging");
             drop.duration = 0.1f;
             drop.hasExitTime = false;
 
-            AddTransitionWithTrigger(climbState, standState, "Stand", 0.1f);
+            AddTransitionWithTrigger(ledgeClimbState, standState, "Stand", 0.1f);
 
             var standToGrounded = standState.AddTransition(groundedState);
             standToGrounded.hasExitTime = true;

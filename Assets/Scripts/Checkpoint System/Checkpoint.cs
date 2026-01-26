@@ -28,6 +28,23 @@ namespace CheckpointSystem
                 ActivateCheckpoint();
             }
         }
+        private void OnTriggerStay(Collider other)
+        {
+            var item = other.GetComponent<ResettableItem>();
+            if (item != null)
+            {
+                item.IsTouchingCheckpoint = true;
+            }
+        }
+
+        private void OnTriggerExit(Collider other)
+        {
+            var item = other.GetComponent<ResettableItem>();
+            if (item != null)
+            {
+                item.IsTouchingCheckpoint = false;
+            }
+        }
 
         private void ActivateCheckpoint()
         {

@@ -12,9 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29b2a5239966e17419732012e75791f3, type: 3}
   m_Name: Test
   m_EditorClassIdentifier: Assembly-CSharp::Dialogue
-  Lines:
-  - character: 0
-    Key: 
-  - character: 1
-    Key: 
   Type: 0
+  Lines:
+  - Character: {fileID: 11400000, guid: 7832fc3c6197f2144b2802326c6977e5, type: 2}
+    Key: tutorial-juan-dialogue-1
+    Text: 
+    Actions:
+    - timing: 0
+      action: {fileID: 11400000, guid: abab08407526d594fba7eb7a88280427, type: 2}

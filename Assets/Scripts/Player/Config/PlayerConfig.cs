@@ -104,6 +104,13 @@ public class PlayerConfig
     [SerializeField] private float climbDuration = 1.0f;
     public float ClimbDuration => climbDuration;
 
+    [Header("Wall Climb Settings")]
+    [SerializeField] private float wallClimbSpeed = 3f;
+    public float WallClimbSpeed => wallClimbSpeed;
+
+    [SerializeField] private float wallClimbDetectionDistance = 0.6f;
+    public float WallClimbDetectionDistance => wallClimbDetectionDistance;
+
     // [Header("Grab Settings")]
     // public float MaxGrabDistance = 1.5f; // Removed
 }

@@ -88,9 +88,6 @@ public class RadialMenu : MonoBehaviour
             rt.anchoredPosition = centerPoint;
             rt.rotation = Quaternion.identity;
 
-            //text.rectTransform.anchoredPosition = Vector2.zero;
-            //text.rectTransform.rotation = Quaternion.identity;
-
             button.onClick.AddListener(() => limbManager.EquipLimb(limb));
             buttons.Add(prefabObj);
         }

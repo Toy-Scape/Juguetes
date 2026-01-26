@@ -17,4 +17,4 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: c9441e6ead152a64d88ccdfcd241ea8f, type: 3}
   maxStackSize: 1
   isLimb: 1
-  limbSO: {fileID: 11400000, guid: b61593b9d2ebffb41977d60aebfeb44a, type: 2}
+  limbSO: {fileID: 11400000, guid: 1129099a91e68664f9cb196523b29bcb, type: 2}
