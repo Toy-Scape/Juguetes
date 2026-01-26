@@ -3,6 +3,7 @@ using System.Linq;
 using Inventory;
 using UnityEngine;
 
+[RequireComponent(typeof(AudioSource))]
 public class LimbManager : MonoBehaviour
 {
     [System.Serializable]
@@ -17,35 +18,36 @@ public class LimbManager : MonoBehaviour
     [SerializeField] private ItemData DefaultLimbData;
     [SerializeField] private PlayerInventory inventory;
     [SerializeField] private List<LimbSocketDefinition> limbSockets;
+    [SerializeField] private GameObject PoofParticlesPrefab;
+    [SerializeField] private AudioSource PoofSoundEffect;
 
     private LimbContext context;
     private LimbSO equippedLimb;
-    private Dictionary<LimbSlot, GameObject> spawnedLimbModels = new();
 
     private void Awake()
     {
-        // El contexto ya no depende de ScriptableObjects
         context = GetComponent<LimbContext>();
-
-        // Equipamos la extremidad por defecto
         equippedLimb = DefaultLimb;
-
-        // Activamos el modelo inicial si existe
         this.transform.FindDeep(DefaultLimb.LimbNameOnModel)?.gameObject.SetActive(true);
     }
 
     public void EquipLimb(LimbSO newLimb)
     {
-        if (newLimb == null) return;
+        if (newLimb == null || newLimb == equippedLimb) return;
 
-        // Desactivar la extremidad anterior
         if (equippedLimb != null)
         {
             equippedLimb.OnUnequip(context);
             this.transform.FindDeep(equippedLimb.LimbNameOnModel)?.gameObject.SetActive(false);
         }
 
-        // Equipar la nueva
+        Instantiate(PoofParticlesPrefab, transform.position, Quaternion.identity);
+        if (PoofSoundEffect != null)
+        {
+            PoofSoundEffect.time = 0.12f;
+            PoofSoundEffect.Play();
+        }
+
         equippedLimb = newLimb;
         equippedLimb.OnEquip(context);
         this.transform.FindDeep(equippedLimb.LimbNameOnModel)?.gameObject.SetActive(true);
