@@ -21,7 +21,9 @@ namespace CinematicSystem.Core
 
         // New consolidated method
         // New consolidated method
+        // New consolidated method
         void SetShot(string targetId, string lookAtId, Vector3 offset, float fov, float duration, bool useOrbit, float orbitSpeed, bool instant = false, bool ignoreCollision = false);
+        IEnumerator WaitForBlend();
     }
 
     public interface ISceneReferenceResolver

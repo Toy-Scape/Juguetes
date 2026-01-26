@@ -82,8 +82,6 @@ namespace CinematicSystem.Infrastructure
             if (cinematicCamera == null) return;
 
             // Handle Collision (Anti-Zoom)
-            // Try to find CinemachineCollider or Deoccluder. 
-            // In Unity 6 / CM 3, it might be a component on the camera object.
             var collider = cinematicCamera.GetComponent<CinemachineCollider>();
             if (collider != null) collider.enabled = !ignoreCollision;
 
@@ -92,14 +90,12 @@ namespace CinematicSystem.Infrastructure
 
             // Setup Pivot
             _pivot.transform.position = target.position;
-            // Reset rotation to Identity ensures the offset is World-Aligned (relative to Pivot center)
-            // This prevents the camera from flip-flopping if the target has weird rotations.
             _pivot.transform.rotation = Quaternion.identity; 
 
             // apply offset to handle
             _cameraHandle.transform.localPosition = offset;
             
-            // Assign Follow Target (Critical for Orbit)
+            // Assign Follow Target
             cinematicCamera.Follow = _cameraHandle.transform;
 
             // LookAt
@@ -117,14 +113,16 @@ namespace CinematicSystem.Infrastructure
                 cinematicCamera.PreviousStateIsValid = false;
 
                 // FORCE BRAIN CUT
-                // If we are transitioning, the Brain uses the Default Blend (usually).
-                // We temporarily set it to 0 to force a Cut.
                 if (_brain != null)
                 {
-                    StartCoroutine(ForceCutRoutine());
+                    ApplyInstantCut();
                 }
             }
         }
+
+        // State for restoration
+        private CinemachineBlendDefinition _savedBlend;
+        private CinemachineBlenderSettings _savedCustomBlends;
 
         public void ResetCamera(bool instant = false)
         {
@@ -132,38 +130,43 @@ namespace CinematicSystem.Infrastructure
             {
                 Debug.Log($"[CinemachineCameraController] Resetting Camera. Instant: {instant}");
                 
+                if (instant && _brain != null)
+                {
+                     ApplyInstantCut();
+                }
+
                 cinematicCamera.Priority = 0; // Return control to gameplay camera
                 cinematicCamera.Follow = _initialFollow;
                 cinematicCamera.LookAt = _initialLookAt;
                 _isOrbiting = false;
-
-                if (instant && _brain != null)
-                {
-                     StartCoroutine(ForceCutRoutine());
-                }
             }
         }
+
+        private void ApplyInstantCut()
+        {
+             // Save state
+             _savedBlend = _brain.DefaultBlend;
+             _savedCustomBlends = _brain.CustomBlends;
+             
+             // Apply Cut
+             _brain.DefaultBlend = new CinemachineBlendDefinition(CinemachineBlendDefinition.Styles.Cut, 0);
+             _brain.CustomBlends = null;
+             
+             Debug.Log("[CinemachineCameraController] Applied Cut settings synchronously.");
+
+             StartCoroutine(RestoreBrainRoutine());
+        }
         
-        private System.Collections.IEnumerator ForceCutRoutine()
+        private System.Collections.IEnumerator RestoreBrainRoutine()
         {
             if (_brain == null) yield break;
             
-            Debug.Log("[CinemachineCameraController] Forcing Cut on Brain...");
-
-            // Save original settings
-            var originalBlend = _brain.DefaultBlend;
-            var originalCustomBlends = _brain.CustomBlends; // Try property first for CM 3 compatibility
-            
-            // Set temporary Cut
-            _brain.DefaultBlend = new CinemachineBlendDefinition(CinemachineBlendDefinition.Styles.Cut, 0);
-            _brain.CustomBlends = null; // Disable custom blends for this frame
-
-            // Wait for one frame (Brain update)
+            // Wait for one frame (Brain update) to ensure the Cut is consumed
             yield return null; 
 
             // Restore
-            _brain.DefaultBlend = originalBlend;
-            _brain.CustomBlends = originalCustomBlends;
+            _brain.DefaultBlend = _savedBlend;
+            _brain.CustomBlends = _savedCustomBlends;
             Debug.Log("[CinemachineCameraController] Restored Brain Default Blend and Custom Blends.");
         }
 
@@ -189,6 +192,26 @@ namespace CinematicSystem.Infrastructure
 
                 cinematicCamera.Priority = 100; // Force high priority
             }
+        }
+
+        public System.Collections.IEnumerator WaitForBlend()
+        {
+             if (_brain == null) yield break;
+
+             // Wait a couple of frames for the blend to definitely start logic in Brain
+             yield return null;
+             yield return null;
+
+             Debug.Log($"[CinemachineCameraController] WaitForBlend Started. IsBlending: {_brain.IsBlending}");
+
+             while (_brain.IsBlending)
+             {
+                 // Optional: Log blend progress
+                 // Debug.Log($"Blending... Time: {_brain.ActiveBlend?.TimeInBlend}");
+                 yield return null;
+             }
+             
+             Debug.Log("[CinemachineCameraController] WaitForBlend Finished.");
         }
     }
 }

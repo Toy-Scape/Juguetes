@@ -21,6 +21,7 @@ public class InputMapManager : MonoBehaviour
 
     private int uiCounter = 0;
     private int dialogueCounter = 0;
+    private int cinematicCounter = 0;
 
     public static event Action<string> OnActionMapChanged;
 
@@ -133,6 +134,18 @@ public class InputMapManager : MonoBehaviour
         UpdateActionMap();
     }
 
+    public void HandleCinematicStart()
+    {
+        cinematicCounter++;
+        UpdateActionMap();
+    }
+
+    public void HandleCinematicEnd()
+    {
+        cinematicCounter = Mathf.Max(0, cinematicCounter - 1);
+        UpdateActionMap();
+    }
+
     private void HandleRadialOpen()
     {
         if (CameraManager.Instance != null)
@@ -157,8 +170,8 @@ public class InputMapManager : MonoBehaviour
 
         if (uiCounter > 0)
             newMap = ActionMaps.UI;
-        else if (dialogueCounter > 0)
-            newMap = ActionMaps.Dialogue;
+        else if (dialogueCounter > 0 || cinematicCounter > 0)
+            newMap = ActionMaps.Dialogue; // Use Dialogue map (blocks movement, allows advance)
         else
             newMap = ActionMaps.Player;
 

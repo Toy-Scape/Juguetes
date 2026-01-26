@@ -138,27 +138,50 @@ namespace CinematicSystem.Application
             }
 
             Debug.Log("[CinematicPlayer] Sequence Finished. Ending Cinematic.");
-            EndCinematic(cinematic.restoreCameraInstantly);
+            yield return StartCoroutine(EndCinematicRoutine(cinematic.restoreCameraInstantly));
         }
 
-        private void EndCinematic(bool instant = false)
+        private IEnumerator EndCinematicRoutine(bool instant = false)
         {
             IsPlaying = false;
 
             if (_cameraController != null)
+            {
                 _cameraController.SetActive(false, instant); // Reset to gameplay camera
+                
+                // If NOT instant, wait for blend to finish before enabling input
+                if (!instant)
+                {
+                    yield return _cameraController.WaitForBlend();
+                }
+            }
 
             SetPlayerInput(true);
         }
 
+        // Backward compatibility wrapper for Stop()
+        private void EndCinematic(bool instant = false)
+        {
+             StartCoroutine(EndCinematicRoutine(instant));
+        }
+
         public void SetPlayerInput(bool enabled)
         {
-            // Ideally call a Game / Input Manager here.
-            // For now we log.
             Debug.Log($"[CinematicPlayer] SetPlayerInput: {enabled}");
 
-            // Example integration (commented out):
-            // if (InputManager.Instance != null) InputManager.Instance.SetInputEnabled(enabled);
+            if (InputMapManager.Instance != null)
+            {
+                if (enabled)
+                {
+                    // Enable Input -> End Cinematic Mode
+                    InputMapManager.Instance.HandleCinematicEnd();
+                }
+                else
+                {
+                    // Disable Input -> Start Cinematic Mode
+                    InputMapManager.Instance.HandleCinematicStart();
+                }
+            }
         }
     }
 }

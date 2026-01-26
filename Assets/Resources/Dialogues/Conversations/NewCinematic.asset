@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CinematicSystem.Core.CinematicAsset
   blockPlayerInput: 1
   hideHUD: 1
-  restoreCameraInstantly: 1
+  restoreCameraInstantly: 0
   actions:
   - rid: 3066938750511087685
   references:
