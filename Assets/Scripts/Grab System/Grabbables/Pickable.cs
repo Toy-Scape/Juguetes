@@ -5,8 +5,8 @@ using System;
 public class Pickable : MonoBehaviour, IPickable
 {
     [SerializeField] private Transform gripPoint;
-    [SerializeField] private GenericConditionSO[] pickConditions;
-    [SerializeField] private Dialogue failThought;
+    [SerializeField] private ConditionSO[] conditions;
+    [SerializeField] private Dialogue failureMessage;
 
     public bool IsPicked { get; private set; }
 
@@ -18,14 +18,21 @@ public class Pickable : MonoBehaviour, IPickable
         if (gripPoint == null) gripPoint = transform;
     }
 
-    public bool CanBePicked ()
+    public bool CanBePicked()
     {
-        if (pickConditions == null || pickConditions.Length == 0) return true;
-        foreach (var c in pickConditions)
-            if (c != null && !c.ConditionIsMet())
+        var provider = FindFirstObjectByType<PlayerConditionProvider>();
+
+        foreach (var c in conditions)
+        {
+            if (!c.TryEvaluate(provider, out failureMessage))
                 return false;
+        }
+
+        failureMessage = null;
         return true;
     }
+
+
 
     public void Pick (Transform hand)
     {
@@ -45,5 +52,5 @@ public class Pickable : MonoBehaviour, IPickable
         transform.SetParent(null);
         rb.isKinematic = false;
     }
-    public Dialogue GetFailThought () => failThought;
+    public Dialogue GetFailThought () => failureMessage;
 }

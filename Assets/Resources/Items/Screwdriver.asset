@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 639d2f37fe394d8696991a99ca6c7eac, type: 3}
-  m_Name: Stain remover
+  m_Name: Screwdriver
   m_EditorClassIdentifier: Assembly-CSharp::Inventory.ItemData
   nameKey: stain-item-name
   descriptionKey: stain-item-description

@@ -100,17 +100,20 @@ public class GrabInteractor : MonoBehaviour
 
         foreach (var pc in pickedColliders)
         {
-            Vector3 center = pc.bounds.center;
-            Vector3 up = center + Vector3.up * pc.bounds.extents.y;
-            float radius = Mathf.Min(pc.bounds.extents.x, pc.bounds.extents.z) * 0.8f;
+            BoxCollider bc = pc as BoxCollider;
 
-            Collider[] overlaps = Physics.OverlapCapsule(
-                center,
-                up,
-                radius,
+            Vector3 worldCenter = bc.transform.TransformPoint(bc.center);
+            Vector3 halfExtents = Vector3.Scale(bc.size * 0.5f, bc.transform.lossyScale);
+            Quaternion worldRotation = bc.transform.rotation;
+
+            Collider[] overlaps = Physics.OverlapBox(
+                worldCenter,
+                halfExtents,
+                worldRotation,
                 ~0,
-                QueryTriggerInteraction.Collide
+                QueryTriggerInteraction.Ignore
             );
+
 
             Debug.Log($"[DropDebug] PC: {pc.name}, overlaps: {overlaps.Length}");
 
