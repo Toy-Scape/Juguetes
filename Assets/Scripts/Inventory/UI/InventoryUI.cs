@@ -38,6 +38,12 @@ namespace Inventory.UI
         [SerializeField] private int limbsGridColumns = 1;
         [SerializeField] private Color selectedSlotColor = new Color(0.5f, 0.7f, 1f, 0.9f);
 
+        [Header("Message tooltips")]
+        [SerializeField] private Image ItemImage;
+        [SerializeField] private TMP_Text ItemName;
+        [SerializeField] private TMP_Text ItemQuantity;
+        [SerializeField] private TMP_Text ItemEventType;
+
         private List<InventorySlotUI> _itemSlots = new List<InventorySlotUI>();
         private List<InventorySlotUI> _limbSlots = new List<InventorySlotUI>();
         private InventorySlotUI _selectedSlot;
@@ -467,8 +473,14 @@ namespace Inventory.UI
             _selectedSlot.SetSelected(true);
         }
 
-        private void OnInventoryChanged(ItemData itemData, int quantity)
+        private void OnInventoryChanged (ItemData itemData, int quantity)
         {
+            RefreshUI();
+        }
+
+        private void OnItemAdded (ItemData itemData, int quantity)
+        {
+
             RefreshUI();
         }
 
