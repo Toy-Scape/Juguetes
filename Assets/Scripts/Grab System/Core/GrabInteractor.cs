@@ -6,6 +6,7 @@ public class GrabInteractor : MonoBehaviour
     [SerializeField] private Transform grabOrigin;
     [SerializeField] private LayerMask grabLayer;
     [SerializeField] private Transform holdPoint;
+    [SerializeField] private float grabSnapDistance = 0.8f;
 
     private Grabbable currentGrabbable;
     private Pickable currentPickable;
@@ -99,17 +100,20 @@ public class GrabInteractor : MonoBehaviour
 
         foreach (var pc in pickedColliders)
         {
-            Vector3 center = pc.bounds.center;
-            Vector3 up = center + Vector3.up * pc.bounds.extents.y;
-            float radius = Mathf.Min(pc.bounds.extents.x, pc.bounds.extents.z) * 0.8f;
+            BoxCollider bc = pc as BoxCollider;
 
-            Collider[] overlaps = Physics.OverlapCapsule(
-                center,
-                up,
-                radius,
+            Vector3 worldCenter = bc.transform.TransformPoint(bc.center);
+            Vector3 halfExtents = Vector3.Scale(bc.size * 0.5f, bc.transform.lossyScale);
+            Quaternion worldRotation = bc.transform.rotation;
+
+            Collider[] overlaps = Physics.OverlapBox(
+                worldCenter,
+                halfExtents,
+                worldRotation,
                 ~0,
-                QueryTriggerInteraction.Collide
+                QueryTriggerInteraction.Ignore
             );
+
 
             Debug.Log($"[DropDebug] PC: {pc.name}, overlaps: {overlaps.Length}");
 
@@ -209,14 +213,32 @@ public class GrabInteractor : MonoBehaviour
         currentGrabbable = grabbable;
         isGrabbing = true;
 
+        // 1. Rotar al jugador hacia el punto de agarre
         Vector3 direction = hitPoint - transform.position;
-        direction.y = 0;
+        direction.y = 0f;
         if (direction.sqrMagnitude > 0.001f)
             transform.rotation = Quaternion.LookRotation(direction);
 
+        // 2. Colocar al jugador a una distancia fija del punto de agarre
+        Vector3 desiredPlayerPos = hitPoint - transform.forward * grabSnapDistance;
+        desiredPlayerPos.y = transform.position.y;
+
+        if (characterController != null)
+        {
+            characterController.enabled = false;
+            transform.position = desiredPlayerPos;
+            characterController.enabled = true;
+        }
+        else
+        {
+            transform.position = desiredPlayerPos;
+        }
+
+        // 3. Calcular offsets para el sistema de movimiento del objeto
         grabOffset = transform.InverseTransformPoint(currentGrabbable.transform.position);
         grabRotationOffset = Quaternion.Inverse(transform.rotation) * currentGrabbable.transform.rotation;
 
+        // 4. Ignorar colisiones
         foreach (var pc in playerColliders)
             currentGrabbable.IgnoreCollisionWith(pc, true);
 
@@ -225,6 +247,8 @@ public class GrabInteractor : MonoBehaviour
 
         currentGrabbable.StartGrab();
     }
+
+
 
     public bool CheckMove (Vector3 movement)
     {

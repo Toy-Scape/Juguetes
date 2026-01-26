@@ -132,7 +132,11 @@ MonoBehaviour:
     english: Test key
     spanish: Clave test
     basque: Testeozko klabea
-  - key: d
-    english: 
-    spanish: 
-    basque: 
+  - key: thought-not-enough-strength
+    english: I'm not strong enough.
+    spanish: No tengo suficiente fuerza.
+    basque: Ez naiz nahikoa indartsu.
+  - key: thought-item-missing-screwdriver
+    english: I should take the screwdriver before moving on.
+    spanish: "Deber\xEDa coger el destornillador antes de continuar."
+    basque: Jarraitu aurretik bihurkina hartu beharko nuke.

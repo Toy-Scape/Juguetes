@@ -5,8 +5,8 @@ using InteractionSystem.Interfaces;
 public class Grabbable : MonoBehaviour, IGrabbable
 {
     [SerializeField] private float moveResistance = 1f;
-    [SerializeField] private GenericConditionSO[] grabConditions;
-    [SerializeField] private Dialogue failThought;
+    [SerializeField] private ConditionSO[] conditions;
+    [SerializeField] private Dialogue failureMessage;
     [SerializeField] private LayerMask collisionLayer = -1;
 
     public float MoveResistance => moveResistance;
@@ -26,16 +26,20 @@ public class Grabbable : MonoBehaviour, IGrabbable
         rb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
     }
 
-    public bool CanBeGrabbed ()
+    public bool CanBeGrabbed()
     {
-        if (grabConditions == null || grabConditions.Length == 0) return true;
+        var provider = FindFirstObjectByType<PlayerConditionProvider>();
 
-        foreach (var c in grabConditions)
-            if (c != null && !c.ConditionIsMet())
+        foreach (var c in conditions)
+        {
+            if (!c.TryEvaluate(provider, out failureMessage))
                 return false;
+        }
 
+        failureMessage = null;
         return true;
     }
+
 
     public void StartGrab ()
     {
@@ -241,5 +245,5 @@ public class Grabbable : MonoBehaviour, IGrabbable
             Physics.IgnoreCollision(c, other, ignore);
     }
 
-    public Dialogue GetFailThought () => failThought;
+    public Dialogue GetFailThought () => failureMessage;
 }
