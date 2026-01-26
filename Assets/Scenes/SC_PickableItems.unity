@@ -364,7 +364,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ClimbableWall
   conditions:
-  - {fileID: 11400000, guid: 60c10b8878b4efa439d5d9b643c44dc2, type: 2}
+  - {fileID: 11400000, guid: 853bdd4dbad2c544eb63773d3ffccb31, type: 2}
 --- !u!65 &49043250
 BoxCollider:
   m_ObjectHideFlags: 0
