@@ -39,10 +39,7 @@ namespace Inventory.UI
         [SerializeField] private Color selectedSlotColor = new Color(0.5f, 0.7f, 1f, 0.9f);
 
         [Header("Message tooltips")]
-        [SerializeField] private Image ItemImage;
-        [SerializeField] private TMP_Text ItemName;
-        [SerializeField] private TMP_Text ItemQuantity;
-        [SerializeField] private TMP_Text ItemEventType;
+        [SerializeField] private GameObject ItemMessage;
 
         private List<InventorySlotUI> _itemSlots = new List<InventorySlotUI>();
         private List<InventorySlotUI> _limbSlots = new List<InventorySlotUI>();
@@ -98,8 +95,8 @@ namespace Inventory.UI
             // Suscribirse a eventos
             if (playerInventory != null)
             {
-                playerInventory.onItemAdded.AddListener(OnInventoryChanged);
-                playerInventory.onItemRemoved.AddListener(OnInventoryChanged);
+                playerInventory.onItemAdded.AddListener(OnItemAdded);
+                playerInventory.onItemRemoved.AddListener(OnItemRemoved);
             }
 
             // Solo refrescar la UI si el inventario está abierto
@@ -113,8 +110,8 @@ namespace Inventory.UI
         {
             if (playerInventory != null)
             {
-                playerInventory.onItemAdded.RemoveListener(OnInventoryChanged);
-                playerInventory.onItemRemoved.RemoveListener(OnInventoryChanged);
+                playerInventory.onItemAdded.RemoveListener(OnItemAdded);
+                playerInventory.onItemRemoved.RemoveListener(OnItemRemoved);
             }
             // No hacemos Instance = null aquí ya que OnDestroy se encargará.
         }
@@ -478,8 +475,18 @@ namespace Inventory.UI
             RefreshUI();
         }
 
-        private void OnItemAdded (ItemData itemData, int quantity)
+        private void OnItemAdded(ItemData itemData, int quantity)
         {
+            var Message = Instantiate(ItemMessage);
+            Message.GetComponent<ItemMessageTooltip>().SetData(ItemMessageType.Added, itemData.Icon, itemData.ItemName, quantity);
+            Debug.Log("Added item");
+            RefreshUI();
+        }
+
+        private void OnItemRemoved(ItemData itemData, int quantity)
+        {
+            var Message = Instantiate(ItemMessage);
+            Message.GetComponent<ItemMessageTooltip>().SetData(ItemMessageType.Removed, itemData.Icon, itemData.ItemName, quantity);
 
             RefreshUI();
         }
