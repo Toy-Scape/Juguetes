@@ -1,24 +1,27 @@
 ﻿using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
 public class FadeAndDestroy : AutoDestroyBase
 {
     public float duration = 2f;
     public float fadeOutTime = 0.5f;
 
-    private CanvasGroup cg;
+    private Graphic[] graphics;
 
-    private void Awake()
+    protected override void Awake ()
     {
-        cg = GetComponent<CanvasGroup>();
+        graphics = GetComponentsInChildren<Graphic>(true);
+        base.Awake();
     }
 
-    public override void BeginDestroy()
+    public override void BeginDestroy ()
     {
         StartCoroutine(FadeRoutine());
     }
 
-    private IEnumerator FadeRoutine()
+    private IEnumerator FadeRoutine ()
     {
         yield return new WaitForSeconds(duration);
 
@@ -26,7 +29,18 @@ public class FadeAndDestroy : AutoDestroyBase
         while (t < fadeOutTime)
         {
             t += Time.deltaTime;
-            cg.alpha = 1f - (t / fadeOutTime);
+            float alpha = 1f - (t / fadeOutTime);
+
+            foreach (var g in graphics)
+            {
+                if (g != null)
+                {
+                    Color c = g.color;
+                    c.a = alpha;
+                    g.color = c;
+                }
+            }
+
             yield return null;
         }
 

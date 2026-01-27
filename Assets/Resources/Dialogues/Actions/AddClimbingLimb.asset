@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e83b592f561bc514f9de7a2b22c69419, type: 3}
   m_Name: AddClimbingLimb
   m_EditorClassIdentifier: Assembly-CSharp::AddItemAction
-  item: {fileID: 11400000, guid: edd76cda1dd6a6f40afde1ba9d934682, type: 2}
+  item: {fileID: 11400000, guid: 0f980eb164f5c634a835f9ed260d29e6, type: 2}
   amount: 1

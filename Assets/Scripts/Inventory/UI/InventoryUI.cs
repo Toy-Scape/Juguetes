@@ -40,6 +40,7 @@ namespace Inventory.UI
 
         [Header("Message tooltips")]
         [SerializeField] private GameObject ItemMessage;
+        [SerializeField] private GameObject ItemMessageContainer;
 
         private List<InventorySlotUI> _itemSlots = new List<InventorySlotUI>();
         private List<InventorySlotUI> _limbSlots = new List<InventorySlotUI>();
@@ -62,8 +63,8 @@ namespace Inventory.UI
             }
 
             // Aseguramos que el tooltip esté oculto al inicio
-            if (tooltipPanel != null)
-                tooltipPanel.SetActive(false);
+            //if (tooltipPanel != null)
+            //    tooltipPanel.SetActive(false);
 
             // Buscar PlayerInventory si no está asignado
             if (playerInventory == null)
@@ -247,36 +248,33 @@ namespace Inventory.UI
             }
         }
 
-        private void SelectSlot(InventorySlotUI slot)
+        private void SelectSlot (InventorySlotUI slot)
         {
             if (slot == null) return;
 
             if (_selectedSlot != null)
-            {
                 _selectedSlot.SetSelected(false);
-            }
 
             _selectedSlot = slot;
             _selectedSlot.SetSelected(true);
 
-            // Mostrar tooltip si tiene item
-            if (!slot.IsEmpty)
-            {
-                // Posicionar tooltip cerca del slot seleccionado
-                RectTransform slotRect = slot.GetComponent<RectTransform>();
-                if (slotRect != null)
-                {
-                    Vector3[] corners = new Vector3[4];
-                    slotRect.GetWorldCorners(corners);
-                    Vector2 center = (corners[0] + corners[2]) / 2;
-                    ShowTooltip(slot.CurrentItem, center);
-                }
-            }
-            else
-            {
-                HideTooltip();
-            }
+            //if (!slot.IsEmpty)
+            //{
+            //    RectTransform slotRect = slot.GetComponent<RectTransform>();
+            //    if (slotRect != null)
+            //    {
+            //        Vector3 worldCenter = slotRect.TransformPoint(slotRect.rect.center);
+            //        Vector2 screenPos = RectTransformUtility.WorldToScreenPoint(null, worldCenter);
+
+            //        ShowTooltip(slot.CurrentItem, screenPos);
+            //    }
+            //}
+            //else
+            //{
+            //    HideTooltip();
+            //}
         }
+
 
         #endregion
 
@@ -477,7 +475,7 @@ namespace Inventory.UI
 
         private void OnItemAdded(ItemData itemData, int quantity)
         {
-            var Message = Instantiate(ItemMessage);
+            var Message = Instantiate(ItemMessage, ItemMessageContainer.transform);
             Message.GetComponent<ItemMessageTooltip>().SetData(ItemMessageType.Added, itemData.Icon, itemData.ItemName, quantity);
             Debug.Log("Added item");
             RefreshUI();
@@ -485,8 +483,9 @@ namespace Inventory.UI
 
         private void OnItemRemoved(ItemData itemData, int quantity)
         {
-            var Message = Instantiate(ItemMessage);
+            var Message = Instantiate(ItemMessage, ItemMessageContainer.transform);
             Message.GetComponent<ItemMessageTooltip>().SetData(ItemMessageType.Removed, itemData.Icon, itemData.ItemName, quantity);
+            Debug.Log("Removed item");
 
             RefreshUI();
         }
@@ -543,49 +542,41 @@ namespace Inventory.UI
 
         #region Tooltip
 
-        public void ShowTooltip(InventoryItem item, Vector2 screenPosition)
+        public void ShowTooltip (InventoryItem item, Vector2 screenPosition)
         {
             if (tooltipPanel == null || item == null || item.Data == null)
                 return;
 
-            if (tooltipNameText != null)
-            {
-                if (Localization.LocalizationManager.Instance != null)
-                    tooltipNameText.text = Localization.LocalizationManager.Instance.GetLocalizedValue(item.Data.NameKey);
-                else
-                    tooltipNameText.text = item.Data.NameKey;
-            }
+            tooltipNameText.text = Localization.LocalizationManager.Instance != null
+                ? Localization.LocalizationManager.Instance.GetLocalizedValue(item.Data.NameKey)
+                : item.Data.NameKey;
 
-            if (tooltipDescriptionText != null)
-            {
-                if (Localization.LocalizationManager.Instance != null)
-                    tooltipDescriptionText.text = Localization.LocalizationManager.Instance.GetLocalizedValue(item.Data.DescriptionKey);
-                else
-                    tooltipDescriptionText.text = item.Data.DescriptionKey;
-            }
+            tooltipDescriptionText.text = Localization.LocalizationManager.Instance != null
+                ? Localization.LocalizationManager.Instance.GetLocalizedValue(item.Data.DescriptionKey)
+                : item.Data.DescriptionKey;
 
             tooltipPanel.SetActive(true);
 
-            RectTransform rt = tooltipPanel.GetComponent<RectTransform>();
-            if (rt != null)
-            {
-                Vector2 anchoredPos;
-                RectTransformUtility.ScreenPointToLocalPointInRectangle(
-                    rt.parent as RectTransform,
-                    screenPosition,
-                    null,
-                    out anchoredPos
-                );
+            //RectTransform rt = tooltipPanel.GetComponent<RectTransform>();
+            //Canvas rootCanvas = tooltipPanel.GetComponentInParent<Canvas>();
+            //RectTransform canvasRect = rootCanvas.GetComponent<RectTransform>();
 
-                anchoredPos += tooltipOffset;
-                rt.anchoredPosition = anchoredPos;
-            }
+            //Vector2 localPos;
+            //RectTransformUtility.ScreenPointToLocalPointInRectangle(
+            //    canvasRect,
+            //    screenPosition,
+            //    rootCanvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : rootCanvas.worldCamera,
+            //    out localPos
+            //);
+
+            //rt.anchoredPosition = localPos + tooltipOffset;
         }
+
 
         public void HideTooltip()
         {
-            if (tooltipPanel != null)
-                tooltipPanel.SetActive(false);
+            //if (tooltipPanel != null)
+            //    tooltipPanel.SetActive(false);
         }
 
         #endregion

@@ -10,27 +10,37 @@ public class ItemMessageTooltip : MonoBehaviour
     [SerializeField] private TMP_Text itemName;
     [SerializeField] private TMP_Text quantityText;
 
-
-    public void SetData(ItemMessageType itemMessageType, Sprite iconSprite, string titleText, int? quantity = null)
+    public void SetData (ItemMessageType itemMessageType, Sprite iconSprite, string titleKey, int? quantity = null)
     {
-        // TODO:: Localize these strings
-        messageText.text = GetDescription(itemMessageType);
+        string descriptionKey = GetDescriptionKey(itemMessageType);
+        messageText.text = Localize(descriptionKey);
+
         icon.sprite = iconSprite;
-        itemName.text = titleText;
+        itemName.text = Localize(titleKey);
         quantityText.text = quantity.HasValue ? $"x{quantity.Value}" : "";
-        Debug.Log($"ItemMessageTooltip SetData: {messageText.text}, {titleText}, Quantity: {quantityText.text}");
     }
 
-    private static string GetDescription(ItemMessageType type)
+    private static string GetDescriptionKey (ItemMessageType type)
     {
         return type switch
         {
-            ItemMessageType.Added => "New item added",
-            ItemMessageType.Removed => "Item removed",
+            ItemMessageType.Added => "inventory-item-added",
+            ItemMessageType.Removed => "inventory-item-removed",
             _ => ""
         };
     }
 
+    private static string Localize (string key)
+    {
+        if (Localization.LocalizationManager.Instance != null)
+            return Localization.LocalizationManager.Instance.GetLocalizedValue(key);
+
+        var db = Resources.Load<Localization.LocalizationDatabase>("LocalizationDatabase");
+        if (db != null)
+            return db.GetValue(key, Localization.Language.Spanish);
+
+        return key; // fallback final
+    }
 }
 
 public enum ItemMessageType
