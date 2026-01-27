@@ -1,7 +1,7 @@
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
-using UnityEngine.Audio;
 
 namespace UI_System.Menus
 {
@@ -25,7 +25,8 @@ namespace UI_System.Menus
             // Reset pause state when this component (usually in the main scene) loads
             IsPaused = false;
 
-            _gameplaySnapshot?.TransitionTo(0f);
+            if (_gameplaySnapshot != null)
+                _gameplaySnapshot.TransitionTo(0f);
         }
 
         // This method is called by PlayerInput via "Send Messages" 
@@ -107,9 +108,12 @@ namespace UI_System.Menus
 
             // Try to find PlayerInput to get the action
             var playerInput = FindFirstObjectByType<PlayerInput>();
-            if (playerInput == null) return;
+            if (playerInput == null || playerInput.actions == null) return;
 
-            _pauseAction = playerInput.actions["Pause"];
+            // Prefer globally finding the action or fallback
+            // Try explicit map first if needed, but generic search is usually okay
+            _pauseAction = playerInput.actions.FindAction("Pause"); // safer than indexer
+            if (_pauseAction == null) _pauseAction = playerInput.actions["Pause"]; // Fallback
             if (_pauseAction != null)
             {
                 _pauseAction.performed += OnPausePerformed;
