@@ -969,7 +969,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7466885678434644253, guid: 2f4d7066f79d04545846e2c72f98062b, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8795068699015775753, guid: 2f4d7066f79d04545846e2c72f98062b, type: 3}
       propertyPath: hearing

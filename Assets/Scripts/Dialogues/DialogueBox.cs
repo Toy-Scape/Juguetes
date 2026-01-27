@@ -29,6 +29,7 @@ public class DialogueBox : MonoBehaviour
 
     public static event Action OnDialogueOpen;
     public static event Action OnDialogueClose;
+    public static event Action OnDialogueVisibleClose;
 
     private Dialogue activeDialogue;
     private string fullText;
@@ -121,10 +122,19 @@ public class DialogueBox : MonoBehaviour
         if (dialogueContent) dialogueContent.SetActive(false);
         if (thoughtContent) thoughtContent.SetActive(false);
 
+        float delay = 0f;
+        if (activeDialogue != null)
+        {
+            delay = activeDialogue.postDialogueInputDelay;
+        }
+
         globalInteractionLockUntil = Time.unscaledTime + interactionLockTime;
 
         onClose?.Invoke();
-        OnDialogueClose?.Invoke();
+        OnDialogueVisibleClose?.Invoke();
+
+        // Note: We delay OnDialogueClose invocation to keep input blocked for 'delay' seconds.
+        // OnDialogueClose?.Invoke(); // Moved to routine
 
         if (typingCoroutine != null)
         {
@@ -133,11 +143,18 @@ public class DialogueBox : MonoBehaviour
         }
 
         IsTyping = false;
+
+        StartCoroutine(UnlockInputRoutine(delay));
     }
 
-    /// <summary>
-    /// Versión usada en Awake para evitar ejecutar eventos y corutinas.
-    /// </summary>
+    private IEnumerator UnlockInputRoutine(float delay)
+    {
+        if (delay > 0f)
+            yield return new WaitForSeconds(delay);
+
+        OnDialogueClose?.Invoke();
+        activeDialogue = null;
+    }
     private void CloseImmediate()
     {
         if (dialogueContent) dialogueContent.SetActive(false);

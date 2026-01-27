@@ -75,13 +75,13 @@ namespace CinematicSystem.Application
 
         public IEnumerator Wait(float duration)
         {
-             float timer = 0f;
-             while (timer < duration)
-             {
-                 if (_skipRequested) yield break; // Break the wait immediately if advanced
-                 timer += Time.unscaledDeltaTime; // Use unscaled time
-                 yield return null;
-             }
+            float timer = 0f;
+            while (timer < duration)
+            {
+                if (_skipRequested) yield break; // Break the wait immediately if advanced
+                timer += Time.unscaledDeltaTime; // Use unscaled time
+                yield return null;
+            }
         }
 
         private IEnumerator PlayRoutine(CinematicAsset cinematic)
@@ -98,7 +98,7 @@ namespace CinematicSystem.Application
                 // No, if user spammed skip, maybe we want to skip multiple?
                 // But for "Advance", we usually mean "Next Action".
                 // So we should consume the flag.
-                 _skipRequested = false;
+                _skipRequested = false;
 
                 if (action != null)
                 {
@@ -112,14 +112,14 @@ namespace CinematicSystem.Application
                         yield return action.Execute(this);
 
                         // If user skipped during execution, we continue to next logic.
-                        
+
                         // Check HOLD AT END
                         Debug.Log($"[CinematicPlayer] Action Finished. HoldAtEnd: {action.holdAtEnd}, AdvanceRequested: {_skipRequested}");
-                        
+
                         if (action.holdAtEnd && !_skipRequested)
                         {
                             Debug.Log("[CinematicPlayer] Holding until Advance...");
-                            
+
                             // Wait until next advance signal
                             // Reset flag first just in case
                             _skipRequested = false;
@@ -148,21 +148,24 @@ namespace CinematicSystem.Application
             if (_cameraController != null)
             {
                 _cameraController.SetActive(false, instant); // Reset to gameplay camera
-                
+
                 // If NOT instant, wait for blend to finish before enabling input
                 if (!instant)
                 {
+                    Debug.Log($"[CinematicPlayer] EndCinematicRoutine: Waiting for Blend... Time: {Time.time}");
                     yield return _cameraController.WaitForBlend();
+                    Debug.Log($"[CinematicPlayer] EndCinematicRoutine: Blend Finished. Time: {Time.time}");
                 }
             }
 
+            Debug.Log($"[CinematicPlayer] EndCinematicRoutine: Enabling Player Input. Time: {Time.time}");
             SetPlayerInput(true);
         }
 
         // Backward compatibility wrapper for Stop()
         private void EndCinematic(bool instant = false)
         {
-             StartCoroutine(EndCinematicRoutine(instant));
+            StartCoroutine(EndCinematicRoutine(instant));
         }
 
         public void SetPlayerInput(bool enabled)

@@ -177,6 +177,7 @@ public class InputMapManager : MonoBehaviour
 
         if (playerInput != null && playerInput.currentActionMap != null && playerInput.currentActionMap.name != newMap)
         {
+            Debug.Log($"[InputMapManager] Switching Map from '{playerInput.currentActionMap.name}' to '{newMap}'. Counters - UI: {uiCounter}, Dialogue: {dialogueCounter}, Cinematic: {cinematicCounter}");
             SwitchToActionMapSafe(newMap);
         }
     }

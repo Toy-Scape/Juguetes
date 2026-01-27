@@ -49,12 +49,23 @@ public class CameraManager : MonoBehaviour
     private void OnEnable()
     {
         InputMapManager.OnActionMapChanged += HandleActionMapChanged;
+        DialogueBox.OnDialogueVisibleClose += HandleDialogueVisibleClose;
     }
 
     private void OnDisable()
     {
         InputMapManager.OnActionMapChanged -= HandleActionMapChanged;
+        DialogueBox.OnDialogueVisibleClose -= HandleDialogueVisibleClose;
         if (_dialogueAnchor != null) Destroy(_dialogueAnchor);
+    }
+
+    private void HandleDialogueVisibleClose()
+    {
+        // When Dialogue UI closes (even if input remains blocked), reset camera priority
+        if (dialogueCamera != null)
+        {
+            dialogueCamera.Priority = 0;
+        }
     }
 
     private void HandleActionMapChanged(string newMap)
@@ -64,37 +75,47 @@ public class CameraManager : MonoBehaviour
         {
             if (newMap == ActionMaps.Dialogue)
             {
-                dialogueCamera.Priority = 20;
-
-                // Configure Camera Position (Over the Shoulder)
-                if (_player != null)
+                // Only enable camera if Dialogue is actually OPEN (visuals)
+                // This prevents camera from staying locked if input is delayed but dialogue UI is closed.
+                if (DialogueBox.Instance != null && DialogueBox.Instance.IsOpen)
                 {
-                    // Try to configure CinemachineThirdPersonFollow if present
-                    var thirdPerson = dialogueCamera.GetComponent<CinemachineThirdPersonFollow>();
-                    if (thirdPerson != null)
+                    dialogueCamera.Priority = 20;
+
+                    // Configure Camera Position (Over the Shoulder)
+                    if (_player != null)
                     {
-                        thirdPerson.ShoulderOffset = dialogueOffset;
-                        dialogueCamera.Follow = _player.transform;
-                        dialogueCamera.LookAt = _player.transform;
-                    }
-                    else
-                    {
-                        // Fallback: If no dedicated component, we position the VCam manually via a temp target 
-                        // attached to the anchor.
-                        // For now, let's just create a child on the anchor.
-                        Transform camTarget = _dialogueAnchor.transform.Find("CamPos");
-                        if (camTarget == null)
+                        // Try to configure CinemachineThirdPersonFollow if present
+                        var thirdPerson = dialogueCamera.GetComponent<CinemachineThirdPersonFollow>();
+                        if (thirdPerson != null)
                         {
-                            camTarget = new GameObject("CamPos").transform;
-                            camTarget.SetParent(_dialogueAnchor.transform);
+                            thirdPerson.ShoulderOffset = dialogueOffset;
+                            dialogueCamera.Follow = _player.transform;
+                            dialogueCamera.LookAt = _player.transform;
                         }
+                        else
+                        {
+                            // Fallback: If no dedicated component, we position the VCam manually via a temp target 
+                            // attached to the anchor.
+                            // For now, let's just create a child on the anchor.
+                            Transform camTarget = _dialogueAnchor.transform.Find("CamPos");
+                            if (camTarget == null)
+                            {
+                                camTarget = new GameObject("CamPos").transform;
+                                camTarget.SetParent(_dialogueAnchor.transform);
+                            }
 
-                        camTarget.localPosition = dialogueOffset;
-                        camTarget.localRotation = Quaternion.identity;
+                            camTarget.localPosition = dialogueOffset;
+                            camTarget.localRotation = Quaternion.identity;
 
-                        dialogueCamera.Follow = camTarget;
-                        dialogueCamera.LookAt = _player.transform; // Look at player
+                            dialogueCamera.Follow = camTarget;
+                            dialogueCamera.LookAt = _player.transform; // Look at player
+                        }
                     }
+                }
+                else
+                {
+                    // Dialogue map active (input blocked) but UI closed -> Return to gameplay view
+                    dialogueCamera.Priority = 0;
                 }
             }
             else

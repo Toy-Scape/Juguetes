@@ -12,7 +12,7 @@ namespace CinematicSystem.Infrastructure
         [SerializeField] private CinemachineCamera cinematicCamera;
 
         [Header("Settings")]
-        
+
         private ISceneReferenceResolver _resolver;
         private CinemachineBrain _brain;
         // private float _defaultBlendTime; // Not needed
@@ -86,26 +86,26 @@ namespace CinematicSystem.Infrastructure
             if (collider != null) collider.enabled = !ignoreCollision;
 
             var deoccluder = cinematicCamera.GetComponent<CinemachineDeoccluder>();
-            if (deoccluder != null) deoccluder.enabled = !ignoreCollision; 
+            if (deoccluder != null) deoccluder.enabled = !ignoreCollision;
 
             // Setup Pivot
             _pivot.transform.position = target.position;
-            _pivot.transform.rotation = Quaternion.identity; 
+            _pivot.transform.rotation = Quaternion.identity;
 
             // apply offset to handle
             _cameraHandle.transform.localPosition = offset;
-            
+
             // Assign Follow Target
             cinematicCamera.Follow = _cameraHandle.transform;
 
             // LookAt
-            cinematicCamera.LookAt = lookAt; 
-            
+            cinematicCamera.LookAt = lookAt;
+
             cinematicCamera.Lens.FieldOfView = fov;
 
             _isOrbiting = useOrbit;
             _currentOrbitSpeed = orbitSpeed;
-            
+
             // IMPORTANT: If 'instant' is requested, we force the camera to warp/reset
             if (instant)
             {
@@ -129,10 +129,10 @@ namespace CinematicSystem.Infrastructure
             if (cinematicCamera != null)
             {
                 Debug.Log($"[CinemachineCameraController] Resetting Camera. Instant: {instant}");
-                
+
                 if (instant && _brain != null)
                 {
-                     ApplyInstantCut();
+                    ApplyInstantCut();
                 }
 
                 cinematicCamera.Priority = 0; // Return control to gameplay camera
@@ -144,25 +144,26 @@ namespace CinematicSystem.Infrastructure
 
         private void ApplyInstantCut()
         {
-             // Save state
-             _savedBlend = _brain.DefaultBlend;
-             _savedCustomBlends = _brain.CustomBlends;
-             
-             // Apply Cut
-             _brain.DefaultBlend = new CinemachineBlendDefinition(CinemachineBlendDefinition.Styles.Cut, 0);
-             _brain.CustomBlends = null;
-             
-             Debug.Log("[CinemachineCameraController] Applied Cut settings synchronously.");
+            // Save state
+            _savedBlend = _brain.DefaultBlend;
+            _savedCustomBlends = _brain.CustomBlends;
 
-             StartCoroutine(RestoreBrainRoutine());
+            // Apply Cut
+            _brain.DefaultBlend = new CinemachineBlendDefinition(CinemachineBlendDefinition.Styles.Cut, 0);
+            _brain.CustomBlends = null;
+
+            Debug.Log("[CinemachineCameraController] Applied Cut settings synchronously.");
+
+            StartCoroutine(RestoreBrainRoutine());
         }
-        
+
         private System.Collections.IEnumerator RestoreBrainRoutine()
         {
             if (_brain == null) yield break;
-            
-            // Wait for one frame (Brain update) to ensure the Cut is consumed
-            yield return null; 
+
+            // Wait for a few frames (Brain update) to ensure the Cut is consumed.
+            // Sometimes 1 frame is not enough if priority update and brain update are out of sync.
+            for (int i = 0; i < 5; i++) yield return null;
 
             // Restore
             _brain.DefaultBlend = _savedBlend;
@@ -196,22 +197,22 @@ namespace CinematicSystem.Infrastructure
 
         public System.Collections.IEnumerator WaitForBlend()
         {
-             if (_brain == null) yield break;
+            if (_brain == null) yield break;
 
-             // Wait a couple of frames for the blend to definitely start logic in Brain
-             yield return null;
-             yield return null;
+            // Wait a couple of frames for the blend to definitely start logic in Brain
+            yield return null;
+            yield return null;
 
-             Debug.Log($"[CinemachineCameraController] WaitForBlend Started. IsBlending: {_brain.IsBlending}");
+            Debug.Log($"[CinemachineCameraController] WaitForBlend Started. IsBlending: {_brain.IsBlending}");
 
-             while (_brain.IsBlending)
-             {
-                 // Optional: Log blend progress
-                 // Debug.Log($"Blending... Time: {_brain.ActiveBlend?.TimeInBlend}");
-                 yield return null;
-             }
-             
-             Debug.Log("[CinemachineCameraController] WaitForBlend Finished.");
+            while (_brain.IsBlending)
+            {
+                // Optional: Log blend progress
+                // Debug.Log($"Blending... Time: {_brain.ActiveBlend?.TimeInBlend}");
+                yield return null;
+            }
+
+            Debug.Log("[CinemachineCameraController] WaitForBlend Finished.");
         }
     }
 }

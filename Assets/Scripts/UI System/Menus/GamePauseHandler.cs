@@ -1,7 +1,7 @@
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
-using UnityEngine.Audio;
 
 namespace UI_System.Menus
 {
@@ -25,7 +25,8 @@ namespace UI_System.Menus
             // Reset pause state when this component (usually in the main scene) loads
             IsPaused = false;
 
-            _gameplaySnapshot?.TransitionTo(0f);
+            if (_gameplaySnapshot != null)
+                _gameplaySnapshot.TransitionTo(0f);
         }
 
         // This method is called by PlayerInput via "Send Messages" 

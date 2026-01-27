@@ -52,3 +52,4 @@ MonoBehaviour:
     Key: tutorial-juan-dialogue-4
     Text: 
     Actions: []
+  postDialogueInputDelay: 2
