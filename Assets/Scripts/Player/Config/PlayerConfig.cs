@@ -111,6 +111,19 @@ public class PlayerConfig
     [SerializeField] private float wallClimbDetectionDistance = 0.6f;
     public float WallClimbDetectionDistance => wallClimbDetectionDistance;
 
+    [Header("Dynamic FOV")]
+    [SerializeField] private float baseFOV = 60f;
+    public float BaseFOV => baseFOV;
+
+    [SerializeField] private float sprintFOVModifier = 10f;
+    public float SprintFOVModifier => sprintFOVModifier;
+
+    [SerializeField] private float lookUpFOVModifier = 5f;
+    public float LookUpFOVModifier => lookUpFOVModifier;
+
+    [SerializeField] private float fovSmoothTime = 5f;
+    public float FOVSmoothTime => fovSmoothTime;
+
     // [Header("Grab Settings")]
     // public float MaxGrabDistance = 1.5f; // Removed
 }
