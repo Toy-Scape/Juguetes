@@ -536,9 +536,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UI_System.Menus.GamePauseHandler
   _menuSceneName: SC_Menus
-  _audioMixer: {fileID: 0}
-  _gameplaySnapshot: {fileID: 0}
-  _pausedSnapshot: {fileID: 0}
+  _audioMixer: {fileID: 24100000, guid: 7bd7eaa6f125ab044b5eaece627b84a9, type: 2}
+  _gameplaySnapshot: {fileID: -1511293616973409331, guid: 7bd7eaa6f125ab044b5eaece627b84a9, type: 2}
+  _pausedSnapshot: {fileID: -7477047019274458235, guid: 7bd7eaa6f125ab044b5eaece627b84a9, type: 2}
   _snapshotTransitionTime: 0.2
 --- !u!1 &4863517487004635220
 GameObject:

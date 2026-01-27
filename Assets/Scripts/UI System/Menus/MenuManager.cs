@@ -98,6 +98,10 @@ namespace UI_System.Menus
         {
             // Load Game Scene in Single mode (replacing the Menu Scene)
             // Or if we are in a dedicated Menu scene, we strictly load the Game Scene.
+
+            // Immediately stop menu music
+            FindFirstObjectByType<MenuMusicFader>()?.StopImmediately();
+
             SceneManager.LoadScene(_gameSceneName, LoadSceneMode.Single);
         }
 
