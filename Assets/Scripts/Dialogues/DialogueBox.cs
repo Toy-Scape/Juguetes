@@ -1,7 +1,7 @@
-using Assets.Scripts.PlayerController;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Assets.Scripts.PlayerController;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -29,6 +29,7 @@ public class DialogueBox : MonoBehaviour
 
     public static event Action OnDialogueOpen;
     public static event Action OnDialogueClose;
+    public static event Action OnDialogueVisibleClose;
 
     private Dialogue activeDialogue;
     private string fullText;
@@ -73,7 +74,7 @@ public class DialogueBox : MonoBehaviour
         CloseImmediate();
     }
 
-    private void OnDestroy ()
+    private void OnDestroy()
     {
         if (nextDialogueAction?.action != null)
         {
@@ -85,7 +86,7 @@ public class DialogueBox : MonoBehaviour
     /// <summary>
     /// Abre el diálogo activo. No asume que el activeDialogue sea nulo.
     /// </summary>
-    public void Open ()
+    public void Open()
     {
         if (activeDialogue == null)
             return;
@@ -121,10 +122,19 @@ public class DialogueBox : MonoBehaviour
         if (dialogueContent) dialogueContent.SetActive(false);
         if (thoughtContent) thoughtContent.SetActive(false);
 
+        float delay = 0f;
+        if (activeDialogue != null)
+        {
+            delay = activeDialogue.postDialogueInputDelay;
+        }
+
         globalInteractionLockUntil = Time.unscaledTime + interactionLockTime;
 
         onClose?.Invoke();
-        OnDialogueClose?.Invoke();
+        OnDialogueVisibleClose?.Invoke();
+
+        // Note: We delay OnDialogueClose invocation to keep input blocked for 'delay' seconds.
+        // OnDialogueClose?.Invoke(); // Moved to routine
 
         if (typingCoroutine != null)
         {
@@ -133,11 +143,18 @@ public class DialogueBox : MonoBehaviour
         }
 
         IsTyping = false;
+
+        StartCoroutine(UnlockInputRoutine(delay));
     }
 
-    /// <summary>
-    /// Versión usada en Awake para evitar ejecutar eventos y corutinas.
-    /// </summary>
+    private IEnumerator UnlockInputRoutine(float delay)
+    {
+        if (delay > 0f)
+            yield return new WaitForSeconds(delay);
+
+        OnDialogueClose?.Invoke();
+        activeDialogue = null;
+    }
     private void CloseImmediate()
     {
         if (dialogueContent) dialogueContent.SetActive(false);
@@ -152,12 +169,19 @@ public class DialogueBox : MonoBehaviour
         IsTyping = false;
     }
 
-    private void OnNextDialogue (InputAction.CallbackContext ctx) => Next();
+    private void OnNextDialogue(InputAction.CallbackContext ctx) => Next();
 
-    public void Next ()
+    public void Next()
     {
         if (activeDialogue == null)
             return;
+
+        // SKIP CINEMATIC IF PLAYING
+        var cinematicPlayer = FindFirstObjectByType<CinematicSystem.Application.CinematicPlayer>();
+        if (cinematicPlayer != null && cinematicPlayer.IsPlaying)
+        {
+            cinematicPlayer.Advance();
+        }
 
         if (IsTyping)
         {
@@ -241,11 +265,12 @@ public class DialogueBox : MonoBehaviour
         activeDialogue = dialogue;
         dialogueIndex = 0;
         duringTriggeredLines.Clear();
+
         Open();
         Next();
     }
 
-    private IEnumerator TypeWriterEffectCoroutine (int lineIndex, DialogueContext context)
+    private IEnumerator TypeWriterEffectCoroutine(int lineIndex, DialogueContext context)
     {
         if (CurrentText == null)
             yield break;
@@ -312,7 +337,7 @@ public class DialogueBox : MonoBehaviour
         Close();
     }
 
-    private IEnumerator EnableNextDialogueAction ()
+    private IEnumerator EnableNextDialogueAction()
     {
         // esperar un frame para evitar race conditions con el InputSystem
         yield return null;

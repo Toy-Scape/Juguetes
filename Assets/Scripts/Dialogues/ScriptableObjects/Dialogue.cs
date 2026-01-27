@@ -13,6 +13,10 @@ public class Dialogue : ScriptableObject
         Thought
     }
 
+    [Header("Settings")]
+    [Tooltip("Time in seconds to wait after dialogue ends before unlocking player input.")]
+    public float postDialogueInputDelay = 0f;
+
     public static Dialogue Load(string relativePath)
     {
         return Resources.Load<Dialogue>($"Dialogues/{relativePath}");
