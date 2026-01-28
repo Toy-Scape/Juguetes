@@ -1,9 +1,11 @@
 using System.Collections.Generic;
 using InteractionSystem.Interfaces;
 using Inventory;
+using Localization;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 namespace InteractionSystem.Core
 {
@@ -21,7 +23,15 @@ namespace InteractionSystem.Core
         [SerializeField] private GameObject interactionPrompt = null;
         [SerializeField] private TMP_Text interactionPromptText = null;
         [SerializeField] private InputActionReference interactActionReference = null;
-        [SerializeField] private string fallbackPrompt = "E";
+        [SerializeField] private string interactionKey = "interaction_prompt";
+
+        [SerializeField] private Image interactionIconImage;
+
+        [Header("Manual Icons (Assign specific button sprites)")]
+        [SerializeField] private Sprite iconKeyboard;
+        [SerializeField] private Sprite iconXbox;
+        [SerializeField] private Sprite iconPlayStation;
+        [SerializeField] private Sprite iconSwitch;
 
         [Header("Feedback")]
         [SerializeField] private GamepadVibration vibration;
@@ -29,18 +39,20 @@ namespace InteractionSystem.Core
 
         [Header("Prompt Positioning")]
         [SerializeField] private Vector3 promptWorldOffset = new Vector3(0f, 1.5f, 0f);
-        //[SerializeField, Range(0.01f, 20f)] private float promptFollowSpeed = 10f;
 
         private IInteractable focusedInteractable;
         private GameObject focusedGameObject;
         private Outline focusedOutline;
         private bool focusedIsUsable;
         private Dictionary<int, IInteractable> interactableCache = new Dictionary<int, IInteractable>();
-        private string promptBindingDisplay = "E";
+        private string promptBindingDisplay = "";
         private RectTransform promptRectTransform;
         private Vector3 promptTargetWorldPosition;
         private bool promptHasTarget;
         private PlayerInventory playerInventory;
+
+        // Cache reference to ensure we subscribe/unsubscribe to the same object
+        private PlayerInput _cachedPlayerInput;
 
         public float InteractionDistance => interactionDistance;
 
@@ -74,18 +86,26 @@ namespace InteractionSystem.Core
 
             InteractableBase.SetGlobalOutlineProperties(outlineColor, outlineWidth, outlineMode);
 
-            if (interactActionReference != null && interactActionReference.action != null)
+            // Find PlayerInput consistently
+            _cachedPlayerInput = GetComponentInParent<PlayerInput>();
+            if (_cachedPlayerInput == null) _cachedPlayerInput = FindFirstObjectByType<PlayerInput>();
+
+            if (_cachedPlayerInput != null)
             {
-                promptBindingDisplay = interactActionReference.action.GetBindingDisplayString();
+                _cachedPlayerInput.onControlsChanged += HandleControlsChanged;
             }
             else
             {
-                promptBindingDisplay = fallbackPrompt;
+                Debug.LogWarning("[PlayerInteractor] Could not find PlayerInput! automatic icon switching will not work.");
             }
+
+            UpdateBindingDisplay();
+
+            if (LocalizationManager.Instance != null)
+                LocalizationManager.OnLanguageChanged += HandleLanguageChanged;
 
             if (interactionPrompt != null)
             {
-                // No desactivar el canvas, solo controlar el texto
                 promptRectTransform = interactionPrompt.GetComponent<RectTransform>();
                 if (interactionPromptText != null)
                 {
@@ -100,14 +120,13 @@ namespace InteractionSystem.Core
                 Debug.LogWarning("PlayerInteractor: PlayerInventory not found on the same GameObject.");
             }
 
-            // Auto-wire feedback dependencies
             if (vibration == null) vibration = GetComponent<GamepadVibration>();
             if (vibration == null) vibration = GetComponentInChildren<GamepadVibration>();
 
             if (config == null)
             {
                 var pc = GetComponent<PlayerController>();
-                if (pc != null) 
+                if (pc != null)
                 {
                     config = pc.Config;
                 }
@@ -119,19 +138,60 @@ namespace InteractionSystem.Core
             }
         }
 
+        void Start()
+        {
+        }
+
         void OnValidate()
         {
             InteractableBase.SetGlobalOutlineProperties(outlineColor, outlineWidth, outlineMode);
+        }
 
-            if (interactActionReference != null && interactActionReference.action != null)
+        private void OnDestroy()
+        {
+            if (LocalizationManager.Instance != null)
+                LocalizationManager.OnLanguageChanged -= HandleLanguageChanged;
+
+            if (_cachedPlayerInput != null)
             {
-                promptBindingDisplay = interactActionReference.action.GetBindingDisplayString();
+                _cachedPlayerInput.onControlsChanged -= HandleControlsChanged;
             }
+        }
+
+        private void HandleLanguageChanged()
+        {
+            if (focusedInteractable != null)
+            {
+                ShowPrompt(true, promptBindingDisplay);
+            }
+        }
+
+        private void HandleControlsChanged(PlayerInput input)
+        {
+            // Debug.Log($"[Interaction] Controls changed to: {input.currentControlScheme}");
+            UpdateBindingDisplay();
+            if (focusedInteractable != null)
+            {
+                ShowPrompt(true, promptBindingDisplay);
+            }
+        }
+
+        private void UpdateBindingDisplay()
+        {
+            // Just triggers the prompt update, we don't strictly need the binding string for Manual Icons mode
+            // but we keep it to support potentially getting the binding index if needed later.
+            if (interactActionReference == null || interactActionReference.action == null)
+            {
+                promptBindingDisplay = "E";
+                return;
+            }
+
+            // We can use this to detect if the binding changed significantly, but for now we just rely on ShowPrompt logic.
+            promptBindingDisplay = "Interact";
         }
 
         void Update()
         {
-            // Check if the focused object was destroyed externally
             if (focusedInteractable != null && focusedGameObject == null)
             {
                 ClearOutline();
@@ -143,19 +203,9 @@ namespace InteractionSystem.Core
 
         public void OnInteract()
         {
-            if (focusedInteractable == null)
-            {
-                Debug.Log("OnInteract called but no focused interactable");
-                return;
-            }
+            if (focusedInteractable == null) return;
+            if (!focusedIsUsable) return;
 
-            if (!focusedIsUsable)
-            {
-                Debug.Log("OnInteract blocked: focused interactable not usable");
-                return;
-            }
-
-            Debug.Log("OnInteract performed on " + focusedGameObject.name);
             InteractContext context = new InteractContext
             {
                 PlayerInventory = playerInventory
@@ -202,7 +252,6 @@ namespace InteractionSystem.Core
                 {
                     interactable = FindInteractableInParents(hitObject);
                     interactableCache[id] = interactable;
-                    Debug.Log($"Interactable cacheado: {hitObject.name} ({id}) => {interactable}");
                 }
 
                 if (interactable != null)
@@ -211,7 +260,6 @@ namespace InteractionSystem.Core
 
                     if (focusedGameObject != hitObject)
                     {
-                        Debug.Log($"Nuevo interactable enfocado: {hitObject.name} (usable: {isUsable})");
                         ClearOutline();
                         focusedInteractable = interactable;
                         focusedGameObject = hitObject;
@@ -223,18 +271,12 @@ namespace InteractionSystem.Core
                         focusedIsUsable = isUsable;
                     }
 
-                    // SetPromptTargetFromHit(closestHitInfo); // Removed to keep prompt fixed on object center
                     return;
-                }
-                else
-                {
-                    //Debug.Log($"No IInteractable en: {hitObject.name}");
                 }
             }
 
             if (focusedGameObject != null)
             {
-                Debug.Log("Interactable enfocado perdido, limpiando outline.");
                 ClearOutline();
             }
         }
@@ -242,62 +284,35 @@ namespace InteractionSystem.Core
         private IInteractable FindInteractableInParents(GameObject start)
         {
             Transform t = start.transform;
-
             while (t != null)
             {
-                if (t.TryGetComponent<IInteractable>(out var interactable))
-                {
-                    return interactable;
-                }
-
+                if (t.TryGetComponent<IInteractable>(out var interactable)) return interactable;
                 t = t.parent;
             }
-
             return null;
-        }
-
-        private void SetPromptTargetFromHit(RaycastHit hit)
-        {
-            promptHasTarget = true;
-            promptTargetWorldPosition = hit.point + promptWorldOffset;
-            if (interactionPrompt != null) interactionPrompt.transform.position = promptTargetWorldPosition;
         }
 
         private void SetPromptTargetFromGameObject(GameObject go)
         {
             promptHasTarget = true;
-
             Collider c = go.GetComponent<Collider>();
-
             if (c != null)
             {
                 promptTargetWorldPosition = c.bounds.center + promptWorldOffset;
                 if (interactionPrompt != null) interactionPrompt.transform.position = promptTargetWorldPosition;
                 return;
             }
-
             promptTargetWorldPosition = go.transform.position + promptWorldOffset;
-            if (interactionPrompt != null) interactionPrompt.transform.position = promptTargetWorldPosition;
-        }
-
-        private void SetPromptTargetToPlayer()
-        {
-            promptHasTarget = true;
-            Transform followTarget = (rayOrigins != null && rayOrigins.Length > 0) ? rayOrigins[0] : transform;
-            promptTargetWorldPosition = followTarget.position + promptWorldOffset;
             if (interactionPrompt != null) interactionPrompt.transform.position = promptTargetWorldPosition;
         }
 
         private void ApplyOutline(GameObject target)
         {
-            if (target == null)
-                return;
+            if (target == null) return;
 
             focusedOutline = target.GetComponent<Outline>();
-
             if (focusedOutline == null)
             {
-                Debug.LogWarning($"El objeto {target.name} no tiene componente Outline. Añádelo manualmente para personalizar el borde desde el inspector.");
                 return;
             }
 
@@ -326,13 +341,90 @@ namespace InteractionSystem.Core
             if (interactionPrompt == null)
                 return;
 
-            if (interactionPromptText != null)
+            if (show)
             {
-                interactionPromptText.text = show ? $"Press {bindingText}" : "";
-                interactionPromptText.enabled = show;
+                // Determine Platform
+                bool isPlayStation = false;
+                bool isSwitch = false;
+                bool isXbox = true; // Default/PC Gamepad usually maps to Xbox
+
+                if (_cachedPlayerInput != null && _cachedPlayerInput.devices.Count > 0)
+                {
+                    var device = _cachedPlayerInput.devices[0];
+                    string deviceName = device.name.ToLower();
+                    string layout = device.layout.ToLower();
+
+                    if (deviceName.Contains("ps") || deviceName.Contains("dualshock") || deviceName.Contains("playstation") || layout.Contains("dualshock"))
+                    {
+                        isPlayStation = true;
+                        isXbox = false;
+                    }
+                    else if (deviceName.Contains("switch") || deviceName.Contains("pro") || layout.Contains("switch"))
+                    {
+                        isSwitch = true;
+                        isXbox = false;
+                    }
+                    else if (deviceName.Contains("keyboard") || deviceName.Contains("mouse"))
+                    {
+                        isXbox = false; // It's Keyboard
+                    }
+                }
+
+                // Select Icon based on Platform
+                Sprite targetIcon = iconKeyboard; // Default to keyboard if not gamepad
+
+                // If scheme is "Gamepad" or similar, use gamepad icons
+                // Or if we detected a Gamepad device above (isXbox || isPS || isSwitch)
+                string scheme = _cachedPlayerInput != null ? _cachedPlayerInput.currentControlScheme : "";
+
+                // Robust check: check Scheme OR device type logic
+                bool isGamepadParams = (isXbox || isPlayStation || isSwitch);
+                bool isGamepadScheme = scheme.ToLower().Contains("gamepad") || scheme.ToLower().Contains("joystick");
+
+                if (isGamepadScheme || (isGamepadParams && !scheme.ToLower().Contains("keyboard")))
+                {
+                    if (isPlayStation) targetIcon = iconPlayStation;
+                    else if (isSwitch) targetIcon = iconSwitch;
+                    else targetIcon = iconXbox;
+                }
+
+                // Set Image
+                if (interactionIconImage != null)
+                {
+                    if (targetIcon != null)
+                    {
+                        interactionIconImage.sprite = targetIcon;
+                        interactionIconImage.gameObject.SetActive(true);
+                        interactionIconImage.enabled = true;
+                        interactionIconImage.color = Color.white;
+                    }
+                    else
+                    {
+                        // If no icon assigned, hide it
+                        interactionIconImage.enabled = false;
+                        interactionIconImage.gameObject.SetActive(false);
+                    }
+                }
+
+                // Set Description Text
+                if (interactionPromptText != null)
+                {
+                    string format = LocalizationManager.Instance != null
+                        ? LocalizationManager.Instance.GetLocalizedValue(interactionKey)
+                        : "Interact";
+
+                    interactionPromptText.text = format.Replace("{0}", "").Trim();
+                    interactionPromptText.enabled = true;
+                }
+            }
+            else
+            {
+                if (interactionPromptText != null) interactionPromptText.text = "";
+                if (interactionIconImage != null) interactionIconImage.enabled = false;
             }
 
-            // Si hay un objeto enfocado, el prompt sigue ese objeto; si no, no hay target
+            interactionPrompt.SetActive(show);
+
             if (show && focusedGameObject != null)
             {
                 SetPromptTargetFromGameObject(focusedGameObject);
@@ -347,9 +439,6 @@ namespace InteractionSystem.Core
         {
             if (interactionPrompt == null || !promptHasTarget)
                 return;
-
-            // Position is now updated only once when target is set, so we don't update it here.
-            // interactionPrompt.transform.position = Vector3.Lerp(current, targetPosition, Time.deltaTime * promptFollowSpeed);
 
             Camera cam = Camera.main;
             if (cam == null && rayOrigins != null && rayOrigins.Length > 0)
