@@ -50,11 +50,20 @@ public class MenuMusicFader : MonoBehaviour
         _isFading = false;
     }
 
+
     // Opcional: por si vuelves a abrir el menú
     public void FadeIn()
     {
         if (_audioSource.isPlaying) return;
         StartCoroutine(FadeInRoutine());
+    }
+
+    public void StopImmediately()
+    {
+        StopAllCoroutines();
+        _audioSource.Stop();
+        _audioSource.volume = 0f;
+        _isFading = false;
     }
 
 

@@ -298,6 +298,8 @@ GameObject:
   - component: {fileID: 5459647364194880392}
   - component: {fileID: 1688514977732223978}
   - component: {fileID: 7946972374396150155}
+  - component: {fileID: 3014097245604593603}
+  - component: {fileID: 623290716098548153}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -576,6 +578,10 @@ MonoBehaviour:
     climbDuration: 1
     wallClimbSpeed: 3
     wallClimbDetectionDistance: 0.6
+    baseFOV: 60
+    sprintFOVModifier: 10
+    lookUpFOVModifier: 50
+    fovSmoothTime: 10
   cameraTransform: {fileID: 0}
   TMPPlayerState: {fileID: 0}
   playerAnimator: {fileID: 4688945857383318680}
@@ -600,11 +606,16 @@ MonoBehaviour:
   outlineColor: {r: 1, g: 1, b: 1, a: 1}
   outlineWidth: 3
   outlineMode: 1
-  interactionPrompt: {fileID: 0}
+  interactionPrompt: {fileID: 8733820849183982285, guid: 5fed6a53a77982a46adaf5a7ecdb37f9, type: 3}
   interactionPromptText: {fileID: 0}
   interactActionReference: {fileID: 1781555164194001046, guid: 052faaac586de48259a63d0c4782560b, type: 3}
-  fallbackPrompt: E
-  vibration: {fileID: 0}
+  interactionKey: interaction_prompt
+  interactionIconImage: {fileID: 0}
+  iconKeyboard: {fileID: 21300000, guid: 398d634b4ba915049827d3658d2d44cf, type: 3}
+  iconXbox: {fileID: 21300000, guid: 354a36c452834e24e82d3a9cd61d5d89, type: 3}
+  iconPlayStation: {fileID: 21300000, guid: 9fba5c16a8f1ea9418c588cd1ecbd899, type: 3}
+  iconSwitch: {fileID: 21300000, guid: da9909fa3e453b84fa27eba9609f2799, type: 3}
+  vibration: {fileID: 6611762367846655109}
   config:
     walkSpeed: 4
     sprintSpeed: 8
@@ -639,6 +650,10 @@ MonoBehaviour:
     climbDuration: 1
     wallClimbSpeed: 3
     wallClimbDetectionDistance: 0.6
+    baseFOV: 60
+    sprintFOVModifier: 10
+    lookUpFOVModifier: 5
+    fovSmoothTime: 5
   promptWorldOffset: {x: 0, y: 2.41, z: 0}
 --- !u!114 &8113327342456687462
 MonoBehaviour:
@@ -955,6 +970,34 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &3014097245604593603
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6641168232080197241}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d5dba0901c075445a012b12e2af523f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Domain.PlayerTarget
+  targetCenter: {fileID: 883425338343852037}
+  isValid: 1
+--- !u!114 &623290716098548153
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6641168232080197241}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f560dbcc92cc94744bbd8f5e7d34040f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DynamicFOVController
+  playerController: {fileID: 1143079539005282384}
+  virtualCamera: {fileID: 0}
 --- !u!1 &8468029186425840670
 GameObject:
   m_ObjectHideFlags: 0

@@ -20,3 +20,6 @@ MonoBehaviour:
     Actions:
     - timing: 0
       action: {fileID: 11400000, guid: abab08407526d594fba7eb7a88280427, type: 2}
+    - timing: 0
+      action: {fileID: 11400000, guid: abab08407526d594fba7eb7a88280427, type: 2}
+  postDialogueInputDelay: 0

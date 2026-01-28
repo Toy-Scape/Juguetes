@@ -163,3 +163,7 @@ MonoBehaviour:
     english: Inventory
     spanish: Inventario
     basque: Inbentarioa
+  - key: interaction_prompt
+    english: Interact {0}
+    spanish: Interactuar {0}
+    basque: Interaktuatu {0}
