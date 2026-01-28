@@ -55,6 +55,8 @@ namespace Domain
         private Transform _currentTargetTransform; // Keep track of the transform for chase logic
         private IVisibleTarget _currentIVisibleTarget;
 
+        public Transform CurrentTarget => _currentTargetTransform;
+
         void Start()
         {
             InitializeDependencies();
