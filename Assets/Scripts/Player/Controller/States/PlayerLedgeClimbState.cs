@@ -17,11 +17,27 @@ namespace Assets.Scripts.PlayerController
 
         public override void UpdateState()
         {
-           
+
         }
 
+        // Called by Animation Event (ClimbEnd), but we ignore it to ensure full animation playback.
         public void FinishClimb()
         {
+            _ctx.StartCoroutine(DelayedFinishClimb());
+        }
+
+        private System.Collections.IEnumerator DelayedFinishClimb()
+        {
+            // 1. Wait until we are close to the end OR if we start transitioning.
+            // This is the correct moment to SNAP position to avoid "Sinking/Drop".
+            yield return new WaitUntil(() =>
+            {
+                var stateInfo = _ctx.Animator.GetCurrentAnimatorStateInfo(0);
+                return _ctx.Animator.IsInTransition(0) || stateInfo.normalizedTime >= 0.9f;
+            });
+
+            // 2. Snap Position IMMEDIATELY.
+            // Doing this here ensures the character is at the top ledge position while the "Getting Up" blend happens.
             var cc = _ctx.CharacterController;
 
             float radius = cc.radius;
@@ -48,18 +64,22 @@ namespace Assets.Scripts.PlayerController
             }
 
             _ctx.transform.position = finalPos;
+
+            // 3. NOW wait for the "Getting Up" / Transition to finish visually.
+            // The position is already correct (Top), so no sinking.
+            // We hold the state (Input Blocked) for a bit longer to feel solid.
+            yield return new WaitForSeconds(_ctx.Config.LedgeClimbFinishDelay);
+
             _ctx.FreezeNearbyGrabbables(0.4f);
             SwitchState(_factory.Grounded());
         }
-
-
 
         public override void FixedUpdateState() { }
 
         public override void ExitState()
         {
             _ctx.CharacterController.enabled = true;
-            _ctx.Animator.applyRootMotion = false; 
+            _ctx.Animator.applyRootMotion = false;
             _ctx.FreezeNearbyGrabbables(0.4f);
 
             if (_ctx.CharacterController.enabled)
@@ -68,7 +88,7 @@ namespace Assets.Scripts.PlayerController
             }
         }
 
-        public override void CheckSwitchStates() { } 
+        public override void CheckSwitchStates() { }
 
         public override void InitializeSubState() { }
     }
