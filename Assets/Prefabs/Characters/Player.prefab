@@ -609,8 +609,13 @@ MonoBehaviour:
   interactionPrompt: {fileID: 0}
   interactionPromptText: {fileID: 0}
   interactActionReference: {fileID: 1781555164194001046, guid: 052faaac586de48259a63d0c4782560b, type: 3}
-  fallbackPrompt: E
-  vibration: {fileID: 0}
+  interactionKey: interaction_prompt
+  interactionIconImage: {fileID: 0}
+  iconKeyboard: {fileID: 21300000, guid: 398d634b4ba915049827d3658d2d44cf, type: 3}
+  iconXbox: {fileID: 21300000, guid: 354a36c452834e24e82d3a9cd61d5d89, type: 3}
+  iconPlayStation: {fileID: 21300000, guid: 9fba5c16a8f1ea9418c588cd1ecbd899, type: 3}
+  iconSwitch: {fileID: 21300000, guid: da9909fa3e453b84fa27eba9609f2799, type: 3}
+  vibration: {fileID: 6611762367846655109}
   config:
     walkSpeed: 4
     sprintSpeed: 8
