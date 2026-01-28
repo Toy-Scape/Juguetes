@@ -26,14 +26,14 @@ public class GrabInteractor : MonoBehaviour
     public float CurrentResistance => currentGrabbable != null ? currentGrabbable.MoveResistance : 0f;
 
 
-    private void Awake ()
+    private void Awake()
     {
         characterController = GetComponent<CharacterController>();
         playerColliders = GetComponentsInChildren<Collider>();
         if (grabOrigin == null) grabOrigin = transform;
     }
 
-    public bool TryPick ()
+    public bool TryPick()
     {
         if (isPicking || isGrabbing) return false;
 
@@ -92,7 +92,7 @@ public class GrabInteractor : MonoBehaviour
         return true;
     }
 
-    public void DropPicked ()
+    public void DropPicked()
     {
         if (!isPicking) return;
 
@@ -151,7 +151,7 @@ public class GrabInteractor : MonoBehaviour
         isPicking = false;
     }
 
-    public bool TryGrab ()
+    public bool TryGrab()
     {
         if (isPicking || isGrabbing) return false;
 
@@ -189,7 +189,7 @@ public class GrabInteractor : MonoBehaviour
         return true;
     }
 
-    public void ReleaseGrab ()
+    public void ReleaseGrab()
     {
         if (!isGrabbing) return;
 
@@ -208,7 +208,7 @@ public class GrabInteractor : MonoBehaviour
         isGrabbing = false;
     }
 
-    private void StartGrab (Grabbable grabbable, Vector3 hitPoint)
+    private void StartGrab(Grabbable grabbable, Vector3 hitPoint)
     {
         currentGrabbable = grabbable;
         isGrabbing = true;
@@ -250,7 +250,7 @@ public class GrabInteractor : MonoBehaviour
 
 
 
-    public bool CheckMove (Vector3 movement)
+    public bool CheckMove(Vector3 movement)
     {
         if (!isGrabbing || currentGrabbable == null)
             return true;
@@ -261,13 +261,13 @@ public class GrabInteractor : MonoBehaviour
         Vector3 targetPos = transform.TransformPoint(grabOffset) + movement;
         Quaternion targetRot = transform.rotation * grabRotationOffset;
 
-        if (currentGrabbable.CheckCollision(targetPos, targetRot))
+        if (currentGrabbable.CheckCollision(targetPos, targetRot, true))
             return false;
 
         return true;
     }
 
-    public void ValidateRotation (float proposedAngle, Vector3 playerPos, out float allowedAngle, out Vector3 effectivePivot)
+    public void ValidateRotation(float proposedAngle, Vector3 playerPos, out float allowedAngle, out Vector3 effectivePivot, bool pivotAroundPlayer = false)
     {
         if (!isGrabbing || currentGrabbable == null)
         {
@@ -276,20 +276,20 @@ public class GrabInteractor : MonoBehaviour
             return;
         }
 
-        currentGrabbable.ValidateRotation(proposedAngle, playerPos, out allowedAngle, out effectivePivot);
+        currentGrabbable.ValidateRotation(proposedAngle, playerPos, out allowedAngle, out effectivePivot, pivotAroundPlayer);
     }
 
-    public bool IsConfigurationValid (Vector3 playerPosition, Quaternion playerRotation)
+    public bool IsConfigurationValid(Vector3 playerPosition, Quaternion playerRotation)
     {
         if (!isGrabbing || currentGrabbable == null) return true;
 
         Vector3 targetPos = playerPosition + (playerRotation * grabOffset);
         Quaternion targetRot = playerRotation * grabRotationOffset;
 
-        return !currentGrabbable.CheckCollision(targetPos, targetRot);
+        return !currentGrabbable.CheckCollision(targetPos, targetRot, true);
     }
 
-    public void UpdateObjectPosition ()
+    public void UpdateObjectPosition()
     {
         if (!isGrabbing || currentGrabbable == null) return;
 
@@ -302,7 +302,7 @@ public class GrabInteractor : MonoBehaviour
         currentGrabbable.MoveTo(targetPos, targetRot);
     }
 
-    private void OnDrawGizmosSelected ()
+    private void OnDrawGizmosSelected()
     {
         if (grabOrigin != null)
         {
