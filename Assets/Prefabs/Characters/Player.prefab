@@ -606,7 +606,7 @@ MonoBehaviour:
   outlineColor: {r: 1, g: 1, b: 1, a: 1}
   outlineWidth: 3
   outlineMode: 1
-  interactionPrompt: {fileID: 0}
+  interactionPrompt: {fileID: 8733820849183982285, guid: 5fed6a53a77982a46adaf5a7ecdb37f9, type: 3}
   interactionPromptText: {fileID: 0}
   interactActionReference: {fileID: 1781555164194001046, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   interactionKey: interaction_prompt
