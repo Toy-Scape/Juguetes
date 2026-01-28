@@ -108,6 +108,8 @@ public class PlayerController : MonoBehaviour
 
     public void HandleMovement (float targetSpeed)
     {
+        if (!CharacterController.enabled) return;
+
         Vector2 inputDir = Context.MoveInput;
 
         if (grabInteractor != null && grabInteractor.IsGrabbing && grabInteractor.GrabbedObjectTransform != null)
@@ -415,5 +417,17 @@ private IEnumerator FreezeGrabbablesCoroutine(float duration)
             climbState.FinishClimb();
         }
     }
+
+    public void OnStandingAnimationEnter ()
+    {
+        CharacterController.enabled = false;
+    }
+
+    public void OnStandingAnimationFinished ()
+    {
+        CharacterController.enabled = true;
+    }
+
+
     #endregion
 }

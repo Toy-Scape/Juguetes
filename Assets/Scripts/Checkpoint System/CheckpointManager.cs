@@ -207,7 +207,7 @@ namespace CheckpointSystem
 
                     if (itemData != null)
                     {
-                        playerInventory.AddItem(itemData, itemEntry.quantity);
+                        playerInventory.AddItemSilent(itemData, itemEntry.quantity);
                     }
                     else
                     {
@@ -239,7 +239,7 @@ namespace CheckpointSystem
 
                     if (itemData != null)
                     {
-                        playerInventory.AddItem(itemData, limbEntry.quantity);
+                        playerInventory.AddItemSilent(itemData, limbEntry.quantity);
                     }
                     else
                     {

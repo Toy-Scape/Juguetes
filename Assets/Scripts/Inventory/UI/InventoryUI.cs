@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -18,6 +19,7 @@ namespace Inventory.UI
         [Header("Referencias Principales")]
         [SerializeField] private PlayerInventory playerInventory;
         [SerializeField] private GameObject inventoryPanel;
+        [SerializeField] private TMP_Text inventoryTitle;
 
         [Header("Contenedores de Slots")]
         [SerializeField] private Transform itemsContainer;
@@ -28,6 +30,7 @@ namespace Inventory.UI
 
         [Header("Tooltip (hover)")]
         [SerializeField] private GameObject tooltipPanel;
+        [SerializeField] private Image tooltipImage;
         [SerializeField] private TextMeshProUGUI tooltipNameText;
         [SerializeField] private TextMeshProUGUI tooltipDescriptionText;
         [SerializeField] private Vector2 tooltipOffset = new Vector2(15, -15);
@@ -61,6 +64,8 @@ namespace Inventory.UI
                 inventoryPanel.SetActive(false);
                 _isInventoryOpen = false;
             }
+
+            
 
             // Aseguramos que el tooltip esté oculto al inicio
             //if (tooltipPanel != null)
@@ -98,6 +103,8 @@ namespace Inventory.UI
             {
                 playerInventory.onItemAdded.AddListener(OnItemAdded);
                 playerInventory.onItemRemoved.AddListener(OnItemRemoved);
+                playerInventory.onItemAddedSilent.AddListener(OnItemAddedSilent);
+                playerInventory.onItemRemovedSilent.AddListener(OnItemRemovedSilent);
             }
 
             // Solo refrescar la UI si el inventario está abierto
@@ -113,6 +120,8 @@ namespace Inventory.UI
             {
                 playerInventory.onItemAdded.RemoveListener(OnItemAdded);
                 playerInventory.onItemRemoved.RemoveListener(OnItemRemoved);
+                playerInventory.onItemAddedSilent.RemoveListener(OnItemAddedSilent);
+                playerInventory.onItemRemovedSilent.RemoveListener(OnItemRemovedSilent);
             }
             // No hacemos Instance = null aquí ya que OnDestroy se encargará.
         }
@@ -473,7 +482,7 @@ namespace Inventory.UI
             RefreshUI();
         }
 
-        private void OnItemAdded(ItemData itemData, int quantity)
+        private void OnItemAdded (ItemData itemData, int quantity)
         {
             var Message = Instantiate(ItemMessage, ItemMessageContainer.transform);
             Message.GetComponent<ItemMessageTooltip>().SetData(ItemMessageType.Added, itemData.Icon, itemData.ItemName, quantity);
@@ -481,12 +490,24 @@ namespace Inventory.UI
             RefreshUI();
         }
 
-        private void OnItemRemoved(ItemData itemData, int quantity)
+        private void OnItemRemoved (ItemData itemData, int quantity)
         {
             var Message = Instantiate(ItemMessage, ItemMessageContainer.transform);
             Message.GetComponent<ItemMessageTooltip>().SetData(ItemMessageType.Removed, itemData.Icon, itemData.ItemName, quantity);
             Debug.Log("Removed item");
 
+            RefreshUI();
+        }
+
+        private void OnItemAddedSilent (ItemData itemData, int quantity)
+        {
+            // No mostramos mensaje, solo refrescamos UI
+            RefreshUI();
+        }
+
+        private void OnItemRemovedSilent (ItemData itemData, int quantity)
+        {
+            // No mostramos mensaje, solo refrescamos UI
             RefreshUI();
         }
 
@@ -515,6 +536,10 @@ namespace Inventory.UI
         {
             if (inventoryPanel == null)
                 return;
+
+            inventoryTitle.text = Localization.LocalizationManager.Instance != null
+                ? Localization.LocalizationManager.Instance.GetLocalizedValue("inventory-title")
+                : "Inventory";
 
             _isInventoryOpen = true;
             inventoryPanel.SetActive(true);
@@ -546,7 +571,10 @@ namespace Inventory.UI
         {
             if (tooltipPanel == null || item == null || item.Data == null)
                 return;
-
+            tooltipImage.sprite = item.Data.Icon;
+            var color = tooltipImage.color;
+            color.a = item.Data.Icon != null ? Color.white.a : 0f;
+            tooltipImage.color = color;
             tooltipNameText.text = Localization.LocalizationManager.Instance != null
                 ? Localization.LocalizationManager.Instance.GetLocalizedValue(item.Data.NameKey)
                 : item.Data.NameKey;

@@ -159,3 +159,7 @@ MonoBehaviour:
       esfuerzo. Perfectas para escalar cristal, metal u otras paredes pulidas.
     basque: Bentosaz osatutako multzoa, gainazal leunetan gora egiteko aukera ematen
       duena. Beira, metala edo horma leunduak igotzeko aproposa.
+  - key: inventory-title
+    english: Inventory
+    spanish: Inventario
+    basque: Inbentarioa
