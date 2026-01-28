@@ -104,6 +104,9 @@ public class PlayerConfig
     [SerializeField] private float climbDuration = 1.0f;
     public float ClimbDuration => climbDuration;
 
+    [SerializeField] private float ledgeClimbFinishDelay = 0.5f;
+    public float LedgeClimbFinishDelay => ledgeClimbFinishDelay;
+
     [Header("Wall Climb Settings")]
     [SerializeField] private float wallClimbSpeed = 3f;
     public float WallClimbSpeed => wallClimbSpeed;

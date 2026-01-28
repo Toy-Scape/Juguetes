@@ -1,6 +1,6 @@
-using Assets.Scripts.PlayerController;
 using System.Collections;
 using System.Collections.Generic;
+using Assets.Scripts.PlayerController;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -33,7 +33,7 @@ public class PlayerController : MonoBehaviour
     private float _pushSpeedMultiplier = 1f;
     private float _turnSmoothVelocity;
 
-    void Awake ()
+    void Awake()
     {
         CharacterController = GetComponent<CharacterController>();
         _states = new PlayerStateFactory(this);
@@ -48,13 +48,13 @@ public class PlayerController : MonoBehaviour
             grabInteractor = GetComponent<GrabInteractor>();
     }
 
-    void Start ()
+    void Start()
     {
         _currentState = _states.Grounded();
         _currentState.EnterState();
     }
 
-    void Update ()
+    void Update()
     {
         Context.IsGrounded = CharacterController.isGrounded;
         _currentState.UpdateStates();
@@ -71,7 +71,7 @@ public class PlayerController : MonoBehaviour
         ApplyMovement();
     }
 
-    private void ApplyMovement ()
+    private void ApplyMovement()
     {
         if (!CharacterController.enabled)
             return;
@@ -93,20 +93,20 @@ public class PlayerController : MonoBehaviour
             grabInteractor.UpdateObjectPosition();
     }
 
-    public void SetGrabState (bool isGrabbing, float resistance, Transform target = null)
+    public void SetGrabState(bool isGrabbing, float resistance, Transform target = null)
     {
         Context.IsGrabbing = isGrabbing;
         Context.GrabTarget = target;
         _pushSpeedMultiplier = isGrabbing ? (1f / Mathf.Max(resistance, 1f)) : 1f;
     }
 
-    public void SetPickState (bool isPicking)
+    public void SetPickState(bool isPicking)
     {
         Context.IsPicking = isPicking;
         Animator.SetBool("IsPicking", isPicking);
     }
 
-    public void HandleMovement (float targetSpeed)
+    public void HandleMovement(float targetSpeed)
     {
         if (!CharacterController.enabled) return;
 
@@ -129,7 +129,7 @@ public class PlayerController : MonoBehaviour
                 float angularSpeed = (linearSpeed / Mathf.Max(radius, 0.5f)) * Mathf.Rad2Deg;
                 float rotationAmount = rotationInput * angularSpeed * Time.deltaTime;
 
-                grabInteractor.ValidateRotation(rotationAmount, transform.position, out float allowedAngle, out Vector3 effectivePivot);
+                grabInteractor.ValidateRotation(rotationAmount, transform.position, out float allowedAngle, out Vector3 effectivePivot, true);
                 if (effectivePivot == Vector3.zero)
                     effectivePivot = grabInteractor.GrabbedObjectTransform.position;
 
@@ -223,22 +223,22 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void ClimbEnd ()
+    public void ClimbEnd()
     {
         FinishLedgeClimb();
     }
 
     #region Input Handling
-    public void OnMove (InputValue value) => Context.MoveInput = value.Get<Vector2>();
-    public void OnLook (InputValue value) => Context.LookInput = value.Get<Vector2>() * config.LookSensitivity;
-    public void OnSprint (InputValue value) => Context.IsSprinting = value.isPressed;
-    public void OnJump (InputValue value) => Context.IsJumping = value.isPressed;
-    public void OnCrouch (InputValue value) => Context.IsCrouching = value.isPressed;
+    public void OnMove(InputValue value) => Context.MoveInput = value.Get<Vector2>();
+    public void OnLook(InputValue value) => Context.LookInput = value.Get<Vector2>() * config.LookSensitivity;
+    public void OnSprint(InputValue value) => Context.IsSprinting = value.isPressed;
+    public void OnJump(InputValue value) => Context.IsJumping = value.isPressed;
+    public void OnCrouch(InputValue value) => Context.IsCrouching = value.isPressed;
     public void OnSprintToggle(InputValue value) => Context.IsSprinting = !Context.IsSprinting;
     public void OnCrouchToggle(InputValue value) => Context.IsCrouching = !Context.IsCrouching;
 
 
-    public void OnGrab (InputValue value)
+    public void OnGrab(InputValue value)
     {
         Context.IsGrabbing = value.isPressed;
 
@@ -278,14 +278,14 @@ public class PlayerController : MonoBehaviour
     public Vector3 LedgeNormal { get; private set; }
     private float _ledgeGrabCooldownTimer = 0f;
 
-    public void SetLedgeGrabCooldown (float duration)
+    public void SetLedgeGrabCooldown(float duration)
     {
         _ledgeGrabCooldownTimer = duration;
     }
 
-    public bool CheckForLedge (bool ignoreVerticalVelocity = false)
+    public bool CheckForLedge(bool ignoreVerticalVelocity = false)
     {
-        if (Context.IsPicking) return false;
+        if (Context.IsPicking || Context.IsGrabbing) return false;
 
         if (_ledgeGrabCooldownTimer > 0)
         {
@@ -296,7 +296,7 @@ public class PlayerController : MonoBehaviour
         if (!ignoreVerticalVelocity)
         {
             if (Context.IsGrounded || (Context.Velocity.y >= 0)) return false;
-        if (Context.Velocity.y > -0.3f) return false;
+            if (Context.Velocity.y > -0.3f) return false;
         }
 
         Vector3 origin = transform.position + Vector3.up * config.LedgeGrabHeight;
@@ -319,7 +319,7 @@ public class PlayerController : MonoBehaviour
         return false;
     }
 
-    private bool IsValidLedgeEdge (Vector3 hitPoint, Vector3 hitNormal, out Vector3 topPoint)
+    private bool IsValidLedgeEdge(Vector3 hitPoint, Vector3 hitNormal, out Vector3 topPoint)
     {
         topPoint = Vector3.zero;
         Vector3 checkAbove = hitPoint + Vector3.up * 0.3f - hitNormal * 0.1f;
@@ -339,49 +339,49 @@ public class PlayerController : MonoBehaviour
 
 
     private Coroutine _freezeGrabbablesCoroutine;
-public void FreezeNearbyGrabbables(float duration)
-{
-    if (_freezeGrabbablesCoroutine != null)
-        StopCoroutine(_freezeGrabbablesCoroutine);
-    
-    _freezeGrabbablesCoroutine = StartCoroutine(FreezeGrabbablesCoroutine(duration));
-}
-private IEnumerator FreezeGrabbablesCoroutine(float duration)
-{
-    float radius = 2f; // Radio de detecci�n
-    Collider[] hits = Physics.OverlapSphere(transform.position, radius);
-    
-    List<(Grabbable, bool)> frozenObjects = new List<(Grabbable, bool)>();
-    
-    foreach (var hit in hits)
+    public void FreezeNearbyGrabbables(float duration)
     {
-        var grabbable = hit.GetComponent<Grabbable>();
-        if (grabbable != null)
+        if (_freezeGrabbablesCoroutine != null)
+            StopCoroutine(_freezeGrabbablesCoroutine);
+
+        _freezeGrabbablesCoroutine = StartCoroutine(FreezeGrabbablesCoroutine(duration));
+    }
+    private IEnumerator FreezeGrabbablesCoroutine(float duration)
+    {
+        float radius = 2f; // Radio de detecci�n
+        Collider[] hits = Physics.OverlapSphere(transform.position, radius);
+
+        List<(Grabbable, bool)> frozenObjects = new List<(Grabbable, bool)>();
+
+        foreach (var hit in hits)
+        {
+            var grabbable = hit.GetComponent<Grabbable>();
+            if (grabbable != null)
+            {
+                var rb = grabbable.GetComponent<Rigidbody>();
+                if (rb != null)
+                {
+                    frozenObjects.Add((grabbable, rb.isKinematic));
+
+                    rb.isKinematic = true;
+                }
+            }
+        }
+
+        yield return new WaitForSeconds(duration);
+
+        // Restaurar constraints
+        foreach (var (grabbable, originalKinematic) in frozenObjects)
         {
             var rb = grabbable.GetComponent<Rigidbody>();
             if (rb != null)
             {
-                frozenObjects.Add((grabbable, rb.isKinematic));
-                
-                rb.isKinematic = true;
+                rb.isKinematic = originalKinematic;
             }
         }
+
+        _freezeGrabbablesCoroutine = null;
     }
-    
-    yield return new WaitForSeconds(duration);
-    
-    // Restaurar constraints
-    foreach (var (grabbable, originalKinematic) in frozenObjects)
-    {
-        var rb = grabbable.GetComponent<Rigidbody>();
-        if (rb != null)
-        {
-            rb.isKinematic = originalKinematic;
-        }
-    }
-    
-    _freezeGrabbablesCoroutine = null;
-}
     #endregion
 
     #region Wall Climb Detection
@@ -393,10 +393,10 @@ private IEnumerator FreezeGrabbablesCoroutine(float duration)
         if (Context.IsGrounded) return false;
 
         Vector3 origin = transform.position + Vector3.up * 1f; // Check from center/chest height
-        
+
         if (Physics.Raycast(origin, transform.forward, out RaycastHit hit, Config.WallClimbDetectionDistance))
         {
-            var climbable = hit.collider.GetComponent<ClimbableWall>(); 
+            var climbable = hit.collider.GetComponent<ClimbableWall>();
             if (climbable != null && climbable.CanBeClimbed())
             {
                 WallPosition = hit.point;
@@ -410,7 +410,7 @@ private IEnumerator FreezeGrabbablesCoroutine(float duration)
     #endregion
 
     #region Animation Events
-    public void FinishLedgeClimb ()
+    public void FinishLedgeClimb()
     {
         if (_currentState is PlayerLedgeClimbState climbState)
         {

@@ -1,5 +1,5 @@
-using UnityEngine;
 using InteractionSystem.Interfaces;
+using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
 public class Grabbable : MonoBehaviour, IGrabbable
@@ -16,7 +16,7 @@ public class Grabbable : MonoBehaviour, IGrabbable
     private BoxCollider boxCollider;
     private bool isGrabbed;
 
-    private void Awake ()
+    private void Awake()
     {
         rb = GetComponent<Rigidbody>();
         colliders = GetComponentsInChildren<Collider>();
@@ -41,9 +41,14 @@ public class Grabbable : MonoBehaviour, IGrabbable
     }
 
 
-    public void StartGrab ()
+    private bool wasKinematic;
+
+    public void StartGrab()
     {
         if (!CanBeGrabbed()) return;
+
+        wasKinematic = rb.isKinematic;
+        rb.isKinematic = true;
 
         rb.linearVelocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
@@ -51,47 +56,64 @@ public class Grabbable : MonoBehaviour, IGrabbable
         isGrabbed = true;
     }
 
-    public void StopGrab ()
+    public void StopGrab()
     {
         isGrabbed = false;
-        rb.WakeUp();
+        rb.isKinematic = wasKinematic;
+        if (!wasKinematic)
+            rb.WakeUp();
     }
 
-    public bool ValidateMovement (Vector3 translation)
+    public bool ValidateMovement(Vector3 translation)
     {
-        if (!isGrabbed)
+        if (!isGrabbed || boxCollider == null)
             return true;
 
         float dist = translation.magnitude;
         if (dist < 0.001f)
             return true;
 
-        RaycastHit[] hits = rb.SweepTestAll(
-            translation.normalized,
-            dist + 0.05f,
+        Vector3 direction = translation.normalized;
+        Vector3 scaledSize = Vector3.Scale(boxCollider.size, transform.lossyScale);
+        Vector3 halfExtents = scaledSize * 0.5f; // BoxCast uses half extents
+        Vector3 absoluteCenter = transform.TransformPoint(boxCollider.center);
+
+        // Backstep logic: Start slightly behind to detect touching walls
+        float backstep = 0.1f;
+        Vector3 startPoint = absoluteCenter - (direction * backstep);
+        float totalDist = dist + backstep + 0.05f;
+
+        RaycastHit[] hits = Physics.BoxCastAll(
+            startPoint,
+            halfExtents,
+            direction,
+            transform.rotation,
+            totalDist,
+            collisionLayer,
             QueryTriggerInteraction.Ignore
         );
 
         foreach (var hit in hits)
         {
-            if (((1 << hit.collider.gameObject.layer) & collisionLayer) == 0)
-                continue;
-
             if (hit.transform == transform || hit.transform.IsChildOf(transform))
                 continue;
 
             if (Vector3.Dot(hit.normal, Vector3.up) > 0.7f)
                 continue;
 
-            if (hit.distance < 0.01f)
+            // Adjust distance to account for backstep
+            float adjustedDist = hit.distance - backstep;
+
+            if (adjustedDist < 0.01f)
             {
-                float dot = Vector3.Dot(translation.normalized, hit.normal);
+                // Collision is touching or very close
+                float dot = Vector3.Dot(direction, hit.normal);
                 if (dot < -0.01f)
                     return false;
             }
             else
             {
-                if (hit.distance <= dist)
+                if (adjustedDist <= dist)
                     return false;
             }
         }
@@ -99,10 +121,10 @@ public class Grabbable : MonoBehaviour, IGrabbable
         return true;
     }
 
-    public void ValidateRotation (float proposedAngle, Vector3 playerPosition, out float allowedAngle, out Vector3 effectivePivot)
+    public void ValidateRotation(float proposedAngle, Vector3 playerPosition, out float allowedAngle, out Vector3 effectivePivot, bool pivotAroundPlayer = false)
     {
         allowedAngle = proposedAngle;
-        effectivePivot = rb.position;
+        effectivePivot = pivotAroundPlayer ? playerPosition : rb.position;
 
         if (!isGrabbed || boxCollider == null) return;
 
@@ -135,7 +157,7 @@ public class Grabbable : MonoBehaviour, IGrabbable
             }
         }
 
-        if (touching)
+        if (touching && !pivotAroundPlayer)
             effectivePivot = closestContact;
 
         Vector3[] corners = GetBoxCorners();
@@ -168,7 +190,7 @@ public class Grabbable : MonoBehaviour, IGrabbable
         if (minRatio < 1f) allowedAngle *= 0.9f;
     }
 
-    private Vector3 GetClosestPointSafe (Collider col, Vector3 point)
+    private Vector3 GetClosestPointSafe(Collider col, Vector3 point)
     {
         if (col is BoxCollider || col is SphereCollider || col is CapsuleCollider || (col is MeshCollider mc && mc.convex))
             return col.ClosestPoint(point);
@@ -176,7 +198,7 @@ public class Grabbable : MonoBehaviour, IGrabbable
         return col.ClosestPointOnBounds(point);
     }
 
-    private Vector3[] GetBoxCorners ()
+    private Vector3[] GetBoxCorners()
     {
         Vector3 scaledSize = Vector3.Scale(boxCollider.size, transform.lossyScale);
         Vector3 center = boxCollider.center;
@@ -199,21 +221,26 @@ public class Grabbable : MonoBehaviour, IGrabbable
         return corners;
     }
 
-    public void MoveTo (Vector3 position, Quaternion rotation)
+    public void MoveTo(Vector3 position, Quaternion rotation)
     {
         rb.MovePosition(position);
         rb.MoveRotation(rotation);
     }
 
-    public bool CheckCollision (Vector3 position, Quaternion rotation)
+    public bool CheckCollision(Vector3 position, Quaternion rotation, bool strict = false)
     {
         if (boxCollider == null)
             return false;
 
         Vector3 scaledSize = Vector3.Scale(boxCollider.size, transform.lossyScale);
         Vector3 extents = scaledSize * 0.5f;
-        extents.x *= 0.999f;
-        extents.z *= 0.999f;
+
+        if (!strict)
+        {
+            extents.x *= 0.999f;
+            extents.z *= 0.999f;
+        }
+
         extents.y *= 0.90f;
 
         Collider[] hits = Physics.OverlapBox(
@@ -239,11 +266,11 @@ public class Grabbable : MonoBehaviour, IGrabbable
         return false;
     }
 
-    public void IgnoreCollisionWith (Collider other, bool ignore)
+    public void IgnoreCollisionWith(Collider other, bool ignore)
     {
         foreach (var c in colliders)
             Physics.IgnoreCollision(c, other, ignore);
     }
 
-    public Dialogue GetFailThought () => failureMessage;
+    public Dialogue GetFailThought() => failureMessage;
 }
