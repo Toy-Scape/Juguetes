@@ -14,6 +14,7 @@ namespace Inventory.UI
         [Header("Referencias UI")]
         [SerializeField] private Image iconImage;
         [SerializeField] private TextMeshProUGUI nameText;
+        [SerializeField] private bool showName = false;
         [SerializeField] private TextMeshProUGUI quantityText;
         [SerializeField] private GameObject quantityContainer;
         [SerializeField] private Image backgroundImage;
@@ -52,7 +53,7 @@ namespace Inventory.UI
             }
 
             // Actualizar nombre
-            if (nameText != null)
+            if (nameText != null && showName)
             {
                 if (Localization.LocalizationManager.Instance != null)
                     nameText.text = Localization.LocalizationManager.Instance.GetLocalizedValue(item.Data.NameKey);

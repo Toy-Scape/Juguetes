@@ -298,7 +298,6 @@ GameObject:
   - component: {fileID: 5459647364194880392}
   - component: {fileID: 1688514977732223978}
   - component: {fileID: 7946972374396150155}
-  - component: {fileID: 3014097245604593603}
   - component: {fileID: 623290716098548153}
   - component: {fileID: 4372283106699263501}
   m_Layer: 6
@@ -577,6 +576,7 @@ MonoBehaviour:
     ledgeForwardOffset: 0
     ledgeGrabCooldown: 1
     climbDuration: 1
+    ledgeClimbFinishDelay: 0.5
     wallClimbSpeed: 3
     wallClimbDetectionDistance: 0.6
     baseFOV: 60
@@ -587,6 +587,7 @@ MonoBehaviour:
   TMPPlayerState: {fileID: 0}
   playerAnimator: {fileID: 4688945857383318680}
   grabInteractor: {fileID: 3434473845669599158}
+  cinematic: {fileID: 11400000, guid: 240fe350093ecbb4dad3ae44aedd0f0b, type: 2}
 --- !u!114 &8163815884479273772
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -649,6 +650,7 @@ MonoBehaviour:
     ledgeForwardOffset: 0.5
     ledgeGrabCooldown: 0.5
     climbDuration: 1
+    ledgeClimbFinishDelay: 0.5
     wallClimbSpeed: 3
     wallClimbDetectionDistance: 0.6
     baseFOV: 60
@@ -835,6 +837,12 @@ MonoBehaviour:
   onItemRemoved:
     m_PersistentCalls:
       m_Calls: []
+  onItemAddedSilent:
+    m_PersistentCalls:
+      m_Calls: []
+  onItemRemovedSilent:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &7793382085548487143
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -971,20 +979,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &3014097245604593603
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6641168232080197241}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4d5dba0901c075445a012b12e2af523f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Domain.PlayerTarget
-  targetCenter: {fileID: 883425338343852037}
-  isValid: 1
 --- !u!114 &623290716098548153
 MonoBehaviour:
   m_ObjectHideFlags: 0

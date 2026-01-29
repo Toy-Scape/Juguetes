@@ -37,7 +37,7 @@ MonoBehaviour:
     Text: 
     Actions: []
   - Character: {fileID: 11400000, guid: 7832fc3c6197f2144b2802326c6977e5, type: 2}
-    Key: d
+    Key: tutorial-juan-dialogue-3
     Text: 
     Actions:
     - timing: 0

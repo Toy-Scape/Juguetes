@@ -140,6 +140,29 @@ MonoBehaviour:
     english: I should take the screwdriver before moving on.
     spanish: "Deber\xEDa coger el destornillador antes de continuar."
     basque: Jarraitu aurretik bihurkina hartu beharko nuke.
+  - key: inventory-item-added
+    english: New item added
+    spanish: "Nuevo objeto a\xF1adido"
+    basque: Objektu berria gehituta
+  - key: inventory-item-removed
+    english: Item removed
+    spanish: Objeto eliminado
+    basque: Objektua kenduta
+  - key: suction-item-name
+    english: Suction cups
+    spanish: Ventosas
+    basque: Bentosak
+  - key: suction-item-description
+    english: A set of suction cups that lets you climb smooth surfaces with ease.
+      Ideal for scaling glass, metal, or any polished wall.
+    spanish: Un conjunto de ventosas que permite trepar por superficies lisas sin
+      esfuerzo. Perfectas para escalar cristal, metal u otras paredes pulidas.
+    basque: Bentosaz osatutako multzoa, gainazal leunetan gora egiteko aukera ematen
+      duena. Beira, metala edo horma leunduak igotzeko aproposa.
+  - key: inventory-title
+    english: Inventory
+    spanish: Inventario
+    basque: Inbentarioa
   - key: interaction_prompt
     english: Interact {0}
     spanish: Interactuar {0}

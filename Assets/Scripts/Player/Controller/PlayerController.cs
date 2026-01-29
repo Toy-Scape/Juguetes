@@ -1,6 +1,8 @@
+using Assets.Scripts.PlayerController;
+using CinematicSystem.Application;
+using CinematicSystem.Core;
 using System.Collections;
 using System.Collections.Generic;
-using Assets.Scripts.PlayerController;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -13,6 +15,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private TMP_Text TMPPlayerState;
     [SerializeField] private Animator playerAnimator;
     [SerializeField] private GrabInteractor grabInteractor;
+
+    [SerializeField] private CinematicAsset cinematic;
+
+    
 
     public CharacterController CharacterController { get; private set; }
     public Animator Animator => playerAnimator;
@@ -108,6 +114,8 @@ public class PlayerController : MonoBehaviour
 
     public void HandleMovement(float targetSpeed)
     {
+        if (!CharacterController.enabled) return;
+
         Vector2 inputDir = Context.MoveInput;
 
         if (grabInteractor != null && grabInteractor.IsGrabbing && grabInteractor.GrabbedObjectTransform != null)
@@ -415,5 +423,27 @@ public class PlayerController : MonoBehaviour
             climbState.FinishClimb();
         }
     }
+
+    public void OnStandingAnimationEnter ()
+    {
+        CharacterController.enabled = false;
+        var CinematicPlayer = FindFirstObjectByType<CinematicPlayer>();
+        if (CinematicPlayer != null)
+        {
+            CinematicPlayer.Play(cinematic);
+        }
+    }
+
+    public void OnStandingAnimationFinished ()
+    {
+        CharacterController.enabled = true;
+        var CinematicPlayer = FindFirstObjectByType<CinematicPlayer>();
+        if (CinematicPlayer != null)
+        {
+            CinematicPlayer.Stop();
+        }
+    }
+
+
     #endregion
 }

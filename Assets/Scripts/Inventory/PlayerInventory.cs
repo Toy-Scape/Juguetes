@@ -38,6 +38,8 @@ namespace Inventory
         [Header("Eventos")]
         public UnityEvent<ItemData, int> onItemAdded = new UnityEvent<ItemData, int>();
         public UnityEvent<ItemData, int> onItemRemoved = new UnityEvent<ItemData, int>();
+        public UnityEvent<ItemData, int> onItemAddedSilent = new UnityEvent<ItemData, int>();
+        public UnityEvent<ItemData, int> onItemRemovedSilent = new UnityEvent<ItemData, int>();
 
         #endregion
 
@@ -97,7 +99,7 @@ namespace Inventory
         /// <param name="itemData">Los datos del ítem a añadir</param>
         /// <param name="quantity">Cantidad a añadir (por defecto 1)</param>
         /// <returns>True si se añadió correctamente, false si el inventario está lleno</returns>
-        public bool AddItem(ItemData itemData, int quantity = 1)
+        public bool AddItem (ItemData itemData, int quantity = 1)
         {
             if (!ValidateItemData(itemData)) return false;
 
@@ -115,13 +117,31 @@ namespace Inventory
             return success;
         }
 
+        public bool AddItemSilent (ItemData itemData, int quantity = 1)
+        {
+            if (!ValidateItemData(itemData)) return false;
+
+            var success = _inventory.AddItem(itemData, quantity);
+
+            if (success)
+            {
+                OnItemAddedSilentSuccessfully(itemData, quantity);
+            }
+            else
+            {
+                LogWarningIfEnabled(string.Format(WarningFullInventory, itemData.name));
+            }
+
+            return success;
+        }
+
         /// <summary>
         /// Elimina un ítem del inventario.
         /// </summary>
         /// <param name="itemData">Los datos del ítem a eliminar</param>
         /// <param name="quantity">Cantidad a eliminar (por defecto 1)</param>
         /// <returns>True si se eliminó correctamente, false si no hay suficientes ítems</returns>
-        public bool RemoveItem(ItemData itemData, int quantity = 1)
+        public bool RemoveItem (ItemData itemData, int quantity = 1)
         {
             if (!ValidateItemData(itemData)) return false;
 
@@ -130,6 +150,20 @@ namespace Inventory
             if (success)
             {
                 OnItemRemovedSuccessfully(itemData, quantity);
+            }
+
+            return success;
+        }
+
+        public bool RemoveItemSilent (ItemData itemData, int quantity = 1)
+        {
+            if (!ValidateItemData(itemData)) return false;
+
+            var success = _inventory.RemoveItem(itemData, quantity);
+
+            if (success)
+            {
+                OnItemRemovedSilentSuccessfully(itemData, quantity);
             }
 
             return success;
@@ -226,13 +260,26 @@ namespace Inventory
             return false;
         }
 
-        private void OnItemAddedSuccessfully(ItemData itemData, int quantity)
+        private void OnItemAddedSuccessfully (ItemData itemData, int quantity)
         {
             onItemAdded?.Invoke(itemData, quantity);
             LogIfEnabled($"✓ Añadido: {itemData.name} x{quantity}");
         }
 
-        private void OnItemRemovedSuccessfully(ItemData itemData, int quantity)
+
+        private void OnItemAddedSilentSuccessfully (ItemData itemData, int quantity)
+        {
+            onItemAddedSilent?.Invoke(itemData, quantity);
+            LogIfEnabled($"✓ Añadido: {itemData.name} x{quantity}");
+        }
+
+        private void OnItemRemovedSilentSuccessfully (ItemData itemData, int quantity)
+        {
+            onItemRemovedSilent?.Invoke(itemData, quantity);
+            LogIfEnabled($"✓ Eliminado: {itemData.name} x{quantity}");
+        }
+
+        private void OnItemRemovedSuccessfully (ItemData itemData, int quantity)
         {
             onItemRemoved?.Invoke(itemData, quantity);
             LogIfEnabled($"✓ Eliminado: {itemData.name} x{quantity}");

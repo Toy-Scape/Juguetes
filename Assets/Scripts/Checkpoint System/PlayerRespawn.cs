@@ -36,7 +36,7 @@ namespace CheckpointSystem
         [ContextMenu("Kill Player")]
         public void KillPlayer()
         {
-            CheckpointManager.Instance .RespawnPlayer();
+            CheckpointManager.Instance.RespawnPlayer();
         }
     }
 }

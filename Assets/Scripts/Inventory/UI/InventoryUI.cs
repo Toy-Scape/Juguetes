@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -18,6 +19,7 @@ namespace Inventory.UI
         [Header("Referencias Principales")]
         [SerializeField] private PlayerInventory playerInventory;
         [SerializeField] private GameObject inventoryPanel;
+        [SerializeField] private TMP_Text inventoryTitle;
 
         [Header("Contenedores de Slots")]
         [SerializeField] private Transform itemsContainer;
@@ -28,6 +30,7 @@ namespace Inventory.UI
 
         [Header("Tooltip (hover)")]
         [SerializeField] private GameObject tooltipPanel;
+        [SerializeField] private Image tooltipImage;
         [SerializeField] private TextMeshProUGUI tooltipNameText;
         [SerializeField] private TextMeshProUGUI tooltipDescriptionText;
         [SerializeField] private Vector2 tooltipOffset = new Vector2(15, -15);
@@ -37,6 +40,10 @@ namespace Inventory.UI
         [SerializeField] private int itemsGridColumns = 5;
         [SerializeField] private int limbsGridColumns = 1;
         [SerializeField] private Color selectedSlotColor = new Color(0.5f, 0.7f, 1f, 0.9f);
+
+        [Header("Message tooltips")]
+        [SerializeField] private GameObject ItemMessage;
+        [SerializeField] private GameObject ItemMessageContainer;
 
         private List<InventorySlotUI> _itemSlots = new List<InventorySlotUI>();
         private List<InventorySlotUI> _limbSlots = new List<InventorySlotUI>();
@@ -58,9 +65,11 @@ namespace Inventory.UI
                 _isInventoryOpen = false;
             }
 
+            
+
             // Aseguramos que el tooltip esté oculto al inicio
-            if (tooltipPanel != null)
-                tooltipPanel.SetActive(false);
+            //if (tooltipPanel != null)
+            //    tooltipPanel.SetActive(false);
 
             // Buscar PlayerInventory si no está asignado
             if (playerInventory == null)
@@ -92,8 +101,10 @@ namespace Inventory.UI
             // Suscribirse a eventos
             if (playerInventory != null)
             {
-                playerInventory.onItemAdded.AddListener(OnInventoryChanged);
-                playerInventory.onItemRemoved.AddListener(OnInventoryChanged);
+                playerInventory.onItemAdded.AddListener(OnItemAdded);
+                playerInventory.onItemRemoved.AddListener(OnItemRemoved);
+                playerInventory.onItemAddedSilent.AddListener(OnItemAddedSilent);
+                playerInventory.onItemRemovedSilent.AddListener(OnItemRemovedSilent);
             }
 
             // Solo refrescar la UI si el inventario está abierto
@@ -107,8 +118,10 @@ namespace Inventory.UI
         {
             if (playerInventory != null)
             {
-                playerInventory.onItemAdded.RemoveListener(OnInventoryChanged);
-                playerInventory.onItemRemoved.RemoveListener(OnInventoryChanged);
+                playerInventory.onItemAdded.RemoveListener(OnItemAdded);
+                playerInventory.onItemRemoved.RemoveListener(OnItemRemoved);
+                playerInventory.onItemAddedSilent.RemoveListener(OnItemAddedSilent);
+                playerInventory.onItemRemovedSilent.RemoveListener(OnItemRemovedSilent);
             }
             // No hacemos Instance = null aquí ya que OnDestroy se encargará.
         }
@@ -244,36 +257,33 @@ namespace Inventory.UI
             }
         }
 
-        private void SelectSlot(InventorySlotUI slot)
+        private void SelectSlot (InventorySlotUI slot)
         {
             if (slot == null) return;
 
             if (_selectedSlot != null)
-            {
                 _selectedSlot.SetSelected(false);
-            }
 
             _selectedSlot = slot;
             _selectedSlot.SetSelected(true);
 
-            // Mostrar tooltip si tiene item
-            if (!slot.IsEmpty)
-            {
-                // Posicionar tooltip cerca del slot seleccionado
-                RectTransform slotRect = slot.GetComponent<RectTransform>();
-                if (slotRect != null)
-                {
-                    Vector3[] corners = new Vector3[4];
-                    slotRect.GetWorldCorners(corners);
-                    Vector2 center = (corners[0] + corners[2]) / 2;
-                    ShowTooltip(slot.CurrentItem, center);
-                }
-            }
-            else
-            {
-                HideTooltip();
-            }
+            //if (!slot.IsEmpty)
+            //{
+            //    RectTransform slotRect = slot.GetComponent<RectTransform>();
+            //    if (slotRect != null)
+            //    {
+            //        Vector3 worldCenter = slotRect.TransformPoint(slotRect.rect.center);
+            //        Vector2 screenPos = RectTransformUtility.WorldToScreenPoint(null, worldCenter);
+
+            //        ShowTooltip(slot.CurrentItem, screenPos);
+            //    }
+            //}
+            //else
+            //{
+            //    HideTooltip();
+            //}
         }
+
 
         #endregion
 
@@ -467,8 +477,37 @@ namespace Inventory.UI
             _selectedSlot.SetSelected(true);
         }
 
-        private void OnInventoryChanged(ItemData itemData, int quantity)
+        private void OnInventoryChanged (ItemData itemData, int quantity)
         {
+            RefreshUI();
+        }
+
+        private void OnItemAdded (ItemData itemData, int quantity)
+        {
+            var Message = Instantiate(ItemMessage, ItemMessageContainer.transform);
+            Message.GetComponent<ItemMessageTooltip>().SetData(ItemMessageType.Added, itemData.Icon, itemData.ItemName, quantity);
+            Debug.Log("Added item");
+            RefreshUI();
+        }
+
+        private void OnItemRemoved (ItemData itemData, int quantity)
+        {
+            var Message = Instantiate(ItemMessage, ItemMessageContainer.transform);
+            Message.GetComponent<ItemMessageTooltip>().SetData(ItemMessageType.Removed, itemData.Icon, itemData.ItemName, quantity);
+            Debug.Log("Removed item");
+
+            RefreshUI();
+        }
+
+        private void OnItemAddedSilent (ItemData itemData, int quantity)
+        {
+            // No mostramos mensaje, solo refrescamos UI
+            RefreshUI();
+        }
+
+        private void OnItemRemovedSilent (ItemData itemData, int quantity)
+        {
+            // No mostramos mensaje, solo refrescamos UI
             RefreshUI();
         }
 
@@ -498,6 +537,10 @@ namespace Inventory.UI
             if (inventoryPanel == null)
                 return;
 
+            inventoryTitle.text = Localization.LocalizationManager.Instance != null
+                ? Localization.LocalizationManager.Instance.GetLocalizedValue("inventory-title")
+                : "Inventory";
+
             _isInventoryOpen = true;
             inventoryPanel.SetActive(true);
             RefreshUI();
@@ -524,49 +567,44 @@ namespace Inventory.UI
 
         #region Tooltip
 
-        public void ShowTooltip(InventoryItem item, Vector2 screenPosition)
+        public void ShowTooltip (InventoryItem item, Vector2 screenPosition)
         {
             if (tooltipPanel == null || item == null || item.Data == null)
                 return;
+            tooltipImage.sprite = item.Data.Icon;
+            var color = tooltipImage.color;
+            color.a = item.Data.Icon != null ? Color.white.a : 0f;
+            tooltipImage.color = color;
+            tooltipNameText.text = Localization.LocalizationManager.Instance != null
+                ? Localization.LocalizationManager.Instance.GetLocalizedValue(item.Data.NameKey)
+                : item.Data.NameKey;
 
-            if (tooltipNameText != null)
-            {
-                if (Localization.LocalizationManager.Instance != null)
-                    tooltipNameText.text = Localization.LocalizationManager.Instance.GetLocalizedValue(item.Data.NameKey);
-                else
-                    tooltipNameText.text = item.Data.NameKey;
-            }
-
-            if (tooltipDescriptionText != null)
-            {
-                if (Localization.LocalizationManager.Instance != null)
-                    tooltipDescriptionText.text = Localization.LocalizationManager.Instance.GetLocalizedValue(item.Data.DescriptionKey);
-                else
-                    tooltipDescriptionText.text = item.Data.DescriptionKey;
-            }
+            tooltipDescriptionText.text = Localization.LocalizationManager.Instance != null
+                ? Localization.LocalizationManager.Instance.GetLocalizedValue(item.Data.DescriptionKey)
+                : item.Data.DescriptionKey;
 
             tooltipPanel.SetActive(true);
 
-            RectTransform rt = tooltipPanel.GetComponent<RectTransform>();
-            if (rt != null)
-            {
-                Vector2 anchoredPos;
-                RectTransformUtility.ScreenPointToLocalPointInRectangle(
-                    rt.parent as RectTransform,
-                    screenPosition,
-                    null,
-                    out anchoredPos
-                );
+            //RectTransform rt = tooltipPanel.GetComponent<RectTransform>();
+            //Canvas rootCanvas = tooltipPanel.GetComponentInParent<Canvas>();
+            //RectTransform canvasRect = rootCanvas.GetComponent<RectTransform>();
 
-                anchoredPos += tooltipOffset;
-                rt.anchoredPosition = anchoredPos;
-            }
+            //Vector2 localPos;
+            //RectTransformUtility.ScreenPointToLocalPointInRectangle(
+            //    canvasRect,
+            //    screenPosition,
+            //    rootCanvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : rootCanvas.worldCamera,
+            //    out localPos
+            //);
+
+            //rt.anchoredPosition = localPos + tooltipOffset;
         }
+
 
         public void HideTooltip()
         {
-            if (tooltipPanel != null)
-                tooltipPanel.SetActive(false);
+            //if (tooltipPanel != null)
+            //    tooltipPanel.SetActive(false);
         }
 
         #endregion
