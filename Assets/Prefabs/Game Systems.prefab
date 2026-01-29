@@ -33,8 +33,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1209707565026163393}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.081036985, y: -0.000000029704305, z: 0.0000000024150903, w: 0.99671113}
-  m_LocalPosition: {x: -21.06728, y: 4.17946, z: -30.560001}
+  m_LocalRotation: {x: 0.081009276, y: -0.000033439523, z: 0.0000027178467, w: 0.99671334}
+  m_LocalPosition: {x: 38.12272, y: 4.17946, z: -36.010002}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -306,7 +306,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineDeoccluder
   CollideAgainst:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 183
   IgnoreTag: Player
   TransparentLayers:
     serializedVersion: 2
@@ -540,6 +540,50 @@ MonoBehaviour:
   _gameplaySnapshot: {fileID: -1511293616973409331, guid: 7bd7eaa6f125ab044b5eaece627b84a9, type: 2}
   _pausedSnapshot: {fileID: -7477047019274458235, guid: 7bd7eaa6f125ab044b5eaece627b84a9, type: 2}
   _snapshotTransitionTime: 0.2
+--- !u!1 &4117842712834476557
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5819510268145420730}
+  - component: {fileID: 7969768692015636442}
+  m_Layer: 0
+  m_Name: Mission Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5819510268145420730
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4117842712834476557}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2549560417305310977}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7969768692015636442
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4117842712834476557}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 152e1d6d297c7a5489f01335358ae0e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MissionSystem.MissionManager
 --- !u!1 &4863517487004635220
 GameObject:
   m_ObjectHideFlags: 0
@@ -1187,6 +1231,8 @@ MonoBehaviour:
   references:
   - id: Ladder
     target: {fileID: 0}
+  - id: Player
+    target: {fileID: 0}
 --- !u!114 &8661671879418834482
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1268,6 +1314,7 @@ Transform:
   - {fileID: 4894171841776252251}
   - {fileID: 9070179735435665394}
   - {fileID: 7522524979561756985}
+  - {fileID: 5819510268145420730}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8046971763016656370
