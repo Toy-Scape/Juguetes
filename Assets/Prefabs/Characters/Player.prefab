@@ -299,6 +299,7 @@ GameObject:
   - component: {fileID: 1688514977732223978}
   - component: {fileID: 7946972374396150155}
   - component: {fileID: 623290716098548153}
+  - component: {fileID: 4372283106699263501}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -992,6 +993,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DynamicFOVController
   playerController: {fileID: 1143079539005282384}
   virtualCamera: {fileID: 0}
+--- !u!114 &4372283106699263501
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6641168232080197241}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b56de936c199964a8a2ec66a37a9428, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InteractionSystem.Core.StrongArmsHighlighter
+  detectionRadius: 15
+  highlightColor: {r: 0.993973, g: 1, b: 0, a: 0.21176471}
+  rimPower: 0.32
+  pulseSpeed: 2.29
+  pulseMin: 0.122
+  interactableLayer:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  limbManager: {fileID: 7319195771677131702}
 --- !u!1 &8468029186425840670
 GameObject:
   m_ObjectHideFlags: 0
