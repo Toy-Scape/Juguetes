@@ -6,6 +6,8 @@ using UnityEngine;
 [RequireComponent(typeof(AudioSource))]
 public class LimbManager : MonoBehaviour
 {
+    public event System.Action<LimbSO> OnLimbChanged;
+
     [System.Serializable]
     public struct LimbSocketDefinition
     {
@@ -29,6 +31,11 @@ public class LimbManager : MonoBehaviour
         context = GetComponent<LimbContext>();
         equippedLimb = DefaultLimb;
         this.transform.FindDeep(DefaultLimb.LimbNameOnModel)?.gameObject.SetActive(true);
+
+        if (GetComponent<InteractionSystem.Core.StrongArmsHighlighter>() == null)
+        {
+            gameObject.AddComponent<InteractionSystem.Core.StrongArmsHighlighter>();
+        }
     }
 
     public void EquipLimb(LimbSO newLimb)
@@ -51,6 +58,8 @@ public class LimbManager : MonoBehaviour
         equippedLimb = newLimb;
         equippedLimb.OnEquip(context);
         this.transform.FindDeep(equippedLimb.LimbNameOnModel)?.gameObject.SetActive(true);
+
+        OnLimbChanged?.Invoke(equippedLimb);
     }
 
     public void UseActive() => equippedLimb?.UseActive(context);
