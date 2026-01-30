@@ -6,6 +6,15 @@ namespace UI_System.Menus
 {
     public class OptionsMenu : MonoBehaviour
     {
+        [Header("Video")]
+        [SerializeField] private TMP_Dropdown _fpsLimitDropdown;
+
+        [Header("Controls")]
+        [SerializeField] private Slider _mouseSensitivitySlider;
+        [SerializeField] private TextMeshProUGUI _mouseSensitivityValueText;
+        [SerializeField] private Slider _gamepadSensitivitySlider;
+        [SerializeField] private TextMeshProUGUI _gamepadSensitivityValueText;
+
         [Header("Audio")]
         [SerializeField] private Slider _volumeSlider;
         [SerializeField] private TextMeshProUGUI _volumeValueText;
@@ -15,6 +24,42 @@ namespace UI_System.Menus
 
         private void Start()
         {
+            // Populate FPS Dropdown
+            if (_fpsLimitDropdown != null)
+            {
+                _fpsLimitDropdown.ClearOptions();
+                var fpsOptions = new System.Collections.Generic.List<string> { "30 FPS", "60 FPS", "120 FPS", "Unlimited" };
+                _fpsLimitDropdown.AddOptions(fpsOptions);
+
+                int savedFpsIndex = PlayerPrefs.GetInt("FpsLimitIndex", 3); // Default to Unlimited (index 3)
+                _fpsLimitDropdown.value = savedFpsIndex;
+                _fpsLimitDropdown.onValueChanged.AddListener(SetFpsLimit);
+
+                // Apply immediately on start
+                SetFpsLimit(savedFpsIndex);
+            }
+
+            // Initialize Sensitivity
+            if (_mouseSensitivitySlider != null)
+            {
+                _mouseSensitivitySlider.minValue = 0.1f;
+                _mouseSensitivitySlider.maxValue = 5.0f;
+                float savedMouseSens = PlayerPrefs.GetFloat("MouseSensitivity", 1f);
+                _mouseSensitivitySlider.value = savedMouseSens;
+                _mouseSensitivitySlider.onValueChanged.AddListener(SetMouseSensitivity);
+                UpdateMouseSensitivityText(savedMouseSens);
+            }
+
+            if (_gamepadSensitivitySlider != null)
+            {
+                _gamepadSensitivitySlider.minValue = 0.1f;
+                _gamepadSensitivitySlider.maxValue = 5.0f;
+                float savedGamepadSens = PlayerPrefs.GetFloat("GamepadSensitivity", 1f);
+                _gamepadSensitivitySlider.value = savedGamepadSens;
+                _gamepadSensitivitySlider.onValueChanged.AddListener(SetGamepadSensitivity);
+                UpdateGamepadSensitivityText(savedGamepadSens);
+            }
+
             // Populate Language Dropdown
             if (_languageDropdown != null)
             {
@@ -35,6 +80,53 @@ namespace UI_System.Menus
                 _volumeSlider.onValueChanged.AddListener(SetVolume);
                 UpdateVolumeText(savedVolume);
             }
+        }
+
+        public void SetFpsLimit(int index)
+        {
+            int targetFps = -1;
+            switch (index)
+            {
+                case 0: targetFps = 30; break;
+                case 1: targetFps = 60; break;
+                case 2: targetFps = 120; break;
+                case 3: targetFps = -1; break;
+            }
+
+            Application.targetFrameRate = targetFps;
+            PlayerPrefs.SetInt("FpsLimitIndex", index);
+        }
+
+        public void SetMouseSensitivity(float value)
+        {
+            PlayerPrefs.SetFloat("MouseSensitivity", value);
+            PlayerPrefs.Save();
+            UpdateMouseSensitivityText(value);
+
+            // Validate changes immediately if in-game
+            if (CameraManager.Instance != null) CameraManager.Instance.UpdateCameraSensitivity();
+        }
+
+        private void UpdateMouseSensitivityText(float value)
+        {
+            if (_mouseSensitivityValueText != null)
+                _mouseSensitivityValueText.text = value.ToString("F1");
+        }
+
+        public void SetGamepadSensitivity(float value)
+        {
+            PlayerPrefs.SetFloat("GamepadSensitivity", value);
+            PlayerPrefs.Save();
+            UpdateGamepadSensitivityText(value);
+
+            // Validate changes immediately if in-game
+            if (CameraManager.Instance != null) CameraManager.Instance.UpdateCameraSensitivity();
+        }
+
+        private void UpdateGamepadSensitivityText(float value)
+        {
+            if (_gamepadSensitivityValueText != null)
+                _gamepadSensitivityValueText.text = value.ToString("F1");
         }
 
         public void SetVolume(float volume)
@@ -70,3 +162,4 @@ namespace UI_System.Menus
         }
     }
 }
+

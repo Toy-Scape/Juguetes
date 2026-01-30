@@ -1,8 +1,8 @@
+using System.Collections;
+using System.Collections.Generic;
 using Assets.Scripts.PlayerController;
 using CinematicSystem.Application;
 using CinematicSystem.Core;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -18,7 +18,7 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private CinematicAsset cinematic;
 
-    
+
 
     public CharacterController CharacterController { get; private set; }
     public Animator Animator => playerAnimator;
@@ -39,10 +39,16 @@ public class PlayerController : MonoBehaviour
     private float _pushSpeedMultiplier = 1f;
     private float _turnSmoothVelocity;
 
+    private PlayerInput _playerInput;
+
     void Awake()
     {
         CharacterController = GetComponent<CharacterController>();
         _states = new PlayerStateFactory(this);
+
+        // Try to get PlayerInput component
+        _playerInput = GetComponent<PlayerInput>();
+        if (_playerInput == null) _playerInput = FindFirstObjectByType<PlayerInput>();
 
         if (playerAnimator == null)
             playerAnimator = GetComponent<Animator>();
@@ -236,7 +242,27 @@ public class PlayerController : MonoBehaviour
 
     #region Input Handling
     public void OnMove(InputValue value) => Context.MoveInput = value.Get<Vector2>();
-    public void OnLook(InputValue value) => Context.LookInput = value.Get<Vector2>() * config.LookSensitivity;
+
+    public void OnLook(InputValue value)
+    {
+        float sensitivityMultiplier = 1f;
+        string scheme = "None";
+
+        if (_playerInput != null)
+        {
+            scheme = _playerInput.currentControlScheme;
+            if (scheme == "Keyboard&Mouse")
+                sensitivityMultiplier = PlayerPrefs.GetFloat("MouseSensitivity", 1f);
+            else if (scheme == "Gamepad" || scheme == "Joystick")
+                sensitivityMultiplier = PlayerPrefs.GetFloat("GamepadSensitivity", 1f);
+        }
+
+        Vector2 rawInput = value.Get<Vector2>();
+        Context.LookInput = rawInput * config.LookSensitivity * sensitivityMultiplier;
+
+        // Debugging
+        Debug.Log($"[PlayerController] Scheme: {scheme}, Raw: {rawInput}, SensMult: {sensitivityMultiplier}, Final: {Context.LookInput}");
+    }
     public void OnSprint(InputValue value) => Context.IsSprinting = value.isPressed;
     public void OnJump(InputValue value) => Context.IsJumping = value.isPressed;
     public void OnCrouch(InputValue value) => Context.IsCrouching = value.isPressed;
@@ -424,7 +450,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void OnStandingAnimationEnter ()
+    public void OnStandingAnimationEnter()
     {
         CharacterController.enabled = false;
         var CinematicPlayer = FindFirstObjectByType<CinematicPlayer>();
@@ -434,7 +460,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void OnStandingAnimationFinished ()
+    public void OnStandingAnimationFinished()
     {
         CharacterController.enabled = true;
         var CinematicPlayer = FindFirstObjectByType<CinematicPlayer>();
