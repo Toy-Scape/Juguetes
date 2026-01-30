@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Unity.Cinemachine;
 using UnityEngine;
 
@@ -79,6 +80,8 @@ public class CameraManager : MonoBehaviour
         UpdateCameraSensitivity();
     }
 
+    private Dictionary<object, float> _initialGains = new Dictionary<object, float>();
+
     public void UpdateCameraSensitivity()
     {
         // Auto-find if missing
@@ -121,10 +124,17 @@ public class CameraManager : MonoBehaviour
             {
                 foreach (var axis in controller.Controllers)
                 {
-                    // Access Input.Gain
                     if (axis.Input != null)
                     {
-                        axis.Input.Gain = sensitivity;
+                        // Cache initial gain if not already cached
+                        if (!_initialGains.ContainsKey(axis))
+                        {
+                            _initialGains[axis] = axis.Input.Gain;
+                            // Debug.Log($"[CameraManager] Cached initial gain for axis {axis.Name}: {axis.Input.Gain}");
+                        }
+
+                        // Apply sensitivity as multiplier on base gain
+                        axis.Input.Gain = _initialGains[axis] * sensitivity;
                         updatedCount++;
                     }
                 }
