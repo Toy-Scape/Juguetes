@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -12,6 +13,11 @@ namespace UI_System.Menus
         [SerializeField] private GameObject _mainMenuPanel;
         [SerializeField] private GameObject _pauseMenuPanel;
         [SerializeField] private GameObject _optionsPanel;
+
+        [Header("Navigation")]
+        [SerializeField] private GameObject _mainMenuFirstSelected;
+        [SerializeField] private GameObject _pauseMenuFirstSelected;
+        [SerializeField] private GameObject _optionsFirstSelected;
 
         [Header("Scene Configuration")]
         [SerializeField] private string _gameSceneName = "SC_GamePlay"; // Update with actual Game Scene name
@@ -68,6 +74,9 @@ namespace UI_System.Menus
             // Fallback if InputMapManager is not present (e.g. testing Menu scene alone without bootstrap)
             // ... already handled above
             FindFirstObjectByType<MenuMusicFader>()?.FadeIn();
+
+            if (_mainMenuPanel.activeSelf) SetSelection(_mainMenuFirstSelected);
+            else if (_pauseMenuPanel.activeSelf) SetSelection(_pauseMenuFirstSelected);
         }
 
         private void OnDestroy()
@@ -78,9 +87,25 @@ namespace UI_System.Menus
             }
         }
 
+        private void SetSelection(GameObject selection)
+        {
+            StartCoroutine(SetSelectionRoutine(selection));
+        }
+
+        private System.Collections.IEnumerator SetSelectionRoutine(GameObject selection)
+        {
+            if (EventSystem.current != null && selection != null)
+            {
+                EventSystem.current.SetSelectedGameObject(null);
+                yield return null;
+                EventSystem.current.SetSelectedGameObject(selection);
+            }
+        }
+
         private void ShowMainMenu()
         {
             _mainMenuPanel.SetActive(true);
+            SetSelection(_mainMenuFirstSelected);
             _pauseMenuPanel.SetActive(false);
             _optionsPanel.SetActive(false);
         }
@@ -89,6 +114,7 @@ namespace UI_System.Menus
         {
             _mainMenuPanel.SetActive(false);
             _pauseMenuPanel.SetActive(true);
+            SetSelection(_pauseMenuFirstSelected);
             _optionsPanel.SetActive(false);
         }
 
@@ -137,6 +163,7 @@ namespace UI_System.Menus
         public void OpenOptions()
         {
             _optionsPanel.SetActive(true);
+            SetSelection(_optionsFirstSelected);
             // Keep the previous panel active behind it, or disable it?
             // Usually disable to avoid navigation issues, but for visual overlap keep enabled.
             // Let's disable for simplicity of input.
@@ -152,10 +179,12 @@ namespace UI_System.Menus
             if (SceneManager.sceneCount == 1)
             {
                 _mainMenuPanel.SetActive(true);
+                SetSelection(_mainMenuFirstSelected);
             }
             else
             {
                 _pauseMenuPanel.SetActive(true);
+                SetSelection(_pauseMenuFirstSelected);
             }
         }
 

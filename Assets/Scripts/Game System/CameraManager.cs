@@ -50,13 +50,88 @@ public class CameraManager : MonoBehaviour
     {
         InputMapManager.OnActionMapChanged += HandleActionMapChanged;
         DialogueBox.OnDialogueVisibleClose += HandleDialogueVisibleClose;
+
+        if (_player != null)
+        {
+            var pInput = _player.GetComponent<UnityEngine.InputSystem.PlayerInput>();
+            if (pInput != null) pInput.onControlsChanged += OnControlsChanged;
+        }
+
+        UpdateCameraSensitivity();
     }
 
     private void OnDisable()
     {
         InputMapManager.OnActionMapChanged -= HandleActionMapChanged;
         DialogueBox.OnDialogueVisibleClose -= HandleDialogueVisibleClose;
+
+        if (_player != null)
+        {
+            var pInput = _player.GetComponent<UnityEngine.InputSystem.PlayerInput>();
+            if (pInput != null) pInput.onControlsChanged -= OnControlsChanged;
+        }
+
         if (_dialogueAnchor != null) Destroy(_dialogueAnchor);
+    }
+
+    private void OnControlsChanged(UnityEngine.InputSystem.PlayerInput input)
+    {
+        UpdateCameraSensitivity();
+    }
+
+    public void UpdateCameraSensitivity()
+    {
+        // Auto-find if missing
+        if (inputControllers == null || inputControllers.Length == 0)
+        {
+            inputControllers = FindObjectsByType<CinemachineInputAxisController>(FindObjectsSortMode.None);
+            Debug.Log($"[CameraManager] Auto-found {inputControllers.Length} CinemachineInputAxisControllers.");
+        }
+
+        if (inputControllers == null || inputControllers.Length == 0)
+        {
+            Debug.LogWarning("[CameraManager] No CinemachineInputAxisController found! Sensitivity cannot be applied.");
+            return;
+        }
+
+        float sensitivity = 1f;
+
+        // Determine sensitivity based on current control scheme
+        if (_player != null)
+        {
+            var pInput = _player.GetComponent<UnityEngine.InputSystem.PlayerInput>();
+            if (pInput != null)
+            {
+                if (pInput.currentControlScheme == "Keyboard&Mouse")
+                {
+                    sensitivity = PlayerPrefs.GetFloat("MouseSensitivity", 1f);
+                }
+                else if (pInput.currentControlScheme == "Gamepad" || pInput.currentControlScheme == "Joystick")
+                {
+                    sensitivity = PlayerPrefs.GetFloat("GamepadSensitivity", 1f);
+                }
+            }
+        }
+
+        // Apply to all controllers
+        int updatedCount = 0;
+        foreach (var controller in inputControllers)
+        {
+            if (controller != null && controller.Controllers != null)
+            {
+                foreach (var axis in controller.Controllers)
+                {
+                    // Access Input.Gain
+                    if (axis.Input != null)
+                    {
+                        axis.Input.Gain = sensitivity;
+                        updatedCount++;
+                    }
+                }
+            }
+        }
+
+        Debug.Log($"[CameraManager] Applied Sensitivity {sensitivity} to {updatedCount} axes (Scheme: {_player?.GetComponent<UnityEngine.InputSystem.PlayerInput>()?.currentControlScheme}).");
     }
 
     private void HandleDialogueVisibleClose()
