@@ -4845,6 +4845,9 @@ MonoBehaviour:
   _mainMenuPanel: {fileID: 239167472}
   _pauseMenuPanel: {fileID: 1723403374}
   _optionsPanel: {fileID: 1846233473}
+  _mainMenuFirstSelected: {fileID: 1800211374}
+  _pauseMenuFirstSelected: {fileID: 308267638}
+  _optionsFirstSelected: {fileID: 1110971803}
   _gameSceneName: SC_POVSYstem
 --- !u!4 &2111212320
 Transform:
