@@ -20,7 +20,7 @@ public class AntennaIndicator : MonoBehaviour
 
         if (npcBrain == null)
         {
-             npcBrain = FindObjectOfType<Domain.NpcBrain>();
+             npcBrain = FindFirstObjectByType<Domain.NpcBrain>();
         }
     }
 

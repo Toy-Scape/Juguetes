@@ -1,7 +1,6 @@
-using System.Text;
 using MissionSystem.Data;
 using MissionSystem.Runtime;
-using TMPro; // Using TextMeshPro as it's standard. Change to UnityEngine.UI if needed, but TMP is better.
+using TMPro;
 using UnityEngine;
 
 namespace MissionSystem.UI
@@ -10,51 +9,49 @@ namespace MissionSystem.UI
     {
         [Header("UI References")]
         [SerializeField] private TextMeshProUGUI titleText;
-        [SerializeField] private TextMeshProUGUI objectivesText;
+        [SerializeField] private TextMeshProUGUI descriptionText;
+        [SerializeField] private Transform objectivesContainer;
+        [SerializeField] private GameObject objectiveEntryPrefab;
 
         private Mission _mission;
 
-        public void Setup(Mission mission)
+        public void Setup (Mission mission)
         {
             _mission = mission;
+
+            titleText.text = mission.Definition.Title;
+            descriptionText.text = mission.Definition.Description;
+
             Refresh();
+
+            foreach (var obj in mission.Objectives)
+                obj.OnProgressUpdated += HandleObjectiveUpdated;
         }
 
-        public void Refresh()
+        private void OnDestroy ()
         {
             if (_mission == null) return;
 
-            // Update Title
-            titleText.text = _mission.Definition.Title;
-
-            // Update Objectives List
-            StringBuilder sb = new StringBuilder();
-            foreach (var objective in _mission.Objectives)
-            {
-                string statusIcon = GetStatusIcon(objective.State);
-                string description = objective.Definition.description;
-
-                // Optional: Showing progress
-                string progress = "";
-                if (objective.State == ObjectiveState.InProgress && objective.Progress > 0 && objective.Progress < 1f)
-                {
-                    progress = $" ({objective.Progress:P0})";
-                }
-
-                sb.AppendLine($"{statusIcon} {description}{progress}");
-            }
-
-            objectivesText.text = sb.ToString();
+            foreach (var obj in _mission.Objectives)
+                obj.OnProgressUpdated -= HandleObjectiveUpdated;
         }
 
-        private string GetStatusIcon(ObjectiveState state)
+        private void HandleObjectiveUpdated (Objective obj, float progress)
         {
-            switch (state)
+            Refresh();
+        }
+
+        public void Refresh ()
+        {
+            if (_mission == null) return;
+
+            foreach (Transform child in objectivesContainer)
+                Destroy(child.gameObject);
+
+            foreach (var objective in _mission.Objectives)
             {
-                case ObjectiveState.Completed: return "<color=green>☑</color>";
-                case ObjectiveState.Failed: return "<color=red>☒</color>";
-                case ObjectiveState.InProgress: return "☐";
-                default: return "☐";
+                var entry = Instantiate(objectiveEntryPrefab, objectivesContainer);
+                entry.GetComponent<ObjectiveEntryUI>().Bind(objective);
             }
         }
     }
