@@ -81,9 +81,12 @@ namespace CinematicSystem.Infrastructure
 
             if (cinematicCamera == null) return;
 
+            //Deshabilito el warning que me tiene hasta las narices... en teoría no se usa, se usa el deoccluder, pero lo dejo por si acaso.
+#pragma warning disable CS0618 
             // Handle Collision (Anti-Zoom)
             var collider = cinematicCamera.GetComponent<CinemachineCollider>();
             if (collider != null) collider.enabled = !ignoreCollision;
+#pragma warning restore CS0618 
 
             var deoccluder = cinematicCamera.GetComponent<CinemachineDeoccluder>();
             if (deoccluder != null) deoccluder.enabled = !ignoreCollision;

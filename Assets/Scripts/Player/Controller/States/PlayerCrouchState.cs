@@ -49,7 +49,7 @@ namespace Assets.Scripts.PlayerController
 
         public override void CheckSwitchStates()
         {
-            if (!_ctx.Context.IsCrouching)
+            if (!_ctx.Context.IsCrouching && _ctx.CanStand())
             {
                 SwitchState(_factory.Idle());
             }

@@ -79577,8 +79577,8 @@ Light:
   m_Enabled: 1
   serializedVersion: 11
   m_Type: 1
-  m_Color: {r: 0.9056604, g: 0.9056604, b: 0.9056604, a: 1}
-  m_Intensity: 0.27
+  m_Color: {r: 0.5484603, g: 0.56656706, b: 0.8018868, a: 1}
+  m_Intensity: 0.8
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -81452,12 +81452,14 @@ MonoBehaviour:
   detectionRadius: 15
   highlightColor: {r: 0.993973, g: 1, b: 0, a: 0.21176471}
   rimPower: 0.32
+  disableHighlightWhenGrabbing: 1
   pulseSpeed: 2.29
   pulseMin: 0.122
   interactableLayer:
     serializedVersion: 2
     m_Bits: 4294967295
   limbManager: {fileID: 1728560817}
+  grabInteractor: {fileID: 0}
 --- !u!1 &1730512417
 GameObject:
   m_ObjectHideFlags: 0
