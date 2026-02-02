@@ -167,3 +167,11 @@ MonoBehaviour:
     english: Interact {0}
     spanish: Interactuar {0}
     basque: Interaktuatu {0}
+  - key: tutorial-dialogue-callout
+    english: Hey!
+    spanish: "\xA1Eh!"
+    basque: Ei!
+  - key: tutorial-dialogue-callout-2
+    english: Over here!
+    spanish: "\xA1Por aqu\xED!"
+    basque: Hemen!
