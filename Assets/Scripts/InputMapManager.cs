@@ -121,7 +121,7 @@ public class InputMapManager : MonoBehaviour
         uiCounter = Mathf.Max(0, uiCounter - 1);
         UpdateActionMap();
     }
-
+    // ...
     public void HandleDialogueOpen()
     {
         dialogueCounter++;

@@ -38,6 +38,8 @@ public class DialogueBox : MonoBehaviour
     private const float interactionLockTime = 0.25f;
     private Coroutine typingCoroutine;
     private Coroutine thoughtCloseCoroutine;
+    private Coroutine enableNextDialogueCoroutine;
+    private Coroutine unlockInputCoroutine;
 
     private GameObject player;
     private GameObject currentSpeaker;
@@ -86,7 +88,7 @@ public class DialogueBox : MonoBehaviour
     /// <summary>
     /// Abre el diálogo activo. No asume que el activeDialogue sea nulo.
     /// </summary>
-    public void Open()
+    public void Open(bool skipStaticEvents = false)
     {
         if (activeDialogue == null)
             return;
@@ -95,8 +97,9 @@ public class DialogueBox : MonoBehaviour
         {
             dialogueContent.SetActive(true);
             thoughtContent.SetActive(false);
-            OnDialogueOpen?.Invoke();
-            StartCoroutine(EnableNextDialogueAction());
+            if (!skipStaticEvents) OnDialogueOpen?.Invoke();
+            if (enableNextDialogueCoroutine != null) StopCoroutine(enableNextDialogueCoroutine);
+            enableNextDialogueCoroutine = StartCoroutine(EnableNextDialogueAction());
         }
         else if (activeDialogue.Type == Dialogue.DialogueType.Thought)
         {
@@ -144,7 +147,26 @@ public class DialogueBox : MonoBehaviour
 
         IsTyping = false;
 
-        StartCoroutine(UnlockInputRoutine(delay));
+        if (enableNextDialogueCoroutine != null)
+        {
+            StopCoroutine(enableNextDialogueCoroutine);
+            enableNextDialogueCoroutine = null;
+        }
+
+        // Unsubscribe input immediately to prevent spamming from resetting the close timer
+        if (nextDialogueAction?.action != null)
+        {
+            nextDialogueAction.action.performed -= OnNextDialogue;
+            nextDialogueAction.action.Disable();
+        }
+
+        if (unlockInputCoroutine != null)
+        {
+            StopCoroutine(unlockInputCoroutine);
+            unlockInputCoroutine = null;
+        }
+
+        unlockInputCoroutine = StartCoroutine(UnlockInputRoutine(delay));
     }
 
     private IEnumerator UnlockInputRoutine(float delay)
@@ -154,6 +176,7 @@ public class DialogueBox : MonoBehaviour
 
         OnDialogueClose?.Invoke();
         activeDialogue = null;
+        unlockInputCoroutine = null;
     }
     private void CloseImmediate()
     {
@@ -164,6 +187,12 @@ public class DialogueBox : MonoBehaviour
         {
             nextDialogueAction.action.performed -= OnNextDialogue;
             nextDialogueAction.action.Disable();
+        }
+
+        if (enableNextDialogueCoroutine != null)
+        {
+            StopCoroutine(enableNextDialogueCoroutine);
+            enableNextDialogueCoroutine = null;
         }
 
         IsTyping = false;
@@ -262,11 +291,26 @@ public class DialogueBox : MonoBehaviour
         if (Time.unscaledTime < globalInteractionLockUntil)
             return;
 
+        if (IsOpen) return;
+
+        // Si hay una rutina de desbloqueo pendiente (diálogo cerrándose),
+        // forzamos el cierre completo INMEDIATO para asegurar que los eventos (OnDialogueClose)
+        // se disparen y el contador del InputMapManager baje a 0 antes de volver a subir.
+        if (unlockInputCoroutine != null)
+        {
+            StopCoroutine(unlockInputCoroutine);
+            unlockInputCoroutine = null;
+
+            // Forzamos el evento de cierre que estaba pendiente
+            OnDialogueClose?.Invoke();
+            activeDialogue = null;
+        }
+
         activeDialogue = dialogue;
         dialogueIndex = 0;
         duringTriggeredLines.Clear();
 
-        Open();
+        Open(); // start normal with event
         Next();
     }
 
@@ -347,7 +391,11 @@ public class DialogueBox : MonoBehaviour
 
         // asegurarse de doble-subscribe
         nextDialogueAction.action.performed -= OnNextDialogue;
-        nextDialogueAction.action.performed += OnNextDialogue;
+
+        if (IsOpen && activeDialogue != null)
+        {
+            nextDialogueAction.action.performed += OnNextDialogue;
+        }
     }
 
     private IEnumerator CloseSafelyNextFrame()
