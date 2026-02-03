@@ -69,7 +69,6 @@ public class GrabInteractor : MonoBehaviour
                 DialogueBox.Instance.StartDialogue(failThought);
             return false;
         }
-
         currentPickable = bestTarget;
         isPicking = true;
 

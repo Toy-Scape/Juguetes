@@ -27,7 +27,7 @@ MonoBehaviour:
         holdAtEnd: 1
         targetId: AirConduct
         lookAtId: AirConduct
-        offset: {x: 30, y: 0, z: -30}
+        offset: {x: 30, y: -10, z: -30}
         fov: 60
         duration: 2
         smooth: 1
