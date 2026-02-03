@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private PlayerConfig config;
     [SerializeField] private Transform cameraTransform;
     [SerializeField] private Unity.Cinemachine.CinemachineCamera gameplayCamera;
+    [SerializeField] private Unity.Cinemachine.CinemachineCamera crouchingCamera;
     [SerializeField] private TMP_Text TMPPlayerState;
     [SerializeField] private Animator playerAnimator;
     [SerializeField] private GrabInteractor grabInteractor;
@@ -262,7 +263,9 @@ public class PlayerController : MonoBehaviour
         Context.LookInput = rawInput * config.LookSensitivity * sensitivityMultiplier;
     }
     public void OnSprint(InputValue value) => Context.IsSprinting = value.isPressed;
-    public void OnJump(InputValue value) => Context.IsJumping = value.isPressed;
+    public void OnJump(InputValue value) {
+        Context.IsJumping = value.isPressed && !Context.IsCrouching && (CurrentState is PlayerLedgeGrabState || CanStand()); 
+    }
     public void OnCrouch(InputValue value) => Context.IsCrouching = value.isPressed;
     public void OnSprintToggle(InputValue value) => Context.IsSprinting = !Context.IsSprinting;
     public void OnCrouchToggle(InputValue value) => Context.IsCrouching = !Context.IsCrouching;
