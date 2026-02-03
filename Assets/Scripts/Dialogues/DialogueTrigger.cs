@@ -7,12 +7,14 @@ public class DialogueTrigger : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if (!other.CompareTag("Player")) return;
+
         if (!dialogue)
         {
             return;
         }
 
         DialogueBox.Instance.StartDialogue(dialogue);
-        this.enabled = false;
+        this.gameObject.SetActive(false);
     }    
 }

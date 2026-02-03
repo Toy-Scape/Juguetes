@@ -43,13 +43,13 @@ MonoBehaviour:
     basque: Kutxa ezin dut hartu, indar gehiago behar dut.
   - key: tutorial-robotin-dialogue-1
     english: "Are you okay? You look\u2026 incomplete.\n"
-    spanish: "\xBFEst\xE1s bien? Te ves\u2026 incompleto."
+    spanish: "\xBFEst\xE1s\u2026 bien?"
     basque: "Ondo zaude?\u2026 osatu gabe ikusten zaitut.\n"
   - key: tutorial-robotin-dialogue-2
     english: 'Do you want me to look for them?
 
 '
-    spanish: "\xBFQuieres que los busque?\n"
+    spanish: "Lo siento\u2026 \xBFHay alguna forma de escapar?"
     basque: 'Bilatu nahi dituzu?
 
 '
@@ -57,7 +57,7 @@ MonoBehaviour:
     english: 'Do you want me to put on your arms?
 
 '
-    spanish: "\xBFQuieres que me ponga tus brazos?\n"
+    spanish: ...
     basque: 'Zure besoak jantzi nahi dituzu?
 
 '
@@ -65,39 +65,40 @@ MonoBehaviour:
     english: 'And you? What will you do?
 
 '
-    spanish: "\xBFY t\xFA? \xBFQu\xE9 har\xE1s?\n"
+    spanish: "Tendr\xE1s que hacer uso de mis brazos para llegar al destornillador."
     basque: 'Eta zu? Zer egingo duzu?
 
 '
   - key: tutorial-juan-dialogue-1
     english: "Hehe\u2026 incomplete, he says. I\u2019m missing my arms, kid. Without
       them I can\u2019t move or defend myself.\n"
-    spanish: "Hehe\u2026 incompleto dice. Me faltan los brazos, chaval. As\xED no
-      puedo moverme ni defenderme.\n"
+    spanish: "M\xEDrame. \xBFTe parece que estoy para correr una marat\xF3n? No tengo
+      ninguna posibilidad de salir de aqu\xED por mi cuenta. Pero t\xFA\u2026 t\xFA
+      a\xFAn est\xE1s entero. Y eso ya es m\xE1s de lo que puedo decir de la mayor\xEDa."
     basque: "Hehe\u2026 osatu gabe, dio. Besoak falta zaizkit, mutil. Horrela ezin
       naiz mugitu ezta defendatu ere.\n"
   - key: tutorial-juan-dialogue-2
     english: "No need. You\u2019d better take them yourself. My arms still work\u2026
       it\u2019s just that I can\u2019t use them anymore.\n"
-    spanish: "No hace falta. Mejor ll\xE9vatelos t\xFA. Mis brazos a\xFAn funcionan\u2026
-      solo que yo ya no puedo usarlos.\n"
+    spanish: "S\xED. Pero no sin ayuda. \xBFVes ese brazo en el suelo? Es m\xEDo.
+      Todav\xEDa funciona. Tiene buen agarre. Te servir\xE1 para mover cosas que
+      t\xFA solo ni so\xF1ar\xEDas con empujar. Ll\xE9vatelo."
     basque: "Ez da beharrezkoa. Hobe zuk eramatea. Nire besoek oraindik funtzionatzen
       dute\u2026 nik erabiltzerik ez dudan arren.\n"
   - key: tutorial-juan-dialogue-3
     english: "Exactly. They\u2019ll help you learn how to swap parts. Also, there\u2019s
       a screwdriver on the table over there. With my arms you\u2019ll be able to
       use it and open the ventilation grate.\n"
-    spanish: "Exacto. Te servir\xE1n para aprender a cambiar piezas. Adem\xE1s, ah\xED
-      en la mesa hay un destornillador. Con mis brazos podr\xE1s usarlo y abrir la
-      rejilla de ventilaci\xF3n."
+    spanish: "Bien. Ahora escucha. Arriba, sobre esa caja de herramientas, hay un
+      destornillador. Lo vas a necesitar para abrir el conducto de ventilaci\xF3n. "
     basque: "Hori da. Piezen aldaketa ikasteko balioko dizute. Gainera, mahai gainean
       han destornilladore bat dago. Nire besoekin erabili ahal izango duzu eta aireztapen\u2011sarea
       ireki.\n"
   - key: tutorial-juan-dialogue-4
     english: "I have no way out, Robot\xEDn. But you do. So go. Escape for both of
       us."
-    spanish: "Yo no tengo escapatoria, Robot\xEDn. Pero t\xFA s\xED. As\xED que ve.
-      Esc\xE1pate por los dos."
+    spanish: "Una vez tengas el destornillador, tendr\xE1s que encontrar una forma
+      de subir hasta el conducto."
     basque: "Nik ez dut ihesbiderik, Robot\xEDn. Baina zuk bai. Beraz, zoaz. Ihes
       egin bion ordez."
   - key: thought-ventilacion
@@ -175,3 +176,19 @@ MonoBehaviour:
     english: Over here!
     spanish: "\xA1Por aqu\xED!"
     basque: Hemen!
+  - key: tutorial-robotin-dialogue-5
+    english: 
+    spanish: "\xBFY t\xFA? \xBFVendr\xE1s conmigo?"
+    basque: 
+  - key: tutorial-juan-dialogue-5
+    english: 
+    spanish: "No puedo. Pero si t\xFA sales\u2026 al menos sabr\xE9 que uno de nosotros
+      lo consigui\xF3. Y oye\u2026 si encuentras m\xE1s juguetes ah\xED arriba, diles
+      que el viejo Titanio Max sigue dando guerra, \xBFvale?"
+    basque: 
+  - key: tutorial-juan-dialogue-6
+    english: 
+    spanish: "Y toma este tambi\xE9n. No me va a hacer falta aqu\xED abajo\u2026
+      y t\xFA lo aprovechar\xE1s mejor que yo. Cr\xE9eme, funcionan mejor en manos
+      que todav\xEDa pueden moverse."
+    basque: 

@@ -110,12 +110,18 @@ public class Grabbable : MonoBehaviour, IGrabbable
                 // Collision is touching or very close
                 float dot = Vector3.Dot(direction, hit.normal);
                 if (dot < -0.01f)
+                {
+                    Debug.LogWarning($"Collision detected with {hit.transform.name} at distance {adjustedDist}");
                     return false;
+                }
             }
             else
             {
                 if (adjustedDist <= dist)
+                {
+                    Debug.LogWarning($"Collision detected with {hit.transform.name} at distance {adjustedDist}");
                     return false;
+                }
             }
         }
 

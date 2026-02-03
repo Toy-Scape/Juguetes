@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe7d36f779e20324b841dfd80305c1d8, type: 3}
-  m_Name: NewCinematic
+  m_Name: ScrewdriverCinematic
   m_EditorClassIdentifier: Assembly-CSharp::CinematicSystem.Core.CinematicAsset
   blockPlayerInput: 1
   hideHUD: 1
@@ -25,9 +25,9 @@ MonoBehaviour:
       data:
         waitForCompletion: 1
         holdAtEnd: 1
-        targetId: Ladder
-        lookAtId: Ladder
-        offset: {x: 0, y: 5, z: -10}
+        targetId: Screwdriver
+        lookAtId: Screwdriver
+        offset: {x: 0, y: 15, z: -20}
         fov: 40
         duration: 5
         smooth: 0

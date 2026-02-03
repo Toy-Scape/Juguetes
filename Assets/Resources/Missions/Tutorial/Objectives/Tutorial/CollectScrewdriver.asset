@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 55a8b3d6c0fd56a439f06d53d4bc4312, type: 3}
-  m_Name: CollectCube 1
+  m_Name: CollectScrewdriver
   m_EditorClassIdentifier: Assembly-CSharp::MissionSystem.Data.CollectItemObjectiveDefinition
-  description: Recoje dos cajas
-  targetItem: {fileID: 11400000, guid: 4d4e899c9fa132944b8fae2775d989d5, type: 2}
-  targetQuantity: 2
+  description: Destornillador obtenido.
+  targetItem: {fileID: 11400000, guid: 271dd0cc060c8374c8ed1b2a3d22ee62, type: 2}
+  targetQuantity: 1

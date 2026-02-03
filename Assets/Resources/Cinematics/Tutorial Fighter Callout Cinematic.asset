@@ -16,15 +16,22 @@ MonoBehaviour:
   hideHUD: 1
   restoreCameraInstantly: 0
   actions:
-  - rid: 1458386780595421473
+  - rid: 1458386800264609792
   references:
     version: 2
     RefIds:
-    - rid: 1458386780595421473
-      type: {class: MoveCameraAction, ns: CinematicSystem.Actions, asm: Assembly-CSharp}
+    - rid: 1458386800264609792
+      type: {class: CameraShotAction, ns: CinematicSystem.Actions, asm: Assembly-CSharp}
       data:
         waitForCompletion: 1
         holdAtEnd: 1
-        targetId: 
-        moveDuration: 2
+        targetId: MMA_Fighter
+        lookAtId: MMA_Fighter
+        offset: {x: 15, y: 5, z: 15}
+        fov: 60
+        duration: 2
         smooth: 1
+        instant: 0
+        ignoreCollision: 0
+        useOrbit: 0
+        orbitSpeed: 10
