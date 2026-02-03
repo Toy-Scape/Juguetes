@@ -8,6 +8,10 @@ public class GrabInteractor : MonoBehaviour
     [SerializeField] private Transform holdPoint;
     [SerializeField] private float grabSnapDistance = 0.8f;
 
+
+    Vector3 grabSize => Vector3.one * (grabRadius * 2f);
+
+
     private Grabbable currentGrabbable;
     private Pickable currentPickable;
     private bool isGrabbing;
@@ -37,7 +41,8 @@ public class GrabInteractor : MonoBehaviour
     {
         if (isPicking || isGrabbing) return false;
 
-        Collider[] hits = Physics.OverlapSphere(grabOrigin.position, grabRadius, grabLayer);
+
+        Collider[] hits = Physics.OverlapBox(grabOrigin.position, grabSize, grabOrigin.rotation, grabLayer);
         float closestDist = float.MaxValue;
         Pickable bestTarget = null;
 
@@ -155,7 +160,7 @@ public class GrabInteractor : MonoBehaviour
     {
         if (isPicking || isGrabbing) return false;
 
-        Collider[] hits = Physics.OverlapSphere(grabOrigin.position, grabRadius, grabLayer);
+        Collider[] hits = Physics.OverlapBox(grabOrigin.position, grabSize, grabOrigin.rotation, grabLayer);
         float closestDist = float.MaxValue;
         Grabbable bestTarget = null;
         Vector3 bestPoint = Vector3.zero;
@@ -302,12 +307,11 @@ public class GrabInteractor : MonoBehaviour
         currentGrabbable.MoveTo(targetPos, targetRot);
     }
 
-    private void OnDrawGizmosSelected()
+    void OnDrawGizmosSelected()
     {
-        if (grabOrigin != null)
-        {
-            Gizmos.color = Color.green;
-            Gizmos.DrawWireSphere(grabOrigin.position, grabRadius);
-        }
+        Gizmos.color = Color.yellow;
+        Gizmos.matrix = grabOrigin.localToWorldMatrix;
+        Gizmos.DrawWireCube(Vector3.zero, grabSize);
     }
+
 }

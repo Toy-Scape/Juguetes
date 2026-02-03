@@ -56,6 +56,8 @@ MonoBehaviour:
     Key: tutorial-juan-dialogue-4
     Text: 
     Actions:
+    - timing: 0
+      action: {fileID: 11400000, guid: 21547a3dccb7de946927bd134664587a, type: 2}
     - timing: 2
       action: {fileID: 11400000, guid: d1fcdc50d708fe4459c0cdcabd0a750a, type: 2}
   - Character: {fileID: 11400000, guid: 42b78f4e58247f64fb0fc56d0c5d1796, type: 2}
