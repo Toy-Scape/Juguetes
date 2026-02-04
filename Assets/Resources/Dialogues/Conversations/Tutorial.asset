@@ -29,27 +29,43 @@ MonoBehaviour:
   - Character: {fileID: 11400000, guid: 7832fc3c6197f2144b2802326c6977e5, type: 2}
     Key: tutorial-juan-dialogue-2
     Text: 
-    Actions:
-    - timing: 0
-      action: {fileID: 11400000, guid: 43dec532915c6914c896e1a71d32aed7, type: 2}
+    Actions: []
+  - Character: {fileID: 11400000, guid: 7832fc3c6197f2144b2802326c6977e5, type: 2}
+    Key: tutorial-juan-dialogue-6
+    Text: 
+    Actions: []
   - Character: {fileID: 11400000, guid: 42b78f4e58247f64fb0fc56d0c5d1796, type: 2}
     Key: tutorial-robotin-dialogue-3
     Text: 
-    Actions: []
+    Actions:
+    - timing: 0
+      action: {fileID: 11400000, guid: 94587dff5e8c0ab40a4c7fb55cb32e12, type: 2}
+    - timing: 2
+      action: {fileID: 11400000, guid: 0a8ad60cc2802444ba9e055bbdc7a102, type: 2}
   - Character: {fileID: 11400000, guid: 7832fc3c6197f2144b2802326c6977e5, type: 2}
     Key: tutorial-juan-dialogue-3
     Text: 
     Actions:
     - timing: 0
-      action: {fileID: 11400000, guid: 94587dff5e8c0ab40a4c7fb55cb32e12, type: 2}
-    - timing: 1
-      action: {fileID: 11400000, guid: 0a8ad60cc2802444ba9e055bbdc7a102, type: 2}
-  - Character: {fileID: 11400000, guid: 42b78f4e58247f64fb0fc56d0c5d1796, type: 2}
+      action: {fileID: 11400000, guid: 43dec532915c6914c896e1a71d32aed7, type: 2}
+  - Character: {fileID: 11400000, guid: 7832fc3c6197f2144b2802326c6977e5, type: 2}
     Key: tutorial-robotin-dialogue-4
     Text: 
     Actions: []
   - Character: {fileID: 11400000, guid: 7832fc3c6197f2144b2802326c6977e5, type: 2}
     Key: tutorial-juan-dialogue-4
+    Text: 
+    Actions:
+    - timing: 0
+      action: {fileID: 11400000, guid: 21547a3dccb7de946927bd134664587a, type: 2}
+    - timing: 2
+      action: {fileID: 11400000, guid: d1fcdc50d708fe4459c0cdcabd0a750a, type: 2}
+  - Character: {fileID: 11400000, guid: 42b78f4e58247f64fb0fc56d0c5d1796, type: 2}
+    Key: tutorial-robotin-dialogue-5
+    Text: 
+    Actions: []
+  - Character: {fileID: 11400000, guid: 7832fc3c6197f2144b2802326c6977e5, type: 2}
+    Key: tutorial-juan-dialogue-5
     Text: 
     Actions:
     - timing: 2

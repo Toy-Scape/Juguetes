@@ -10,6 +10,7 @@ namespace Assets.Scripts.PlayerController
         public override void EnterState()
         {
             _ctx.Animator.SetBool("IsCrouching", true);
+            CameraManager.Instance.SetCrouchingState(true);
 
             float oldHeight = _ctx.Config.StandingHeight;
             float newHeight = _ctx.Config.CrouchingHeight;
@@ -34,6 +35,7 @@ namespace Assets.Scripts.PlayerController
         public override void ExitState()
         {
             _ctx.Animator.SetBool("IsCrouching", false);
+            CameraManager.Instance.SetCrouchingState(false);
 
             float oldHeight = _ctx.Config.CrouchingHeight;
             float newHeight = _ctx.Config.StandingHeight;
@@ -44,12 +46,13 @@ namespace Assets.Scripts.PlayerController
             _ctx.CharacterController.center += new Vector3(0, delta, 0);
 
             _ctx.CharacterController.Move(Vector3.zero);
+
         }
 
 
         public override void CheckSwitchStates()
         {
-            if (!_ctx.Context.IsCrouching)
+            if (!_ctx.Context.IsCrouching && _ctx.CanStand())
             {
                 SwitchState(_factory.Idle());
             }

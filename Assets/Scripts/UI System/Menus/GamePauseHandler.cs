@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.InputSystem;
@@ -51,6 +52,7 @@ namespace UI_System.Menus
 
             // Check if the menu scene is already loaded
             Scene menuScene = SceneManager.GetSceneByName(_menuSceneName);
+            Debug.Log("Game Paused");
 
             if (menuScene.isLoaded)
             {
@@ -148,7 +150,6 @@ namespace UI_System.Menus
             if (scene.name == _menuSceneName)
             {
                 Debug.Log("Game Resumed");
-                IsPaused = false;
                 Time.timeScale = 1f;
 
                 _gameplaySnapshot?.TransitionTo(_snapshotTransitionTime);
@@ -158,7 +159,18 @@ namespace UI_System.Menus
                 {
                     InputMapManager.Instance.SwitchToActionMap(ActionMaps.Player);
                 }
+                StartCoroutine(DelayUnpause());
             }
         }
+
+        private IEnumerator DelayUnpause()
+        {
+            IsPaused = true;
+
+            yield return null;
+
+            IsPaused = false;
+        }
+
     }
 }
