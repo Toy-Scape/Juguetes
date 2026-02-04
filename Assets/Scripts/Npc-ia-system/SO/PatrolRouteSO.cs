@@ -72,7 +72,7 @@ namespace SO
                 bool valid = UnityEngine.AI.NavMesh.SamplePosition(pos, out hit, 1.0f, UnityEngine.AI.NavMesh.AllAreas);
                 if (!valid)
                 {
-                    Debug.LogWarning($"PatrolRouteSO '{name}': patrol point {i} at {pos} is not on NavMesh (within 1m). Consider adjusting or assigning a scene reference.");
+                    //Debug.LogWarning($"PatrolRouteSO '{name}': patrol point {i} at {pos} is not on NavMesh (within 1m). Consider adjusting or assigning a scene reference.");
                 }
             }
 #endif

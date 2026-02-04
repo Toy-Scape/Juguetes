@@ -5,11 +5,14 @@ using UnityEngine;
 public class CameraManager : MonoBehaviour
 {
     [SerializeField] private CinemachineInputAxisController[] inputControllers;
-    [SerializeField] private CinemachineCamera dialogueCamera; // Reference to the Dialogue VCam
+    [SerializeField] private CinemachineCamera crouchingCamera;
+    [SerializeField] private CinemachineCamera generalCamera;
+    [SerializeField] private CinemachineCamera dialogueCamera;
     [SerializeField] private Vector3 dialogueOffset = new Vector3(0.6f, 1.6f, -1.2f); // Right Shoulder
 
     private GameObject _dialogueAnchor;
     private GameObject _player;
+    private bool CrouchingState;
 
     public static CameraManager Instance;
 
@@ -221,6 +224,7 @@ public class CameraManager : MonoBehaviour
         }
         else
         {
+            ActivarCamaraAgachado(this.CrouchingState);
             LockCursor();
             UnlockCameraMovement();
         }
@@ -259,4 +263,26 @@ public class CameraManager : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
     }
+
+
+    void ActivarCamaraAgachado(bool CrouchingState)
+    {
+        Debug.Log($"Crouching: {CrouchingState}");
+        if (CrouchingState)
+        {
+            generalCamera.Priority = 0;
+            crouchingCamera.Priority = 10;
+            return;
+        }
+        generalCamera.Priority = 10;
+        crouchingCamera.Priority = 0;
+    }
+
+
+    public void SetCrouchingState(bool CrouchingState) {
+        // Añañdo el estado de agachado por si ocurre algun dialogo mientras estamos agachados
+        this.CrouchingState = CrouchingState;
+        ActivarCamaraAgachado(CrouchingState);
+    }
+
 }

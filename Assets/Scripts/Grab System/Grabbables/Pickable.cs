@@ -11,6 +11,8 @@ public class Pickable : MonoBehaviour, IPickable
     public bool IsPicked { get; private set; }
 
     private Rigidbody rb;
+    private Transform pickableOriginalParent;
+    private string pickableOriginalTag;
 
     private void Awake ()
     {
@@ -39,7 +41,10 @@ public class Pickable : MonoBehaviour, IPickable
         IsPicked = true;
 
         rb.isKinematic = true;
+        pickableOriginalParent = transform.parent;
         transform.SetParent(hand);
+        pickableOriginalTag = transform.tag;
+        transform.tag = "Player";
 
         transform.localPosition = -gripPoint.localPosition;
         transform.localRotation = Quaternion.identity;
@@ -49,7 +54,9 @@ public class Pickable : MonoBehaviour, IPickable
     {
         IsPicked = false;
 
-        transform.SetParent(null);
+        transform.SetParent(pickableOriginalParent);
+        transform.tag = pickableOriginalTag;
+        pickableOriginalParent = null;
         rb.isKinematic = false;
     }
     public Dialogue GetFailThought () => failureMessage;

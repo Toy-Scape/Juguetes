@@ -1,3 +1,4 @@
+using UI_System.Menus;
 using UnityEngine;
 
 namespace Assets.Scripts.PlayerController
@@ -25,6 +26,7 @@ namespace Assets.Scripts.PlayerController
 
         public void UpdateStates()
         {
+            if (GamePauseHandler.IsPaused) return;
             UpdateState();
             if (_currentSubState != null)
             {

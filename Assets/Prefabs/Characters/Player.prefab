@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &158765007733403613
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5518209162879253192}
+  m_Layer: 6
+  m_Name: CameraFollowTarget
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5518209162879253192
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 158765007733403613}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 883425338343852037}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &244548135522618819
 GameObject:
   m_ObjectHideFlags: 0
@@ -325,6 +356,7 @@ Transform:
   - {fileID: 6036746498463826646}
   - {fileID: 2426249561720117486}
   - {fileID: 3965595420503697572}
+  - {fileID: 5518209162879253192}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &4688945857383318680
@@ -1008,12 +1040,14 @@ MonoBehaviour:
   detectionRadius: 15
   highlightColor: {r: 0.993973, g: 1, b: 0, a: 0.21176471}
   rimPower: 0.32
+  disableHighlightWhenGrabbing: 1
   pulseSpeed: 2.29
   pulseMin: 0.122
   interactableLayer:
     serializedVersion: 2
     m_Bits: 4294967295
   limbManager: {fileID: 7319195771677131702}
+  grabInteractor: {fileID: 0}
 --- !u!1 &8468029186425840670
 GameObject:
   m_ObjectHideFlags: 0

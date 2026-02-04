@@ -12,6 +12,8 @@ public class PlayerController : MonoBehaviour
     [Header("Configuration")]
     [SerializeField] private PlayerConfig config;
     [SerializeField] private Transform cameraTransform;
+    [SerializeField] private Unity.Cinemachine.CinemachineCamera gameplayCamera;
+    [SerializeField] private Unity.Cinemachine.CinemachineCamera crouchingCamera;
     [SerializeField] private TMP_Text TMPPlayerState;
     [SerializeField] private Animator playerAnimator;
     [SerializeField] private GrabInteractor grabInteractor;
@@ -259,12 +261,11 @@ public class PlayerController : MonoBehaviour
 
         Vector2 rawInput = value.Get<Vector2>();
         Context.LookInput = rawInput * config.LookSensitivity * sensitivityMultiplier;
-
-        // Debugging
-        Debug.Log($"[PlayerController] Scheme: {scheme}, Raw: {rawInput}, SensMult: {sensitivityMultiplier}, Final: {Context.LookInput}");
     }
     public void OnSprint(InputValue value) => Context.IsSprinting = value.isPressed;
-    public void OnJump(InputValue value) => Context.IsJumping = value.isPressed;
+    public void OnJump(InputValue value) {
+        Context.IsJumping = value.isPressed && !Context.IsCrouching && (CurrentState is PlayerLedgeGrabState || CanStand()); 
+    }
     public void OnCrouch(InputValue value) => Context.IsCrouching = value.isPressed;
     public void OnSprintToggle(InputValue value) => Context.IsSprinting = !Context.IsSprinting;
     public void OnCrouchToggle(InputValue value) => Context.IsCrouching = !Context.IsCrouching;
@@ -313,6 +314,112 @@ public class PlayerController : MonoBehaviour
     public void SetLedgeGrabCooldown(float duration)
     {
         _ledgeGrabCooldownTimer = duration;
+    }
+
+    
+
+    
+                private Unity.Cinemachine.CinemachineOrbitalFollow _orbitalFollow;
+    private float _originalTopHeight;
+    private float _originalMiddleHeight;
+    private float _originalBottomHeight;
+    private bool _orbitsCached = false;
+
+    public void SetCameraHeightOffset(float yOffset)
+    {
+        if (_orbitalFollow == null)
+        {
+            if (gameplayCamera != null)
+            {
+                _orbitalFollow = gameplayCamera.GetComponent<Unity.Cinemachine.CinemachineOrbitalFollow>();
+                if (_orbitalFollow == null) Debug.LogWarning("Gameplay Camera assigned but no CinemachineOrbitalFollow found!");
+            }
+            
+            if (_orbitalFollow == null)
+            {
+                var vcam = FindFirstObjectByType<Unity.Cinemachine.CinemachineCamera>();
+                if (vcam != null) _orbitalFollow = vcam.GetComponent<Unity.Cinemachine.CinemachineOrbitalFollow>();
+            }
+        }
+        
+        if (_orbitalFollow == null) return;
+        
+        // Cache original heights
+        if (!_orbitsCached)
+        {
+            try 
+            {
+                _originalTopHeight = _orbitalFollow.Orbits.Top.Height;
+                _originalMiddleHeight = _orbitalFollow.Orbits.Center.Height;
+                _originalBottomHeight = _orbitalFollow.Orbits.Bottom.Height;
+                _orbitsCached = true;
+                Debug.Log($"Cached camera orbits: Top={_originalTopHeight}, Mid={_originalMiddleHeight}, Bot={_originalBottomHeight}");
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogError($"SetCameraHeightOffset Error Caching: {e.Message}");
+                return;
+            }
+        }
+
+        // Modify struct and assign back
+        try
+        {
+            var orbits = _orbitalFollow.Orbits;
+            orbits.Top.Height = _originalTopHeight + yOffset;
+            orbits.Center.Height = _originalMiddleHeight + yOffset;
+            orbits.Bottom.Height = _originalBottomHeight + yOffset;
+            _orbitalFollow.Orbits = orbits;
+            
+             Debug.Log($"Adjusted camera orbits by {yOffset}. New Heights: Top={orbits.Top.Height}, Mid={orbits.Center.Height}, Bot={orbits.Bottom.Height}");
+        }
+        catch (System.Exception e)
+        {
+             Debug.LogError($"SetCameraHeightOffset Error Modifying: {e.Message}");
+        }
+    }
+
+
+
+    public bool CanStand()
+    {
+        float radius = CharacterController.radius;
+        float currentHeight = config.CrouchingHeight;
+        float targetHeight = config.StandingHeight;
+        float heightDifference = targetHeight - currentHeight;
+        
+        // Start from top of crouched capsule
+        Vector3 bottom = transform.position + CharacterController.center;
+        Vector3 start = bottom + Vector3.up * (currentHeight / 2f);
+        
+        Debug.Log($"CanStand: pos={transform.position}, center={CharacterController.center}, start={start}, radius={radius}, checkDist={heightDifference}");
+        Debug.DrawRay(start, Vector3.up * heightDifference, Color.red, 1f);
+        
+        // Check with SphereCast
+        bool isBlocked = Physics.SphereCast(start, radius * 0.8f, Vector3.up, out RaycastHit hit, heightDifference, ~0, QueryTriggerInteraction.Ignore);
+        
+        if (isBlocked)
+        {
+            Debug.Log($"CanStand: BLOCKED by {hit.collider.name} at distance {hit.distance}");
+            return false;
+        }
+        
+        // Also try OverlapCapsule as backup
+        Vector3 point1 = transform.position + Vector3.up * (currentHeight / 2f);
+        Vector3 point2 = transform.position + Vector3.up * (targetHeight / 2f);
+        Collider[] overlaps = Physics.OverlapCapsule(point1, point2, radius * 0.8f, ~0, QueryTriggerInteraction.Ignore);
+        
+        foreach (var overlap in overlaps)
+        {
+            if (overlap != CharacterController)
+            {
+                Debug.Log($"CanStand: BLOCKED by overlap with {overlap.name}");
+                return false;
+            }
+        }
+        
+        Debug.Log("CanStand: CLEAR");
+        return true;
     }
 
     public bool CheckForLedge(bool ignoreVerticalVelocity = false)
