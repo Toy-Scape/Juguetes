@@ -12,7 +12,7 @@ public class Pickable : MonoBehaviour, IPickable
 
     private Rigidbody rb;
     private Transform pickableOriginalParent;
-    private string pickableOriginalTag;
+    private int pickableOriginalLayer;
 
     private void Awake ()
     {
@@ -43,8 +43,9 @@ public class Pickable : MonoBehaviour, IPickable
         rb.isKinematic = true;
         pickableOriginalParent = transform.parent;
         transform.SetParent(hand);
-        pickableOriginalTag = transform.tag;
-        transform.tag = "Player";
+        pickableOriginalLayer = transform.gameObject.layer;
+        transform.gameObject.layer = LayerMask.NameToLayer("Picked");
+
 
         transform.localPosition = -gripPoint.localPosition;
         transform.localRotation = Quaternion.identity;
@@ -55,7 +56,7 @@ public class Pickable : MonoBehaviour, IPickable
         IsPicked = false;
 
         transform.SetParent(pickableOriginalParent);
-        transform.tag = pickableOriginalTag;
+        transform.gameObject.layer = pickableOriginalLayer;
         pickableOriginalParent = null;
         rb.isKinematic = false;
     }

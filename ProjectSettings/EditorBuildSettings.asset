@@ -9,8 +9,8 @@ EditorBuildSettings:
     path: Assets/Scenes/SC_Menus.unity
     guid: f5511c3594b60bd46b25e63ca68485e4
   - enabled: 1
-    path: Assets/Scenes/SC_POVSYstem.unity
-    guid: 8b8c875140b1af546a2509c36f389459
+    path: Assets/Scenes/TestEnvironment.unity
+    guid: 906ded8941e865d4ab4187a47417dce3
   - enabled: 1
     path: Assets/Scenes/End Prototype screen.unity
     guid: 27c5de9a09b79a14e8b6e498c3b5f20a

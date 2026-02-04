@@ -833,7 +833,7 @@ PlayerSettings:
     GameCoreXboxOne: DOTWEEN
     Kepler: DOTWEEN
     LinuxHeadlessSimulation: DOTWEEN
-    Nintendo Switch: DOTWEEN
+    Nintendo Switch: DOTWEEN;UNITY_SWITCH_FIXED_MAX_QUEUED_FRAMES
     PS4: DOTWEEN
     PS5: DOTWEEN
     QNX: DOTWEEN

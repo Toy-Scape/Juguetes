@@ -616,6 +616,8 @@ MonoBehaviour:
     lookUpFOVModifier: 50
     fovSmoothTime: 10
   cameraTransform: {fileID: 0}
+  gameplayCamera: {fileID: 0}
+  crouchingCamera: {fileID: 0}
   TMPPlayerState: {fileID: 0}
   playerAnimator: {fileID: 4688945857383318680}
   grabInteractor: {fileID: 3434473845669599158}

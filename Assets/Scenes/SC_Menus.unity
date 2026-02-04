@@ -6965,7 +6965,7 @@ MonoBehaviour:
   _mainMenuFirstSelected: {fileID: 1800211374}
   _pauseMenuFirstSelected: {fileID: 308267638}
   _optionsFirstSelected: {fileID: 1110971803}
-  _gameSceneName: SC_POVSYstem
+  _gameSceneName: TestEnvironment
 --- !u!4 &2111212320
 Transform:
   m_ObjectHideFlags: 0
