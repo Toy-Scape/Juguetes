@@ -7,11 +7,7 @@ namespace Assets.Scripts.PlayerController
         public PlayerIdleState(global::PlayerController currentContext, PlayerStateFactory playerStateFactory)
             : base(currentContext, playerStateFactory) { }
 
-        public override void EnterState()
-        {
-            // Do NOT reset velocity to zero here. 
-            // Let UpdateState -> HandleMovement(0f) handle the deceleration.
-        }
+        public override void EnterState() { }
 
         public override void UpdateState()
         {
