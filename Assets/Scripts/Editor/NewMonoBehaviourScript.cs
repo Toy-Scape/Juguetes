@@ -1,16 +1,17 @@
-using UnityEngine;
-using UnityEditor;
-using UnityEngine.UI;
-using UnityEngine.EventSystems;
+using System.Collections.Generic;
+using System.Reflection;
+using TMPro;
 using UI_System.Menus;
+using UnityEditor;
+using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem.UI;
+using UnityEngine.UI;
 
 public class AdvancedMenuBuilder : EditorWindow
 {
-    [Header("Button Prefabs")]
     public GameObject primaryButtonPrefab;
     public GameObject secondaryButtonPrefab;
-
-    [Header("Menu Manager Prefab (Optional)")]
     public GameObject menuManagerPrefab;
 
     [MenuItem("Tools/Advanced Menu Builder")]
@@ -23,152 +24,310 @@ public class AdvancedMenuBuilder : EditorWindow
     {
         GUILayout.Label("Advanced Menu Builder", EditorStyles.boldLabel);
 
-        primaryButtonPrefab = (GameObject)EditorGUILayout.ObjectField("Primary Button", primaryButtonPrefab, typeof(GameObject), false);
-        secondaryButtonPrefab = (GameObject)EditorGUILayout.ObjectField("Secondary Button", secondaryButtonPrefab, typeof(GameObject), false);
-        menuManagerPrefab = (GameObject)EditorGUILayout.ObjectField("MenuManager Prefab", menuManagerPrefab, typeof(GameObject), false);
+        primaryButtonPrefab = (GameObject)EditorGUILayout.ObjectField(
+            "Primary Button", primaryButtonPrefab, typeof(GameObject), false);
+
+        secondaryButtonPrefab = (GameObject)EditorGUILayout.ObjectField(
+            "Secondary Button", secondaryButtonPrefab, typeof(GameObject), false);
+
+        menuManagerPrefab = (GameObject)EditorGUILayout.ObjectField(
+            "MenuManager Prefab", menuManagerPrefab, typeof(GameObject), false);
 
         if (GUILayout.Button("Generate Full Menu"))
-        {
-            if (primaryButtonPrefab == null || secondaryButtonPrefab == null)
-            {
-                EditorUtility.DisplayDialog("Error", "Assign both Primary and Secondary Button prefabs!", "OK");
-                return;
-            }
-
             GenerateFullMenu();
-        }
     }
 
     private void GenerateFullMenu()
     {
-        // --- Canvas ---
-        Canvas canvas = Object.FindObjectOfType<Canvas>();
-        if (canvas == null)
+        // ================= Canvas =================
+        Canvas canvas = FindFirstObjectByType<Canvas>();
+        if (!canvas)
         {
-            GameObject canvasGO = new GameObject("Canvas", typeof(Canvas), typeof(CanvasScaler), typeof(GraphicRaycaster));
-            canvas = canvasGO.GetComponent<Canvas>();
+            GameObject c = new GameObject(
+                "Canvas",
+                typeof(Canvas),
+                typeof(CanvasScaler),
+                typeof(GraphicRaycaster)
+            );
+            c.layer = LayerMask.NameToLayer("UI");
+
+            canvas = c.GetComponent<Canvas>();
             canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-            canvasGO.GetComponent<CanvasScaler>().uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-            canvasGO.GetComponent<CanvasScaler>().referenceResolution = new Vector2(1920, 1080);
+
+            CanvasScaler s = c.GetComponent<CanvasScaler>();
+            s.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+            s.referenceResolution = new Vector2(1920, 1080);
         }
 
-        // --- EventSystem ---
-        if (Object.FindObjectOfType<EventSystem>() == null)
+        // ================= EventSystem =================
+        if (!FindFirstObjectByType<EventSystem>())
         {
-            new GameObject("EventSystem", typeof(EventSystem), typeof(StandaloneInputModule));
+            new GameObject(
+                "EventSystem",
+                typeof(EventSystem),
+                typeof(InputSystemUIInputModule)
+            );
         }
 
-        // --- MenuManager ---
-        MenuManager menuManager;
-        if (menuManagerPrefab != null)
+        // ================= MenuManager =================
+        MenuManager manager;
+        if (menuManagerPrefab)
         {
-            GameObject managerGO = (GameObject)PrefabUtility.InstantiatePrefab(menuManagerPrefab);
-            managerGO.name = "MenuManager";
-            menuManager = managerGO.GetComponent<MenuManager>();
+            GameObject m = (GameObject)PrefabUtility.InstantiatePrefab(menuManagerPrefab);
+            m.name = "MenuManager";
+            manager = m.GetComponent<MenuManager>();
         }
         else
         {
-            GameObject managerGO = new GameObject("MenuManager", typeof(MenuManager));
-            menuManager = managerGO.GetComponent<MenuManager>();
+            manager = new GameObject("MenuManager", typeof(MenuManager))
+                .GetComponent<MenuManager>();
         }
+        manager.gameObject.layer = LayerMask.NameToLayer("UI");
 
-        // --- Panels ---
-        GameObject mainPanel = CreatePanel("MainMenuPanel", canvas.transform, new Color(0, 0, 0, 0.5f));
-        GameObject pausePanel = CreatePanel("PauseMenuPanel", canvas.transform, new Color(0, 0, 0, 0.5f));
-        GameObject optionsPanel = CreatePanel("OptionsPanel", canvas.transform, new Color(0, 0, 0, 0.5f));
+        // ================= Panels =================
+        GameObject mainPanel = CreateRightPanel(canvas.transform, "MainMenuPanel");
+        GameObject pausePanel = CreateFullscreenPanel("PauseMenuPanel", canvas.transform);
+        GameObject optionsPanel = CreateFullscreenPanel("OptionsPanel", canvas.transform);
 
-        // --- Buttons Main Menu ---
-        GameObject playBtn = InstantiateButton(primaryButtonPrefab, "PlayButton", mainPanel.transform, "Play");
-        GameObject optionsBtn = InstantiateButton(secondaryButtonPrefab, "OptionsButton", mainPanel.transform, "Options");
-        GameObject quitBtn = InstantiateButton(secondaryButtonPrefab, "QuitButton", mainPanel.transform, "Quit");
+        Transform mainContent = CreateContent(mainPanel.transform);
+        Transform pauseContent = CreateContent(pausePanel.transform);
+        Transform optionsContent = CreateContent(optionsPanel.transform);
 
-        // --- Buttons Pause Menu ---
-        GameObject resumeBtn = InstantiateButton(primaryButtonPrefab, "ResumeButton", pausePanel.transform, "Resume");
-        GameObject pauseOptionsBtn = InstantiateButton(secondaryButtonPrefab, "PauseOptionsButton", pausePanel.transform, "Options");
-        GameObject backToMenuBtn = InstantiateButton(secondaryButtonPrefab, "BackToMenuButton", pausePanel.transform, "Main Menu");
+        // ================= Buttons =================
+        GameObject play = CreateButton(primaryButtonPrefab, "Play", mainContent);
+        GameObject opt = CreateButton(secondaryButtonPrefab, "Options", mainContent);
+        GameObject quit = CreateButton(secondaryButtonPrefab, "Quit", mainContent);
 
-        // --- Buttons Options Panel ---
-        GameObject backBtn = InstantiateButton(secondaryButtonPrefab, "BackButton", optionsPanel.transform, "Back");
+        GameObject resume = CreateButton(primaryButtonPrefab, "Resume", pauseContent);
+        GameObject pauseOpt = CreateButton(secondaryButtonPrefab, "Options", pauseContent);
+        GameObject backMenu = CreateButton(secondaryButtonPrefab, "Main Menu", pauseContent);
 
-        // --- Assign Panels & First Selected to MenuManager ---
-        menuManager.GetType().GetField("_mainMenuPanel", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
-            .SetValue(menuManager, mainPanel);
-        menuManager.GetType().GetField("_pauseMenuPanel", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
-            .SetValue(menuManager, pausePanel);
-        menuManager.GetType().GetField("_optionsPanel", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
-            .SetValue(menuManager, optionsPanel);
+        GameObject backOpt = CreateButton(secondaryButtonPrefab, "Back", optionsContent);
 
-        menuManager.GetType().GetField("_mainMenuFirstSelected", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
-            .SetValue(menuManager, playBtn);
-        menuManager.GetType().GetField("_pauseMenuFirstSelected", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
-            .SetValue(menuManager, resumeBtn);
-        menuManager.GetType().GetField("_optionsFirstSelected", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
-            .SetValue(menuManager, backBtn);
+        // ================= Options UI =================
 
-        // --- Button Events ---
-        AddButtonListener(playBtn, menuManager, "PlayGame");
-        AddButtonListener(optionsBtn, menuManager, "OpenOptions");
-        AddButtonListener(quitBtn, menuManager, "QuitGame");
+        CreateDropdown(
+            "FPSDropdown",
+            optionsContent,
+            new List<string> { "30 FPS", "60 FPS", "120 FPS", "Unlimited" }
+        );
 
-        AddButtonListener(resumeBtn, menuManager, "ResumeGame");
-        AddButtonListener(pauseOptionsBtn, menuManager, "OpenOptions");
-        AddButtonListener(backToMenuBtn, menuManager, "LoadMainMenu");
+        Slider mouseSlider = CreateSlider(
+            "MouseSensitivitySlider",
+            optionsContent,
+            0.1f, 5f, 1f
+        );
+        CreateValueText("MouseSensitivityValueText", mouseSlider.transform);
 
-        AddButtonListener(backBtn, menuManager, "BackFromOptions");
+        Slider gamepadSlider = CreateSlider(
+            "GamepadSensitivitySlider",
+            optionsContent,
+            0.1f, 5f, 1f
+        );
+        CreateValueText("GamepadSensitivityValueText", gamepadSlider.transform);
 
-        // --- Deactivate panels by default ---
+        Slider volumeSlider = CreateSlider(
+            "VolumeSlider",
+            optionsContent,
+            0f, 1f, 1f
+        );
+        CreateValueText("VolumeValueText", volumeSlider.transform);
+
+        CreateDropdown(
+            "LanguageDropdown",
+            optionsContent,
+            new List<string> { "English", "Español", "Euskera" }
+        );
+
+        // ================= Events =================
+        Bind(play, manager, "OnPlayClicked");
+        Bind(opt, manager, "OnOptionsClicked");
+        Bind(quit, manager, "OnQuitClicked");
+
+        Bind(resume, manager, "OnResumeClicked");
+        Bind(pauseOpt, manager, "OnOptionsClicked");
+        Bind(backMenu, manager, "OnBackToMenuClicked");
+
+        Bind(backOpt, manager, "OnBackFromOptionsClicked");
+
+        // ================= States =================
         pausePanel.SetActive(false);
         optionsPanel.SetActive(false);
 
-        EditorUtility.DisplayDialog("Advanced Menu Builder", "Full menu generated successfully!", "OK");
+        EditorUtility.DisplayDialog("Done", "Menu generated correctly", "OK");
     }
 
-    private GameObject CreatePanel(string name, Transform parent, Color bgColor)
-    {
-        GameObject panel = new GameObject(name, typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
-        panel.transform.SetParent(parent, false);
-        Image img = panel.GetComponent<Image>();
-        img.color = bgColor;
+    // ================= Helpers =================
 
-        RectTransform rt = panel.GetComponent<RectTransform>();
+    void Bind(GameObject btn, MenuManager mgr, string method)
+    {
+        if (!btn) return;
+
+        Button b = btn.GetComponent<Button>();
+        if (!b) return;
+
+        MethodInfo mi = typeof(MenuManager).GetMethod(method);
+        if (mi == null) return;
+
+        UnityEditor.Events.UnityEventTools.AddPersistentListener(
+            b.onClick,
+            (UnityEngine.Events.UnityAction)
+                System.Delegate.CreateDelegate(
+                    typeof(UnityEngine.Events.UnityAction),
+                    mgr,
+                    mi
+                )
+        );
+    }
+
+    GameObject CreateButton(GameObject prefab, string text, Transform parent)
+    {
+        if (!prefab) return null;
+
+        GameObject b = (GameObject)PrefabUtility.InstantiatePrefab(prefab);
+        b.transform.SetParent(parent, false);
+        b.layer = LayerMask.NameToLayer("UI");
+
+        Button btn = b.GetComponent<Button>();
+        Image img = b.GetComponent<Image>();
+
+        if (btn && img && btn.targetGraphic == null)
+            btn.targetGraphic = img;
+
+        TextMeshProUGUI tmp = b.GetComponentInChildren<TextMeshProUGUI>();
+        if (tmp) tmp.text = text;
+
+        return b;
+    }
+
+
+    GameObject CreateFullscreenPanel(string name, Transform parent)
+    {
+        GameObject p = new GameObject(name, typeof(Image));
+        p.transform.SetParent(parent, false);
+        p.layer = LayerMask.NameToLayer("UI");
+
+        p.GetComponent<Image>().color = new Color(0, 0, 0, 0.5f);
+
+        RectTransform rt = p.GetComponent<RectTransform>();
         rt.anchorMin = Vector2.zero;
         rt.anchorMax = Vector2.one;
+        rt.offsetMin = rt.offsetMax = Vector2.zero;
+
+        return p;
+    }
+
+    GameObject CreateRightPanel(Transform parent, string name)
+    {
+        GameObject p = new GameObject(name, typeof(Image));
+        p.transform.SetParent(parent, false);
+        p.layer = LayerMask.NameToLayer("UI");
+
+        p.GetComponent<Image>().color = new Color32(46, 46, 46, 100);
+
+        RectTransform rt = p.GetComponent<RectTransform>();
+        rt.anchorMin = new Vector2(1, 0);
+        rt.anchorMax = new Vector2(1, 1);
+        rt.pivot = new Vector2(1, 0.5f);
+        rt.sizeDelta = new Vector2(420, 0);
+
+        return p;
+    }
+
+    Transform CreateContent(Transform parent)
+    {
+        GameObject c = new GameObject("Content", typeof(RectTransform));
+        c.transform.SetParent(parent, false);
+        c.layer = LayerMask.NameToLayer("UI");
+
+        RectTransform rt = c.GetComponent<RectTransform>();
+        rt.anchorMin = new Vector2(0, 0.5f);
+        rt.anchorMax = new Vector2(1, 0.5f);
+        rt.anchoredPosition = Vector2.zero;
         rt.offsetMin = Vector2.zero;
         rt.offsetMax = Vector2.zero;
 
-        VerticalLayoutGroup layout = panel.AddComponent<VerticalLayoutGroup>();
-        layout.childAlignment = TextAnchor.MiddleCenter;
-        layout.spacing = 20;
-        layout.childControlWidth = true;
-        layout.childControlHeight = true;
-        layout.childForceExpandWidth = false;
-        layout.childForceExpandHeight = false;
+        VerticalLayoutGroup v = c.AddComponent<VerticalLayoutGroup>();
+        v.spacing = 20;
+        v.childAlignment = TextAnchor.MiddleCenter;
+        v.childControlWidth = true;
+        v.childControlHeight = true;
+        v.childForceExpandWidth = true;
+        v.childForceExpandHeight = false;
+        v.padding = new RectOffset(20, 20, 0, 0);
 
-        panel.AddComponent<ContentSizeFitter>().verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+        ContentSizeFitter fitter = c.AddComponent<ContentSizeFitter>();
+        fitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
 
-        return panel;
+        return c.transform;
     }
 
-    private GameObject InstantiateButton(GameObject prefab, string name, Transform parent, string label)
+    TMP_Dropdown CreateDropdown(string name, Transform parent, List<string> options)
     {
-        GameObject btn = (GameObject)PrefabUtility.InstantiatePrefab(prefab);
-        btn.name = name;
-        btn.transform.SetParent(parent, false);
-        var text = btn.GetComponentInChildren<Text>();
-        if (text != null) text.text = label;
-        return btn;
+        GameObject go = new GameObject(
+            name,
+            typeof(RectTransform),
+            typeof(Image),
+            typeof(TMP_Dropdown)
+        );
+        go.transform.SetParent(parent, false);
+        go.layer = LayerMask.NameToLayer("UI");
+
+        TMP_Dropdown dropdown = go.GetComponent<TMP_Dropdown>();
+        dropdown.ClearOptions();
+        dropdown.AddOptions(options);
+
+        LayoutElement le = go.AddComponent<LayoutElement>();
+        le.preferredWidth = 300;
+        le.minWidth = 200;
+        le.flexibleWidth = 1;
+
+        return dropdown;
     }
 
-    private void AddButtonListener(GameObject btn, MenuManager manager, string methodName)
+    Slider CreateSlider(string name, Transform parent, float min, float max, float value)
     {
-        var button = btn.GetComponent<Button>();
-        if (button != null)
-        {
-            UnityEditor.Events.UnityEventTools.AddPersistentListener(button.onClick, () =>
-            {
-                var mi = manager.GetType().GetMethod(methodName);
-                if (mi != null) mi.Invoke(manager, null);
-            });
-        }
+        GameObject go = new GameObject(
+            name,
+            typeof(RectTransform),
+            typeof(Image),
+            typeof(Slider)
+        );
+        go.transform.SetParent(parent, false);
+        go.layer = LayerMask.NameToLayer("UI");
+
+        Slider s = go.GetComponent<Slider>();
+        s.minValue = min;
+        s.maxValue = max;
+        s.value = value;
+
+        LayoutElement le = go.AddComponent<LayoutElement>();
+        le.preferredWidth = 300;
+        le.minWidth = 200;
+        le.flexibleWidth = 1;
+
+        return s;
+    }
+
+    TextMeshProUGUI CreateValueText(string name, Transform parent)
+    {
+        GameObject go = new GameObject(
+            name,
+            typeof(RectTransform),
+            typeof(TextMeshProUGUI)
+        );
+        go.transform.SetParent(parent, false);
+        go.layer = LayerMask.NameToLayer("UI");
+
+        TextMeshProUGUI tmp = go.GetComponent<TextMeshProUGUI>();
+        tmp.text = "0";
+        tmp.fontSize = 24;
+        tmp.alignment = TextAlignmentOptions.Center;
+
+        LayoutElement le = go.AddComponent<LayoutElement>();
+        le.preferredWidth = 100;
+        le.minWidth = 80;
+
+        return tmp;
     }
 }

@@ -79870,6 +79870,10 @@ PrefabInstance:
       propertyPath: Composition.ScreenPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1199089562050212375, guid: 6cdab5b0b0234a5478f65b4a6b2a5bf5, type: 3}
+      propertyPath: _menuSceneName
+      value: SC_OptionsMenu
+      objectReference: {fileID: 0}
     - target: {fileID: 1630764675510679922, guid: 6cdab5b0b0234a5478f65b4a6b2a5bf5, type: 3}
       propertyPath: Target.TrackingTarget
       value: 

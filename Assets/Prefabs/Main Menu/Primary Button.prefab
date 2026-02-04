@@ -295,5 +295,5 @@ MonoBehaviour:
   speed: 10
   topColor: {r: 0.41960785, g: 0.35686275, b: 1, a: 1}
   bottomColor: {r: 0.3019608, g: 0.6392157, b: 1, a: 1}
-  topHoverColor: {r: 0.41960785, g: 0.35686275, b: 1, a: 1}
-  bottomHoverColor: {r: 0.3019608, g: 0.6392157, b: 1, a: 1}
+  topHoverColor: {r: 0.3019608, g: 0.6392157, b: 1, a: 1}
+  bottomHoverColor: {r: 0.41960785, g: 0.35686275, b: 1, a: 1}

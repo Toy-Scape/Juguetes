@@ -167,7 +167,7 @@ public class InputMapManager : MonoBehaviour
     private void UpdateActionMap()
     {
         string newMap;
-
+        Debug.Log($"[InputMapManager] Updating Action Map. Counters - UI: {uiCounter}, Dialogue: {dialogueCounter}, Cinematic: {cinematicCounter}");
         if (uiCounter > 0)
             newMap = ActionMaps.UI;
         else if (dialogueCounter > 0 || cinematicCounter > 0)
