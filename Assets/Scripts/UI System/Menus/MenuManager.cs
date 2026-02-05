@@ -20,6 +20,9 @@ namespace UI_System.Menus
         [SerializeField] private GameObject _pauseMenuFirstSelected;
         [SerializeField] private GameObject _optionsFirstSelected;
 
+        [SerializeField] private PauseMenuBlur pauseMenuBlur;
+        [SerializeField] private GameObject[] LightSources;
+
         [SerializeField] private Camera _menuCamera;
 
         private void Awake()
@@ -135,11 +138,19 @@ namespace UI_System.Menus
 
             if (_menuCamera != null)
                 _menuCamera.gameObject.SetActive(false);
-
+            pauseMenuBlur.OpenMenu();
+            DeactivateLightSources();
             StartIn(MenuStartMode.PauseMenu);
         }
 
        
-
+        private void DeactivateLightSources()
+        {
+            foreach (var light in LightSources)
+            {
+                if (light != null)
+                    light.SetActive(false);
+            }
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using TMPro;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -6,12 +7,13 @@ namespace UI_System.Menus
 {
     public class OptionsMenuHandler : MonoBehaviour
     {
+
         /// <summary>
         /// Establece el límite de FPS según el índice del dropdown.
         /// </summary>
-        public void SetFpsLimit(int index)
+        public void SetFpsLimit(TMP_Dropdown change)
         {
-            int fps = index switch
+            int fps = change.value switch
             {
                 0 => 30,
                 1 => 60,
@@ -20,15 +22,15 @@ namespace UI_System.Menus
             };
 
             Application.targetFrameRate = fps;
-            PlayerPrefs.SetInt("FpsLimitIndex", index);
+            PlayerPrefs.SetInt("FpsLimitIndex", change.value);
         }
 
         /// <summary>
         /// Establece la sensibilidad del ratón.
         /// </summary>
-        public void SetMouseSensitivity(float value)
+        public void SetMouseSensitivity(Slider change)
         {
-            PlayerPrefs.SetFloat("MouseSensitivity", value);
+            PlayerPrefs.SetFloat("MouseSensitivity", change.value);
             PlayerPrefs.Save();
 
             if (CameraManager.Instance != null)
@@ -38,9 +40,9 @@ namespace UI_System.Menus
         /// <summary>
         /// Establece la sensibilidad del gamepad.
         /// </summary>
-        public void SetGamepadSensitivity(float value)
+        public void SetGamepadSensitivity(Slider change)
         {
-            PlayerPrefs.SetFloat("GamepadSensitivity", value);
+            PlayerPrefs.SetFloat("GamepadSensitivity", change.value);
             PlayerPrefs.Save();
 
             if (CameraManager.Instance != null)
@@ -50,21 +52,21 @@ namespace UI_System.Menus
         /// <summary>
         /// Establece el volumen maestro.
         /// </summary>
-        public void SetVolume(float value)
+        public void SetVolume(Slider change)
         {
-            AudioListener.volume = value;
-            PlayerPrefs.SetFloat("MasterVolume", value);
+            AudioListener.volume = change.value;
+            PlayerPrefs.SetFloat("MasterVolume", change.value);
         }
 
         /// <summary>
         /// Cambia el idioma según el índice del dropdown.
         /// </summary>
-        public void SetLanguage(int index)
+        public void SetLanguage(TMP_Dropdown change)
         {
-            PlayerPrefs.SetInt("LanguageIndex", index);
+            PlayerPrefs.SetInt("LanguageIndex", change.value);
 
             if (Localization.LocalizationManager.Instance != null)
-                Localization.LocalizationManager.Instance.LoadLanguage((Localization.Language)index);
+                Localization.LocalizationManager.Instance.LoadLanguage((Localization.Language)change.value);
         }
 
         public void OnBackClicked(MenuManager menuManager)
@@ -72,6 +74,8 @@ namespace UI_System.Menus
             if (menuManager != null)
                 menuManager.HandleBackInput();
         }
+
+
 
     }
 }

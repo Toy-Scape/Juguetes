@@ -150,6 +150,7 @@ GameObject:
   - component: {fileID: 2757023741161209075}
   - component: {fileID: 3094890134844681353}
   - component: {fileID: 8054632464345251630}
+  - component: {fileID: 6753178028814705649}
   m_Layer: 5
   m_Name: Primary Button
   m_TagString: Untagged
@@ -295,5 +296,19 @@ MonoBehaviour:
   speed: 10
   topColor: {r: 0.41960785, g: 0.35686275, b: 1, a: 1}
   bottomColor: {r: 0.3019608, g: 0.6392157, b: 1, a: 1}
-  topHoverColor: {r: 0.3019608, g: 0.6392157, b: 1, a: 1}
-  bottomHoverColor: {r: 0.41960785, g: 0.35686275, b: 1, a: 1}
+  topHoverColor: {r: 1, g: 0.34901962, b: 0.3019608, a: 1}
+  bottomHoverColor: {r: 0.7372549, g: 0, b: 0.19215687, a: 1}
+--- !u!114 &6753178028814705649
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5485785636806250314}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3053f88f47e93274c885473f9b5f868c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LocalizedButton
+  labelKey: 
+  label: {fileID: 6225840253745424498}
