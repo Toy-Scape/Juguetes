@@ -222,3 +222,55 @@ MonoBehaviour:
       eskaintzen du presiopean ere. Arina, fidagarria eta panelak ireki, mekanismoak
       desmuntatu edo beste aukerarik ez dagoenean estalki zailak behartzeko ezin
       hobea.
+  - key: menu-options-title
+    english: Options
+    spanish: Opciones
+    basque: Ezarpenak
+  - key: menu-options-master-volume
+    english: Master Volume
+    spanish: Volumen General
+    basque: Bolumen Orokorra
+  - key: menu-options-label-fps
+    english: Max FPS
+    spanish: "FPS m\xE1ximos"
+    basque: FPS maximoak
+  - key: menu-options-dropdown-option-fps-unlimited
+    english: Unlimited
+    spanish: Ilimitado
+    basque: Mugagabea
+  - key: menu-options-dropdown-options-fps-30
+    english: 30
+    spanish: 30
+    basque: 30
+  - key: menu-options-dropdown-options-fps-60
+    english: 60
+    spanish: 60
+    basque: 60
+  - key: menu-options-dropdown-options-fps-120
+    english: 120
+    spanish: 120
+    basque: 120
+  - key: menu-options-label-languages
+    english: Languages
+    spanish: Idiomas
+    basque: Hizkuntzak
+  - key: menu-options-dropdown-option-basque
+    english: Euskara
+    spanish: Euskara
+    basque: Euskara
+  - key: menu-options-dropdown-option-english
+    english: English
+    spanish: English
+    basque: English
+  - key: menu-options-dropdown-option-spanish
+    english: "Espa\xF1ol"
+    spanish: "Espa\xF1ol"
+    basque: "Espa\xF1ol"
+  - key: menu-options-controller-sensitivity
+    english: Controller Sensitivity
+    spanish: Sensibilidad del mando
+    basque: Kontroladorearen sentikortasuna
+  - key: menu-options-mouse-sensitivity
+    english: Mouse Sensitivity
+    spanish: "Sensibilidad del rat\xF3n"
+    basque: Saguaren sentikortasuna

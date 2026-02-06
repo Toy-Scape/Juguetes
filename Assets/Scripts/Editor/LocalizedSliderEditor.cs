@@ -1,9 +1,9 @@
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEngine;
 using Localization;
 
-[CustomEditor(typeof(LocalizedText))]
-public class LocalizedTextEditor : Editor
+[CustomEditor(typeof(LocalizedSlider))]
+public class LocalizedSliderEditor : Editor
 {
     private LocalizationDatabase _db;
     private bool creatingNewKey;
@@ -23,7 +23,13 @@ public class LocalizedTextEditor : Editor
         }
 
         serializedObject.Update();
-        SerializedProperty keyProp = serializedObject.FindProperty("_key");
+
+        SerializedProperty keyProp = serializedObject.FindProperty("labelKey");
+        SerializedProperty labelProp = serializedObject.FindProperty("label");
+
+        EditorGUILayout.PropertyField(labelProp);
+
+        EditorGUILayout.Space(6);
 
         keyFilter = EditorGUILayout.TextField("Search Key", keyFilter);
 
@@ -36,7 +42,7 @@ public class LocalizedTextEditor : Editor
         int index = Mathf.Max(0, System.Array.IndexOf(filteredKeys, keyProp.stringValue));
 
         EditorGUILayout.BeginHorizontal();
-        int newIndex = EditorGUILayout.Popup("Key", index, filteredKeys);
+        int newIndex = EditorGUILayout.Popup("Label Key", index, filteredKeys);
 
         if (GUILayout.Button("+", GUILayout.Width(25)))
         {
@@ -82,20 +88,23 @@ public class LocalizedTextEditor : Editor
         if (entryObj != null)
         {
             EditorGUILayout.Space(8);
-            EditorGUILayout.LabelField("Localized Text", EditorStyles.boldLabel);
+            EditorGUILayout.LabelField("Localized Label", EditorStyles.boldLabel);
 
             _editorLanguage = (Language)EditorGUILayout.EnumPopup("Language", _editorLanguage);
 
             string currentText = entryObj.Get(_editorLanguage);
 
             EditorGUI.BeginChangeCheck();
-            string newText = EditorGUILayout.TextArea(currentText, GUILayout.MinHeight(60));
+            string newText = EditorGUILayout.TextArea(currentText, GUILayout.MinHeight(50));
 
             if (EditorGUI.EndChangeCheck())
             {
                 Undo.RecordObject(_db, "Edit Localization Text");
                 entryObj.Set(_editorLanguage, newText);
                 EditorUtility.SetDirty(_db);
+
+                if (target is LocalizedSlider slider)
+                    slider.Localize();
             }
 
             bool missingAny =

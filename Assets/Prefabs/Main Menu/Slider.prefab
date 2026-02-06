@@ -71,10 +71,10 @@ RectTransform:
   - {fileID: 3270059543632409807}
   m_Father: {fileID: 7734735479657131532}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 250, y: -32.5825}
-  m_SizeDelta: {x: 500, y: 50.11}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 50.11}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &8477249643399799023
 MonoBehaviour:
@@ -740,10 +740,10 @@ RectTransform:
   - {fileID: 1047178198483813424}
   m_Father: {fileID: 7734735479657131532}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 250, y: -82.692505}
-  m_SizeDelta: {x: 500, y: 20}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &4065412451666380799
 MonoBehaviour:
@@ -941,3 +941,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15c6b003a1b103841810a770d054e34f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  labelKey: play-button
+  label: {fileID: 4178593644770691534}

@@ -23,6 +23,7 @@ namespace UI_System.Menus
 
             Application.targetFrameRate = fps;
             PlayerPrefs.SetInt("FpsLimitIndex", change.value);
+            PlayerPrefs.Save();
         }
 
         /// <summary>
@@ -56,6 +57,7 @@ namespace UI_System.Menus
         {
             AudioListener.volume = change.value;
             PlayerPrefs.SetFloat("MasterVolume", change.value);
+            PlayerPrefs.Save();
         }
 
         /// <summary>
@@ -64,6 +66,7 @@ namespace UI_System.Menus
         public void SetLanguage(TMP_Dropdown change)
         {
             PlayerPrefs.SetInt("LanguageIndex", change.value);
+            PlayerPrefs.Save();
 
             if (Localization.LocalizationManager.Instance != null)
                 Localization.LocalizationManager.Instance.LoadLanguage((Localization.Language)change.value);

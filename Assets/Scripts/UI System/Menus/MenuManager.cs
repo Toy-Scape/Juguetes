@@ -123,10 +123,11 @@ namespace UI_System.Menus
 
         private void SetFirstSelected(GameObject go)
         {
-            if (go == null || EventSystem.current == null) return;
+            if (EventSystem.current == null) return;
             EventSystem.current.SetSelectedGameObject(null);
             EventSystem.current.SetSelectedGameObject(go);
         }
+
 
         public void OpenAsPauseMenu()
         {

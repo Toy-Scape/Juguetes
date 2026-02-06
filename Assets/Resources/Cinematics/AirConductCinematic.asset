@@ -25,8 +25,8 @@ MonoBehaviour:
       data:
         waitForCompletion: 1
         holdAtEnd: 1
-        targetId: AirConduct
-        lookAtId: AirConduct
+        targetId: Airduct
+        lookAtId: Airduct
         offset: {x: 30, y: -10, z: -30}
         fov: 60
         duration: 2

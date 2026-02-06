@@ -123,8 +123,25 @@ public class LineDrawer : PropertyDrawer
         EditorGUI.EndProperty();
     }
 
-    public override float GetPropertyHeight (SerializedProperty property, GUIContent label)
+    public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
     {
-        return EditorGUIUtility.singleLineHeight * 12;
+        float h = 0f;
+        float line = EditorGUIUtility.singleLineHeight;
+        float spacing = 4f;
+
+        h += line + spacing; 
+        h += line + spacing; 
+        h += line + spacing; 
+
+        if (creatingNewKey)
+            h += line + spacing; 
+
+        h += (line * 3) + spacing;
+
+        var actionsProp = property.FindPropertyRelative("Actions");
+        h += EditorGUI.GetPropertyHeight(actionsProp, true) + spacing;
+
+        return h;
     }
+
 }

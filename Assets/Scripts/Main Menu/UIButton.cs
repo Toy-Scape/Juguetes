@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
 [RequireComponent(typeof(Image))]
-public class UIButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, ISelectHandler, IDeselectHandler
+public class UIButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, ISelectHandler, IDeselectHandler, IPointerClickHandler
 {
     [Header("Hover & Scale")]
     public float hoverScale = 1.05f;
@@ -22,10 +22,9 @@ public class UIButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     private bool isHovered = false;
     private bool isSelected = false;
 
-    // Track the last selected button
     private static UIButton lastSelectedByMouse;
 
-    void Awake()
+    private void Awake()
     {
         img = GetComponent<Image>();
         originalScale = transform.localScale;
@@ -37,31 +36,38 @@ public class UIButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         matInstance.SetColor("_BottomColor", bottomColor);
     }
 
-    void Update()
+    private void OnEnable()
     {
-        bool active = isHovered || EventSystem.current.currentSelectedGameObject == gameObject;
+        if (lastSelectedByMouse == this)
+            lastSelectedByMouse = null;
+    }
 
+    private void Update()
+    {
+        bool active = isHovered || isSelected || EventSystem.current?.currentSelectedGameObject == gameObject;
+
+        // Escalado suave
         transform.localScale = Vector3.Lerp(transform.localScale,
             active ? originalScale * hoverScale : originalScale, Time.deltaTime * speed);
 
+        // Cambiar colores
         matInstance.SetColor("_TopColor", active ? topHoverColor : topColor);
         matInstance.SetColor("_BottomColor", active ? bottomHoverColor : bottomColor);
     }
 
-
-    // Mouse hover
+    // Hover del ratón
     public void OnPointerEnter(PointerEventData eventData)
     {
         isHovered = true;
 
         if (lastSelectedByMouse != null && lastSelectedByMouse != this)
-        {
             lastSelectedByMouse.isSelected = false;
-        }
 
         lastSelectedByMouse = this;
 
-        EventSystem.current.SetSelectedGameObject(gameObject);
+        // Solo selecciona si no es ya el objeto seleccionado
+        if (EventSystem.current != null && EventSystem.current.currentSelectedGameObject != gameObject)
+            EventSystem.current.SetSelectedGameObject(gameObject);
     }
 
     public void OnPointerExit(PointerEventData eventData)
@@ -69,18 +75,43 @@ public class UIButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         isHovered = false;
     }
 
+    // Cuando el EventSystem selecciona este botón
     public void OnSelect(BaseEventData eventData)
     {
         isSelected = true;
 
         if (lastSelectedByMouse != null && lastSelectedByMouse != this)
-        {
             lastSelectedByMouse.isSelected = false;
-        }
     }
 
     public void OnDeselect(BaseEventData eventData)
     {
         isSelected = false;
+    }
+    private void OnDisable()
+    {
+        isHovered = false;
+        isSelected = false;
+        ResetColors();
+    }
+
+    private void ResetColors()
+    {
+        if (matInstance != null)
+        {
+            matInstance.SetColor("_TopColor", topColor);
+            matInstance.SetColor("_BottomColor", bottomColor);
+            transform.localScale = originalScale;
+        }
+    }
+
+    // Desseleccionar automáticamente después de click
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if (EventSystem.current != null && EventSystem.current.currentSelectedGameObject == gameObject)
+        {
+            // Deselect after click
+            EventSystem.current.SetSelectedGameObject(null);
+        }
     }
 }

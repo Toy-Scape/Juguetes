@@ -9,7 +9,6 @@ namespace UI_System.Menus
     public class GamePauseHandler : MonoBehaviour
     {
         [SerializeField] private string _menuSceneName = "SC_OptionsMenu";
-
         [SerializeField] private AudioMixer _audioMixer;
         [SerializeField] private AudioMixerSnapshot _gameplaySnapshot;
         [SerializeField] private AudioMixerSnapshot _pausedSnapshot;
@@ -53,14 +52,14 @@ namespace UI_System.Menus
 
             _pauseAction = playerInput.actions.FindAction("Pause");
             if (_pauseAction != null)
-                _pauseAction.performed += OnPausePerformed;
+                _pauseAction.canceled += OnPausePerformed;
         }
 
         private void UnsubscribeFromInput()
         {
             if (_pauseAction != null)
             {
-                _pauseAction.performed -= OnPausePerformed;
+                _pauseAction.canceled -= OnPausePerformed;
                 _pauseAction = null;
             }
         }
@@ -76,11 +75,9 @@ namespace UI_System.Menus
             _lastToggleTime = Time.unscaledTime;
 
             Scene menuScene = SceneManager.GetSceneByName(_menuSceneName);
-
             if (menuScene.isLoaded)
             {
                 MenuManager manager = null;
-
                 foreach (var root in menuScene.GetRootGameObjects())
                 {
                     manager = root.GetComponentInChildren<MenuManager>();
@@ -99,6 +96,8 @@ namespace UI_System.Menus
                 _isLoading = true;
                 SceneManager.LoadSceneAsync(_menuSceneName, LoadSceneMode.Additive);
                 _pausedSnapshot?.TransitionTo(_snapshotTransitionTime);
+
+                InputMapManager.Instance?.HandleOpenUI();
             }
         }
 
@@ -120,13 +119,13 @@ namespace UI_System.Menus
             }
         }
 
-
         private void OnSceneUnloaded(Scene scene)
         {
             if (scene.name != _menuSceneName) return;
 
             Time.timeScale = 1f;
             _gameplaySnapshot?.TransitionTo(_snapshotTransitionTime);
+            InputMapManager.Instance?.HandleCloseUI();
             StartCoroutine(DelayUnpause());
         }
 
