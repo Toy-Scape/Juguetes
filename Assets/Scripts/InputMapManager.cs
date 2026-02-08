@@ -72,9 +72,6 @@ public class InputMapManager : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        // Only reset counters if we are loading a whole new context (Single mode).
-        // If we are loading Additively (like Pause Menu), we should NOT reset, 
-        // as the new scene might register itself as UI immediately.
         if (mode == LoadSceneMode.Single)
         {
             uiCounter = 0;
@@ -167,17 +164,15 @@ public class InputMapManager : MonoBehaviour
     private void UpdateActionMap()
     {
         string newMap;
-        Debug.Log($"[InputMapManager] Updating Action Map. Counters - UI: {uiCounter}, Dialogue: {dialogueCounter}, Cinematic: {cinematicCounter}");
         if (uiCounter > 0)
             newMap = ActionMaps.UI;
         else if (dialogueCounter > 0 || cinematicCounter > 0)
-            newMap = ActionMaps.Dialogue; // Use Dialogue map (blocks movement, allows advance)
+            newMap = ActionMaps.Dialogue;
         else
             newMap = ActionMaps.Player;
 
         if (playerInput != null && playerInput.currentActionMap != null && playerInput.currentActionMap.name != newMap)
         {
-            Debug.Log($"[InputMapManager] Switching Map from '{playerInput.currentActionMap.name}' to '{newMap}'. Counters - UI: {uiCounter}, Dialogue: {dialogueCounter}, Cinematic: {cinematicCounter}");
             SwitchToActionMapSafe(newMap);
         }
     }
