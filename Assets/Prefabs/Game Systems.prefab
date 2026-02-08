@@ -33,8 +33,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1209707565026163393}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.081009276, y: -0.000033439523, z: 0.0000027178467, w: 0.99671334}
-  m_LocalPosition: {x: 38.12272, y: 4.17946, z: -36.010002}
+  m_LocalRotation: {x: 0.06634575, y: 0.571999, z: -0.046493102, w: 0.8162437}
+  m_LocalPosition: {x: -0.582119, y: -6.7700005, z: -78.49534}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -117,7 +117,7 @@ MonoBehaviour:
     SplineCurvature: 0.5
   RecenteringTarget: 2
   HorizontalAxis:
-    Value: 0
+    Value: 70.047
     Center: 0
     Range: {x: -180, y: 180}
     Wrap: 1
@@ -535,11 +535,59 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e88d0f329110e2f41990b6d2f8a41c36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UI_System.Menus.GamePauseHandler
-  _menuSceneName: SC_Menus
+  _menuSceneName: SC_OptionsMenu
   _audioMixer: {fileID: 24100000, guid: 7bd7eaa6f125ab044b5eaece627b84a9, type: 2}
   _gameplaySnapshot: {fileID: -1511293616973409331, guid: 7bd7eaa6f125ab044b5eaece627b84a9, type: 2}
   _pausedSnapshot: {fileID: -7477047019274458235, guid: 7bd7eaa6f125ab044b5eaece627b84a9, type: 2}
   _snapshotTransitionTime: 0.2
+--- !u!1 &3864402171397566455
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7858781500871817506}
+  - component: {fileID: 1375298621588362893}
+  m_Layer: 0
+  m_Name: InputPromptIconProvider
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7858781500871817506
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3864402171397566455}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2549560417305310977}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1375298621588362893
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3864402171397566455}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8986813008058954cbbd9ba1859ecd9d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  iconKeyboard: {fileID: 21300000, guid: 398d634b4ba915049827d3658d2d44cf, type: 3}
+  iconXbox: {fileID: 21300000, guid: 354a36c452834e24e82d3a9cd61d5d89, type: 3}
+  iconPlayStation: {fileID: 21300000, guid: 9fba5c16a8f1ea9418c588cd1ecbd899, type: 3}
+  iconSwitch: {fileID: 21300000, guid: da9909fa3e453b84fa27eba9609f2799, type: 3}
 --- !u!1 &4100358887806692575
 GameObject:
   m_ObjectHideFlags: 0
@@ -573,8 +621,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4100358887806692575}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.04381651, y: 0.9218396, z: 0.10939734, w: -0.369221}
-  m_LocalPosition: {x: 34.30773, y: -0.61372805, z: -26.332932}
+  m_LocalRotation: {x: 0.053327065, y: 0.58877707, z: -0.03897476, w: 0.80559224}
+  m_LocalPosition: {x: 7.8845444, y: -10.822157, z: -75.421585}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -657,7 +705,7 @@ MonoBehaviour:
     SplineCurvature: 0.5
   RecenteringTarget: 2
   HorizontalAxis:
-    Value: -133.16434
+    Value: 70.047
     Center: 0
     Range: {x: -180, y: 180}
     Wrap: 1
@@ -972,8 +1020,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4863517487004635220}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.081036985, y: -0.000000029704305, z: 0.0000000024150903, w: 0.99671113}
-  m_LocalPosition: {x: -21.06728, y: 4.17946, z: -30.560001}
+  m_LocalRotation: {x: 0.4211961, y: 0.05741419, z: -0.026728353, w: 0.90475583}
+  m_LocalPosition: {x: 8.6005535, y: -3.126256, z: -79.31885}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1591,6 +1639,12 @@ MonoBehaviour:
     target: {fileID: 0}
   - id: Player
     target: {fileID: 0}
+  - id: Player
+    target: {fileID: 0}
+  - id: Screwdriver
+    target: {fileID: 0}
+  - id: Airduct
+    target: {fileID: 0}
 --- !u!114 &8661671879418834482
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1673,6 +1727,7 @@ Transform:
   - {fileID: 9070179735435665394}
   - {fileID: 7522524979561756985}
   - {fileID: 5819510268145420730}
+  - {fileID: 7858781500871817506}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8046971763016656370

@@ -104,10 +104,10 @@ Rigidbody:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2035552756773601392}
-  serializedVersion: 5
+  serializedVersion: 4
   m_Mass: 1
-  m_LinearDamping: 0
-  m_AngularDamping: 0.05
+  m_Drag: 0
+  m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -594,8 +594,8 @@ MonoBehaviour:
     interactVibration: {x: 0, y: 0.05, z: 0.1}
     dragVibration: {x: 0.05, y: 0, z: 0}
     minFallForceForFeedback: 20
-    jumpHeight: 1
-    gravity: -16.8
+    jumpHeight: 1.75
+    gravity: -40
     coyoteTime: 0.15
     jumpBufferTime: 0.1
     standingHeight: 2
@@ -644,13 +644,9 @@ MonoBehaviour:
   outlineMode: 1
   interactionPrompt: {fileID: 0}
   interactionPromptText: {fileID: 0}
-  interactActionReference: {fileID: 1781555164194001046, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   interactionKey: interaction_prompt
   interactionIconImage: {fileID: 0}
-  iconKeyboard: {fileID: 21300000, guid: 398d634b4ba915049827d3658d2d44cf, type: 3}
-  iconXbox: {fileID: 21300000, guid: 354a36c452834e24e82d3a9cd61d5d89, type: 3}
-  iconPlayStation: {fileID: 21300000, guid: 9fba5c16a8f1ea9418c588cd1ecbd899, type: 3}
-  iconSwitch: {fileID: 21300000, guid: da9909fa3e453b84fa27eba9609f2799, type: 3}
+  iconProvider: {fileID: 0}
   vibration: {fileID: 6611762367846655109}
   config:
     walkSpeed: 4
