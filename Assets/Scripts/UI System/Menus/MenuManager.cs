@@ -1,3 +1,4 @@
+using CheckpointSystem;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
@@ -108,6 +109,14 @@ namespace UI_System.Menus
         {
             HandleBackInput();
         }
+
+        public void OnBackToMenuClicked1()
+        {
+            Time.timeScale = 1f;
+
+            SceneManager.LoadScene("SC_OptionsMenu", LoadSceneMode.Single);
+        }
+
 
         public void OnBackToMenuClicked()
         {
