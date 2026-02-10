@@ -144,7 +144,6 @@ public class CameraManager : MonoBehaviour
             }
         }
 
-        Debug.Log($"[CameraManager] Applied Sensitivity {sensitivity} to {updatedCount} axes (Scheme: {_player?.GetComponent<UnityEngine.InputSystem.PlayerInput>()?.currentControlScheme}).");
     }
 
     private void HandleDialogueVisibleClose()

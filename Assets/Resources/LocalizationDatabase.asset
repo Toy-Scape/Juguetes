@@ -163,9 +163,9 @@ MonoBehaviour:
     spanish: Inventario
     basque: Inbentarioa
   - key: interaction_prompt
-    english: Interact {0}
-    spanish: Interactuar {0}
-    basque: Interaktuatu {0}
+    english: Interact
+    spanish: Interactuar
+    basque: Interaktuatu
   - key: tutorial-dialogue-callout
     english: Hey!
     spanish: "\xA1Eh!"

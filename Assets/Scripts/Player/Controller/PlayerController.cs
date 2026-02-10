@@ -579,4 +579,12 @@ public class PlayerController : MonoBehaviour
 
 
     #endregion
+
+    public void OnNextDialogue()
+    {
+        // Uno de los problemas de usar el input system con SendMessage/BroadcastMessage es que todos los eventos lanzados en el PlayerInput se envían a todos los componentes del objeto/hijos que lo contiene.
+        // Esto significa que si en el PlayerInput hay un evento llamado "NextDialogue" y el objeto contenedor no tiene ningun script con ese método, se lanzará un error cada vez que se pulse el botón asignado a ese evento, incluso si el método existe en otro objeto o componente que sí lo necesita.
+        // Lo dejo como una advertencia :)
+        Debug.LogWarning("Hola :)");
+    }
 }

@@ -26,7 +26,6 @@ public class InputMapManager : MonoBehaviour
 
     public static event Action<string> OnActionMapChanged;
 
-    // Nueva bandera para desactivar el singleton cuando quieras cargar limpio
     public static bool AllowAutoCreate = true;
 
     private void Awake()
@@ -49,7 +48,7 @@ public class InputMapManager : MonoBehaviour
             playerInput = GetComponent<PlayerInput>();
 
         transform.SetParent(null);
-        DontDestroyOnLoad(gameObject);
+        //DontDestroyOnLoad(gameObject);
     }
 
     private void OnEnable()
@@ -130,6 +129,7 @@ public class InputMapManager : MonoBehaviour
         Debug.Log($"[InputMapManager] Cambiando a Action Map: {newMap} (UI: {uiCounter}, Dialogue: {dialogueCounter}, Cinematic: {cinematicCounter})");
         if (playerInput != null && playerInput.currentActionMap != null && playerInput.currentActionMap.name != newMap)
         {
+            Debug.Log($"[InputMapManager 2] Cambiando a Action Map: {newMap} (UI: {uiCounter}, Dialogue: {dialogueCounter}, Cinematic: {cinematicCounter})");
             SwitchToActionMapSafe(newMap);
         }
     }
