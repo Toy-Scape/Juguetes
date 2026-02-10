@@ -172,7 +172,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 0.5}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.90588236}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1873,6 +1873,18 @@ PrefabInstance:
       propertyPath: m_Navigation.m_SelectOnUp
       value: 
       objectReference: {fileID: 1898271533}
+    - target: {fileID: 231120723091675242, guid: 50c8ec9316e1ff042a16ab8986c9ad75, type: 3}
+      propertyPath: m_Colors.m_SelectedColor.b
+      value: 0.30980393
+      objectReference: {fileID: 0}
+    - target: {fileID: 231120723091675242, guid: 50c8ec9316e1ff042a16ab8986c9ad75, type: 3}
+      propertyPath: m_Colors.m_SelectedColor.g
+      value: 0.15686275
+      objectReference: {fileID: 0}
+    - target: {fileID: 231120723091675242, guid: 50c8ec9316e1ff042a16ab8986c9ad75, type: 3}
+      propertyPath: m_Colors.m_SelectedColor.r
+      value: 0.12156863
+      objectReference: {fileID: 0}
     - target: {fileID: 231120723091675242, guid: 50c8ec9316e1ff042a16ab8986c9ad75, type: 3}
       propertyPath: m_Navigation.m_SelectOnDown
       value: 
@@ -3894,16 +3906,80 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 231120723091675242, guid: 50c8ec9316e1ff042a16ab8986c9ad75, type: 3}
+      propertyPath: m_Navigation.m_Mode
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 231120723091675242, guid: 50c8ec9316e1ff042a16ab8986c9ad75, type: 3}
+      propertyPath: m_Navigation.m_SelectOnUp
+      value: 
+      objectReference: {fileID: 1113931637}
+    - target: {fileID: 231120723091675242, guid: 50c8ec9316e1ff042a16ab8986c9ad75, type: 3}
+      propertyPath: m_Navigation.m_SelectOnDown
+      value: 
+      objectReference: {fileID: 2011492247}
+    - target: {fileID: 231120723091675242, guid: 50c8ec9316e1ff042a16ab8986c9ad75, type: 3}
+      propertyPath: m_Options.m_Options.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 231120723091675242, guid: 50c8ec9316e1ff042a16ab8986c9ad75, type: 3}
       propertyPath: m_Options.m_Options.Array.data[0].m_Text
       value: English
       objectReference: {fileID: 0}
     - target: {fileID: 231120723091675242, guid: 50c8ec9316e1ff042a16ab8986c9ad75, type: 3}
       propertyPath: m_Options.m_Options.Array.data[1].m_Text
-      value: Euskera
+      value: "Espa\xF1ol"
       objectReference: {fileID: 0}
     - target: {fileID: 231120723091675242, guid: 50c8ec9316e1ff042a16ab8986c9ad75, type: 3}
       propertyPath: m_Options.m_Options.Array.data[2].m_Text
-      value: "Espa\xF1ol"
+      value: Euskara
+      objectReference: {fileID: 0}
+    - target: {fileID: 231120723091675242, guid: 50c8ec9316e1ff042a16ab8986c9ad75, type: 3}
+      propertyPath: m_Options.m_Options.Array.data[0].m_Color.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 231120723091675242, guid: 50c8ec9316e1ff042a16ab8986c9ad75, type: 3}
+      propertyPath: m_Options.m_Options.Array.data[0].m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 231120723091675242, guid: 50c8ec9316e1ff042a16ab8986c9ad75, type: 3}
+      propertyPath: m_Options.m_Options.Array.data[0].m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 231120723091675242, guid: 50c8ec9316e1ff042a16ab8986c9ad75, type: 3}
+      propertyPath: m_Options.m_Options.Array.data[0].m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 231120723091675242, guid: 50c8ec9316e1ff042a16ab8986c9ad75, type: 3}
+      propertyPath: m_Options.m_Options.Array.data[1].m_Color.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 231120723091675242, guid: 50c8ec9316e1ff042a16ab8986c9ad75, type: 3}
+      propertyPath: m_Options.m_Options.Array.data[1].m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 231120723091675242, guid: 50c8ec9316e1ff042a16ab8986c9ad75, type: 3}
+      propertyPath: m_Options.m_Options.Array.data[1].m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 231120723091675242, guid: 50c8ec9316e1ff042a16ab8986c9ad75, type: 3}
+      propertyPath: m_Options.m_Options.Array.data[1].m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 231120723091675242, guid: 50c8ec9316e1ff042a16ab8986c9ad75, type: 3}
+      propertyPath: m_Options.m_Options.Array.data[2].m_Color.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 231120723091675242, guid: 50c8ec9316e1ff042a16ab8986c9ad75, type: 3}
+      propertyPath: m_Options.m_Options.Array.data[2].m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 231120723091675242, guid: 50c8ec9316e1ff042a16ab8986c9ad75, type: 3}
+      propertyPath: m_Options.m_Options.Array.data[2].m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 231120723091675242, guid: 50c8ec9316e1ff042a16ab8986c9ad75, type: 3}
+      propertyPath: m_Options.m_Options.Array.data[2].m_Color.r
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 231120723091675242, guid: 50c8ec9316e1ff042a16ab8986c9ad75, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.size
@@ -4150,7 +4226,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 0.5}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.90588236}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -4874,6 +4950,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d68a43f7dd5a6d54da3b5b3e0a4d9a60, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &2011492247 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2795299860653920993, guid: 17ad6473ee122e841ac21d71d249bb8a, type: 3}
+  m_PrefabInstance: {fileID: 143323134}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
 --- !u!1001 &2079321640
 PrefabInstance:
   m_ObjectHideFlags: 0
