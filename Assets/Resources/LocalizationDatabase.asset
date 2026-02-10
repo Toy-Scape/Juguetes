@@ -1,0 +1,276 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7728d7534433d742a587d8a6e37c1dd, type: 3}
+  m_Name: LocalizationDatabase
+  m_EditorClassIdentifier: Assembly-CSharp::Localization.LocalizationDatabase
+  _entries:
+  - key: play-button
+    english: Play
+    spanish: Jugar
+    basque: Jolastu
+  - key: options-button
+    english: Options
+    spanish: Opciones
+    basque: Ezarpenak
+  - key: exit-button
+    english: Exit
+    spanish: Salir
+    basque: Atera
+  - key: resume-button
+    english: Resume
+    spanish: Reanudar
+    basque: Jarraitu
+  - key: main-menu-button
+    english: Main menu
+    spanish: Menu principal
+    basque: Menu nagusia
+  - key: back-button
+    english: Back
+    spanish: Atras
+    basque: Atzera
+  - key: thought-fail-box
+    english: "I can\u2019t grab the box, I need more strength."
+    spanish: No puedo agarrar la caja, necesito mas fuerza.
+    basque: Kutxa ezin dut hartu, indar gehiago behar dut.
+  - key: tutorial-robotin-dialogue-1
+    english: "Are you\u2026 okay?"
+    spanish: "\xBFEst\xE1s\u2026 bien?"
+    basque: "Ondo\u2026 zaude?"
+  - key: tutorial-robotin-dialogue-2
+    english: "I\u2019m sorry\u2026 Is there any way to escape?\r\n"
+    spanish: "Lo siento\u2026 \xBFHay alguna forma de escapar?"
+    basque: "Barkatu\u2026 Ihes egiteko moduren bat badago?\r\n"
+  - key: tutorial-robotin-dialogue-3
+    english: ...
+    spanish: ...
+    basque: ...
+  - key: tutorial-robotin-dialogue-4
+    english: "You\u2019ll need to use my arms to reach the screwdriver.\r\n"
+    spanish: "Tendr\xE1s que hacer uso de mis brazos para llegar al destornillador."
+    basque: 'Nire besoak erabili beharko dituzu bihurkinera iristeko.
+
+'
+  - key: tutorial-juan-dialogue-1
+    english: "Look at me. Do I look like I\u2019m ready to run a marathon? I have
+      no chance of getting out of here on my own. But you\u2026 you\u2019re still
+      in one piece. And that\u2019s more than I can say for most.\r\n"
+    spanish: "M\xEDrame. \xBFTe parece que estoy para correr una marat\xF3n? No tengo
+      ninguna posibilidad de salir de aqu\xED por mi cuenta. Pero t\xFA\u2026 t\xFA
+      a\xFAn est\xE1s entero. Y eso ya es m\xE1s de lo que puedo decir de la mayor\xEDa."
+    basque: "Begira nazazu. Maratoi bat korrika egiteko moduan nagoela iruditzen
+      zaizu? Ez daukat inolako aukerarik hemendik nire kabuz irteteko. Baina zu\u2026
+      zu oraindik osorik zaude. Eta hori gehienengatik ezin dut esan.\r\n"
+  - key: tutorial-juan-dialogue-2
+    english: "Yes. But not without help. See that arm on the floor? It\u2019s mine.
+      It still works. It has a good grip. It will help you move things you wouldn\u2019t
+      even dream of pushing on your own. Take it.\r\n"
+    spanish: "S\xED. Pero no sin ayuda. \xBFVes ese brazo en el suelo? Es m\xEDo.
+      Todav\xEDa funciona. Tiene buen agarre. Te servir\xE1 para mover cosas que
+      t\xFA solo ni so\xF1ar\xEDas con empujar. Ll\xE9vatelo."
+    basque: 'Bai. Baina ez laguntzarik gabe. Lurrean dagoen beso hura ikusten duzu?
+      Nirea da. Oraindik funtzionatzen du. Euste ona dauka. Zuk bakarrik mugitu ere
+      ezin izango zenituzkeen gauzak mugitzeko balioko dizu. Eraman ezazu.
+
+'
+  - key: tutorial-juan-dialogue-3
+    english: "Good. Now listen. Up there, on top of that toolbox, there\u2019s a
+      screwdriver. You\u2019re going to need it to open the ventilation duct.\r\n"
+    spanish: "Bien. Ahora escucha. Arriba, sobre esa caja de herramientas, hay un
+      destornillador. Lo vas a necesitar para abrir el conducto de ventilaci\xF3n. "
+    basque: 'Ondo. Orain entzun. Goian, tresna-kutxa horren gainean, bihurkin bat
+      dago. Aireztapen-hodia ireki ahal izateko beharko duzu.
+
+'
+  - key: tutorial-juan-dialogue-4
+    english: "Once you have the screwdriver, you\u2019ll need to find a way to climb
+      up to the duct.\r\n"
+    spanish: "Una vez tengas el destornillador, tendr\xE1s que encontrar una forma
+      de subir hasta el conducto."
+    basque: 'Bihurkina lortzen duzunean, hodira igo ahal izateko moduren bat aurkitu
+      beharko duzu.
+
+'
+  - key: thought-ventilacion
+    english: "I can\u2019t open the ventilation duct without the screwdriver."
+    spanish: "No puedo abrir el conducto de ventilaci\xF3n sin el destornillador."
+    basque: "Aireztapen\u2011sarea ezin dut ireki destornilladorerik gabe."
+  - key: strong-arm-item-name
+    english: Strong arm
+    spanish: Brazo fuerte
+    basque: Beso indartsu
+  - key: strong-arm-item-description
+    english: Allows you to lift heavy objects.
+    spanish: Permite levantar objetos pesados.
+    basque: Objektu astunak altxatzeko aukera ematen du.
+  - key: cubo-item-name
+    english: Cube
+    spanish: Cubo
+    basque: Kubo
+  - key: cubo-item-description
+    english: Just a cube
+    spanish: Simplemente un cubo
+    basque: Besterik gabe, kubo bat
+  - key: hook-item-name
+    english: Hook
+    spanish: Gancho
+    basque: Azkoin
+  - key: hook-item-description
+    english: Hook on and swing through the air.
+    spanish: "Eng\xE1nchate y balanc\xE9ate por el aire."
+    basque: Konektatu eta airean pendulatu.
+  - key: test-key
+    english: Test key
+    spanish: Clave test
+    basque: Testeozko klabea
+  - key: thought-not-enough-strength
+    english: I'm not strong enough.
+    spanish: No tengo suficiente fuerza.
+    basque: Ez naiz nahikoa indartsu.
+  - key: thought-item-missing-screwdriver
+    english: I should take the screwdriver before moving on.
+    spanish: "Deber\xEDa coger el destornillador antes de continuar."
+    basque: Jarraitu aurretik bihurkina hartu beharko nuke.
+  - key: inventory-item-added
+    english: New item added
+    spanish: "Nuevo objeto a\xF1adido"
+    basque: Objektu berria gehituta
+  - key: inventory-item-removed
+    english: Item removed
+    spanish: Objeto eliminado
+    basque: Objektua kenduta
+  - key: suction-item-name
+    english: Suction cups
+    spanish: Ventosas
+    basque: Bentosak
+  - key: suction-item-description
+    english: A set of suction cups that lets you climb smooth surfaces with ease.
+      Ideal for scaling glass, metal, or any polished wall.
+    spanish: Un conjunto de ventosas que permite trepar por superficies lisas sin
+      esfuerzo. Perfectas para escalar cristal, metal u otras paredes pulidas.
+    basque: Bentosaz osatutako multzoa, gainazal leunetan gora egiteko aukera ematen
+      duena. Beira, metala edo horma leunduak igotzeko aproposa.
+  - key: inventory-title
+    english: Inventory
+    spanish: Inventario
+    basque: Inbentarioa
+  - key: interaction_prompt
+    english: Interact
+    spanish: Interactuar
+    basque: Interaktuatu
+  - key: tutorial-dialogue-callout
+    english: Hey!
+    spanish: "\xA1Eh!"
+    basque: Ei!
+  - key: tutorial-dialogue-callout-2
+    english: Over here!
+    spanish: "\xA1Por aqu\xED!"
+    basque: Hemen!
+  - key: tutorial-robotin-dialogue-5
+    english: 'And you? Will you come with me?
+
+'
+    spanish: "\xBFY t\xFA? \xBFVendr\xE1s conmigo?"
+    basque: 'Eta zu? Etorriko zara nirekin?
+
+'
+  - key: tutorial-juan-dialogue-5
+    english: "I can\u2019t. But if you make it out\u2026 at least I\u2019ll know
+      one of us did. And hey\u2026 if you find more toys up there, tell them old
+      Titanium Max is still putting up a fight, alright?\r\n"
+    spanish: "No puedo. Pero si t\xFA sales\u2026 al menos sabr\xE9 que uno de nosotros
+      lo consigui\xF3. Y oye\u2026 si encuentras m\xE1s juguetes ah\xED arriba, diles
+      que el viejo Titanio Max sigue dando guerra, \xBFvale?"
+    basque: "Ezin dut. Baina zu ateratzen bazara\u2026 behintzat jakingo dut gutako
+      batek lortu duela. Eta, tira\u2026 goian jostailu gehiago aurkitzen badituzu,
+      esan iezaiezu Titanio Max zaharrak oraindik borrokan jarraitzen duela, ados?\r\n"
+  - key: tutorial-juan-dialogue-6
+    english: "And take this one too. I won\u2019t be needing it down here\u2026 and
+      you\u2019ll make better use of it than I ever could. Trust me, they work better
+      in hands that can still move.\r\n"
+    spanish: "Y toma este tambi\xE9n. No me va a hacer falta aqu\xED abajo\u2026
+      y t\xFA lo aprovechar\xE1s mejor que yo. Cr\xE9eme, funcionan mejor en manos
+      que todav\xEDa pueden moverse."
+    basque: "Eta hau ere hartu. Ez dut beharko hemen behean\u2026 eta zuk nik baino
+      hobeto aprobetxatuko duzu. Sinetsi, oraindik mugi daitezkeen eskuetan hobeto
+      funtzionatzen dute.\r\n"
+  - key: item-name-screwdriver
+    english: Screwdriver
+    spanish: Destornillador
+    basque: Bihurkina
+  - key: item-description-screwdriver
+    english: "A sturdy, well-balanced screwdriver designed for precision work in
+      tight spaces. Its tip fits firmly into screws, and its handle provides a secure
+      grip even under pressure. Light, reliable, and perfect for opening panels,
+      dismantling mechanisms, or forcing stubborn covers when there\u2019s no other
+      option.\r\n"
+    spanish: "Un destornillador resistente y bien equilibrado, dise\xF1ado para trabajos
+      de precisi\xF3n en espacios reducidos. Su punta encaja con firmeza en los tornillos
+      y su mango ofrece un agarre seguro incluso bajo presi\xF3n. Ligero, fiable
+      y perfecto para abrir paneles, desmontar mecanismos o forzar tapas rebeldes
+      cuando no hay otra opci\xF3n."
+    basque: Toki estuetan zehaztasunezko lanetarako diseinatutako bihurkin sendo
+      eta orekatua. Puntak torlojuetan ondo sartzen da, eta heldulekuak euste segurua
+      eskaintzen du presiopean ere. Arina, fidagarria eta panelak ireki, mekanismoak
+      desmuntatu edo beste aukerarik ez dagoenean estalki zailak behartzeko ezin
+      hobea.
+  - key: menu-options-title
+    english: Options
+    spanish: Opciones
+    basque: Ezarpenak
+  - key: menu-options-master-volume
+    english: Master Volume
+    spanish: Volumen General
+    basque: Bolumen Orokorra
+  - key: menu-options-label-fps
+    english: Max FPS
+    spanish: "FPS m\xE1ximos"
+    basque: FPS maximoak
+  - key: menu-options-dropdown-option-fps-unlimited
+    english: Unlimited
+    spanish: Ilimitado
+    basque: Mugagabea
+  - key: menu-options-dropdown-options-fps-30
+    english: 30
+    spanish: 30
+    basque: 30
+  - key: menu-options-dropdown-options-fps-60
+    english: 60
+    spanish: 60
+    basque: 60
+  - key: menu-options-dropdown-options-fps-120
+    english: 120
+    spanish: 120
+    basque: 120
+  - key: menu-options-label-languages
+    english: Languages
+    spanish: Idiomas
+    basque: Hizkuntzak
+  - key: menu-options-dropdown-option-basque
+    english: Euskara
+    spanish: Euskara
+    basque: Euskara
+  - key: menu-options-dropdown-option-english
+    english: English
+    spanish: English
+    basque: English
+  - key: menu-options-dropdown-option-spanish
+    english: "Espa\xF1ol"
+    spanish: "Espa\xF1ol"
+    basque: "Espa\xF1ol"
+  - key: menu-options-controller-sensitivity
+    english: Controller Sensitivity
+    spanish: Sensibilidad del mando
+    basque: Kontroladorearen sentikortasuna
+  - key: menu-options-mouse-sensitivity
+    english: Mouse Sensitivity
+    spanish: "Sensibilidad del rat\xF3n"
+    basque: Saguaren sentikortasuna

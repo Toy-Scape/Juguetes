@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54519d1aa122ccf4082ea43e362ff44c, type: 3}
+  m_Name: Limb Context Variables SO
+  m_EditorClassIdentifier: Assembly-CSharp::ContextVariablesSO
+  canLiftHeavyObjectsVar: {fileID: 11400000, guid: 99be5174a42a6fa42847a7dcb0aa81cd, type: 2}
+  canClimbWallsVar: {fileID: 11400000, guid: 6275820a1fab86c41b3d9c0fb2f29bfa, type: 2}
+  canSwimVar: {fileID: 11400000, guid: 177b4c9276226b340aaf59969fefb341, type: 2}
+  isAimingVar: {fileID: 11400000, guid: 6711021d3a97a8448bcc510755c92651, type: 2}
