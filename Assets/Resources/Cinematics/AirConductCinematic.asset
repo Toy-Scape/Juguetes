@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe7d36f779e20324b841dfd80305c1d8, type: 3}
+  m_Name: AirConductCinematic
+  m_EditorClassIdentifier: Assembly-CSharp::CinematicSystem.Core.CinematicAsset
+  blockPlayerInput: 1
+  hideHUD: 1
+  restoreCameraInstantly: 0
+  actions:
+  - rid: 1458386802501746767
+  references:
+    version: 2
+    RefIds:
+    - rid: 1458386802501746767
+      type: {class: CameraShotAction, ns: CinematicSystem.Actions, asm: Assembly-CSharp}
+      data:
+        waitForCompletion: 1
+        holdAtEnd: 1
+        targetId: Airduct
+        lookAtId: Airduct
+        offset: {x: 30, y: -10, z: -30}
+        fov: 60
+        duration: 2
+        smooth: 1
+        instant: 0
+        ignoreCollision: 0
+        useOrbit: 0
+        orbitSpeed: 10
