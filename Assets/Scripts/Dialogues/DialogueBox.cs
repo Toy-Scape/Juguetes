@@ -6,6 +6,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class DialogueBox : MonoBehaviour
 {
@@ -15,6 +16,10 @@ public class DialogueBox : MonoBehaviour
     [SerializeField] private TextMeshProUGUI dialogueText;
     [SerializeField] private TextMeshProUGUI thoughtText;
     [SerializeField] private TextMeshProUGUI nameText;
+    [SerializeField] private Image nextDialoguePrompt;
+
+    [Header("Providers")]
+    [SerializeField] private InputPromptIconProvider inputPromptIconProvider;
 
     [Header("Settings")]
     [SerializeField] private float textSpeed = 10f;
@@ -55,7 +60,6 @@ public class DialogueBox : MonoBehaviour
     private TextMeshProUGUI CurrentText =>
         activeDialogue.Type == Dialogue.DialogueType.Normal ? dialogueText : thoughtText;
 
-
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -64,15 +68,11 @@ public class DialogueBox : MonoBehaviour
             return;
         }
 
-        if (player == null)
-        {
-            var controller = FindFirstObjectByType<PlayerController>();
-            if (controller != null)
-                player = controller.gameObject;
-        }
+        var controller = FindFirstObjectByType<PlayerController>();
+        if (controller != null)
+            player = controller.gameObject;
 
         Instance = this;
-        // asegurar estado inicial
         CloseImmediate();
     }
 
@@ -85,9 +85,6 @@ public class DialogueBox : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Abre el diálogo activo. No asume que el activeDialogue sea nulo.
-    /// </summary>
     public void Open(bool skipStaticEvents = false)
     {
         if (activeDialogue == null)
@@ -100,44 +97,33 @@ public class DialogueBox : MonoBehaviour
             if (!skipStaticEvents) OnDialogueOpen?.Invoke();
             if (enableNextDialogueCoroutine != null) StopCoroutine(enableNextDialogueCoroutine);
             enableNextDialogueCoroutine = StartCoroutine(EnableNextDialogueAction());
+            UpdateNextPrompt(false);
         }
-        else if (activeDialogue.Type == Dialogue.DialogueType.Thought)
+        else
         {
-            if (dialogueContent) dialogueContent.SetActive(false);
-            if (thoughtContent) thoughtContent.SetActive(true);
-
+            dialogueContent.SetActive(false);
+            thoughtContent.SetActive(true);
             onOpen?.Invoke();
         }
     }
 
-    /// <summary>
-    /// Cierra el diálogo y su UI. Usa un cierre "seguro" que limpia listeners.
-    /// </summary>
     public void Close()
     {
-        // cancelar cierres pendientes
         if (thoughtCloseCoroutine != null)
         {
             StopCoroutine(thoughtCloseCoroutine);
             thoughtCloseCoroutine = null;
         }
 
-        if (dialogueContent) dialogueContent.SetActive(false);
-        if (thoughtContent) thoughtContent.SetActive(false);
+        dialogueContent.SetActive(false);
+        thoughtContent.SetActive(false);
+        UpdateNextPrompt(false);
 
-        float delay = 0f;
-        if (activeDialogue != null)
-        {
-            delay = activeDialogue.postDialogueInputDelay;
-        }
-
+        float delay = activeDialogue != null ? activeDialogue.postDialogueInputDelay : 0f;
         globalInteractionLockUntil = Time.unscaledTime + interactionLockTime;
 
         onClose?.Invoke();
         OnDialogueVisibleClose?.Invoke();
-
-        // Note: We delay OnDialogueClose invocation to keep input blocked for 'delay' seconds.
-        // OnDialogueClose?.Invoke(); // Moved to routine
 
         if (typingCoroutine != null)
         {
@@ -153,7 +139,6 @@ public class DialogueBox : MonoBehaviour
             enableNextDialogueCoroutine = null;
         }
 
-        // Unsubscribe input immediately to prevent spamming from resetting the close timer
         if (nextDialogueAction?.action != null)
         {
             nextDialogueAction.action.performed -= OnNextDialogue;
@@ -178,10 +163,12 @@ public class DialogueBox : MonoBehaviour
         activeDialogue = null;
         unlockInputCoroutine = null;
     }
+
     private void CloseImmediate()
     {
-        if (dialogueContent) dialogueContent.SetActive(false);
-        if (thoughtContent) thoughtContent.SetActive(false);
+        dialogueContent.SetActive(false);
+        thoughtContent.SetActive(false);
+        UpdateNextPrompt(false);
 
         if (nextDialogueAction?.action != null)
         {
@@ -205,7 +192,6 @@ public class DialogueBox : MonoBehaviour
         if (activeDialogue == null)
             return;
 
-        // SKIP CINEMATIC IF PLAYING
         var cinematicPlayer = FindFirstObjectByType<CinematicSystem.Application.CinematicPlayer>();
         if (cinematicPlayer != null && cinematicPlayer.IsPlaying)
         {
@@ -218,7 +204,6 @@ public class DialogueBox : MonoBehaviour
             return;
         }
 
-        // si ya no quedan líneas -> cerrar
         if (dialogueIndex >= activeDialogue.Lines.Count)
         {
             StartCoroutine(CloseSafelyNextFrame());
@@ -230,31 +215,18 @@ public class DialogueBox : MonoBehaviour
         nameText.text = line.GetCharacterName();
         nameText.color = line.GetNameColor();
 
-        // Fetch text from Localization System
         if (Localization.LocalizationManager.Instance != null)
-        {
             fullText = Localization.LocalizationManager.Instance.GetLocalizedValue(line.Key);
-        }
         else
-        {
-            var db = Resources.Load<Localization.LocalizationDatabase>("LocalizationDatabase");
-            if (db != null)
-            {
-                fullText = db.GetValue(line.Key, Localization.Language.Spanish); // idioma por defecto
-            }
-            else
-            {
-                fullText = line.Key; // fallback final
-            }
-        }
+            fullText = line.Key;
 
         currentSpeaker = CharacterManager.Instance.GetModel(line.Character.CharacterId);
-
         var context = new DialogueContext(player, currentSpeaker);
 
         activeDialogue.TriggerActions(dialogueIndex, TriggerTiming.OnStart, context);
 
         IsTyping = true;
+        UpdateNextPrompt(false);
         typingCoroutine = StartCoroutine(TypeWriterEffectCoroutine(dialogueIndex, context));
 
         dialogueIndex++;
@@ -268,7 +240,6 @@ public class DialogueBox : MonoBehaviour
             typingCoroutine = null;
         }
 
-        // mostrar todo el texto inmediatamente
         CurrentText.text = fullText;
         IsTyping = false;
 
@@ -293,15 +264,10 @@ public class DialogueBox : MonoBehaviour
 
         if (IsOpen) return;
 
-        // Si hay una rutina de desbloqueo pendiente (diálogo cerrándose),
-        // forzamos el cierre completo INMEDIATO para asegurar que los eventos (OnDialogueClose)
-        // se disparen y el contador del InputMapManager baje a 0 antes de volver a subir.
         if (unlockInputCoroutine != null)
         {
             StopCoroutine(unlockInputCoroutine);
             unlockInputCoroutine = null;
-
-            // Forzamos el evento de cierre que estaba pendiente
             OnDialogueClose?.Invoke();
             activeDialogue = null;
         }
@@ -310,22 +276,18 @@ public class DialogueBox : MonoBehaviour
         dialogueIndex = 0;
         duringTriggeredLines.Clear();
 
-        Open(); // start normal with event
+        Open();
         Next();
     }
 
     private IEnumerator TypeWriterEffectCoroutine(int lineIndex, DialogueContext context)
     {
-        if (CurrentText == null)
-            yield break;
-
         CurrentText.text = string.Empty;
         float delay = Mathf.Max(0.001f, 1f / Mathf.Max(1f, textSpeed));
 
         int half = fullText.Length / 2;
         bool duringTriggered = false;
-
-        int i = 0; // índice manual
+        int i = 0;
 
         foreach (char c in fullText)
         {
@@ -340,8 +302,7 @@ public class DialogueBox : MonoBehaviour
                 activeDialogue.TriggerActions(lineIndex, TriggerTiming.During, context);
             }
 
-            i++; // avanzar índice
-
+            i++;
             yield return new WaitForSeconds(delay);
         }
 
@@ -356,14 +317,11 @@ public class DialogueBox : MonoBehaviour
         OnTypingComplete();
     }
 
-
-    /// <summary>
-    /// Cuando se acaba de escribir un texto (o se fastforwardea), aquí se centraliza la lógica
-    /// que dependa del final del tipeo: p.ej. iniciar el cierre automático de pensamientos.
-    /// </summary>
     private void OnTypingComplete()
     {
-        // Si es un pensamiento, lanzar la corutina de cierre (asegurando no duplicarla)
+        if (activeDialogue != null && activeDialogue.Type == Dialogue.DialogueType.Normal)
+            UpdateNextPrompt(true);
+
         if (activeDialogue != null && activeDialogue.Type == Dialogue.DialogueType.Thought)
         {
             if (thoughtCloseCoroutine != null)
@@ -375,6 +333,22 @@ public class DialogueBox : MonoBehaviour
         }
     }
 
+    private void UpdateNextPrompt(bool visible)
+    {
+        if (nextDialoguePrompt == null || inputPromptIconProvider == null)
+            return;
+
+        if (!visible)
+        {
+            nextDialoguePrompt.enabled = false;
+            return;
+        }
+
+        var sprite = inputPromptIconProvider.GetCurrentInteractIcon();
+        nextDialoguePrompt.sprite = sprite;
+        nextDialoguePrompt.enabled = sprite != null;
+    }
+
     private IEnumerator CloseThoughtAfterDelay()
     {
         yield return new WaitForSeconds(thoughtsCloseDelay);
@@ -383,29 +357,21 @@ public class DialogueBox : MonoBehaviour
 
     private IEnumerator EnableNextDialogueAction()
     {
-        // esperar un frame para evitar race conditions con el InputSystem
         yield return null;
 
         if (nextDialogueAction?.action == null)
             yield break;
 
-        // asegurarse de doble-subscribe
         nextDialogueAction.action.performed -= OnNextDialogue;
 
         if (IsOpen && activeDialogue != null)
-        {
             nextDialogueAction.action.performed += OnNextDialogue;
-        }
     }
 
     private IEnumerator CloseSafelyNextFrame()
     {
-        // Esperar a que termine el ciclo interno del Input System
         yield return null;
-
-        // Espera extra muy corta para gamepads (opcional pero muy efectivo)
         yield return new WaitForEndOfFrame();
-
         Close();
     }
 }

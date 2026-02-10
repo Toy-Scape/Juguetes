@@ -12,6 +12,7 @@ public static class ActionMaps
     public const string Dialogue = "Dialogue";
 }
 
+
 [DefaultExecutionOrder(-100)]
 public class InputMapManager : MonoBehaviour
 {
@@ -25,8 +26,16 @@ public class InputMapManager : MonoBehaviour
 
     public static event Action<string> OnActionMapChanged;
 
+    public static bool AllowAutoCreate = true;
+
     private void Awake()
     {
+        if (!AllowAutoCreate)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
         if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
@@ -39,7 +48,7 @@ public class InputMapManager : MonoBehaviour
             playerInput = GetComponent<PlayerInput>();
 
         transform.SetParent(null);
-        DontDestroyOnLoad(gameObject);
+        //DontDestroyOnLoad(gameObject);
     }
 
     private void OnEnable()
@@ -64,17 +73,14 @@ public class InputMapManager : MonoBehaviour
         InventoryUI.OnInventoryOpened -= HandleOpenUI;
         InventoryUI.OnInventoryClosed -= HandleCloseUI;
 
-        //DialogueBox.OnDialogueOpen -= HandleDialogueOpen;
-        //DialogueBox.OnDialogueClose -= HandleDialogueClose;
+        DialogueBox.OnDialogueOpen -= HandleDialogueOpen;
+        DialogueBox.OnDialogueClose -= HandleDialogueClose;
 
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        // Only reset counters if we are loading a whole new context (Single mode).
-        // If we are loading Additively (like Pause Menu), we should NOT reset, 
-        // as the new scene might register itself as UI immediately.
         if (mode == LoadSceneMode.Single)
         {
             uiCounter = 0;
@@ -110,41 +116,30 @@ public class InputMapManager : MonoBehaviour
         SwitchToActionMap(mapName);
     }
 
-    public void HandleOpenUI()
+    private void UpdateActionMap()
     {
-        uiCounter++;
-        UpdateActionMap();
+        string newMap;
+        if (uiCounter > 0)
+            newMap = ActionMaps.UI;
+        else if (dialogueCounter > 0 || cinematicCounter > 0)
+            newMap = ActionMaps.Dialogue;
+        else
+            newMap = ActionMaps.Player;
+
+        Debug.Log($"[InputMapManager] Cambiando a Action Map: {newMap} (UI: {uiCounter}, Dialogue: {dialogueCounter}, Cinematic: {cinematicCounter})");
+        if (playerInput != null && playerInput.currentActionMap != null && playerInput.currentActionMap.name != newMap)
+        {
+            Debug.Log($"[InputMapManager 2] Cambiando a Action Map: {newMap} (UI: {uiCounter}, Dialogue: {dialogueCounter}, Cinematic: {cinematicCounter})");
+            SwitchToActionMapSafe(newMap);
+        }
     }
 
-    public void HandleCloseUI()
-    {
-        uiCounter = Mathf.Max(0, uiCounter - 1);
-        UpdateActionMap();
-    }
-    // ...
-    public void HandleDialogueOpen()
-    {
-        dialogueCounter++;
-        UpdateActionMap();
-    }
-
-    public void HandleDialogueClose()
-    {
-        dialogueCounter = Mathf.Max(0, dialogueCounter - 1);
-        UpdateActionMap();
-    }
-
-    public void HandleCinematicStart()
-    {
-        cinematicCounter++;
-        UpdateActionMap();
-    }
-
-    public void HandleCinematicEnd()
-    {
-        cinematicCounter = Mathf.Max(0, cinematicCounter - 1);
-        UpdateActionMap();
-    }
+    public void HandleOpenUI() { uiCounter++; UpdateActionMap(); }
+    public void HandleCloseUI() { uiCounter = Mathf.Max(0, uiCounter - 1); UpdateActionMap(); }
+    public void HandleDialogueOpen() { dialogueCounter++; UpdateActionMap(); }
+    public void HandleDialogueClose() { dialogueCounter = Mathf.Max(0, dialogueCounter - 1); UpdateActionMap(); }
+    public void HandleCinematicStart() { cinematicCounter++; UpdateActionMap(); }
+    public void HandleCinematicEnd() { cinematicCounter = Mathf.Max(0, cinematicCounter - 1); UpdateActionMap(); }
 
     private void HandleRadialOpen()
     {
@@ -164,26 +159,18 @@ public class InputMapManager : MonoBehaviour
         }
     }
 
-    private void UpdateActionMap()
-    {
-        string newMap;
-
-        if (uiCounter > 0)
-            newMap = ActionMaps.UI;
-        else if (dialogueCounter > 0 || cinematicCounter > 0)
-            newMap = ActionMaps.Dialogue; // Use Dialogue map (blocks movement, allows advance)
-        else
-            newMap = ActionMaps.Player;
-
-        if (playerInput != null && playerInput.currentActionMap != null && playerInput.currentActionMap.name != newMap)
-        {
-            Debug.Log($"[InputMapManager] Switching Map from '{playerInput.currentActionMap.name}' to '{newMap}'. Counters - UI: {uiCounter}, Dialogue: {dialogueCounter}, Cinematic: {cinematicCounter}");
-            SwitchToActionMapSafe(newMap);
-        }
-    }
-
     public string GetCurrentActionMap()
     {
         return playerInput != null && playerInput.currentActionMap != null ? playerInput.currentActionMap.name : string.Empty;
+    }
+
+    public static void DestroyForMenu()
+    {
+        if (Instance != null)
+        {
+            AllowAutoCreate = false; 
+            Destroy(Instance.gameObject);
+            Instance = null;
+        }
     }
 }
