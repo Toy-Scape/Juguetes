@@ -9,8 +9,11 @@ EditorBuildSettings:
     path: Assets/Scenes/Menus/SC_OptionsMenu.unity
     guid: 1ea76a9e316499942a9d000a5b078a5b
   - enabled: 1
+    path: Assets/Scenes/SC_IntroAnimation.unity
+    guid: a8fdaf5480c999c4287d303e4b9e770e
+  - enabled: 1
     path: Assets/Scenes/TestEnvironment.unity
-    guid: 906ded8941e865d4ab4187a47417dce3
+    guid: 2b10ed91aa9c37e489c736c856e952af
   - enabled: 1
     path: Assets/Scenes/End Prototype screen.unity
     guid: 27c5de9a09b79a14e8b6e498c3b5f20a
