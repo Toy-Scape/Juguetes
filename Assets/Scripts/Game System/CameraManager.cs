@@ -8,6 +8,7 @@ public class CameraManager : MonoBehaviour
     [SerializeField] private CinemachineCamera crouchingCamera;
     [SerializeField] private CinemachineCamera generalCamera;
     [SerializeField] private CinemachineCamera dialogueCamera;
+    [SerializeField] private CinemachineCamera introTutorial;
     [SerializeField] private Vector3 dialogueOffset = new Vector3(0.6f, 1.6f, -1.2f); // Right Shoulder
 
     private GameObject _dialogueAnchor;
@@ -279,7 +280,7 @@ public class CameraManager : MonoBehaviour
 
 
     public void SetCrouchingState(bool CrouchingState) {
-        // Añañdo el estado de agachado por si ocurre algun dialogo mientras estamos agachados
+        // Aï¿½aï¿½do el estado de agachado por si ocurre algun dialogo mientras estamos agachados
         this.CrouchingState = CrouchingState;
         ActivarCamaraAgachado(CrouchingState);
     }
