@@ -768,6 +768,8 @@ MonoBehaviour:
   dialogueText: {fileID: 8129981300841180376}
   thoughtText: {fileID: 8806407907352164226}
   nameText: {fileID: 1400142672813642107}
+  nextDialoguePrompt: {fileID: 0}
+  inputPromptIconProvider: {fileID: 0}
   textSpeed: 30
   thoughtsCloseDelay: 2
   nextDialogueAction: {fileID: 1222488934710843565, guid: 052faaac586de48259a63d0c4782560b, type: 3}

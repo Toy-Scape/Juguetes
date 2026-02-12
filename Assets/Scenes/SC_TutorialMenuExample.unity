@@ -1123,7 +1123,7 @@ PrefabInstance:
     - target: {fileID: 4150955209068363241, guid: bbf81c367bb664e419e76eed27ae70be, type: 3}
       propertyPath: playerInput
       value: 
-      objectReference: {fileID: 1728560819}
+      objectReference: {fileID: 0}
     - target: {fileID: 6488942036269364735, guid: bbf81c367bb664e419e76eed27ae70be, type: 3}
       propertyPath: m_UiScaleMode
       value: 1
@@ -2075,11 +2075,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 235dc7df742c7214b97d4cd100b29707, type: 3}
---- !u!1 &896140798 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8136914190127092944, guid: bbf81c367bb664e419e76eed27ae70be, type: 3}
-  m_PrefabInstance: {fileID: 568419954}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &897646954
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2791,7 +2786,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db09507ce5c7ae64f9e4a21a13516ef7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InputMapManager
-  playerInput: {fileID: 1728560819}
+  playerInput: {fileID: 0}
 --- !u!1 &1150505108
 GameObject:
   m_ObjectHideFlags: 0
@@ -3873,6 +3868,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UI_System.Menus.GamePauseHandler
   _menuSceneName: SC_Menus
+  _audioMixer: {fileID: 0}
+  _gameplaySnapshot: {fileID: 0}
+  _pausedSnapshot: {fileID: 0}
+  _snapshotTransitionTime: 0.2
 --- !u!1 &1538532911
 GameObject:
   m_ObjectHideFlags: 0
@@ -3984,17 +3983,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1538532911}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &1548940056 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1535618464312994159, guid: bbf81c367bb664e419e76eed27ae70be, type: 3}
-  m_PrefabInstance: {fileID: 568419954}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
 --- !u!1 &1567823663
 GameObject:
   m_ObjectHideFlags: 0
@@ -4154,11 +4142,11 @@ PrefabInstance:
     - target: {fileID: 8163815884479273772, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
       propertyPath: interactionPrompt
       value: 
-      objectReference: {fileID: 896140798}
+      objectReference: {fileID: 0}
     - target: {fileID: 8163815884479273772, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
       propertyPath: interactionPromptText
       value: 
-      objectReference: {fileID: 1548940056}
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4695,17 +4683,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e9fb74deaa107e4b87fb65f5948581d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LimbManager
---- !u!114 &1728560819 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8113327342456687462, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
-  m_PrefabInstance: {fileID: 1580724418}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 615313555}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.InputSystem::UnityEngine.InputSystem.PlayerInput
 --- !u!114 &1728560837
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5224,8 +5201,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Pickable
   gripPoint: {fileID: 463563179}
-  pickConditions:
-  - {fileID: 11400000, guid: b6aca484fd4ac2244b6a4cf6ae02475e, type: 2}
+  conditions: []
+  failureMessage: {fileID: 0}
 --- !u!54 &1946445651
 Rigidbody:
   m_ObjectHideFlags: 0

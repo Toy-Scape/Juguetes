@@ -133,6 +133,7 @@ GameObject:
   - component: {fileID: 347904774}
   - component: {fileID: 347904773}
   - component: {fileID: 347904778}
+  - component: {fileID: 347904779}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -152,6 +153,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7242f4f8ec0cb994ba9176ad03552fb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ClimbableWall
+  conditions: []
 --- !u!65 &347904774
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -256,17 +258,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8053da89ceb9d3c42a4c57d885a47a91, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LedgeGrabSurface
---- !u!114 &376145209 stripped
+--- !u!114 &347904779
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8113327342456687462, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
-  m_PrefabInstance: {fileID: 2125908235}
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 347904772}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Script: {fileID: 11500000, guid: 5f0ca327cad629843a76a9ddf067fa38, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Unity.InputSystem::UnityEngine.InputSystem.PlayerInput
+  m_EditorClassIdentifier: Assembly-CSharp::LedgeGrabSurface
 --- !u!4 &376145224 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 883425338343852037, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
@@ -631,11 +634,11 @@ PrefabInstance:
     - target: {fileID: 9113027240273351130, guid: 6a958f6d3a41e3949b28a210b6df1695, type: 3}
       propertyPath: playerInput
       value: 
-      objectReference: {fileID: 376145209}
+      objectReference: {fileID: 0}
     - target: {fileID: 9205758698093029184, guid: 6a958f6d3a41e3949b28a210b6df1695, type: 3}
       propertyPath: playerInput
       value: 
-      objectReference: {fileID: 376145209}
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 7515621333372260787, guid: 6a958f6d3a41e3949b28a210b6df1695, type: 3}

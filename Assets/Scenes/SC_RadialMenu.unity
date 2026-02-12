@@ -749,7 +749,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 496c46a34a4eb9a48a88b7dc69d12245, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CameraManager
-  inputController: {fileID: 2059893612}
+  inputControllers: []
+  crouchingCamera: {fileID: 0}
+  generalCamera: {fileID: 0}
+  dialogueCamera: {fileID: 0}
+  dialogueOffset: {x: 0.6, y: 1.6, z: -1.2}
 --- !u!1 &1822980947
 GameObject:
   m_ObjectHideFlags: 0

@@ -913,7 +913,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PickableObject
   gripPoint: {fileID: 488117591}
-  pickConditions: []
+  conditions: []
+  failureMessage: {fileID: 0}
 --- !u!54 &420676472
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1063,7 +1064,7 @@ PrefabInstance:
     - target: {fileID: 4150955209068363241, guid: bbf81c367bb664e419e76eed27ae70be, type: 3}
       propertyPath: playerInput
       value: 
-      objectReference: {fileID: 705442935}
+      objectReference: {fileID: 0}
     - target: {fileID: 4150955209068363241, guid: bbf81c367bb664e419e76eed27ae70be, type: 3}
       propertyPath: onOpen.m_PersistentCalls.m_Calls.Array.size
       value: 1
@@ -1136,17 +1137,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e9fb74deaa107e4b87fb65f5948581d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LimbManager
---- !u!114 &705442935 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8113327342456687462, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
-  m_PrefabInstance: {fileID: 812513235}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.InputSystem::UnityEngine.InputSystem.PlayerInput
 --- !u!4 &705442941 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 883425338343852037, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
@@ -1389,8 +1379,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GrabbableObject
   moveResistance: 2
-  grabConditions: []
-  failThought: {fileID: 0}
+  conditions: []
+  failureMessage: {fileID: 0}
+  collisionLayer:
+    serializedVersion: 2
+    m_Bits: 4294967295
 --- !u!54 &706793085
 Rigidbody:
   m_ObjectHideFlags: 0

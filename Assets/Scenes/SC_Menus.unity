@@ -6965,7 +6965,16 @@ MonoBehaviour:
   _mainMenuFirstSelected: {fileID: 1800211374}
   _pauseMenuFirstSelected: {fileID: 308267638}
   _optionsFirstSelected: {fileID: 1110971803}
-  _gameSceneName: TestEnvironment
+  pauseMenuBlur: {fileID: 0}
+  LightSources: []
+  _uiCanvasGroup: {fileID: 0}
+  _fadeOutDuration: 1
+  _delayBeforeLoad: 2
+  _crossFadeDuration: 1
+  _cameraTarget: {fileID: 0}
+  _cameraMoveDuration: 2
+  _targetOrthographicSize: 5
+  _menuCamera: {fileID: 0}
 --- !u!4 &2111212320
 Transform:
   m_ObjectHideFlags: 0

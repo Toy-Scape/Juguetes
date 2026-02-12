@@ -1,6 +1,6 @@
-using UnityEngine;
 using System.Collections.Generic;
 using DG.Tweening;
+using UnityEngine;
 
 namespace CinematicSystem.TableSequence
 {
@@ -35,11 +35,22 @@ namespace CinematicSystem.TableSequence
         public float IdleAmount = 0.5f;
     }
 
+    [System.Serializable]
+    public struct CinematicSubtitle
+    {
+        [TextArea] public string Text;
+        public float Duration;
+        public float PreDelay;
+    }
+
     public class TableCameraSequence : MonoBehaviour
     {
         [SerializeField] private Camera _camera;
         [SerializeField] private List<TableTarget> _targets;
-        
+
+        [Header("Subtitle Sequence")]
+        [SerializeField] private List<CinematicSubtitle> _subtitles;
+
         [Header("Global Settings")]
         [SerializeField] private float _closeDistance = 1f;
         [SerializeField] private float _farDistance = 2.5f;
@@ -60,6 +71,11 @@ namespace CinematicSystem.TableSequence
         [SerializeField] private bool _loop = false;
         [SerializeField] private bool _startOnEnable = true;
         [SerializeField] private bool _stopAtLastObject = false; // New Option
+
+        [Header("Scene Transition")]
+        [SerializeField] private string _nextSceneName;
+        [SerializeField] private float _transitionDuration = 1f;
+        [SerializeField] private float _delayBeforeTransition = 0f;
 
         private Sequence _sequence;
 
@@ -84,6 +100,11 @@ namespace CinematicSystem.TableSequence
             // Setup initial position
             if (_targets.Count > 0 && _targets[0].TargetObject != null)
             {
+                // Start independent subtitle sequence
+                if (_subtitles != null && _subtitles.Count > 0)
+                {
+                    StartCoroutine(PlaySubtitleRoutine());
+                }
                 // Start at Close Position of first object (as requested)
                 Vector3 startPos = GetClosePos(_targets[0].TargetObject);
                 Vector3 startLookAt = GetLookAtPos(_targets[0].TargetObject);
@@ -136,7 +157,7 @@ namespace CinematicSystem.TableSequence
                     if (iType == IdleMoveType.Horizontal) idleOffset = right * iAmount;
                     else if (iType == IdleMoveType.Vertical) idleOffset = up * iAmount;
                 }
-                
+
                 Vector3 approachEndPos = closePos - (idleOffset * 0.5f);
                 Vector3 stayEndPos = closePos + (idleOffset * 0.5f);
 
@@ -194,24 +215,77 @@ namespace CinematicSystem.TableSequence
                     {
                         Vector3 nextFarPos = GetFarPos(nextObj);
                         Vector3 nextLookAt = GetLookAtPos(nextObj);
-                        
+
                         // The rotation at Far Position is constant because _approachDirection is global.
                         // We simply rotate to the 'Ideal Far Rotation' for the NEXT object (which is the same as current), 
                         // ensuring we don't 'look at' the object while moving (no panning), just strafing.
                         Quaternion nextFarRot = Quaternion.LookRotation(nextLookAt - nextFarPos);
-    
+
                         _sequence.Append(_camera.transform.DOMove(nextFarPos, dTrans).SetEase(eTrans));
                         // Rotate to the target's ideal rotation (which should be effectively keeping it straight if aligned)
                         _sequence.Join(_camera.transform.DORotate(nextFarRot.eulerAngles, dTrans).SetEase(eTrans));
                     }
                 }
-            }
 
-            if (_loop)
-                _sequence.SetLoops(-1);
+                if (_loop)
+                    _sequence.SetLoops(-1);
+                else if (!string.IsNullOrEmpty(_nextSceneName))
+                {
+                    // Transition to Next Scene on complete
+                    _sequence.OnComplete(() =>
+                    {
+                        // Delay before transition if requested (using a coroutine or tween delay)
+                        DOVirtual.DelayedCall(_delayBeforeTransition, () =>
+                        {
+                            var transitionManager = CinematicSystem.Transitions.SceneTransitionManager.Instance;
+                            if (transitionManager == null)
+                            {
+                                // Create Manager if missing (generic fallback)
+                                GameObject go = new GameObject("SceneTransitionManager");
+                                transitionManager = go.AddComponent<CinematicSystem.Transitions.SceneTransitionManager>();
+                            }
+
+                            transitionManager.CrossfadeToScene(_nextSceneName, _transitionDuration);
+                        });
+                    });
+                }
+            }
         }
 
-        private Vector3 GetClosePos(Transform target, Vector3 idleOffset = default) 
+        private System.Collections.IEnumerator PlaySubtitleRoutine()
+        {
+            // Wait for instance if null (race condition)
+            while (UI_System.Subtitles.SimpleSubtitleUI.Instance == null)
+            {
+                yield return null;
+            }
+
+            var subtitleUI = UI_System.Subtitles.SimpleSubtitleUI.Instance;
+
+
+            Debug.Log($"[TableCameraSequence] Starting Subtitles. Count: {_subtitles.Count}");
+
+            foreach (var sub in _subtitles)
+            {
+                if (sub.PreDelay > 0)
+                {
+                    Debug.Log($"[TableCameraSequence] Waiting PreDelay: {sub.PreDelay}");
+                    yield return new WaitForSeconds(sub.PreDelay);
+                }
+
+                if (!string.IsNullOrEmpty(sub.Text))
+                {
+                    Debug.Log($"[TableCameraSequence] Showing Subtitle: {sub.Text} for {sub.Duration}s");
+                    subtitleUI.ShowSubtitle(sub.Text, sub.Duration);
+
+                    // Wait for the duration of the subtitle before processing the next one?
+                    // Usually subtitles flow: Delay -> Show(duration) -> (Wait duration) -> Next Delay...
+                    yield return new WaitForSeconds(sub.Duration);
+                }
+            }
+        }
+
+        private Vector3 GetClosePos(Transform target, Vector3 idleOffset = default)
         {
             if (target == null) return Vector3.zero;
             Vector3 basePos = target.position + (_approachDirection.normalized * _closeDistance) + (Vector3.up * _heightOffset);
@@ -248,7 +322,7 @@ namespace CinematicSystem.TableSequence
                 Gizmos.DrawSphere(closePos, 0.1f); // Close Camera Pos
                 Gizmos.color = Color.blue;
                 Gizmos.DrawSphere(farPos, 0.1f);   // Far Camera Pos
-                
+
                 // Draw Look Direction
                 Gizmos.color = Color.red;
                 Gizmos.DrawLine(closePos, lookAt);

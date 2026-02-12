@@ -76109,7 +76109,7 @@ PrefabInstance:
     - target: {fileID: 3543792114148510448, guid: 6cdab5b0b0234a5478f65b4a6b2a5bf5, type: 3}
       propertyPath: playerInput
       value: 
-      objectReference: {fileID: 912803332}
+      objectReference: {fileID: 0}
     - target: {fileID: 3547771546001523345, guid: 6cdab5b0b0234a5478f65b4a6b2a5bf5, type: 3}
       propertyPath: Target.TrackingTarget
       value: 
@@ -76307,17 +76307,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e9fb74deaa107e4b87fb65f5948581d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LimbManager
---- !u!114 &912803332 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8113327342456687462, guid: fba0b947bb02c684cadda1b37111914f, type: 3}
-  m_PrefabInstance: {fileID: 809300732}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 912803327}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.InputSystem::UnityEngine.InputSystem.PlayerInput
 --- !u!1 &1078288786
 GameObject:
   m_ObjectHideFlags: 0
@@ -76793,7 +76782,7 @@ PrefabInstance:
     - target: {fileID: 4150955209068363241, guid: bbf81c367bb664e419e76eed27ae70be, type: 3}
       propertyPath: playerInput
       value: 
-      objectReference: {fileID: 912803332}
+      objectReference: {fileID: 0}
     - target: {fileID: 4449160380051932739, guid: bbf81c367bb664e419e76eed27ae70be, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0

@@ -1,10 +1,10 @@
+using System.Collections;
 using CheckpointSystem;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
-using System.Collections;
 using UnityEngine.UI;
-using DG.Tweening;
 
 namespace UI_System.Menus
 {
@@ -131,7 +131,7 @@ namespace UI_System.Menus
                 Debug.Log("[Transition] Moving Camera & Changing Projection.");
                 _menuCamera.transform.DOMove(_cameraTarget.position, _cameraMoveDuration).SetEase(Ease.InOutQuad).SetUpdate(true).SetLink(gameObject);
                 _menuCamera.transform.DORotate(_cameraTarget.rotation.eulerAngles, _cameraMoveDuration).SetEase(Ease.InOutQuad).SetUpdate(true).SetLink(gameObject);
-                
+
                 // Projection Transition (Perspective -> Orthographic)
                 Matrix4x4 perspectiveMatrix = _menuCamera.projectionMatrix;
                 float aspect = _menuCamera.aspect;
@@ -166,86 +166,17 @@ namespace UI_System.Menus
             Debug.Log($"[Transition] Step 2: Waiting {waitTime} seconds.");
             yield return new WaitForSecondsRealtime(waitTime);
 
-            // Store current scene reference
-            Scene currentScene = gameObject.scene;
-
-            // --- TRUE CROSSFADE ---
-            // 1. Load the new scene additively (it coexists with the old one)
-            Debug.Log($"[Transition] Step 3: Loading scene '{sceneName}' additively.");
-            AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
-            yield return asyncLoad;
-
-            Scene newScene = SceneManager.GetSceneByName(sceneName);
-
-            // 2. Find the new scene's camera and disable it temporarily
-            Camera newSceneCamera = null;
-            foreach (var root in newScene.GetRootGameObjects())
+            // Use the shared SceneTransitionManager
+            // Use the shared SceneTransitionManager
+            var transitionManager = CinematicSystem.Transitions.SceneTransitionManager.Instance;
+            if (transitionManager == null)
             {
-                newSceneCamera = root.GetComponentInChildren<Camera>(true);
-                if (newSceneCamera != null) break;
+                Debug.Log("[MenuManager] SceneTransitionManager missing. Creating one.");
+                GameObject go = new GameObject("SceneTransitionManager");
+                transitionManager = go.AddComponent<CinematicSystem.Transitions.SceneTransitionManager>();
             }
 
-            if (newSceneCamera != null)
-            {
-                // Disable the new camera so it doesn't render to screen yet
-                newSceneCamera.enabled = false;
-
-                // 3. Create a RenderTexture and make the new camera render to it
-                RenderTexture rt = new RenderTexture(Screen.width, Screen.height, 24);
-                newSceneCamera.targetTexture = rt;
-                newSceneCamera.enabled = true;
-
-                // 4. Create overlay showing the RenderTexture (starts invisible)
-                Debug.Log("[Transition] Step 4: Creating crossfade overlay.");
-                GameObject overlayObj = new GameObject("CrossfadeOverlay");
-                DontDestroyOnLoad(overlayObj);
-
-                Canvas canvas = overlayObj.AddComponent<Canvas>();
-                canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-                canvas.sortingOrder = 32767;
-                overlayObj.AddComponent<CanvasScaler>();
-                overlayObj.AddComponent<GraphicRaycaster>();
-
-                GameObject imageObj = new GameObject("NewSceneImage");
-                imageObj.transform.SetParent(overlayObj.transform, false);
-
-                RawImage rawImage = imageObj.AddComponent<RawImage>();
-                rawImage.texture = rt;
-
-                RectTransform imageRt = imageObj.GetComponent<RectTransform>();
-                imageRt.anchorMin = Vector2.zero;
-                imageRt.anchorMax = Vector2.one;
-                imageRt.sizeDelta = Vector2.zero;
-
-                CanvasGroup overlayCG = imageObj.AddComponent<CanvasGroup>();
-                overlayCG.alpha = 0f; // Starts invisible (old scene is fully visible)
-                overlayCG.blocksRaycasts = true;
-
-                // 5. Crossfade: Fade IN the new scene overlay (old scene fades away underneath)
-                Debug.Log("[Transition] Step 5: Crossfading to new scene.");
-                Tween crossfade = overlayCG.DOFade(1f, _crossFadeDuration).SetEase(Ease.InOutQuad).SetUpdate(true);
-                yield return crossfade.WaitForCompletion();
-
-                // 6. Swap: New camera renders to screen, remove overlay
-                Debug.Log("[Transition] Step 6: Swapping cameras.");
-                newSceneCamera.targetTexture = null; // Render to screen now
-                SceneManager.SetActiveScene(newScene);
-
-                // Cleanup
-                rt.Release();
-                Destroy(rt);
-                Destroy(overlayObj);
-            }
-            else
-            {
-                // Fallback if no camera found in new scene
-                Debug.LogWarning("[Transition] No camera found in new scene, switching directly.");
-                SceneManager.SetActiveScene(newScene);
-            }
-
-            // 7. Unload old scene
-            Debug.Log($"[Transition] Step 7: Unloading old scene '{currentScene.name}'.");
-            SceneManager.UnloadSceneAsync(currentScene);
+            transitionManager.CrossfadeToScene(sceneName, _crossFadeDuration);
         }
 
         public void OnOptionsClicked()
@@ -306,7 +237,7 @@ namespace UI_System.Menus
             StartIn(MenuStartMode.PauseMenu);
         }
 
-       
+
         private void DeactivateLightSources()
         {
             foreach (var light in LightSources)
