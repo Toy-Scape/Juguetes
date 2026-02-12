@@ -1,4 +1,5 @@
 using DG.Tweening;
+using Unity.Cinemachine;
 using UnityEngine;
 
 namespace CinematicSystem.Transitions
@@ -12,6 +13,7 @@ namespace CinematicSystem.Transitions
         [Header("Animation Settings")]
         [SerializeField] private Animator _targetAnimator;
         [SerializeField] private string _triggerName = "init";
+        [SerializeField] private CinemachineCamera introCamera;
 
         [Header("Optional Delay")]
         [SerializeField] private float _delay = 0f;
@@ -26,6 +28,7 @@ namespace CinematicSystem.Transitions
                     {
                         if (_targetAnimator != null)
                             _targetAnimator.SetTrigger(_triggerName);
+                        introCamera.Priority = 0;
                     });
                 }
                 else
