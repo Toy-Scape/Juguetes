@@ -2822,7 +2822,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3627481445454822692, guid: 5175b7a67ceacff4bb7552d4a5727ae0, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -4.28
+      value: -4.39
       objectReference: {fileID: 0}
     - target: {fileID: 3627481445454822692, guid: 5175b7a67ceacff4bb7552d4a5727ae0, type: 3}
       propertyPath: m_LocalPosition.y
@@ -2830,7 +2830,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3627481445454822692, guid: 5175b7a67ceacff4bb7552d4a5727ae0, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 4.818
+      value: 4.819
       objectReference: {fileID: 0}
     - target: {fileID: 3627481445454822692, guid: 5175b7a67ceacff4bb7552d4a5727ae0, type: 3}
       propertyPath: m_LocalRotation.w
@@ -79850,6 +79850,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2582344697653728713, guid: b9ab63dbe677e1142b49aa57e68984a0, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4671733101845002166, guid: b9ab63dbe677e1142b49aa57e68984a0, type: 3}
       propertyPath: m_Name
       value: Tutorial Box - Movement Variant
@@ -79857,6 +79861,22 @@ PrefabInstance:
     - target: {fileID: 4671733101845002166, guid: b9ab63dbe677e1142b49aa57e68984a0, type: 3}
       propertyPath: m_Layer
       value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 9112357154789303872, guid: b9ab63dbe677e1142b49aa57e68984a0, type: 3}
+      propertyPath: m_Center.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9112357154789303872, guid: b9ab63dbe677e1142b49aa57e68984a0, type: 3}
+      propertyPath: m_Extents.x
+      value: 1.105
+      objectReference: {fileID: 0}
+    - target: {fileID: 9112357154789303872, guid: b9ab63dbe677e1142b49aa57e68984a0, type: 3}
+      propertyPath: m_Extents.y
+      value: 0.985
+      objectReference: {fileID: 0}
+    - target: {fileID: 9112357154789303872, guid: b9ab63dbe677e1142b49aa57e68984a0, type: 3}
+      propertyPath: m_Extents.z
+      value: 1.03
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -81562,7 +81582,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3555071908243776792, guid: 6a958f6d3a41e3949b28a210b6df1695, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -45.505447
+      value: 8.6005535
       objectReference: {fileID: 0}
     - target: {fileID: 3555071908243776792, guid: 6a958f6d3a41e3949b28a210b6df1695, type: 3}
       propertyPath: m_LocalPosition.y
@@ -81570,7 +81590,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3555071908243776792, guid: 6a958f6d3a41e3949b28a210b6df1695, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -68.13885
+      value: -79.31885
       objectReference: {fileID: 0}
     - target: {fileID: 3555071908243776792, guid: 6a958f6d3a41e3949b28a210b6df1695, type: 3}
       propertyPath: m_LocalRotation.w
