@@ -44,6 +44,7 @@ namespace UI_System.Menus
 
         [SerializeField] private Camera _menuCamera;
         [SerializeField] private string _sceneToPreload;
+        [SerializeField] private GameObject menuBackground;
 
         private void Awake()
         {
@@ -52,9 +53,20 @@ namespace UI_System.Menus
 
         private void Start()
         {
+            // Only preload if we are in the actual Menu scene (Main Menu mode).
+            // If we are loaded additively (Pause/Options), the active scene will be the Game Scene.
+            if (SceneManager.GetActiveScene().name == gameObject.scene.name)
+            {
+                PreloadScene();
+            }
+        }
+
+        private void PreloadScene()
+        {
             if (!string.IsNullOrEmpty(_sceneToPreload))
             {
                 var transitionManager = CinematicSystem.Transitions.SceneTransitionManager.Instance;
+                // If we are in the Main Menu, we likely need to create the manager.
                 if (transitionManager == null)
                 {
                     GameObject go = new GameObject("SceneTransitionManager");
@@ -74,6 +86,7 @@ namespace UI_System.Menus
 
         public void ShowMainMenu()
         {
+            menuBackground.SetActive(true);
             if (_menuCamera != null)
                 _menuCamera.gameObject.SetActive(true);
 
@@ -88,6 +101,7 @@ namespace UI_System.Menus
             _mainMenuPanel.SetActive(false);
             _pauseMenuPanel.SetActive(true);
             _optionsPanel.SetActive(false);
+            menuBackground.SetActive(false);
             SetFirstSelected(_pauseMenuFirstSelected);
         }
 
