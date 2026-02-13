@@ -41,6 +41,10 @@ namespace UI_System.Menus
 
         public void ShowMainMenu()
         {
+            var music = FindFirstObjectByType<MenuMusicFader>();
+            if (music != null)
+                music.FadeIn();
+
             if (_menuCamera != null)
                 _menuCamera.gameObject.SetActive(true);
 
@@ -92,6 +96,10 @@ namespace UI_System.Menus
 
         public void OnPlayClicked(string scene)
         {
+            var music = FindFirstObjectByType<MenuMusicFader>();
+            if (music != null)
+                music.FadeOutAndStop();
+
             SceneManager.LoadScene(scene, LoadSceneMode.Single);
         }
 
@@ -142,6 +150,11 @@ namespace UI_System.Menus
         {
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
+
+            var music = FindFirstObjectByType<MenuMusicFader>();
+            if (music != null)
+                music.FadeIn();
+
 
             if (InputMapManager.Instance != null)
                 InputMapManager.Instance.HandleOpenUI();

@@ -120,14 +120,19 @@ namespace UI_System.Menus
         }
 
         private void OnSceneUnloaded(Scene scene)
-        {
-            if (scene.name != _menuSceneName) return;
+    {
+        if (scene.name != _menuSceneName) return;
 
-            Time.timeScale = 1f;
-            _gameplaySnapshot?.TransitionTo(_snapshotTransitionTime);
-            InputMapManager.Instance?.HandleCloseUI();
-            StartCoroutine(DelayUnpause());
-        }
+        var menuMusic = FindFirstObjectByType<MenuMusicFader>();
+        if (menuMusic != null)
+            menuMusic.FadeOutAndStop();
+
+        Time.timeScale = 1f;
+        _gameplaySnapshot?.TransitionTo(_snapshotTransitionTime);
+        InputMapManager.Instance?.HandleCloseUI();
+        StartCoroutine(DelayUnpause());
+    }
+
 
         private IEnumerator DelayUnpause()
         {

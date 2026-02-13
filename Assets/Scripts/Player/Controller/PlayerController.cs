@@ -26,6 +26,8 @@ public class PlayerController : MonoBehaviour
     public Animator Animator => playerAnimator;
     public Transform CameraTransform => cameraTransform;
     public PlayerConfig Config => config;
+    public PlayerMovementAudioSystem AudioSystem { get; private set; }
+
 
     private PlayerBaseState _currentState;
     private PlayerStateFactory _states;
@@ -46,6 +48,8 @@ public class PlayerController : MonoBehaviour
     void Awake()
     {
         CharacterController = GetComponent<CharacterController>();
+        AudioSystem = GetComponent<PlayerMovementAudioSystem>();
+
         _states = new PlayerStateFactory(this);
 
         // Try to get PlayerInput component
