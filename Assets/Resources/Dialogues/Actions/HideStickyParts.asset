@@ -9,10 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4095d182f787bab4296b2cbc98feae64, type: 3}
-  m_Name: CharacterDatabase
-  m_EditorClassIdentifier: Assembly-CSharp::CharacterDatabase
-  CharacterIds:
-  - PLAYER
-  - MMA_FIGHTER
-  - STICKY_TOY
+  m_Script: {fileID: 11500000, guid: 041225a50b5b71b4e9f9e45c3c7cab85, type: 3}
+  m_Name: HideStickyParts
+  m_EditorClassIdentifier: Assembly-CSharp::HideModelPartsAction
+  partsToHide: []
