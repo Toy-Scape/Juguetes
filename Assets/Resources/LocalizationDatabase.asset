@@ -285,10 +285,6 @@ MonoBehaviour:
       all\xED arriba."
     basque: Eskerrik asko laguntzeagatik. Ez dakit zenbat gehiago iraungo nuke hor
       goian.
-  - key: level1-robotin-dialogue-1
-    english: You're welcome. You must have had a tough time.
-    spanish: No es nada. No me quiero ni imaginar lo mal que lo has tenido que pasar.
-    basque: Ez da ezer. Segurazki oso gaizki pasa behar izan duzu.
   - key: level1-sticky-dialogue-2
     english: Now that I remeber, those arms whom which you moved the fan, aren't
       them of Juan?
@@ -296,16 +292,6 @@ MonoBehaviour:
       \xBFno son de Juan?"
     basque: Orain gogoratzen naizela, haizagailua mugitzeko erabili dituzun beso
       hoiek, ez dira Juanenak?
-  - key: level1-robotin-dialogue-2
-    english: Yes, they are his.
-    spanish: 'Si, son los suyos. '
-    basque: Bai, bereak dira.
-  - key: level1-robotin-dialogue-3
-    english: I found him on the basement in a pretty rough shape and he gave them
-      to me as help to escape from here.
-    spanish: "Me lo encontr\xE9 en el s\xF3tano en muy mal estado y los di\xF3 para
-      ayudarme a escapar de aqu\xED."
-    basque: Sotoan aurkitu nuen nahiko apurtuta eta eman zizkidan hemendik ihes egiteko.
   - key: level1-sticky-dialogue-3
     english: To escape? Then let me return the favor and take my arms. It will allow
       you to reach places you couldn't before.
@@ -313,3 +299,28 @@ MonoBehaviour:
       ten mis brazos. Te ayudar\xE1n a alcanzar sitios que antes no llegabas."
     basque: Ihes egiteko? Orduan faborea bueltatuko dizut nire besoak ematen. Lehen
       iristen ez zenitun lekutara igotzen lagunduko dizute.
+  - key: level1-sticky-dialogue-4
+    english: Don't worry, I'll be fine. If I'm lucky enough, I'll end up in the basement
+      along Juan. But you have to keep going.
+    spanish: "No te preocupes por m\xED, estar\xE9 bien. Si tengo la suficiente suerte
+      acabar\xE9 junto a Juan en el s\xF3tano. Pero tu ahora tienes que marcharte."
+    basque: Ez kezkatu, ondo egongo naiz. Zortea izaten badut, Juanekin sotoan amaituko
+      dut. Baina zu jarraitu egin behar duzu.
+  - key: level1-robotin-dialogue-1
+    english: You're welcome. You must have had a tough time.
+    spanish: No es nada. No me quiero ni imaginar lo mal que lo has tenido que pasar.
+    basque: Ez da ezer. Segurazki oso gaizki pasa behar izan duzu.
+  - key: level1-robotin-dialogue-2
+    english: Yes, they are his.
+    spanish: 'Si, son los suyos. '
+    basque: Bai, bereak dira.
+  - key: level1-robotin-dialogue-3
+    english: I found him on the basement in a pretty rough shape and he gave them
+      to me as help to escape from here.
+    spanish: "Me lo encontr\xE9 en el s\xF3tano en un muy mal estado y me los di\xF3
+      para ayudarme a escapar de aqu\xED."
+    basque: Sotoan aurkitu nuen nahiko apurtuta eta eman zizkidan hemendik ihes egiteko.
+  - key: level1-robotin-dialogue-4
+    english: Are you sure? And what about you?
+    spanish: "\xBFEst\xE1s seguro? \xBFQue ser\xE1 de ti?"
+    basque: Ziur zaude? Zer gertatuko da zurekin?
