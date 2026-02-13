@@ -11,8 +11,22 @@ namespace Assets.Scripts.PlayerController
         public override void EnterState()
         {
             _ctx.Animator.SetTrigger("Climb");
+
+            if (_ctx.AudioSystem != null)
+            {
+                Debug.Log("PLAYING CLIMB SOUND");
+                _ctx.AudioSystem.PlayClimbMovement();
+            }
+            else
+            {
+                Debug.LogError("AudioSystem NULL");
+            }
+
             _ctx.CharacterController.enabled = false;
             _ctx.Animator.applyRootMotion = false;
+
+            _ctx.Context.IsGrabbingLedge = false;
+            _ctx.Context.IsWallClimbing = true;
         }
 
         public override void UpdateState()
@@ -71,6 +85,7 @@ namespace Assets.Scripts.PlayerController
             yield return new WaitForSeconds(_ctx.Config.LedgeClimbFinishDelay);
 
             _ctx.FreezeNearbyGrabbables(0.4f);
+            _ctx.Context.IsWallClimbing = false;
             SwitchState(_factory.Grounded());
         }
 
