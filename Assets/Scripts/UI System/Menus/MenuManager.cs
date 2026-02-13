@@ -43,10 +43,25 @@ namespace UI_System.Menus
         [SerializeField] private float _targetOrthographicSize = 5f;
 
         [SerializeField] private Camera _menuCamera;
+        [SerializeField] private string _sceneToPreload;
 
         private void Awake()
         {
             ShowMainMenu();
+        }
+
+        private void Start()
+        {
+            if (!string.IsNullOrEmpty(_sceneToPreload))
+            {
+                var transitionManager = CinematicSystem.Transitions.SceneTransitionManager.Instance;
+                if (transitionManager == null)
+                {
+                    GameObject go = new GameObject("SceneTransitionManager");
+                    transitionManager = go.AddComponent<CinematicSystem.Transitions.SceneTransitionManager>();
+                }
+                transitionManager.PreloadScene(_sceneToPreload);
+            }
         }
 
         public void StartIn(MenuStartMode mode)
@@ -108,9 +123,16 @@ namespace UI_System.Menus
         }
 
 
-        public void OnPlayClicked(string scene)
+        public void OnPlayClicked()
         {
-            StartCoroutine(TransitionRoutine(scene));
+            if (string.IsNullOrEmpty(_sceneToPreload))
+            {
+                Debug.LogError("[MenuManager] Scene to preload is empty! Please assign it in the Inspector.");
+                return;
+            }
+
+            StartCoroutine(TransitionRoutine(_sceneToPreload));
+
             // Ensure time scale is running for tweens and load
             Time.timeScale = 1f;
         }

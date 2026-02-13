@@ -33,5 +33,6 @@ public class TutorialIntroBehaviour : StateMachineBehaviour
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         InputMapManager.Instance.HandleCinematicEnd();
+        CameraManager.Instance.LowPriorityIntroTutorial();
     }
 }

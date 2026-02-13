@@ -28,6 +28,39 @@ namespace CinematicSystem.Transitions
             }
         }
 
+        private AsyncOperation _preloadOperation;
+        private string _preloadedSceneName;
+        private bool _isOperationInProgress;
+
+        public void PreloadScene(string sceneName)
+        {
+            StartCoroutine(PreloadRoutine(sceneName));
+        }
+
+        private IEnumerator PreloadRoutine(string sceneName)
+        {
+            // Wait until any previous operation (like Unload) is finished
+            while (_isOperationInProgress)
+            {
+                yield return null;
+            }
+
+            if (_preloadOperation != null && _preloadedSceneName == sceneName)
+            {
+                Debug.Log($"[SceneTransitionManager] Scene '{sceneName}' already preloading.");
+                yield break;
+            }
+
+            // Set flag to prevent double loads? Or is preload safe? 
+            // Loading is safe, Unloading is critical. We can let loading run.
+            // But if we Unload while Loading, bad things happen.
+
+            Debug.Log($"[SceneTransitionManager] Preloading scene '{sceneName}' additively (Background).");
+            _preloadOperation = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
+            _preloadOperation.allowSceneActivation = false;
+            _preloadedSceneName = sceneName;
+        }
+
         public void CrossfadeToScene(string sceneName, float duration)
         {
             StartCoroutine(CrossfadeRoutine(sceneName, duration));
@@ -35,12 +68,36 @@ namespace CinematicSystem.Transitions
 
         private IEnumerator CrossfadeRoutine(string sceneName, float duration)
         {
+            // Mark operation as started
+            _isOperationInProgress = true;
+
             // Store current scene reference (we might be in Menu or Table scene)
             Scene currentScene = SceneManager.GetActiveScene();
 
-            Debug.Log($"[SceneTransitionManager] Loading scene '{sceneName}' additively.");
-            AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
-            yield return asyncLoad;
+            AsyncOperation asyncLoad = null;
+
+            // Check if we have a valid preload
+            if (_preloadOperation != null && _preloadedSceneName == sceneName)
+            {
+                Debug.Log($"[SceneTransitionManager] Using preloaded scene '{sceneName}'. Activating...");
+                asyncLoad = _preloadOperation;
+                asyncLoad.allowSceneActivation = true;
+
+                // Clear payload
+                _preloadOperation = null;
+                _preloadedSceneName = null;
+            }
+            else
+            {
+                Debug.Log($"[SceneTransitionManager] Loading scene '{sceneName}' additively (No preload).");
+                asyncLoad = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
+            }
+
+            // Wait until fully loaded
+            while (!asyncLoad.isDone)
+            {
+                yield return null;
+            }
 
             Scene newScene = SceneManager.GetSceneByName(sceneName);
 
@@ -123,7 +180,18 @@ namespace CinematicSystem.Transitions
 
             // Unload old scene
             Debug.Log($"[SceneTransitionManager] Unloading old scene '{currentScene.name}'.");
-            SceneManager.UnloadSceneAsync(currentScene);
+            var unloadOp = SceneManager.UnloadSceneAsync(currentScene);
+            if (unloadOp != null)
+            {
+                while (!unloadOp.isDone) yield return null;
+                Debug.Log($"[SceneTransitionManager] Unload of '{currentScene.name}' complete.");
+
+                // Optional: Clean up unused assets to fully free memory
+                yield return Resources.UnloadUnusedAssets();
+            }
+
+            // Operation finished
+            _isOperationInProgress = false;
         }
     }
 }

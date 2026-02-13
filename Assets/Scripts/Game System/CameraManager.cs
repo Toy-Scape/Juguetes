@@ -284,5 +284,9 @@ public class CameraManager : MonoBehaviour
         this.CrouchingState = CrouchingState;
         ActivarCamaraAgachado(CrouchingState);
     }
+    
+    public void LowPriorityIntroTutorial() {
+        if (introTutorial != null) introTutorial.Priority = -10;
+    }
 
 }

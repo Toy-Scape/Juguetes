@@ -111,6 +111,19 @@ namespace CinematicSystem.TableSequence
 
                 _camera.transform.position = startPos;
                 _camera.transform.LookAt(startLookAt);
+
+                // PRELOAD SCENE (Background Loading)
+                if (!string.IsNullOrEmpty(_nextSceneName))
+                {
+                    var transitionManager = CinematicSystem.Transitions.SceneTransitionManager.Instance;
+                    if (transitionManager == null)
+                    {
+                        GameObject go = new GameObject("SceneTransitionManager");
+                        transitionManager = go.AddComponent<CinematicSystem.Transitions.SceneTransitionManager>();
+                    }
+                    if (transitionManager != null)
+                        transitionManager.PreloadScene(_nextSceneName);
+                }
             }
 
             for (int i = 0; i < _targets.Count; i++)
