@@ -410,6 +410,53 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1156887796722948874, guid: f984636a8914ae543bcf09ca3510c481, type: 3}
   m_PrefabInstance: {fileID: 462866640}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &104414012
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 104414014}
+  - component: {fileID: 104414013}
+  m_Layer: 0
+  m_Name: Audio manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &104414013
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 104414012}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f0cf29f230c0d44c80b7fc24dfb9dad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIFadeOutMixer
+  _mixer: {fileID: 24100000, guid: 7bd7eaa6f125ab044b5eaece627b84a9, type: 2}
+  _volumeParam: UI_Volume
+  _fadeDuration: 1.5
+--- !u!4 &104414014
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 104414012}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -3.75554, y: 4.40362, z: 40.28662}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &110636104
 GameObject:
   m_ObjectHideFlags: 0
@@ -617,6 +664,10 @@ PrefabInstance:
       propertyPath: _uiCanvasGroup
       value: 
       objectReference: {fileID: 1976281452}
+    - target: {fileID: 8265476340101930415, guid: 5b26b4be386ebad4cb1a1886af65849b, type: 3}
+      propertyPath: menuBackground
+      value: 
+      objectReference: {fileID: 534181025}
     - target: {fileID: 8265476340101930415, guid: 5b26b4be386ebad4cb1a1886af65849b, type: 3}
       propertyPath: _nextSceneFrame
       value: 
@@ -2125,6 +2176,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 50e9d694213653a4e8d1111b9281bbaf, type: 3}
+--- !u!1 &534181025 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1988216609701568294, guid: 5b26b4be386ebad4cb1a1886af65849b, type: 3}
+  m_PrefabInstance: {fileID: 132189279}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &559546351
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5782,7 +5838,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8265476340101930415, guid: 5b26b4be386ebad4cb1a1886af65849b, type: 3}
   m_PrefabInstance: {fileID: 132189279}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 534181025}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2ed8e5d18987f904499f15e0e48448df, type: 3}
@@ -7841,6 +7897,150 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Slider
+--- !u!1 &1888392880
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1888392882}
+  - component: {fileID: 1888392881}
+  - component: {fileID: 1888392883}
+  m_Layer: 0
+  m_Name: Music
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1888392881
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1888392880}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0bf1e724e54aec0478f949fca23155df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MenuMusicFader
+  _audioSource: {fileID: 1888392883}
+  _fadeDuration: 6
+--- !u!4 &1888392882
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1888392880}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -3.75554, y: 4.40362, z: 40.28662}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!82 &1888392883
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1888392880}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 8300000, guid: b75a1da5b016b1a46be5e36f1aabc687, type: 3}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 1
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!114 &1898271533 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4065412451666380799, guid: db97fc4d916c75349bfa8f08c1032f48, type: 3}
@@ -9557,3 +9757,5 @@ SceneRoots:
   - {fileID: 16496817}
   - {fileID: 1858077905}
   - {fileID: 1978789123}
+  - {fileID: 1888392882}
+  - {fileID: 104414014}
