@@ -90,7 +90,6 @@ namespace UI_System.Menus
             var music = FindFirstObjectByType<MenuMusicFader>();
             if (music != null)
                 music.FadeIn();
-
             if (_menuCamera != null)
                 _menuCamera.gameObject.SetActive(true);
 
