@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: CollectCubeMission
   m_EditorClassIdentifier: Assembly-CSharp::MissionSystem.Data.MissionDefinition
   id: e8ee4b61-ae87-446d-85eb-c5a838b9b6cc
-  title: Con un par de brazos
-  description: "Encuentra una forma de obtener el destornillador y escapar del s\xF3tano."
+  title: mission-tutorial-title
+  description: mission-tutorial-description
   objectives:
   - {fileID: 11400000, guid: 7ea27a5ca01b5de4da8845e6e19d47e9, type: 2}
   - {fileID: 11400000, guid: acb72b06a7af68c43ac2d61f2ad4e3f8, type: 2}

@@ -1,3 +1,4 @@
+using Localization;
 using MissionSystem.Data;
 using MissionSystem.Runtime;
 using TMPro;
@@ -26,6 +27,8 @@ namespace MissionSystem.UI
 
             foreach (var obj in mission.Objectives)
                 obj.OnProgressUpdated += HandleObjectiveUpdated;
+
+            LocalizationManager.OnLanguageChanged += Refresh;
         }
 
         private void OnDestroy ()

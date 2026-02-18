@@ -15,7 +15,10 @@ public class ObjectiveEntryUI : MonoBehaviour
 
     public void Bind (Objective objective)
     {
-        descriptionText.text = objective.Definition.description;
+        if (Localization.LocalizationManager.Instance != null)
+            descriptionText.text = Localization.LocalizationManager.Instance.GetLocalizedValue(objective.Definition.description);
+        else
+            descriptionText.text = objective.Definition.description;
 
         switch (objective.State)
         {

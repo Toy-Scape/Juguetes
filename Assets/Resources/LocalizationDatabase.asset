@@ -278,3 +278,20 @@ MonoBehaviour:
     english: 
     spanish: ...
     basque: 
+  - key: mission-tutorial-title
+    english: With a pair of arms
+    spanish: Con un par de brazos
+    basque: Beso pare batekin
+  - key: mission-tutorial-description
+    english: Find a way to get the screwdriver and escape the basement.
+    spanish: "Encuentra una forma de obtener el destornillador y escapar del s\xF3tano."
+    basque: "Aurkitu bihurkin\xADa lortzeko eta soto\xADtik ihes egiteko moduren
+      bat."
+  - key: mission-tutorial-objective-1
+    english: Screwdriver obtained.
+    spanish: Destornillador obtenido.
+    basque: Bihurkina eskuratuta.
+  - key: mission-tutorial-objective-2
+    english: Find a way to climb up to the ventilation duct.
+    spanish: "Encuentra una forma de subir hasta el conducto de ventilaci\xF3n."
+    basque: Aurkitu aireztapen-hodira igo ahal izateko moduren bat.
