@@ -6975,6 +6975,8 @@ MonoBehaviour:
   _cameraMoveDuration: 2
   _targetOrthographicSize: 5
   _menuCamera: {fileID: 0}
+  _sceneToPreload: 
+  menuBackground: {fileID: 0}
 --- !u!4 &2111212320
 Transform:
   m_ObjectHideFlags: 0

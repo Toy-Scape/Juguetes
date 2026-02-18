@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Inventory.ItemData
   nameKey: item-name-screwdriver
   descriptionKey: item-description-screwdriver
-  icon: {fileID: 21300000, guid: b032f49c31573eb4b999d5abfaa22c81, type: 3}
+  icon: {fileID: 21300000, guid: 025529e91a09d1842ab87dbe8dc05061, type: 3}
   maxStackSize: 1
   isLimb: 0
   limbSO: {fileID: 0}

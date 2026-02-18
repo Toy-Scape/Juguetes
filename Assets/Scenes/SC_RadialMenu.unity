@@ -753,6 +753,7 @@ MonoBehaviour:
   crouchingCamera: {fileID: 0}
   generalCamera: {fileID: 0}
   dialogueCamera: {fileID: 0}
+  introTutorial: {fileID: 0}
   dialogueOffset: {x: 0.6, y: 1.6, z: -1.2}
 --- !u!1 &1822980947
 GameObject:

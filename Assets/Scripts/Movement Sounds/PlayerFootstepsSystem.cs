@@ -22,7 +22,6 @@ public class PlayerFootstepSystem : MonoBehaviour
 
     private float stepTimer;
     private SurfaceType currentSurface;
-    private bool wasMovingLastFrame;
 
     [Range(0f,2f)] public float asphaltVolume = 1f;
     [Range(0f,2f)] public float woodVolume = 0.3f;
@@ -37,7 +36,6 @@ public class PlayerFootstepSystem : MonoBehaviour
 
         if (!player.CharacterController.isGrounded)
         {
-            wasMovingLastFrame = false;
             StopFootstepSound();
             return;
         }

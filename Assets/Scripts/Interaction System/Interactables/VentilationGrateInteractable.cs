@@ -16,7 +16,7 @@ namespace Interaction_System.Interactables
         {
             if (context.PlayerInventory != null && context.PlayerInventory.Contains(itemData))
             {
-                SceneManager.LoadScene(2);
+                SceneManager.LoadScene(3);
             }
             else
             {

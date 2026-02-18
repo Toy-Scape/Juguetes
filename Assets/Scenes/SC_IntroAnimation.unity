@@ -4959,9 +4959,7 @@ MonoBehaviour:
   - Text: "Ve\xEDa pasar a la gente, escuchaba voces..."
     Duration: 4.5
     PreDelay: 2
-  - Text: 'y esperaba a que alguien se lo
-
-      llevara.'
+  - Text: y esperaba a que alguien se lo llevara.
     Duration: 2
     PreDelay: 0.5
   - Text: "Un d\xEDa, un ni\xF1o llamado Pablo lo cogi\xF3."
@@ -4976,7 +4974,7 @@ MonoBehaviour:
   - Text: La casa de Pablo era grande... pero no siempre tranquila.
     Duration: 5
     PreDelay: 1
-  - Text: "Las voces de sus\r\npadres se o\xEDan a menudo, incluso cuando nadie quer\xEDa
+  - Text: "Las voces de sus padres se o\xEDan a menudo, incluso cuando nadie quer\xEDa
       escuchar."
     Duration: 5
     PreDelay: 0.5
@@ -5026,7 +5024,7 @@ MonoBehaviour:
   _loop: 0
   _startOnEnable: 1
   _stopAtLastObject: 1
-  _nextSceneName: TestEnvironment
+  _nextSceneName: TestEnvironment 1
   _transitionDuration: 4
   _delayBeforeTransition: 0
 --- !u!4 &1596881416

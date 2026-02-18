@@ -1396,6 +1396,7 @@ MonoBehaviour:
   crouchingCamera: {fileID: 3117903247911859807}
   generalCamera: {fileID: 1630764675510679922}
   dialogueCamera: {fileID: 6767910048808848282}
+  introTutorial: {fileID: 0}
   dialogueOffset: {x: 1.32, y: 0, z: -1.74}
 --- !u!1 &5479070345797081530
 GameObject:
