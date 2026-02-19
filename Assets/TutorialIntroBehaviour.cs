@@ -13,6 +13,7 @@ public class TutorialIntroBehaviour : StateMachineBehaviour
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         InputMapManager.Instance.HandleCinematicStart();
+        CameraManager.Instance.HighPriorityIntroTutorial();
         timer = 0f;
         triggered = false;
     }

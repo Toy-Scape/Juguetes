@@ -243,7 +243,7 @@ namespace UI_System.Menus
         {
             Time.timeScale = 1f;
 
-            SceneManager.LoadScene("SC_OptionsMenu", LoadSceneMode.Single);
+            SceneManager.LoadScene("_Menu", LoadSceneMode.Single);
         }
 
 
@@ -251,7 +251,7 @@ namespace UI_System.Menus
         {
             Time.timeScale = 1f;
 
-            SceneManager.LoadScene("SC_OptionsMenu", LoadSceneMode.Single);
+            SceneManager.LoadScene("_Menu", LoadSceneMode.Single);
         }
 
         public void OnQuitClicked()

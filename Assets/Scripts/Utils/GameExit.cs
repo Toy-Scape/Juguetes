@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameExit : MonoBehaviour
@@ -29,12 +30,9 @@ public class GameExit : MonoBehaviour
         }
     }
 
-    public void QuitGame()
+    public void MainMenu()
     {
-        #if UNITY_EDITOR
-            UnityEditor.EditorApplication.isPlaying = false;
-        #else
-            Application.Quit();
-        #endif
+
+        SceneManager.LoadScene("_Menu", LoadSceneMode.Single);
     }
 }

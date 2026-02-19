@@ -288,5 +288,8 @@ public class CameraManager : MonoBehaviour
     public void LowPriorityIntroTutorial() {
         if (introTutorial != null) introTutorial.Priority = -10;
     }
+    public void HighPriorityIntroTutorial() {
+        if (introTutorial != null) introTutorial.Priority = 99;
+    }
 
 }
