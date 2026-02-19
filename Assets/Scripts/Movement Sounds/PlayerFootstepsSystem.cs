@@ -22,7 +22,6 @@ public class PlayerFootstepSystem : MonoBehaviour
 
     private float stepTimer;
     private SurfaceType currentSurface;
-    private bool wasMovingLastFrame;
 
     [Range(0f,2f)] public float asphaltVolume = 1f;
     [Range(0f,2f)] public float woodVolume = 0.3f;
@@ -31,9 +30,12 @@ public class PlayerFootstepSystem : MonoBehaviour
 
     void Update()
     {
+        // If climbing or grabbing, let PlayerMovementAudioSystem handle the source
+        if (player.Context.IsWallClimbing || player.Context.IsGrabbingLedge)
+            return;
+
         if (!player.CharacterController.isGrounded)
         {
-            wasMovingLastFrame = false;
             StopFootstepSound();
             return;
         }

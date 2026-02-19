@@ -8,7 +8,7 @@ namespace UI_System.Menus
 {
     public class GamePauseHandler : MonoBehaviour
     {
-        [SerializeField] private string _menuSceneName = "SC_OptionsMenu";
+        [SerializeField] private string _menuSceneName = "_Menu";
         [SerializeField] private AudioMixer _audioMixer;
         [SerializeField] private AudioMixerSnapshot _gameplaySnapshot;
         [SerializeField] private AudioMixerSnapshot _pausedSnapshot;

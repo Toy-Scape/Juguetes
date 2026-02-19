@@ -238,6 +238,13 @@
       },
       "url": "https://packages.unity.com"
     },
+    "de.thirteenpixels.gitmerge": {
+      "version": "https://github.com/FlaShG/GitMerge-for-Unity.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "821edbdc33bd8553040e9e025f20c2b708f853c0"
+    },
     "com.unity.modules.accessibility": {
       "version": "1.0.0",
       "depth": 0,
