@@ -239,17 +239,17 @@ MonoBehaviour:
     spanish: Ilimitado
     basque: Mugagabea
   - key: menu-options-dropdown-options-fps-30
-    english: 30
-    spanish: 30
-    basque: 30
+    english: 100
+    spanish: 100
+    basque: 100
   - key: menu-options-dropdown-options-fps-60
-    english: 60
-    spanish: 60
-    basque: 60
-  - key: menu-options-dropdown-options-fps-120
     english: 120
     spanish: 120
     basque: 120
+  - key: menu-options-dropdown-options-fps-120
+    english: 144
+    spanish: 144
+    basque: 144
   - key: menu-options-label-languages
     english: Languages
     spanish: Idiomas

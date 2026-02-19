@@ -8,7 +8,7 @@ namespace UI_System.Menus
 {
     public class GamePauseHandler : MonoBehaviour
     {
-        [SerializeField] private string _menuSceneName = "SC_OptionsMenu";
+        [SerializeField] private string _menuSceneName = "_Menu";
         [SerializeField] private AudioMixer _audioMixer;
         [SerializeField] private AudioMixerSnapshot _gameplaySnapshot;
         [SerializeField] private AudioMixerSnapshot _pausedSnapshot;
@@ -120,14 +120,19 @@ namespace UI_System.Menus
         }
 
         private void OnSceneUnloaded(Scene scene)
-        {
-            if (scene.name != _menuSceneName) return;
+    {
+        if (scene.name != _menuSceneName) return;
 
-            Time.timeScale = 1f;
-            _gameplaySnapshot?.TransitionTo(_snapshotTransitionTime);
-            InputMapManager.Instance?.HandleCloseUI();
-            StartCoroutine(DelayUnpause());
-        }
+        var menuMusic = FindFirstObjectByType<MenuMusicFader>();
+        if (menuMusic != null)
+            menuMusic.FadeOutAndStop();
+
+        Time.timeScale = 1f;
+        _gameplaySnapshot?.TransitionTo(_snapshotTransitionTime);
+        InputMapManager.Instance?.HandleCloseUI();
+        StartCoroutine(DelayUnpause());
+    }
+
 
         private IEnumerator DelayUnpause()
         {

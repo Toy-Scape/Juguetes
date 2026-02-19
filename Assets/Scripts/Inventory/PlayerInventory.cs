@@ -63,8 +63,10 @@ namespace Inventory
             InitializeInventory();
         }
 
-        private void OnToggleInventory()
+            private void OnToggleInventory()
         {
+            Debug.Log($"[PlayerInventory] OnToggleInventory called. Frame: {Time.frameCount}");
+
             if (GamePauseHandler.IsPaused) return;
 
             if (DialogueBox.Instance != null && DialogueBox.Instance.IsOpen) return;

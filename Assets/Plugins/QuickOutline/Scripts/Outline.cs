@@ -216,6 +216,7 @@ public class Outline : MonoBehaviour
             // Check if mesh is readable
             if (!meshFilter.sharedMesh.isReadable)
             {
+                Debug.LogWarning($"Outline: Mesh '{meshFilter.name}' is not readable. Please enable 'Read/Write Enabled' in the model import settings.", meshFilter);
                 continue;
             }
 
@@ -248,6 +249,7 @@ public class Outline : MonoBehaviour
             // Check if mesh is readable
             if (!skinnedMeshRenderer.sharedMesh.isReadable)
             {
+                Debug.LogWarning($"Outline: SkinnedMesh '{skinnedMeshRenderer.name}' is not readable. Please enable 'Read/Write Enabled' in the model import settings.", skinnedMeshRenderer);
                 continue;
             }
 
