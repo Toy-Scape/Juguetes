@@ -48,4 +48,6 @@ MonoBehaviour:
     Actions:
     - timing: 1
       action: {fileID: 11400000, guid: abab08407526d594fba7eb7a88280427, type: 2}
+    - timing: 1
+      action: {fileID: 11400000, guid: 94587dff5e8c0ab40a4c7fb55cb32e12, type: 2}
   postDialogueInputDelay: 0
