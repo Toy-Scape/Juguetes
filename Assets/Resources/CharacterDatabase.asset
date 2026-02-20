@@ -15,3 +15,4 @@ MonoBehaviour:
   CharacterIds:
   - PLAYER
   - MMA_FIGHTER
+  - STICKY_TOY
