@@ -28,7 +28,7 @@
 //            if (_fpsLimitDropdown != null)
 //            {
 //                _fpsLimitDropdown.ClearOptions();
-//                var fpsOptions = new System.Collections.Generic.List<string> { "30 FPS", "60 FPS", "120 FPS", "Unlimited" };
+//                var fpsOptions = new System.Collections.Generic.List<string> { "100 FPS", "120 FPS", "150 FPS", "Unlimited" };
 //                _fpsLimitDropdown.AddOptions(fpsOptions);
 
 //                int savedFpsIndex = PlayerPrefs.GetInt("FpsLimitIndex", 3); // Default to Unlimited (index 3)

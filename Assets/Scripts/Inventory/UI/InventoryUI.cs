@@ -515,10 +515,20 @@ namespace Inventory.UI
 
         #region Control de Visibilidad
 
+        private int _lastToggleFrame = -1;
+
         public void ToggleInventory()
         {
             if (inventoryPanel == null)
                 return;
+
+            // Prevent doubleinput (e.g. switching action maps triggering input again in same frame)
+            if (Time.frameCount == _lastToggleFrame)
+            {
+                Debug.Log($"[InventoryUI] ToggleInventory ignored (Duplicate call in Frame {Time.frameCount})");
+                return;
+            }
+            _lastToggleFrame = Time.frameCount;
 
             _isInventoryOpen = !_isInventoryOpen;
 
@@ -542,7 +552,31 @@ namespace Inventory.UI
                 : "Inventory";
 
             _isInventoryOpen = true;
+            Debug.Log($"[InventoryUI] OpenInventory. Frame: {Time.frameCount}");
+            
+            // Revert debug name if needed, or just keep original name
+            if (inventoryPanel.name.Contains("[ACTIVE"))
+            {
+                inventoryPanel.name = "Inventory Panel";
+            }
+            
             inventoryPanel.SetActive(true);
+
+            var canvas = GetComponentInParent<Canvas>();
+            if (canvas != null)
+            {
+                // Ensure correct sorting and visibility
+                canvas.sortingOrder = 999;
+                if (!canvas.enabled) canvas.enabled = true;
+                
+                var group = inventoryPanel.GetComponent<CanvasGroup>();
+                if (group != null)
+                {
+                    group.alpha = 1f;
+                    group.blocksRaycasts = true;
+                }
+            }
+
             RefreshUI();
             OnInventoryOpened?.Invoke();
         }
@@ -554,13 +588,14 @@ namespace Inventory.UI
 
             _isInventoryOpen = false;
             inventoryPanel.SetActive(false);
-
+            
             if (_selectedSlot != null)
             {
                 _selectedSlot.SetSelected(false);
                 _selectedSlot = null;
             }
             OnInventoryClosed?.Invoke();
+            Debug.Log($"[InventoryUI] CloseInventory. Frame: {Time.frameCount}");
         }
 
         #endregion
