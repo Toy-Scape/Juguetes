@@ -38,6 +38,9 @@ namespace CinematicSystem.TableSequence
     [System.Serializable]
     public struct CinematicSubtitle
     {
+        [Tooltip("Key from the Localization Database")]
+        public string Key;
+
         [TextArea] public string Text;
         public float Duration;
         public float PreDelay;
@@ -286,10 +289,20 @@ namespace CinematicSystem.TableSequence
                     yield return new WaitForSeconds(sub.PreDelay);
                 }
 
-                if (!string.IsNullOrEmpty(sub.Text))
+                string textToShow = sub.Text;
+                // If a key is provided, try to localize it
+                if (!string.IsNullOrEmpty(sub.Key))
                 {
-                    Debug.Log($"[TableCameraSequence] Showing Subtitle: {sub.Text} for {sub.Duration}s");
-                    subtitleUI.ShowSubtitle(sub.Text, sub.Duration);
+                    if (Localization.LocalizationManager.Instance != null)
+                    {
+                        textToShow = Localization.LocalizationManager.Instance.GetLocalizedValue(sub.Key);
+                    }
+                }
+
+                if (!string.IsNullOrEmpty(textToShow))
+                {
+                    Debug.Log($"[TableCameraSequence] Showing Subtitle: {textToShow} for {sub.Duration}s");
+                    subtitleUI.ShowSubtitle(textToShow, sub.Duration);
 
                     // Wait for the duration of the subtitle before processing the next one?
                     // Usually subtitles flow: Delay -> Show(duration) -> (Wait duration) -> Next Delay...
