@@ -2370,6 +2370,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 2375353825483667942, guid: cf61fa18617b84044a7a5e27d47719dc, type: 3}
       insertIndex: -1
       addedObject: {fileID: 917207068}
+    - targetCorrespondingSourceObject: {fileID: 2375353825483667942, guid: cf61fa18617b84044a7a5e27d47719dc, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 917207069}
   m_SourcePrefab: {fileID: 100100000, guid: cf61fa18617b84044a7a5e27d47719dc, type: 3}
 --- !u!1 &917207067 stripped
 GameObject:
@@ -2405,6 +2408,71 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_RenderingLayers: 1
   m_ShadowRenderingLayers: 1
+--- !u!108 &917207069
+Light:
+  m_ObjectHideFlags: 8
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 917207067}
+  m_Enabled: 1
+  serializedVersion: 11
+  m_Type: 2
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Intensity: 1
+  m_Range: 10
+  m_SpotAngle: 30
+  m_InnerSpotAngle: 21.80208
+  m_CookieSize: 10
+  m_Shadows:
+    m_Type: 0
+    m_Resolution: -1
+    m_CustomResolution: -1
+    m_Strength: 1
+    m_Bias: 0.05
+    m_NormalBias: 0.4
+    m_NearPlane: 0.2
+    m_CullingMatrixOverride:
+      e00: 1
+      e01: 0
+      e02: 0
+      e03: 0
+      e10: 0
+      e11: 1
+      e12: 0
+      e13: 0
+      e20: 0
+      e21: 0
+      e22: 1
+      e23: 0
+      e30: 0
+      e31: 0
+      e32: 0
+      e33: 1
+    m_UseCullingMatrixOverride: 0
+  m_Cookie: {fileID: 0}
+  m_DrawHalo: 0
+  m_Flare: {fileID: 0}
+  m_RenderMode: 0
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_RenderingLayerMask: 1
+  m_Lightmapping: 4
+  m_LightShadowCasterMode: 0
+  m_AreaSize: {x: 1, y: 1}
+  m_BounceIntensity: 1
+  m_ColorTemperature: 6570
+  m_UseColorTemperature: 0
+  m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
+  m_UseBoundingSphereOverride: 0
+  m_UseViewFrustumForShadowCasterCull: 1
+  m_ForceVisible: 0
+  m_ShadowRadius: 0
+  m_ShadowAngle: 0
+  m_LightUnit: 1
+  m_LuxAtDistance: 1
+  m_EnableSpotReflector: 1
 --- !u!4 &918552579 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5799459384240928098, guid: e5e3f50da533d5d47aadb127d27cce39, type: 3}
@@ -4952,62 +5020,82 @@ MonoBehaviour:
     IdleType: 0
     IdleAmount: 0.5
   _subtitles:
-  - Text: "El astronauta pas\xF3 mucho tiempo en una estanter\xEDa de una tienda
+  - Key: intro-subtitle-1
+    Text: "El astronauta pas\xF3 mucho tiempo en una estanter\xEDa de una tienda
       de juguetes."
     Duration: 5
     PreDelay: 1
-  - Text: "Ve\xEDa pasar a la gente, escuchaba voces..."
+  - Key: intro-subtitle-2
+    Text: "Ve\xEDa pasar a la gente, escuchaba voces..."
     Duration: 4.5
     PreDelay: 2
-  - Text: y esperaba a que alguien se lo llevara.
+  - Key: intro-subtitle-3
+    Text: 'y esperaba a que alguien se lo
+
+      llevara.'
     Duration: 2
     PreDelay: 0.5
-  - Text: "Un d\xEDa, un ni\xF1o llamado Pablo lo cogi\xF3."
+  - Key: intro-subtitle-4
+    Text: "Un d\xEDa, un ni\xF1o llamado Pablo lo cogi\xF3."
     Duration: 3
     PreDelay: 0.5
-  - Text: "Lo mir\xF3 un momento, sonri\xF3..."
+  - Key: intro-subtitle-5
+    Text: "Lo mir\xF3 un momento, sonri\xF3..."
     Duration: 3
     PreDelay: 0.8
-  - Text: "y decidi\xF3 que ser\xEDa suyo."
+  - Key: intro-subtitle-6
+    Text: "y decidi\xF3 que ser\xEDa suyo."
     Duration: 2
     PreDelay: 0.5
-  - Text: La casa de Pablo era grande... pero no siempre tranquila.
+  - Key: intro-subtitle-7
+    Text: La casa de Pablo era grande... pero no siempre tranquila.
     Duration: 5
     PreDelay: 1
-  - Text: "Las voces de sus padres se o\xEDan a menudo, incluso cuando nadie quer\xEDa
+  - Key: intro-subtitle-8
+    Text: "Las voces de sus\r\npadres se o\xEDan a menudo, incluso cuando nadie quer\xEDa
       escuchar."
     Duration: 5
     PreDelay: 0.5
-  - Text: "Pablo jugaba con el astronauta como sab\xEDa hacerlo."
+  - Key: intro-subtitle-9
+    Text: "Pablo jugaba con el astronauta como sab\xEDa hacerlo."
     Duration: 3
     PreDelay: 1
-  - Text: A veces con cuidado... otras veces, no tanto.
+  - Key: intro-subtitle-10
+    Text: A veces con cuidado... otras veces, no tanto.
     Duration: 4
     PreDelay: 1
-  - Text: "Un d\xEDa, mientras jugaba en su habitaci\xF3n, llamaron a Pablo para
+  - Key: intro-subtitle-11
+    Text: "Un d\xEDa, mientras jugaba en su habitaci\xF3n, llamaron a Pablo para
       comer."
     Duration: 5
     PreDelay: 1
-  - Text: "Dej\xF3 el juguete caer al suelo... y sali\xF3 de la habitaci\xF3n."
+  - Key: intro-subtitle-12
+    Text: "Dej\xF3 el juguete caer al suelo... y sali\xF3 de la habitaci\xF3n."
     Duration: 5
     PreDelay: 1
-  - Text: "El astronauta no se qued\xF3 solo mucho tiempo."
+  - Key: intro-subtitle-13
+    Text: "El astronauta no se qued\xF3 solo mucho tiempo."
     Duration: 3
     PreDelay: 0.5
-  - Text: "El perro de la familia lo encontr\xF3... y decidi\xF3 llev\xE1rselo."
+  - Key: intro-subtitle-14
+    Text: "El perro de la familia lo encontr\xF3... y decidi\xF3 llev\xE1rselo."
     Duration: 3
     PreDelay: 0.5
-  - Text: "Bajaron las escaleras hasta el s\xF3tano. Un lugar oscuro... lleno de
+  - Key: intro-subtitle-15
+    Text: "Bajaron las escaleras hasta el s\xF3tano. Un lugar oscuro... lleno de
       cajas y cosas olvidadas."
     Duration: 7
     PreDelay: 0.8
-  - Text: "El perro lo dej\xF3 all\xED... entre el polvo y la oscuridad."
+  - Key: intro-subtitle-16
+    Text: "El perro lo dej\xF3 all\xED... entre el polvo y la oscuridad."
     Duration: 4
     PreDelay: 0.7
-  - Text: "Y cuando la casa volvi\xF3 a quedarse en silencio..."
+  - Key: intro-subtitle-17
+    Text: "Y cuando la casa volvi\xF3 a quedarse en silencio..."
     Duration: 3
     PreDelay: 0.7
-  - Text: "el astronauta empez\xF3 a moverse."
+  - Key: intro-subtitle-18
+    Text: "el astronauta empez\xF3 a moverse."
     Duration: 3
     PreDelay: 0.5
   _closeDistance: 0.37
@@ -5024,7 +5112,7 @@ MonoBehaviour:
   _loop: 0
   _startOnEnable: 1
   _stopAtLastObject: 1
-  _nextSceneName: Level_00_Tutorial
+  _nextSceneName: TestEnvironment
   _transitionDuration: 4
   _delayBeforeTransition: 0
 --- !u!4 &1596881416

@@ -239,17 +239,17 @@ MonoBehaviour:
     spanish: Ilimitado
     basque: Mugagabea
   - key: menu-options-dropdown-options-fps-30
-    english: 100
-    spanish: 100
-    basque: 100
+    english: 30
+    spanish: 30
+    basque: 30
   - key: menu-options-dropdown-options-fps-60
+    english: 60
+    spanish: 60
+    basque: 60
+  - key: menu-options-dropdown-options-fps-120
     english: 120
     spanish: 120
     basque: 120
-  - key: menu-options-dropdown-options-fps-120
-    english: 144
-    spanish: 144
-    basque: 144
   - key: menu-options-label-languages
     english: Languages
     spanish: Idiomas
@@ -278,3 +278,88 @@ MonoBehaviour:
     english: 
     spanish: ...
     basque: 
+  - key: intro-subtitle-1
+    english: The astronaut spent a lot of time on a shelf in a toy store.
+    spanish: "El astronauta pas\xF3 mucho tiempo en una estanter\xEDa de una tienda
+      de juguetes."
+    basque: Astronautak denbora asko eman zuen jostailu-denda bateko apal batean.
+  - key: intro-subtitle-2
+    english: He saw people passing by, he heard voices...
+    spanish: "Ve\xEDa pasar a la gente, escuchaba voces..."
+    basque: Jendea pasatzen ikusi zuen, ahotsak entzun zituen...
+  - key: intro-subtitle-3
+    english: and waited for someone to take it away.
+    spanish: 'y esperaba a que alguien se lo
+
+      llevara.'
+    basque: eta norbaitek eramateko zain egon zen.
+  - key: intro-subtitle-4
+    english: One day, a boy named Pablo picked it up.
+    spanish: "Un d\xEDa, un ni\xF1o llamado Pablo lo cogi\xF3."
+    basque: Egun batean, Pablo izeneko mutil batek jaso zuen.
+  - key: intro-subtitle-5
+    english: He looked at it for a moment, smiled...
+    spanish: "Lo mir\xF3 un momento, sonri\xF3..."
+    basque: Une batez begiratu zion, irribarre egin zuen...
+  - key: intro-subtitle-6
+    english: and decided it would be his.
+    spanish: "y decidi\xF3 que ser\xEDa suyo."
+    basque: eta berea izango zela erabaki zuen.
+  - key: intro-subtitle-7
+    english: Pablo's house was big... but not always quiet.
+    spanish: La casa de Pablo era grande... pero no siempre tranquila.
+    basque: Pabloren etxea handia zen... baina ez beti isila.
+  - key: intro-subtitle-8
+    english: 'The voices of their
+
+      parents could often be heard, even when
+      no one wanted to listen.'
+    spanish: "Las voces de sus\npadres se o\xEDan a menudo, incluso cuando nadie
+      quer\xEDa escuchar."
+    basque: Gurasoen ahotsak askotan entzun zitezkeen, inork entzun nahi ez zuenean
+      ere.
+  - key: intro-subtitle-9
+    english: Pablo played with the astronaut as only he knew how.
+    spanish: "Pablo jugaba con el astronauta como sab\xEDa hacerlo."
+    basque: Pablok astronautarekin jolastu zuen berak bakarrik zekien bezala.
+  - key: intro-subtitle-10
+    english: Sometimes carefully... other times, not so much.
+    spanish: A veces con cuidado... otras veces, no tanto.
+    basque: Batzuetan kontu handiz... beste batzuetan, ez hainbeste.
+  - key: intro-subtitle-11
+    english: One day, while he was playing in his room, Pablo was called for lunch.
+    spanish: "Un d\xEDa, mientras jugaba en su habitaci\xF3n, llamaron a Pablo para
+      comer."
+    basque: Egun batean, bere gelan jolasean ari zela, Pablori bazkaltzera deitu
+      zioten.
+  - key: intro-subtitle-12
+    english: He dropped the toy on the floor... and left the room.
+    spanish: "Dej\xF3 el juguete caer al suelo... y sali\xF3 de la habitaci\xF3n."
+    basque: Jostailua lurrera bota zuen... eta gelatik irten zen.
+  - key: intro-subtitle-13
+    english: The astronaut was not alone for long.
+    spanish: "El astronauta no se qued\xF3 solo mucho tiempo."
+    basque: Astronauta ez zen denbora luzez bakarrik egon.
+  - key: intro-subtitle-14
+    english: "The family dog \u200B\u200Bfound him... and decided to take him."
+    spanish: "El perro de la familia lo encontr\xF3... y decidi\xF3 llev\xE1rselo."
+    basque: Familiako txakurrak aurkitu zuen... eta eramatea erabaki zuen.
+  - key: intro-subtitle-15
+    english: They went downstairs to the basement. A dark place... full of boxes
+      and forgotten things.
+    spanish: "Bajaron las escaleras hasta el s\xF3tano. Un lugar oscuro... lleno
+      de cajas y cosas olvidadas."
+    basque: Beheko solairura jaitsi ziren. Leku ilun bat... kutxez eta ahaztutako
+      gauzez betea.
+  - key: intro-subtitle-16
+    english: The dog left him there... amidst the dust and darkness.
+    spanish: "El perro lo dej\xF3 all\xED... entre el polvo y la oscuridad."
+    basque: Txakurrak han utzi zuen... hautsaren eta iluntasunaren artean.
+  - key: intro-subtitle-17
+    english: And when the house fell silent again...
+    spanish: "Y cuando la casa volvi\xF3 a quedarse en silencio..."
+    basque: Eta etxea berriro isildu zenean...
+  - key: intro-subtitle-18
+    english: The astronaut began to move.
+    spanish: "el astronauta empez\xF3 a moverse."
+    basque: Astronauta mugitzen hasi zen.
