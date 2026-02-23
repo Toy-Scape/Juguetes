@@ -409,3 +409,30 @@ MonoBehaviour:
     english: Are you sure? And what about you?
     spanish: "\xBFEst\xE1s seguro? \xBFQue ser\xE1 de ti?"
     basque: Ziur zaude? Zer gertatuko da zurekin?
+  - key: item-name-batteries
+    english: Batteries
+    spanish: Pilas
+    basque: Pilak
+  - key: item-description-batteries
+    english: 'Reliable and long-lasting batteries, designed to deliver consistent
+      power when you need it most. Compact, powerful, and easy to install, they''re
+      perfect for powering remotes, flashlights, and small devices without letting
+      you down when it matters most.
+
+      
+
+      Will they need to be stored
+      anywhere?'
+    spanish: "Unas bater\xEDas fiables y duraderas, dise\xF1adas para ofrecer energ\xEDa
+      constante cuando m\xE1s la necesitas. Compactas, potentes y f\xE1ciles de instalar,
+      perfectas para dar vida a mandos, linternas y peque\xF1os dispositivos sin
+      fallar en el momento clave.\n\n\xBFHabr\xE1 que colocarlas en alg\xFAn sitio?"
+    basque: 'Bateria fidagarriak eta iraunkorrak, gehien behar duzunean potentzia
+      etengabea emateko diseinatuak. Trinkoak, indartsuak eta instalatzeko errazak,
+      urrutiko aginteei, linternei eta gailu txikiei energia emateko aproposak dira,
+      gehien behar duzunean hutsik egin gabe.
+
+      
+
+      Nonbait gorde beharko
+      al dira?'
