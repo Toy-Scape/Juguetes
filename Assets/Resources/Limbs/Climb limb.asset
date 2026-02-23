@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Inventory.ItemData
   nameKey: suction-item-name
   descriptionKey: suction-item-description
-  icon: {fileID: 21300000, guid: 10eb338915e5ac044bacd94e9c42e8a8, type: 3}
+  icon: {fileID: -351371986, guid: e2257f2cc499f1b4eb52b0b1a2f50af5, type: 3}
   maxStackSize: 1
   isLimb: 1
   limbSO: {fileID: 11400000, guid: 1129099a91e68664f9cb196523b29bcb, type: 2}
