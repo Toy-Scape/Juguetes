@@ -27,14 +27,24 @@ public class RadialMenu : MonoBehaviour
 
     void Start()
     {
+        if (limbManager == null)
+        {
+            limbManager = FindFirstObjectByType<LimbManager>();
+            if (limbManager == null)
+            {
+                Debug.LogError("RadialMenu: No LimbManager found in the scene and none assigned in inspector.");
+                return;
+            }
+        }
         PopulateMenu();
         Hide();
     }
 
     public bool CanBeOpened()
     {
+        if (limbManager == null) return false;
         var limbs = limbManager.GetAvailableLimbs();
-        return limbs.Count > 1;
+        return limbs != null && limbs.Count > 1;
     }
 
     public void Show()
@@ -53,12 +63,14 @@ public class RadialMenu : MonoBehaviour
 
     public void PopulateMenu()
     {
+        if (limbManager == null) return;
+        
         foreach (var obj in buttons)
             Destroy(obj);
         buttons.Clear();
 
         var limbs = limbManager.GetAvailableLimbs();
-        if (limbs.Count == 0) return;
+        if (limbs == null || limbs.Count == 0) return;
 
         float angleStep = 360f / limbs.Count;
 
