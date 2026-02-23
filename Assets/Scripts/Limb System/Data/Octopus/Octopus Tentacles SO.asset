@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ab93db8096b7954f96be5c53f7a1b51, type: 3}
   m_Name: Octopus Tentacles SO
   m_EditorClassIdentifier: Assembly-CSharp::OctopusTentaclesSO
-  LimbName: "Tent\xE1culos de Pulpo"
   Slot: 2
-  LimbIcon: {fileID: 21300000, guid: 10eb338915e5ac044bacd94e9c42e8a8, type: 3}
+  LimbIcon: {fileID: -351371986, guid: e2257f2cc499f1b4eb52b0b1a2f50af5, type: 3}
   LimbModel: {fileID: 0}
   activeAbility: {fileID: 0}
   secondaryAbility: {fileID: 0}
   passiveAbility: {fileID: 11400000, guid: 4f58cf73ffd7c1040a68fd260cc6711c, type: 2}
+  limbNameOnModel: Brazos Ventosas.001
