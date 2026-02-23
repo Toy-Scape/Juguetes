@@ -1,21 +1,32 @@
+using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(WindAffected))]
 public class PaperStackController : MonoBehaviour
 {
-    [Header("Referencias")]
-    [Tooltip("Modelo compacto de la pila")]
-    public GameObject pilaVisual;
+    [Header("Referencias de pila")]
+    [SerializeField] GameObject paperStack;
+    [SerializeField] GameObject smallPaperStack;
 
-    [Tooltip("Contenedor con las hojas individuales (debe empezar desactivado)")]
-    public GameObject hojasContainer;
+    [Header("Spawn de hojas")]
+    [SerializeField] GameObject paperPrefab;
+    [SerializeField] int maxHojas = 20;
+    [SerializeField] float intervalo = 0.2f;
+    [SerializeField] int hojasAntesDeReducir = 5;
+
+    [Header("Fuerza de viento")]
+    [SerializeField] float fuerzaHorizontal = 3f;
+    [SerializeField] float fuerzaVertical = 2f;
 
     private WindAffected windAffected;
     private bool alreadyTriggered = false;
+    private Collider pilaCollider;
 
     void Awake()
     {
         windAffected = GetComponent<WindAffected>();
+        if (paperStack != null)
+            pilaCollider = paperStack.GetComponent<Collider>();
     }
 
     void OnEnable()
@@ -32,13 +43,76 @@ public class PaperStackController : MonoBehaviour
     {
         if (alreadyTriggered) return;
         alreadyTriggered = true;
+        StartCoroutine(SpawnHojas());
+    }
 
-        Debug.Log("La pila fue soplada. Activando hojas...");
+    IEnumerator SpawnHojas()
+    {
+        GetComponent<Collider>().enabled = false;
+        if (paperStack != null)
+        {
+            Collider stackCollider = paperStack.GetComponentInChildren<Collider>();
+            if (stackCollider != null)
+                stackCollider.enabled = false;
+        }
 
-        if (pilaVisual != null)
-            pilaVisual.SetActive(false);
+        int hojasSpawned = 0;
+        bool pilaReducida = false;
 
-        if (hojasContainer != null)
-            hojasContainer.SetActive(true);
+        while (hojasSpawned < maxHojas)
+        {
+            Vector3 spawnPos = GetTopOfCurrentStack();
+
+            GameObject hoja = Instantiate(
+                paperPrefab,
+                spawnPos,
+                Random.rotation,
+                transform
+            );
+
+            Rigidbody rb = hoja.GetComponent<Rigidbody>();
+            if (rb != null)
+            {
+                Vector3 fuerza = transform.forward * fuerzaHorizontal
+                               + Vector3.up * fuerzaVertical;
+                rb.AddForce(fuerza, ForceMode.Impulse);
+            }
+
+            hojasSpawned++;
+
+            if (!pilaReducida && hojasSpawned >= hojasAntesDeReducir)
+            {
+                pilaReducida = true;
+
+                if (paperStack != null)
+                    paperStack.SetActive(false);
+
+                if (smallPaperStack != null)
+                    smallPaperStack.SetActive(true);
+            }
+
+            yield return new WaitForSeconds(intervalo);
+        }
+
+        if (smallPaperStack != null)
+        {
+            Collider smallCollider = smallPaperStack.GetComponent<Collider>();
+            if (smallCollider != null)
+                smallCollider.enabled = true;
+        }
+    }
+
+    Vector3 GetTopOfCurrentStack()
+    {
+        GameObject pilaActual = paperStack.activeSelf ? paperStack : smallPaperStack;
+
+        if (pilaActual == null)
+            return transform.position;
+
+        Renderer rend = pilaActual.GetComponentInChildren<Renderer>();
+        if (rend != null)
+            return new Vector3(rend.bounds.center.x, rend.bounds.max.y, rend.bounds.center.z);
+
+        return pilaActual.transform.position;
     }
 }
