@@ -1,8 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using Assets.Scripts.PlayerController;
 using CinematicSystem.Application;
 using CinematicSystem.Core;
+using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -242,6 +242,10 @@ public class PlayerController : MonoBehaviour
     }
 
     public void ClimbEnd()
+    {
+    }
+
+    public void OnClimbAnimationFinished()
     {
         FinishLedgeClimb();
     }
