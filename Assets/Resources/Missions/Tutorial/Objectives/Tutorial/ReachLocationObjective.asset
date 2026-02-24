@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c7200318f1ae243469bb114250f3882a, type: 3}
   m_Name: ReachLocationObjective
   m_EditorClassIdentifier: Assembly-CSharp::MissionSystem.Data.ReachLocationObjectiveDefinition
-  description: "Encuentra una forma de subir hasta el conducto de ventilaci\xF3n."
+  description: mission-tutorial-objective-2
   locationID: TutorialTrigger1

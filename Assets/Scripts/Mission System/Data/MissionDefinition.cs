@@ -16,8 +16,28 @@ namespace MissionSystem.Data
         [SerializeField] private List<ObjectiveDefinition> objectives = new List<ObjectiveDefinition>();
 
         public string ID => id;
-        public string Title => title;
-        public string Description => description;
+
+        public string Title
+        {
+            get { 
+                string fullText;
+                    if (Localization.LocalizationManager.Instance != null)
+                    fullText = Localization.LocalizationManager.Instance.GetLocalizedValue(title);
+                else
+                    fullText = title;
+                return fullText;
+            }
+        }
+        public string Description {
+            get { 
+                string fullText;
+                    if (Localization.LocalizationManager.Instance != null)
+                    fullText = Localization.LocalizationManager.Instance.GetLocalizedValue(description);
+                else
+                    fullText = description;
+                return fullText;
+            }
+        }
         public IReadOnlyList<ObjectiveDefinition> Objectives => objectives;
 
         public void Init(string id, string title, string description, List<ObjectiveDefinition> objectives)
