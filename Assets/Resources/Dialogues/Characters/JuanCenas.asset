@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: JuanCenas
   m_EditorClassIdentifier: Assembly-CSharp::DialogueCharacter
   CharacterId: MMA_FIGHTER
-  DisplayName: "Ju\xE1n el Cenas"
+  DisplayName: Titanio Max
   Portrait: {fileID: 0}
   NameColor: {r: 0.15729372, g: 0.6698113, b: 0, a: 0}
   Voice: {fileID: 0}

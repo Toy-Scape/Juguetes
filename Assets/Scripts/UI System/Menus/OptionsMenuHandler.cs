@@ -15,9 +15,9 @@ namespace UI_System.Menus
         {
             int fps = change.value switch
             {
-                0 => 30,
-                1 => 60,
-                2 => 120,
+                0 => 100,
+                1 => 120,
+                2 => 144,
                 _ => -1 // Unlimited
             };
 

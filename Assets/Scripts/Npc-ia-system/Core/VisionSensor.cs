@@ -15,11 +15,17 @@ namespace Core
         public Transform eyeTransform;
         [Tooltip("Offset from the pivot to the eyes if eyeTransform is null.")]
         public Vector3 eyeOffset = new Vector3(0, 1.5f, 0);
+        [Tooltip("Euler angles to correct the forward direction if the assigned bone rotates weirdly (e.g. bones pointing up instead of forward).")]
+        public Vector3 eyeRotationOffset = Vector3.zero;
 
         [Header("Layer Masks")]
         [Tooltip("Optimization: Only check these layers for targets. Set to 'Everything' if unsure, or specific layers for performance.")]
         public LayerMask detectionMask = -1; // Default to Everything
         public LayerMask obstacleMask;  // Lo que bloquea la visión
+
+        [Header("Visualization")]
+        [Tooltip("A Spot Light used to visualize the vision cone. Its range, angle, position, and rotation will trace the vision properties.")]
+        public Light visionLight;
 
         // Cache to avoid allocations
         private Collider[] _overlapBuffer = new Collider[64];
@@ -27,6 +33,28 @@ namespace Core
 
         // New interface-based cache
         private List<IVisibleTarget> _visibleTargetsCache = new List<IVisibleTarget>();
+
+        private void LateUpdate()
+        {
+            if (visionLight != null)
+            {
+                // Sync Light properties to vision settings
+                visionLight.type = LightType.Spot;
+                visionLight.spotAngle = viewAngle;
+                visionLight.range = viewRadius;
+                
+                // Sync Transform
+                visionLight.transform.position = GetEyePosition();
+                
+                Vector3 forward = GetEyeForward();
+                Vector3 up = GetEyeUp();
+                
+                if (forward != Vector3.zero)
+                {
+                    visionLight.transform.rotation = Quaternion.LookRotation(forward, up);
+                }
+            }
+        }
 
         /// <summary>
         /// Returns valid IVisibleTargets currently seen.
@@ -36,7 +64,7 @@ namespace Core
             _visibleTargetsCache.Clear();
             int count = Physics.OverlapSphereNonAlloc(transform.position, viewRadius, _overlapBuffer, detectionMask);
             Vector3 eyePos = GetEyePosition();
-            Vector3 forward = eyeTransform != null ? eyeTransform.forward : transform.forward;
+            Vector3 forward = GetEyeForward();
 
             for (int i = 0; i < count; i++)
             {
@@ -78,7 +106,7 @@ namespace Core
             if (targetTrans.TryGetComponent<IVisibleTarget>(out var iTarget))
             {
                 if (!iTarget.IsValid) return false;
-                return CheckVisibility(GetEyePosition(), eyeTransform != null ? eyeTransform.forward : transform.forward, iTarget);
+                return CheckVisibility(GetEyePosition(), GetEyeForward(), iTarget);
             }
 
             // Fallback for non-IVisibleTarget objects
@@ -119,7 +147,7 @@ namespace Core
             float dist = dirToTarget.magnitude;
 
             if (dist > viewRadius) return false;
-            Vector3 forward = eyeTransform != null ? eyeTransform.forward : transform.forward;
+            Vector3 forward = GetEyeForward();
             if (Vector3.Angle(forward, dirToTarget) > viewAngle / 2f) return false;
 
             if (Physics.Raycast(eyePos, dirToTarget.normalized, dist, obstacleMask)) return false;
@@ -133,17 +161,41 @@ namespace Core
             return transform.TransformPoint(eyeOffset);
         }
 
+        private Vector3 GetEyeForward()
+        {
+            if (eyeTransform != null)
+            {
+                return eyeTransform.rotation * Quaternion.Euler(eyeRotationOffset) * Vector3.forward;
+            }
+            return transform.rotation * Quaternion.Euler(eyeRotationOffset) * Vector3.forward;
+        }
+
+        private Vector3 GetEyeUp()
+        {
+            if (eyeTransform != null)
+            {
+                return eyeTransform.rotation * Quaternion.Euler(eyeRotationOffset) * Vector3.up;
+            }
+            return transform.rotation * Quaternion.Euler(eyeRotationOffset) * Vector3.up;
+        }
+
 #if UNITY_EDITOR
         public void DrawGizmosSelected()
         {
             Vector3 eyePos = GetEyePosition();
-            Vector3 forward = eyeTransform != null ? eyeTransform.forward : transform.forward;
+            Vector3 forward = GetEyeForward();
+            Vector3 up = GetEyeUp();
 
-            // Draw View Arc
-            UnityEditor.Handles.color = new Color(1, 1, 0, 0.1f);
-            UnityEditor.Handles.DrawSolidArc(transform.position, Vector3.up,
-                Quaternion.Euler(0, -viewAngle / 2, 0) * forward,
-                viewAngle, viewRadius); // Note based on feet for radius is usually fine, visual ref.
+            // Draw View Arc from the eye position, oriented with the eye's up vector
+            UnityEditor.Handles.color = new Color(1, 1, 0, 0.2f);
+            Vector3 initialPos = Quaternion.AngleAxis(-viewAngle / 2f, up) * forward;
+            UnityEditor.Handles.DrawSolidArc(eyePos, up, initialPos, viewAngle, viewRadius);
+
+            // Outline of the arc for better readability
+            UnityEditor.Handles.color = Color.yellow;
+            UnityEditor.Handles.DrawWireArc(eyePos, up, initialPos, viewAngle, viewRadius);
+            UnityEditor.Handles.DrawLine(eyePos, eyePos + initialPos * viewRadius);
+            UnityEditor.Handles.DrawLine(eyePos, eyePos + Quaternion.AngleAxis(viewAngle / 2f, up) * forward * viewRadius);
 
             // Draw Eye Pos
             Gizmos.color = Color.green;

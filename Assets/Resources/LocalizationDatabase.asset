@@ -295,3 +295,161 @@ MonoBehaviour:
     english: Find a way to climb up to the ventilation duct.
     spanish: "Encuentra una forma de subir hasta el conducto de ventilaci\xF3n."
     basque: Aurkitu aireztapen-hodira igo ahal izateko moduren bat.
+  - key: intro-subtitle-1
+    english: The astronaut spent a lot of time on a shelf in a toy store.
+    spanish: "El astronauta pas\xF3 mucho tiempo en una estanter\xEDa de una tienda
+      de juguetes."
+    basque: Astronautak denbora asko eman zuen jostailu-denda bateko apal batean.
+  - key: intro-subtitle-2
+    english: He saw people passing by, he heard voices...
+    spanish: "Ve\xEDa pasar a la gente, escuchaba voces..."
+    basque: Jendea pasatzen ikusi zuen, ahotsak entzun zituen...
+  - key: intro-subtitle-3
+    english: and waited for someone to take it away.
+    spanish: 'y esperaba a que alguien se lo
+
+      llevara.'
+    basque: eta norbaitek eramateko zain egon zen.
+  - key: intro-subtitle-4
+    english: One day, a boy named Pablo picked it up.
+    spanish: "Un d\xEDa, un ni\xF1o llamado Pablo lo cogi\xF3."
+    basque: Egun batean, Pablo izeneko mutil batek jaso zuen.
+  - key: intro-subtitle-5
+    english: He looked at it for a moment, smiled...
+    spanish: "Lo mir\xF3 un momento, sonri\xF3..."
+    basque: Une batez begiratu zion, irribarre egin zuen...
+  - key: intro-subtitle-6
+    english: and decided it would be his.
+    spanish: "y decidi\xF3 que ser\xEDa suyo."
+    basque: eta berea izango zela erabaki zuen.
+  - key: intro-subtitle-7
+    english: Pablo's house was big... but not always quiet.
+    spanish: La casa de Pablo era grande... pero no siempre tranquila.
+    basque: Pabloren etxea handia zen... baina ez beti isila.
+  - key: intro-subtitle-8
+    english: 'The voices of their
+
+      parents could often be heard, even when
+      no one wanted to listen.'
+    spanish: "Las voces de sus\npadres se o\xEDan a menudo, incluso cuando nadie
+      quer\xEDa escuchar."
+    basque: Gurasoen ahotsak askotan entzun zitezkeen, inork entzun nahi ez zuenean
+      ere.
+  - key: intro-subtitle-9
+    english: Pablo played with the astronaut as only he knew how.
+    spanish: "Pablo jugaba con el astronauta como sab\xEDa hacerlo."
+    basque: Pablok astronautarekin jolastu zuen berak bakarrik zekien bezala.
+  - key: intro-subtitle-10
+    english: Sometimes carefully... other times, not so much.
+    spanish: A veces con cuidado... otras veces, no tanto.
+    basque: Batzuetan kontu handiz... beste batzuetan, ez hainbeste.
+  - key: intro-subtitle-11
+    english: One day, while he was playing in his room, Pablo was called for lunch.
+    spanish: "Un d\xEDa, mientras jugaba en su habitaci\xF3n, llamaron a Pablo para
+      comer."
+    basque: Egun batean, bere gelan jolasean ari zela, Pablori bazkaltzera deitu
+      zioten.
+  - key: intro-subtitle-12
+    english: He dropped the toy on the floor... and left the room.
+    spanish: "Dej\xF3 el juguete caer al suelo... y sali\xF3 de la habitaci\xF3n."
+    basque: Jostailua lurrera bota zuen... eta gelatik irten zen.
+  - key: intro-subtitle-13
+    english: The astronaut was not alone for long.
+    spanish: "El astronauta no se qued\xF3 solo mucho tiempo."
+    basque: Astronauta ez zen denbora luzez bakarrik egon.
+  - key: intro-subtitle-14
+    english: "The family dog \u200B\u200Bfound him... and decided to take him."
+    spanish: "El perro de la familia lo encontr\xF3... y decidi\xF3 llev\xE1rselo."
+    basque: Familiako txakurrak aurkitu zuen... eta eramatea erabaki zuen.
+  - key: intro-subtitle-15
+    english: They went downstairs to the basement. A dark place... full of boxes
+      and forgotten things.
+    spanish: "Bajaron las escaleras hasta el s\xF3tano. Un lugar oscuro... lleno
+      de cajas y cosas olvidadas."
+    basque: Beheko solairura jaitsi ziren. Leku ilun bat... kutxez eta ahaztutako
+      gauzez betea.
+  - key: intro-subtitle-16
+    english: The dog left him there... amidst the dust and darkness.
+    spanish: "El perro lo dej\xF3 all\xED... entre el polvo y la oscuridad."
+    basque: Txakurrak han utzi zuen... hautsaren eta iluntasunaren artean.
+  - key: intro-subtitle-17
+    english: And when the house fell silent again...
+    spanish: "Y cuando la casa volvi\xF3 a quedarse en silencio..."
+    basque: Eta etxea berriro isildu zenean...
+  - key: intro-subtitle-18
+    english: The astronaut began to move.
+    spanish: "el astronauta empez\xF3 a moverse."
+    basque: Astronauta mugitzen hasi zen.
+  - key: level1-sticky-dialogue-1
+    english: Thanks for helping me. I do not know how much longer could I resist
+      up there.
+    spanish: "Gracias por ayudarme. No s\xE9 cuanto tiempo mas podr\xEDa aguantar
+      all\xED arriba."
+    basque: Eskerrik asko laguntzeagatik. Ez dakit zenbat gehiago iraungo nuke hor
+      goian.
+  - key: level1-sticky-dialogue-2
+    english: Now that I remeber, those arms whom which you moved the fan, aren't
+      them of Juan?
+    spanish: "Ahora que me acuerdo, esos brazos con los que has movido el ventilador,
+      \xBFno son de Juan?"
+    basque: Orain gogoratzen naizela, haizagailua mugitzeko erabili dituzun beso
+      hoiek, ez dira Juanenak?
+  - key: level1-sticky-dialogue-3
+    english: To escape? Then let me return the favor and take my arms. It will allow
+      you to reach places you couldn't before.
+    spanish: "\xBFPara escapar dices? En ese caso d\xE9jame devolverte el favor y
+      ten mis brazos. Te ayudar\xE1n a alcanzar sitios que antes no llegabas."
+    basque: Ihes egiteko? Orduan faborea bueltatuko dizut nire besoak ematen. Lehen
+      iristen ez zenitun lekutara igotzen lagunduko dizute.
+  - key: level1-sticky-dialogue-4
+    english: Don't worry, I'll be fine. If I'm lucky enough, I'll end up in the basement
+      along Juan. But you have to keep going.
+    spanish: "No te preocupes por m\xED, estar\xE9 bien. Si tengo la suficiente suerte
+      acabar\xE9 junto a Juan en el s\xF3tano. Pero tu ahora tienes que marcharte."
+    basque: Ez kezkatu, ondo egongo naiz. Zortea izaten badut, Juanekin sotoan amaituko
+      dut. Baina zu jarraitu egin behar duzu.
+  - key: level1-robotin-dialogue-1
+    english: You're welcome. You must have had a tough time.
+    spanish: No es nada. No me quiero ni imaginar lo mal que lo has tenido que pasar.
+    basque: Ez da ezer. Segurazki oso gaizki pasa behar izan duzu.
+  - key: level1-robotin-dialogue-2
+    english: Yes, they are his.
+    spanish: 'Si, son los suyos. '
+    basque: Bai, bereak dira.
+  - key: level1-robotin-dialogue-3
+    english: I found him on the basement in a pretty rough shape and he gave them
+      to me as help to escape from here.
+    spanish: "Me lo encontr\xE9 en el s\xF3tano en un muy mal estado y me los di\xF3
+      para ayudarme a escapar de aqu\xED."
+    basque: Sotoan aurkitu nuen nahiko apurtuta eta eman zizkidan hemendik ihes egiteko.
+  - key: level1-robotin-dialogue-4
+    english: Are you sure? And what about you?
+    spanish: "\xBFEst\xE1s seguro? \xBFQue ser\xE1 de ti?"
+    basque: Ziur zaude? Zer gertatuko da zurekin?
+  - key: item-name-batteries
+    english: Batteries
+    spanish: Pilas
+    basque: Pilak
+  - key: item-description-batteries
+    english: 'Reliable and long-lasting batteries, designed to deliver consistent
+      power when you need it most. Compact, powerful, and easy to install, they''re
+      perfect for powering remotes, flashlights, and small devices without letting
+      you down when it matters most.
+
+      
+
+      Will they need to be stored
+      anywhere?'
+    spanish: "Unas bater\xEDas fiables y duraderas, dise\xF1adas para ofrecer energ\xEDa
+      constante cuando m\xE1s la necesitas. Compactas, potentes y f\xE1ciles de instalar,
+      perfectas para dar vida a mandos, linternas y peque\xF1os dispositivos sin
+      fallar en el momento clave.\n\n\xBFHabr\xE1 que colocarlas en alg\xFAn sitio?"
+    basque: 'Bateria fidagarriak eta iraunkorrak, gehien behar duzunean potentzia
+      etengabea emateko diseinatuak. Trinkoak, indartsuak eta instalatzeko errazak,
+      urrutiko aginteei, linternei eta gailu txikiei energia emateko aproposak dira,
+      gehien behar duzunean hutsik egin gabe.
+
+      
+
+      Nonbait gorde beharko
+      al dira?'

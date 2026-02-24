@@ -80,7 +80,7 @@ public class DialogueBox : MonoBehaviour
     {
         if (nextDialogueAction?.action != null)
         {
-            nextDialogueAction.action.performed -= OnNextDialogue;
+            nextDialogueAction.action.performed -= OnNextDialogueAction;
             nextDialogueAction.action.Disable();
         }
     }
@@ -141,7 +141,7 @@ public class DialogueBox : MonoBehaviour
 
         if (nextDialogueAction?.action != null)
         {
-            nextDialogueAction.action.performed -= OnNextDialogue;
+            nextDialogueAction.action.performed -= OnNextDialogueAction;
             nextDialogueAction.action.Disable();
         }
 
@@ -172,7 +172,7 @@ public class DialogueBox : MonoBehaviour
 
         if (nextDialogueAction?.action != null)
         {
-            nextDialogueAction.action.performed -= OnNextDialogue;
+            nextDialogueAction.action.performed -= OnNextDialogueAction;
             nextDialogueAction.action.Disable();
         }
 
@@ -185,7 +185,7 @@ public class DialogueBox : MonoBehaviour
         IsTyping = false;
     }
 
-    private void OnNextDialogue(InputAction.CallbackContext ctx) => Next();
+    private void OnNextDialogueAction(InputAction.CallbackContext ctx) => Next();
 
     public void Next()
     {
@@ -362,10 +362,10 @@ public class DialogueBox : MonoBehaviour
         if (nextDialogueAction?.action == null)
             yield break;
 
-        nextDialogueAction.action.performed -= OnNextDialogue;
+        nextDialogueAction.action.performed -= OnNextDialogueAction;
 
         if (IsOpen && activeDialogue != null)
-            nextDialogueAction.action.performed += OnNextDialogue;
+            nextDialogueAction.action.performed += OnNextDialogueAction;
     }
 
     private IEnumerator CloseSafelyNextFrame()
