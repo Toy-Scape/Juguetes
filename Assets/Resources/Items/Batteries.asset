@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 639d2f37fe394d8696991a99ca6c7eac, type: 3}
-  m_Name: Climb limb
+  m_Name: Batteries
   m_EditorClassIdentifier: Assembly-CSharp::Inventory.ItemData
-  nameKey: suction-item-name
-  descriptionKey: suction-item-description
-  icon: {fileID: -351371986, guid: e2257f2cc499f1b4eb52b0b1a2f50af5, type: 3}
+  nameKey: item-name-batteries
+  descriptionKey: item-description-batteries
+  icon: {fileID: 21300000, guid: 09c4772db4fc8904bb1565bfc14c074b, type: 3}
   maxStackSize: 1
-  isLimb: 1
-  limbSO: {fileID: 11400000, guid: 1129099a91e68664f9cb196523b29bcb, type: 2}
+  isLimb: 0
+  limbSO: {fileID: 0}
