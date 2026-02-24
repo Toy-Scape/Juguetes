@@ -129,7 +129,7 @@ namespace CinematicSystem.Transitions
 
                 Canvas canvas = overlayObj.AddComponent<Canvas>();
                 canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-                canvas.sortingOrder = 32767;
+                canvas.sortingOrder = 10;
 
                 CanvasScaler scaler = overlayObj.AddComponent<CanvasScaler>();
                 scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
@@ -170,6 +170,7 @@ namespace CinematicSystem.Transitions
                 rt.Release();
                 Destroy(rt);
                 Destroy(overlayObj);
+                Destroy(overlayCG);
             }
             else
             {
