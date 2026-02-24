@@ -1,6 +1,7 @@
 using Localization;
 using MissionSystem.Data;
 using MissionSystem.Runtime;
+using System.Reflection;
 using TMPro;
 using UnityEngine;
 
@@ -19,9 +20,6 @@ namespace MissionSystem.UI
         public void Setup (Mission mission)
         {
             _mission = mission;
-
-            titleText.text = mission.Definition.Title;
-            descriptionText.text = mission.Definition.Description;
 
             Refresh();
 
@@ -47,6 +45,9 @@ namespace MissionSystem.UI
         public void Refresh ()
         {
             if (_mission == null) return;
+
+            titleText.text = _mission.Definition.Title;
+            descriptionText.text = _mission.Definition.Description;
 
             foreach (Transform child in objectivesContainer)
                 Destroy(child.gameObject);
