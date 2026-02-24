@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4603371082449161300}
   - component: {fileID: 4351068607724697596}
   - component: {fileID: 6045356991781117238}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -76,7 +76,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1511682519588291473}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: ToolBox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -164,6 +164,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -6199696510265673442, guid: ca8b7e8a6301dbe47a9da754fd52abea, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -6199696510265673442, guid: ca8b7e8a6301dbe47a9da754fd52abea, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
       objectReference: {fileID: 0}
@@ -172,8 +176,16 @@ PrefabInstance:
       value: ToolBoxModel
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: ca8b7e8a6301dbe47a9da754fd52abea, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: ca8b7e8a6301dbe47a9da754fd52abea, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 7702506591332752022, guid: ca8b7e8a6301dbe47a9da754fd52abea, type: 3}
+      propertyPath: m_Layer
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 7702506591332752022, guid: ca8b7e8a6301dbe47a9da754fd52abea, type: 3}
       propertyPath: m_StaticEditorFlags

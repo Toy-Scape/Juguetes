@@ -591,4 +591,13 @@ public class PlayerController : MonoBehaviour
         // Lo dejo como una advertencia :)
         Debug.LogWarning("Hola :)");
     }
+
+
+    void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        Rigidbody rb = hit.collider.attachedRigidbody;
+
+        if (rb == null)
+            return;
+    }
 }
