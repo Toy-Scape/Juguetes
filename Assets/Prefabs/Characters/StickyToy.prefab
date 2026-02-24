@@ -13,6 +13,8 @@ GameObject:
   - component: {fileID: 4291585496232193250}
   - component: {fileID: 7465566194327505468}
   - component: {fileID: 720312153969666487}
+  - component: {fileID: 3472105764762360682}
+  - component: {fileID: 1914207111203654674}
   m_Layer: 0
   m_Name: StickyToy
   m_TagString: Untagged
@@ -99,10 +101,53 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 1.8321288
-  m_Height: 5.4112315
+  m_Radius: 0.69
+  m_Height: 5.29
   m_Direction: 1
   m_Center: {x: -0.05357313, y: 2.2056158, z: -0.0141147375}
+--- !u!54 &3472105764762360682
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1126832252849937329}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 1
+  m_AngularDamping: 2
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!114 &1914207111203654674
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1126832252849937329}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9abe945904ff58d44aa37fe49ab2f00d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  windSensitivity: 1
+  liftFactor: 0
+  turbulence: 0
+  hasBeenBlown: 0
 --- !u!1 &5747067555095790355
 GameObject:
   m_ObjectHideFlags: 0
