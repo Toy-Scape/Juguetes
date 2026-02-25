@@ -57,7 +57,9 @@ namespace UI_System.Menus
             // If we are loaded additively (Pause/Options), the active scene will be the Game Scene.
             if (SceneManager.GetActiveScene().name == gameObject.scene.name)
             {
-                PreloadScene();
+                // Removemos la precarga para evitar que se cargue la escena del juego
+                // automáticamente cuando entramos a la escena de Créditos (LoadSceneMode.Single).
+                // PreloadScene();
             }
         }
 
@@ -294,6 +296,11 @@ namespace UI_System.Menus
             for (int i = 0; i < 16; i++)
                 ret[i] = Mathf.Lerp(from[i], to[i], time);
             return ret;
+        }
+
+        public void LoadCredits()
+        {
+            SceneManager.LoadScene("_Credits");
         }
     }
 }

@@ -455,3 +455,7 @@ MonoBehaviour:
     english: I need to escape from this house no matter what.
     spanish: Necesito escapar de esta casa como sea.
     basque: Etxe honetatik ihes egin behar dut edozein modutan.
+  - key: credits-button
+    english: Credits
+    spanish: Creditos
+    basque: Kredituak
