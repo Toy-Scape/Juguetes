@@ -17,7 +17,7 @@ namespace Interaction_System.Interactables
             if (context.PlayerInventory != null && context.PlayerInventory.Contains(itemData))
             {
                 //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
-                SceneManager.LoadScene("_DemoEnd");
+                SceneManager.LoadScene("Level_01_Office_Camera_Dolly");
             }
             else
             {
