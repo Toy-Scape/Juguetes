@@ -350,7 +350,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51d70aee5dfbdc34297a07702a768d14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameExit
-  _firstSelected: {fileID: 1799949517}
+  _firstSelected: {fileID: 0}
 --- !u!1 &147791915
 GameObject:
   m_ObjectHideFlags: 0
@@ -914,87 +914,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &1198943716
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: -8679921383154817045, guid: 18ae8f0eeae036142a2b2b237f62055a, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 3.14358
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 18ae8f0eeae036142a2b2b237f62055a, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 3.14358
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 18ae8f0eeae036142a2b2b237f62055a, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 3.14358
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 18ae8f0eeae036142a2b2b237f62055a, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 6.95
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 18ae8f0eeae036142a2b2b237f62055a, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -3.1274
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 18ae8f0eeae036142a2b2b237f62055a, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 1.2499
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 18ae8f0eeae036142a2b2b237f62055a, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.0000029504295
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 18ae8f0eeae036142a2b2b237f62055a, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 18ae8f0eeae036142a2b2b237f62055a, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -1
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 18ae8f0eeae036142a2b2b237f62055a, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 18ae8f0eeae036142a2b2b237f62055a, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 18ae8f0eeae036142a2b2b237f62055a, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: -180
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 18ae8f0eeae036142a2b2b237f62055a, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 18ae8f0eeae036142a2b2b237f62055a, type: 3}
-      propertyPath: m_ConstrainProportionsScale
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 919132149155446097, guid: 18ae8f0eeae036142a2b2b237f62055a, type: 3}
-      propertyPath: m_Name
-      value: Toy model Backpack Antena 1 (1)
-      objectReference: {fileID: 0}
-    - target: {fileID: 2776956682711762759, guid: 18ae8f0eeae036142a2b2b237f62055a, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5866666021909216657, guid: 18ae8f0eeae036142a2b2b237f62055a, type: 3}
-      propertyPath: m_Controller
-      value: 
-      objectReference: {fileID: 9100000, guid: a5bd3fa86b77eee449588a35c0bd3e39, type: 2}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 18ae8f0eeae036142a2b2b237f62055a, type: 3}
 --- !u!1 &1306837634
 GameObject:
   m_ObjectHideFlags: 0
@@ -1122,91 +1041,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0.392, y: 0, z: 0}
---- !u!1001 &1587080197
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: -8679921383154817045, guid: 18ae8f0eeae036142a2b2b237f62055a, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 3.14358
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 18ae8f0eeae036142a2b2b237f62055a, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 3.14358
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 18ae8f0eeae036142a2b2b237f62055a, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 3.14358
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 18ae8f0eeae036142a2b2b237f62055a, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -6.45
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 18ae8f0eeae036142a2b2b237f62055a, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -3.1274
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 18ae8f0eeae036142a2b2b237f62055a, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 1.2499
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 18ae8f0eeae036142a2b2b237f62055a, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.0000029504295
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 18ae8f0eeae036142a2b2b237f62055a, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 18ae8f0eeae036142a2b2b237f62055a, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -1
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 18ae8f0eeae036142a2b2b237f62055a, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 18ae8f0eeae036142a2b2b237f62055a, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 18ae8f0eeae036142a2b2b237f62055a, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: -180
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 18ae8f0eeae036142a2b2b237f62055a, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 18ae8f0eeae036142a2b2b237f62055a, type: 3}
-      propertyPath: m_ConstrainProportionsScale
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -2549632214264001594, guid: 18ae8f0eeae036142a2b2b237f62055a, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 919132149155446097, guid: 18ae8f0eeae036142a2b2b237f62055a, type: 3}
-      propertyPath: m_Name
-      value: Toy model Backpack Antena 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2776956682711762759, guid: 18ae8f0eeae036142a2b2b237f62055a, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5866666021909216657, guid: 18ae8f0eeae036142a2b2b237f62055a, type: 3}
-      propertyPath: m_Controller
-      value: 
-      objectReference: {fileID: 9100000, guid: a5bd3fa86b77eee449588a35c0bd3e39, type: 2}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 18ae8f0eeae036142a2b2b237f62055a, type: 3}
 --- !u!1001 &1799949515
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1253,11 +1087,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6225840253745424498, guid: 47c09d0806e9c5a4da464118f6398f56, type: 3}
       propertyPath: m_text
-      value: Menu principal
+      value: Volver
       objectReference: {fileID: 0}
     - target: {fileID: 6225840253745424498, guid: 47c09d0806e9c5a4da464118f6398f56, type: 3}
       propertyPath: m_fontSize
-      value: 18.85
+      value: 26.85
       objectReference: {fileID: 0}
     - target: {fileID: 6225840253745424498, guid: 47c09d0806e9c5a4da464118f6398f56, type: 3}
       propertyPath: m_margin.x
@@ -1378,11 +1212,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 6955054204525198658, guid: 47c09d0806e9c5a4da464118f6398f56, type: 3}
   m_PrefabInstance: {fileID: 1799949515}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1799949517 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5485785636806250314, guid: 47c09d0806e9c5a4da464118f6398f56, type: 3}
-  m_PrefabInstance: {fileID: 1799949515}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1913184635
 GameObject:
   m_ObjectHideFlags: 0
@@ -1440,7 +1269,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: FINAL DE LA DEMO
+  m_text: Creditos
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2100000, guid: e73a58f6e2794ae7b1b7e50b7fb811b0, type: 2}
@@ -1662,7 +1491,5 @@ SceneRoots:
   - {fileID: 147791918}
   - {fileID: 75257349}
   - {fileID: 664207526}
-  - {fileID: 1587080197}
-  - {fileID: 1198943716}
   - {fileID: 46903512}
   - {fileID: 1306837637}
