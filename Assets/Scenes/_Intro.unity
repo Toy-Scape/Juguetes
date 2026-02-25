@@ -5112,8 +5112,6 @@ MonoBehaviour:
   _loop: 0
   _startOnEnable: 1
   _stopAtLastObject: 1
-  _allowSkip: 1
-  _skipAction: {fileID: 1222488934710843565, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   _nextSceneName: Level_00_Tutorial
   _transitionDuration: 4
   _delayBeforeTransition: 0

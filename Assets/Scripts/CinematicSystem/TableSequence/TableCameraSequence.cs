@@ -76,9 +76,7 @@ namespace CinematicSystem.TableSequence
         [SerializeField] private bool _startOnEnable = true;
         [SerializeField] private bool _stopAtLastObject = false; // New Option
 
-        [Header("Skip Settings")]
-        [SerializeField] private bool _allowSkip = true;
-        [SerializeField] private InputActionReference _skipAction;
+
 
         [Header("Scene Transition")]
         [SerializeField] private string _nextSceneName;
@@ -87,73 +85,25 @@ namespace CinematicSystem.TableSequence
 
         private Sequence _sequence;
         private Coroutine _subtitleCoroutine;
-        private bool _isSkipping = false;
 
        
         private void OnEnable()
         {
-            if (_skipAction != null)
-            {
-                _skipAction.action.Enable();
-                _skipAction.action.performed += OnSkipPerformed;
-            }
-
             if (_startOnEnable)
                 PlaySequence();
         }
 
         private void OnDisable()
         {
-            if (_skipAction != null)
-            {
-                _skipAction.action.performed -= OnSkipPerformed;
-                _skipAction.action.Disable();
-            }
 
             if (_sequence != null)
                 _sequence.Kill();
         }
 
-        private void OnSkipPerformed(InputAction.CallbackContext context)
-        {
-            if (_allowSkip && !_isSkipping)
-            {
-                SkipSequence();
-            }
-        }
 
-        public void SkipSequence()
-        {
-            if (_isSkipping) return;
-            _isSkipping = true;
-
-            if (_sequence != null)
-                _sequence.Kill();
-
-            if (_subtitleCoroutine != null)
-            {
-                StopCoroutine(_subtitleCoroutine);
-                if (UI_System.Subtitles.SimpleSubtitleUI.Instance != null)
-                {
-                    UI_System.Subtitles.SimpleSubtitleUI.Instance.HideImmediate();
-                }
-            }
-
-            if (!string.IsNullOrEmpty(_nextSceneName))
-            {
-                var transitionManager = CinematicSystem.Transitions.SceneTransitionManager.Instance;
-                if (transitionManager == null)
-                {
-                    GameObject go = new GameObject("SceneTransitionManager");
-                    transitionManager = go.AddComponent<CinematicSystem.Transitions.SceneTransitionManager>();
-                }
-                transitionManager.CrossfadeToScene(_nextSceneName, _transitionDuration);
-            }
-        }
 
         public void PlaySequence()
         {
-            _isSkipping = false;
             if (_targets == null || _targets.Count == 0 || _camera == null) return;
 
             _sequence = DOTween.Sequence();
