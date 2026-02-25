@@ -93,6 +93,9 @@ namespace UI_System.Menus
             {
                 IsPaused = true;
                 Time.timeScale = 0f;
+                var music = FindFirstObjectByType<MusicManager>();
+                if (music != null)
+                    music.PauseMusic();
                 _isLoading = true;
                 SceneManager.LoadSceneAsync(_menuSceneName, LoadSceneMode.Additive);
                 _pausedSnapshot?.TransitionTo(_snapshotTransitionTime);
@@ -128,6 +131,9 @@ namespace UI_System.Menus
             menuMusic.FadeOutAndStop();
 
         Time.timeScale = 1f;
+        var music = FindFirstObjectByType<MusicManager>();
+        if (music != null)
+            music.ResumeMusic();
         _gameplaySnapshot?.TransitionTo(_snapshotTransitionTime);
         InputMapManager.Instance?.HandleCloseUI();
         StartCoroutine(DelayUnpause());
