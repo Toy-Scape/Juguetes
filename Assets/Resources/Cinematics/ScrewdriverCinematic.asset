@@ -30,7 +30,6 @@ MonoBehaviour:
         offset: {x: 0, y: 5, z: -20}
         fov: 40
         duration: 5
-        smooth: 0
         instant: 1
         ignoreCollision: 1
         useOrbit: 1

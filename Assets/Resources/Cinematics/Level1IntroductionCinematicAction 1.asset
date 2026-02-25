@@ -1,0 +1,85 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe7d36f779e20324b841dfd80305c1d8, type: 3}
+  m_Name: Level1IntroductionCinematicAction 1
+  m_EditorClassIdentifier: Assembly-CSharp::CinematicSystem.Core.CinematicAsset
+  blockPlayerInput: 1
+  hideHUD: 1
+  restoreCameraInstantly: 0
+  actions:
+  - rid: 555653078854926414
+  - rid: 555653078854926486
+  - rid: 555653078854926449
+  - rid: 555653078854926490
+  - rid: 555653078854926451
+  references:
+    version: 2
+    RefIds:
+    - rid: 555653078854926414
+      type: {class: CameraShotAction, ns: CinematicSystem.Actions, asm: Assembly-CSharp}
+      data:
+        waitForCompletion: 1
+        holdAtEnd: 0
+        targetId: Player
+        lookAtId: Player
+        offset: {x: 0, y: 5, z: -10}
+        fov: 60
+        duration: 1
+        smooth: 1
+        instant: 0
+        ignoreCollision: 1
+        useOrbit: 1
+        orbitSpeed: 10
+    - rid: 555653078854926449
+      type: {class: CameraShotAction, ns: CinematicSystem.Actions, asm: Assembly-CSharp}
+      data:
+        waitForCompletion: 1
+        holdAtEnd: 0
+        targetId: Father
+        lookAtId: Father
+        offset: {x: 25, y: 5, z: -30}
+        fov: 60
+        duration: 5
+        smooth: 1
+        instant: 0
+        ignoreCollision: 1
+        useOrbit: 1
+        orbitSpeed: 10
+    - rid: 555653078854926451
+      type: {class: CameraShotAction, ns: CinematicSystem.Actions, asm: Assembly-CSharp}
+      data:
+        waitForCompletion: 1
+        holdAtEnd: 0
+        targetId: Suck Toy
+        lookAtId: Suck Toy
+        offset: {x: 10, y: 5, z: 10}
+        fov: 60
+        duration: 5
+        smooth: 1
+        instant: 0
+        ignoreCollision: 1
+        useOrbit: 1
+        orbitSpeed: 10
+    - rid: 555653078854926486
+      type: {class: LookAtAction, ns: CinematicSystem.Actions, asm: Assembly-CSharp}
+      data:
+        waitForCompletion: 1
+        holdAtEnd: 0
+        targetId: Father
+        lookDuration: 0.5
+    - rid: 555653078854926490
+      type: {class: LookAtAction, ns: CinematicSystem.Actions, asm: Assembly-CSharp}
+      data:
+        waitForCompletion: 1
+        holdAtEnd: 0
+        targetId: Suck Toy
+        lookDuration: 0.5

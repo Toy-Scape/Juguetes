@@ -15,7 +15,8 @@ namespace CinematicSystem.Core
     public interface ICameraController
     {
         void SetActive(bool active, bool instant = false);
-        void MoveTo(string targetId, float duration, bool smooth = true);
+        void MoveTo(string targetId, float duration, bool smooth);
+        void MoveTo(string targetId, float duration, bool smooth, bool instant, bool ignoreCollision);
         void LookAt(string targetId, float duration);
         void ResetCamera(bool instant = false);
 
