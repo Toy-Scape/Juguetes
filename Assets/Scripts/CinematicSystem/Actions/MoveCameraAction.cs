@@ -7,29 +7,29 @@ namespace CinematicSystem.Actions
     [System.Serializable]
     public class MoveCameraAction : CinematicAction
     {
-        [Tooltip("ID of the transform defined in SceneReferenceResolver")]
         [SceneReferenceID]
         public string targetId;
+
         public float moveDuration = 2f;
         public bool smooth = true;
 
+        public bool instant = false;
+        public bool ignoreCollision = false;
+
         public override IEnumerator Execute(ICinematicContext context)
         {
-            if (context.CameraController != null)
-            {
-                context.CameraController.MoveTo(targetId, moveDuration, smooth);
+            if (context.CameraController == null)
+                yield break;
 
-                // If this action handles the waiting itself, we yield.
-                // But usually the action just triggers the move. 
-                // However, CinematicAction has a 'waitForCompletion' flag.
-                // Implementation depend on if camera controller blocks.
-                // For now, let's assume we wait for result duration if flagged.
+            context.CameraController.MoveTo(
+                targetId,
+                moveDuration,
+                smooth,
+                instant,
+                ignoreCollision);
 
-                if (waitForCompletion && moveDuration > 0)
-                {
-                    yield return new WaitForSeconds(moveDuration);
-                }
-            }
+            if (waitForCompletion && moveDuration > 0)
+                yield return context.Wait(moveDuration);
         }
     }
 }
