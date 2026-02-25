@@ -14,25 +14,25 @@ namespace UI_System.Subtitles
         [SerializeField] private float _fadeDuration = 0.5f;
 
         private Sequence _currentSequence;
+        private float _originalTextAlpha;
+        private Color _originalImageColor;
+        private float _originalImageAlpha;
 
         private void Awake()
         {
-            if (Instance == null)
-            {
-                Instance = this;
-                // Ideally this is part of the scene, not persisted, or part of a persistent UI manager
-            }
-            else
-            {
-                Destroy(gameObject);
-            }
+            if (Instance == null) Instance = this;
+            else { Destroy(gameObject); return; }
 
             if (_subtitleText != null)
             {
+                _originalTextAlpha = _subtitleText.alpha;
                 _subtitleText.alpha = 0f;
             }
+
             if (_imageObj != null)
             {
+                _originalImageColor = _imageObj.color;
+                _originalImageAlpha = _imageObj.color.a;
                 var c = _imageObj.color;
                 c.a = 0f;
                 _imageObj.color = c;
@@ -43,25 +43,22 @@ namespace UI_System.Subtitles
         {
             if (_subtitleText == null) return;
 
-            // Kill any ongoing sequence
             if (_currentSequence != null)
                 _currentSequence.Kill();
 
             _currentSequence = DOTween.Sequence();
 
-            // Set text
             _subtitleText.text = text;
 
-            // Fade In
             _currentSequence.Append(_subtitleText.DOFade(1f, _fadeDuration));
-            if (_imageObj != null) _currentSequence.Join(_imageObj.DOFade(0.5f, _fadeDuration));
+            if (_imageObj != null)
+                _currentSequence.Join(_imageObj.DOFade(_originalImageAlpha, _fadeDuration));
 
-            // Wait for duration (minus fade times mostly, or full duration visible)
             _currentSequence.AppendInterval(duration);
 
-            // Fade Out
             _currentSequence.Append(_subtitleText.DOFade(0f, _fadeDuration));
-            if (_imageObj != null) _currentSequence.Join(_imageObj.DOFade(0f, _fadeDuration));
+            if (_imageObj != null)
+                _currentSequence.Join(_imageObj.DOFade(0f, _fadeDuration));
         }
 
         public void HideImmediate()

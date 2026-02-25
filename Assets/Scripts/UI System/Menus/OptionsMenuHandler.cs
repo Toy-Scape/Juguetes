@@ -1,84 +1,71 @@
-﻿using TMPro;
-using UnityEditor;
-using UnityEngine;
-using UnityEngine.UI;
+﻿using UnityEngine;
+using UI_System.Menus;
+using TMPro;
+using UnityEngine.Events;
 
-namespace UI_System.Menus
+public class OptionsMenuHandler : MonoBehaviour
 {
-    public class OptionsMenuHandler : MonoBehaviour
+    [Header("UI References")]
+    [SerializeField] private UI_SliderField mouseSensitivitySliderField;
+    [SerializeField] private UI_SliderField gamepadSensitivitySliderField;
+    [SerializeField] private UI_SliderField volumeSliderField;
+    [SerializeField] private LocalizedDropdown fpsDropdownPrefab;
+    [SerializeField] private LocalizedDropdown languageDropdownPrefab;
+
+    // Listeners con nombre para poder quitarlos sin RemoveAllListeners
+    // (RemoveAllListeners también eliminaría los listeners internos de UI_SliderField)
+    private UnityAction<float> _onMouseSens;
+    private UnityAction<float> _onGamepadSens;
+    private UnityAction<float> _onVolume;
+    private UnityAction<int> _onFps;
+    private UnityAction<int> _onLanguage;
+
+    private void Awake()
     {
+        _onMouseSens    = value => PreferencesManager.Instance.SetMouseSensitivity(value);
+        _onGamepadSens  = value => PreferencesManager.Instance.SetGamepadSensitivity(value);
+        _onVolume       = value => PreferencesManager.Instance.SetVolume(value);
+        _onFps          = value => PreferencesManager.Instance.SetFpsLimit(value);
+        _onLanguage     = value => PreferencesManager.Instance.SetLanguage(value);
+    }
 
-        /// <summary>
-        /// Establece el límite de FPS según el índice del dropdown.
-        /// </summary>
-        public void SetFpsLimit(TMP_Dropdown change)
-        {
-            int fps = change.value switch
-            {
-                0 => 30,
-                1 => 60,
-                2 => 120,
-                _ => -1 // Unlimited
-            };
+    private void OnEnable()
+    {
+        // Primero cargar valores sin disparar eventos
+        LoadSettings();
 
-            Application.targetFrameRate = fps;
-            PlayerPrefs.SetInt("FpsLimitIndex", change.value);
-            PlayerPrefs.Save();
-        }
+        // Luego suscribir listeners para detectar cambios del usuario
+        mouseSensitivitySliderField.onValueChanged.AddListener(_onMouseSens);
+        gamepadSensitivitySliderField.onValueChanged.AddListener(_onGamepadSens);
+        volumeSliderField.onValueChanged.AddListener(_onVolume);
+        fpsDropdownPrefab.Dropdown.onValueChanged.AddListener(_onFps);
+        languageDropdownPrefab.Dropdown.onValueChanged.AddListener(_onLanguage);
+    }
 
-        /// <summary>
-        /// Establece la sensibilidad del ratón.
-        /// </summary>
-        public void SetMouseSensitivity(Slider change)
-        {
-            PlayerPrefs.SetFloat("MouseSensitivity", change.value);
-            PlayerPrefs.Save();
+    private void OnDisable()
+    {
+        // Quitamos solo nuestros listeners, no los internos de UI_SliderField
+        mouseSensitivitySliderField.onValueChanged.RemoveListener(_onMouseSens);
+        gamepadSensitivitySliderField.onValueChanged.RemoveListener(_onGamepadSens);
+        volumeSliderField.onValueChanged.RemoveListener(_onVolume);
+        fpsDropdownPrefab.Dropdown.onValueChanged.RemoveListener(_onFps);
+        languageDropdownPrefab.Dropdown.onValueChanged.RemoveListener(_onLanguage);
+    }
 
-            if (CameraManager.Instance != null)
-                CameraManager.Instance.UpdateCameraSensitivity();
-        }
+    private void LoadSettings()
+    {
+        // Usar SetValueWithoutNotify para no disparar el evento y no sobreescribir PreferencesManager
+        mouseSensitivitySliderField.SetValueWithoutNotify(PlayerPrefs.GetFloat("MouseSensitivity", 1f));
+        gamepadSensitivitySliderField.SetValueWithoutNotify(PlayerPrefs.GetFloat("GamepadSensitivity", 1f));
+        volumeSliderField.SetValueWithoutNotify(PlayerPrefs.GetFloat("MasterVolume", 1f));
 
-        /// <summary>
-        /// Establece la sensibilidad del gamepad.
-        /// </summary>
-        public void SetGamepadSensitivity(Slider change)
-        {
-            PlayerPrefs.SetFloat("GamepadSensitivity", change.value);
-            PlayerPrefs.Save();
+        fpsDropdownPrefab.SetValueWithoutNotify(PlayerPrefs.GetInt("FpsLimitIndex", 1));
+        languageDropdownPrefab.SetValueWithoutNotify(PlayerPrefs.GetInt("LanguageIndex", 0));
+    }
 
-            if (CameraManager.Instance != null)
-                CameraManager.Instance.UpdateCameraSensitivity();
-        }
-
-        /// <summary>
-        /// Establece el volumen maestro.
-        /// </summary>
-        public void SetVolume(Slider change)
-        {
-            AudioListener.volume = change.value;
-            PlayerPrefs.SetFloat("MasterVolume", change.value);
-            PlayerPrefs.Save();
-        }
-
-        /// <summary>
-        /// Cambia el idioma según el índice del dropdown.
-        /// </summary>
-        public void SetLanguage(TMP_Dropdown change)
-        {
-            PlayerPrefs.SetInt("LanguageIndex", change.value);
-            PlayerPrefs.Save();
-
-            if (Localization.LocalizationManager.Instance != null)
-                Localization.LocalizationManager.Instance.LoadLanguage((Localization.Language)change.value);
-        }
-
-        public void OnBackClicked(MenuManager menuManager)
-        {
-            if (menuManager != null)
-                menuManager.HandleBackInput();
-        }
-
-
-
+    public void OnBackClicked(MenuManager menuManager)
+    {
+        if (menuManager != null)
+            menuManager.HandleBackInput();
     }
 }

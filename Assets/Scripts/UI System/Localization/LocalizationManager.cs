@@ -33,7 +33,11 @@ namespace Localization
             DontDestroyOnLoad(gameObject);
 
             if (_database != null) _database.Initialize();
-
+            var a = PlayerPrefs.GetInt("FpsLimitIndex", 0);
+            var b = PlayerPrefs.GetFloat("MouseSensitivity", 0);
+            var c = PlayerPrefs.GetFloat("GamepadSensitivity", 0);
+            var d = PlayerPrefs.GetFloat("MasterVolume", 0);
+            var e = PlayerPrefs.GetInt("LanguageIndex", 0);
             LoadLanguage((Language)PlayerPrefs.GetInt("LanguageIndex", 0));
         }
 

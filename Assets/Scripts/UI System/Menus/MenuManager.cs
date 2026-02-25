@@ -161,32 +161,30 @@ namespace UI_System.Menus
 
         private IEnumerator TransitionRoutine(string sceneName)
         {
-            Debug.Log("[Transition] Step 1: Fading UI out.");
             if (_uiCanvasGroup != null)
             {
                 _uiCanvasGroup.interactable = false;
                 _uiCanvasGroup.blocksRaycasts = false;
+
+                // Asegurarse de que el Canvas tiene un Sorting Order alto
+                var canvas = _uiCanvasGroup.GetComponent<Canvas>();
+                if (canvas != null) canvas.sortingOrder = 1000;
+
+                _uiCanvasGroup.alpha = 1f; // Parte del alpha inicial del inspector
                 _uiCanvasGroup.DOFade(0f, _fadeOutDuration).SetEase(Ease.InOutQuad).SetUpdate(true).SetLink(gameObject);
             }
 
-            // Move Camera if target is assigned
             if (_menuCamera != null && _cameraTarget != null)
             {
-                Debug.Log("[Transition] Moving Camera & Changing Projection.");
                 _menuCamera.transform.DOMove(_cameraTarget.position, _cameraMoveDuration).SetEase(Ease.InOutQuad).SetUpdate(true).SetLink(gameObject);
                 _menuCamera.transform.DORotate(_cameraTarget.rotation.eulerAngles, _cameraMoveDuration).SetEase(Ease.InOutQuad).SetUpdate(true).SetLink(gameObject);
 
-                // Projection Transition (Perspective -> Orthographic)
                 Matrix4x4 perspectiveMatrix = _menuCamera.projectionMatrix;
                 float aspect = _menuCamera.aspect;
                 float orthoSize = _targetOrthographicSize;
                 float near = _menuCamera.nearClipPlane;
                 float far = _menuCamera.farClipPlane;
-
-                // Calculate target Orthographic Matrix
                 Matrix4x4 orthoMatrix = Matrix4x4.Ortho(-orthoSize * aspect, orthoSize * aspect, -orthoSize, orthoSize, near, far);
-
-                // Disable orthographic mode to allow manual matrix manipulation
                 _menuCamera.orthographic = false;
 
                 DOVirtual.Float(0f, 1f, _cameraMoveDuration, t =>
@@ -195,7 +193,6 @@ namespace UI_System.Menus
                         _menuCamera.projectionMatrix = MatrixLerp(perspectiveMatrix, orthoMatrix, t);
                 }).SetEase(Ease.InOutQuad).SetUpdate(true).SetLink(gameObject).OnComplete(() =>
                 {
-                    // Snap to actual orthographic mode at the end
                     if (_menuCamera != null)
                     {
                         _menuCamera.orthographic = true;
@@ -205,24 +202,18 @@ namespace UI_System.Menus
                 });
             }
 
-            // Wait for camera movement
             float waitTime = (_menuCamera != null && _cameraTarget != null) ? _cameraMoveDuration : _delayBeforeLoad;
-            Debug.Log($"[Transition] Step 2: Waiting {waitTime} seconds.");
             yield return new WaitForSecondsRealtime(waitTime);
 
-            // Use the shared SceneTransitionManager
-            // Use the shared SceneTransitionManager
             var transitionManager = CinematicSystem.Transitions.SceneTransitionManager.Instance;
             if (transitionManager == null)
             {
-                Debug.Log("[MenuManager] SceneTransitionManager missing. Creating one.");
                 GameObject go = new GameObject("SceneTransitionManager");
                 transitionManager = go.AddComponent<CinematicSystem.Transitions.SceneTransitionManager>();
             }
 
             transitionManager.CrossfadeToScene(sceneName, _crossFadeDuration);
         }
-
 
         public void OnOptionsClicked()
         {
