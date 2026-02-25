@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace CinematicSystem.TableSequence
 {
@@ -75,28 +76,84 @@ namespace CinematicSystem.TableSequence
         [SerializeField] private bool _startOnEnable = true;
         [SerializeField] private bool _stopAtLastObject = false; // New Option
 
+        [Header("Skip Settings")]
+        [SerializeField] private bool _allowSkip = true;
+        [SerializeField] private InputActionReference _skipAction;
+
         [Header("Scene Transition")]
         [SerializeField] private string _nextSceneName;
         [SerializeField] private float _transitionDuration = 1f;
         [SerializeField] private float _delayBeforeTransition = 0f;
 
         private Sequence _sequence;
+        private Coroutine _subtitleCoroutine;
+        private bool _isSkipping = false;
 
        
         private void OnEnable()
         {
+            if (_skipAction != null)
+            {
+                _skipAction.action.Enable();
+                _skipAction.action.performed += OnSkipPerformed;
+            }
+
             if (_startOnEnable)
                 PlaySequence();
         }
 
         private void OnDisable()
         {
+            if (_skipAction != null)
+            {
+                _skipAction.action.performed -= OnSkipPerformed;
+                _skipAction.action.Disable();
+            }
+
             if (_sequence != null)
                 _sequence.Kill();
         }
 
+        private void OnSkipPerformed(InputAction.CallbackContext context)
+        {
+            if (_allowSkip && !_isSkipping)
+            {
+                SkipSequence();
+            }
+        }
+
+        public void SkipSequence()
+        {
+            if (_isSkipping) return;
+            _isSkipping = true;
+
+            if (_sequence != null)
+                _sequence.Kill();
+
+            if (_subtitleCoroutine != null)
+            {
+                StopCoroutine(_subtitleCoroutine);
+                if (UI_System.Subtitles.SimpleSubtitleUI.Instance != null)
+                {
+                    UI_System.Subtitles.SimpleSubtitleUI.Instance.HideImmediate();
+                }
+            }
+
+            if (!string.IsNullOrEmpty(_nextSceneName))
+            {
+                var transitionManager = CinematicSystem.Transitions.SceneTransitionManager.Instance;
+                if (transitionManager == null)
+                {
+                    GameObject go = new GameObject("SceneTransitionManager");
+                    transitionManager = go.AddComponent<CinematicSystem.Transitions.SceneTransitionManager>();
+                }
+                transitionManager.CrossfadeToScene(_nextSceneName, _transitionDuration);
+            }
+        }
+
         public void PlaySequence()
         {
+            _isSkipping = false;
             if (_targets == null || _targets.Count == 0 || _camera == null) return;
 
             _sequence = DOTween.Sequence();
@@ -107,7 +164,7 @@ namespace CinematicSystem.TableSequence
                 // Start independent subtitle sequence
                 if (_subtitles != null && _subtitles.Count > 0)
                 {
-                    StartCoroutine(PlaySubtitleRoutine());
+                    _subtitleCoroutine = StartCoroutine(PlaySubtitleRoutine());
                 }
                 // Start at Close Position of first object (as requested)
                 Vector3 startPos = GetClosePos(_targets[0].TargetObject);
