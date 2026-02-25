@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace CinematicSystem.TableSequence
 {
@@ -75,12 +76,15 @@ namespace CinematicSystem.TableSequence
         [SerializeField] private bool _startOnEnable = true;
         [SerializeField] private bool _stopAtLastObject = false; // New Option
 
+
+
         [Header("Scene Transition")]
         [SerializeField] private string _nextSceneName;
         [SerializeField] private float _transitionDuration = 1f;
         [SerializeField] private float _delayBeforeTransition = 0f;
 
         private Sequence _sequence;
+        private Coroutine _subtitleCoroutine;
 
        
         private void OnEnable()
@@ -91,9 +95,12 @@ namespace CinematicSystem.TableSequence
 
         private void OnDisable()
         {
+
             if (_sequence != null)
                 _sequence.Kill();
         }
+
+
 
         public void PlaySequence()
         {
@@ -107,7 +114,7 @@ namespace CinematicSystem.TableSequence
                 // Start independent subtitle sequence
                 if (_subtitles != null && _subtitles.Count > 0)
                 {
-                    StartCoroutine(PlaySubtitleRoutine());
+                    _subtitleCoroutine = StartCoroutine(PlaySubtitleRoutine());
                 }
                 // Start at Close Position of first object (as requested)
                 Vector3 startPos = GetClosePos(_targets[0].TargetObject);

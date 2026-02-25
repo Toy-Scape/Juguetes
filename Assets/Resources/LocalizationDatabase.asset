@@ -436,10 +436,9 @@ MonoBehaviour:
       perfect for powering remotes, flashlights, and small devices without letting
       you down when it matters most.
 
-      
 
-      Will they need to be stored
-      anywhere?'
+
+      Will they need to be stored anywhere?'
     spanish: "Unas bater\xEDas fiables y duraderas, dise\xF1adas para ofrecer energ\xEDa
       constante cuando m\xE1s la necesitas. Compactas, potentes y f\xE1ciles de instalar,
       perfectas para dar vida a mandos, linternas y peque\xF1os dispositivos sin
@@ -449,7 +448,10 @@ MonoBehaviour:
       urrutiko aginteei, linternei eta gailu txikiei energia emateko aproposak dira,
       gehien behar duzunean hutsik egin gabe.
 
-      
 
-      Nonbait gorde beharko
-      al dira?'
+
+      Nonbait gorde beharko al dira?'
+  - key: tutorial-first-think
+    english: I need to escape from this house no matter what.
+    spanish: Necesito escapar de esta casa como sea.
+    basque: Etxe honetatik ihes egin behar dut edozein modutan.
