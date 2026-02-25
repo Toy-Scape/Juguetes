@@ -10,6 +10,22 @@ public class LocalizedDropdown : MonoBehaviour, ILocalizable
     [SerializeField] private TMP_Text label;
     [SerializeField] private TMP_Dropdown dropdown;
 
+    /// <summary>Acceso público al TMP_Dropdown para suscribir listeners desde código.</summary>
+    public TMP_Dropdown Dropdown => dropdown;
+
+    /// <summary>
+    /// Establece el valor del dropdown sin disparar onValueChanged.
+    /// Usar al cargar ajustes guardados.
+    /// </summary>
+    public void SetValueWithoutNotify(int value)
+    {
+        if (dropdown != null)
+        {
+            dropdown.SetValueWithoutNotify(value);
+            dropdown.RefreshShownValue();
+        }
+    }
+
     private void Awake()
     {
         Localize();

@@ -27,4 +27,17 @@ public class UI_SliderField : MonoBehaviour
         // Llama al evento del inspector
         onValueChanged?.Invoke(value);
     }
+
+    /// <summary>
+    /// Actualiza el valor del slider y el texto sin disparar el evento onValueChanged.
+    /// Usar esto al cargar ajustes guardados para no sobrescribir los PlayerPrefs.
+    /// </summary>
+    public void SetValueWithoutNotify(float value)
+    {
+        if (slider != null)
+            slider.SetValueWithoutNotify(value);
+
+        if (valueText != null)
+            valueText.text = (value * 100f).ToString("0.0") + "%";
+    }
 }

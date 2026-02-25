@@ -82,6 +82,7 @@ namespace CinematicSystem.TableSequence
 
         private Sequence _sequence;
 
+       
         private void OnEnable()
         {
             if (_startOnEnable)
