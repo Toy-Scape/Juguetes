@@ -14,7 +14,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6225840253745424498, guid: 47c09d0806e9c5a4da464118f6398f56, type: 3}
       propertyPath: m_text
-      value: play-button
+      value: Jugar
       objectReference: {fileID: 0}
     - target: {fileID: 6753178028814705649, guid: 47c09d0806e9c5a4da464118f6398f56, type: 3}
       propertyPath: labelKey
@@ -101,9 +101,17 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7948750643290814398, guid: 47c09d0806e9c5a4da464118f6398f56, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7948750643290814398, guid: 47c09d0806e9c5a4da464118f6398f56, type: 3}
       propertyPath: m_Material
       value: 
       objectReference: {fileID: 2100000, guid: f1f8040b621696441ab0eba4abafb1ad, type: 2}
+    - target: {fileID: 8054632464345251630, guid: 47c09d0806e9c5a4da464118f6398f56, type: 3}
+      propertyPath: hoverScale
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8054632464345251630, guid: 47c09d0806e9c5a4da464118f6398f56, type: 3}
       propertyPath: topColor.b
       value: 0.22745098

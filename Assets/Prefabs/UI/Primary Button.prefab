@@ -92,7 +92,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 26.85
+  m_fontSize: 50
   m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -292,12 +292,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf642e5c1406e744c921e78686b24de5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UIButtonHover
-  hoverScale: 1.05
+  hoverScale: 1
   speed: 10
-  topColor: {r: 0.41960785, g: 0.35686275, b: 1, a: 1}
-  bottomColor: {r: 0.3019608, g: 0.6392157, b: 1, a: 1}
-  topHoverColor: {r: 1, g: 0.34901962, b: 0.3019608, a: 1}
-  bottomHoverColor: {r: 0.7372549, g: 0, b: 0.19215687, a: 1}
+  topColor: {r: 0.41960785, g: 0.35686275, b: 1, a: 0}
+  bottomColor: {r: 0.3019608, g: 0.6392157, b: 1, a: 0}
+  topHoverColor: {r: 1, g: 0.34901962, b: 0.3019608, a: 0.5372549}
+  bottomHoverColor: {r: 0.7372549, g: 0, b: 0.19215687, a: 0.5372549}
 --- !u!114 &6753178028814705649
 MonoBehaviour:
   m_ObjectHideFlags: 0
