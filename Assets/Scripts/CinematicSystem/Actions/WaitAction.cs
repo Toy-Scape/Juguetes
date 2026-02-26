@@ -1,6 +1,5 @@
 using System.Collections;
 using CinematicSystem.Core;
-using UnityEngine;
 
 namespace CinematicSystem.Actions
 {
@@ -12,9 +11,7 @@ namespace CinematicSystem.Actions
         public override IEnumerator Execute(ICinematicContext context)
         {
             if (duration > 0)
-            {
-                yield return new WaitForSeconds(duration);
-            }
+                yield return context.Wait(duration);
         }
     }
 }
