@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Models/Characters/MMA Fighter/MMA Fighter.fbx.meta
+guid: e884654bea14e5d44bd4d2bda626d831
+========
 guid: f89b29212c8c76c438594dc69dbb2fcb
+>>>>>>>> develop:Assets/Models/Door 2.fbx.meta
 ModelImporter:
   serializedVersion: 24200
   internalIDToNameTable: []

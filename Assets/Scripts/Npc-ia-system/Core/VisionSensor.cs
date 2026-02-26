@@ -56,15 +56,14 @@ namespace Core
             }
         }
 
-        /// <summary>
-        /// Returns valid IVisibleTargets currently seen.
-        /// </summary>
         public List<IVisibleTarget> GetVisibleTargetsInterface()
         {
             _visibleTargetsCache.Clear();
             int count = Physics.OverlapSphereNonAlloc(transform.position, viewRadius, _overlapBuffer, detectionMask);
             Vector3 eyePos = GetEyePosition();
             Vector3 forward = GetEyeForward();
+
+            // Debug.Log($"[VisionSensor] OverlapSphere found {count} potential colliders.");
 
             for (int i = 0; i < count; i++)
             {
@@ -75,10 +74,14 @@ namespace Core
                 {
                     if (!target.IsValid) continue;
 
-                    // Parse unique ID or use reference to avoid duplicate adds if multiple colliders belong to same target
-                    if (!_visibleTargetsCache.Contains(target) && CheckVisibility(eyePos, forward, target))
+                    if (!_visibleTargetsCache.Contains(target))
                     {
-                        _visibleTargetsCache.Add(target);
+                        bool isVisible = CheckVisibility(eyePos, forward, target);
+                        // Debug.Log($"[VisionSensor] Evaluating {col.name}: Visble? {isVisible}");
+                        if (isVisible)
+                        {
+                            _visibleTargetsCache.Add(target);
+                        }
                     }
                 }
             }
@@ -119,20 +122,41 @@ namespace Core
             Vector3 dirToTarget = (targetPos - eyePos);
             float distance = dirToTarget.magnitude;
 
-            if (distance > viewRadius) return false;
+            if (distance > viewRadius) 
+            {
+                // Debug.Log($"[VisionSensor] Out of radius: {distance} > {viewRadius}");
+                return false;
+            }
 
             // Angle check
-            if (Vector3.Angle(forward, dirToTarget) > viewAngle / 2f) return false;
+            float angle = Vector3.Angle(forward, dirToTarget);
+            if (angle > viewAngle / 2f) 
+            {
+                // Debug.Log($"[VisionSensor] Out of angle: {angle} > {viewAngle / 2f}");
+                return false;
+            }
 
-            // Occlusion check
-            if (Physics.Raycast(eyePos, dirToTarget.normalized, out RaycastHit hit, distance, obstacleMask))
+            // Occlusion check: RaycastAll to find first valid hit on the obstacle mask
+            // We use RaycastAll and ignore triggers manually, or rely on Physics settings.
+            RaycastHit[] hits = Physics.RaycastAll(eyePos, dirToTarget.normalized, distance, obstacleMask, QueryTriggerInteraction.Ignore);
+            
+            // Sort hits by distance
+            System.Array.Sort(hits, (a, b) => a.distance.CompareTo(b.distance));
+
+            foreach (var hit in hits)
             {
                 // Verify if the hit object is part of the target
                 if (hit.collider.transform == target.Transform || hit.collider.transform.IsChildOf(target.Transform))
                 {
                     return true; // We hit the target, so it is visible
                 }
-                return false; // We hit something else, so it is occluded
+                
+                // If we hit something else that is in the obstacleMask and not a trigger, it's occluded
+                if (!hit.collider.isTrigger) 
+                {
+                    // Debug.Log($"[VisionSensor] Occluded by {hit.collider.name}");
+                    return false;
+                }
             }
 
             return true;
@@ -150,7 +174,7 @@ namespace Core
             Vector3 forward = GetEyeForward();
             if (Vector3.Angle(forward, dirToTarget) > viewAngle / 2f) return false;
 
-            if (Physics.Raycast(eyePos, dirToTarget.normalized, dist, obstacleMask)) return false;
+            if (Physics.Raycast(eyePos, dirToTarget.normalized, dist, obstacleMask, QueryTriggerInteraction.Ignore)) return false;
 
             return true;
         }

@@ -1,9 +1,13 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 
 [RequireComponent(typeof(WindAffected))]
 public class PaperStackController : MonoBehaviour
 {
+    [Header("Eventos")]
+    public UnityEvent onPapersBlown;
+
     [Header("Referencias de pila")]
     [SerializeField] GameObject paperStack;
     [SerializeField] GameObject smallPaperStack;
@@ -43,6 +47,7 @@ public class PaperStackController : MonoBehaviour
     {
         if (alreadyTriggered) return;
         alreadyTriggered = true;
+        onPapersBlown?.Invoke();
         StartCoroutine(SpawnHojas());
     }
 

@@ -24,10 +24,25 @@ namespace Domain.StaticNpc
         public NpcActionType actionType;
 
         [Header("Movement / Rotation")]
+        [Tooltip("Single target for movement or rotation.")]
         public Transform targetTransform;
+        [Tooltip("Multiple points for 'Move' action. If empty, uses targetTransform.")]
+        public List<Transform> movePath = new List<Transform>();
+        [Tooltip("If true, the NPC will look in the direction it's moving.")]
+        public bool lookForwardWhileMoving = true;
+        [Tooltip("If true, Move uses 'movementSpeed'. If false, uses 'duration'.")]
+        public bool moveBySpeed = true;
+        [Tooltip("Units per second for movement.")]
+        public float movementSpeed = 3f;
         public float duration = 1f;
         public Ease easeType = Ease.Linear;
         public bool waitForCompletion = true;
+
+        [Header("Animator Control During Move")]
+        [Tooltip("Float parameter Name to set on the Animator while moving (e.g. 'Speed'). Leave empty if not needed.")]
+        public string moveSpeedParameter;
+        [Tooltip("Value to set for the parameter while moving.")]
+        public float moveSpeedValue = 1f;
 
         [Header("Animation")]
         public string animationStateOrTriggerName;
@@ -56,12 +71,14 @@ namespace Domain.StaticNpc
         public UnityEvent onSequenceComplete;
 
         private Animator _animator;
+        private StaticNpcScannerIK _scannerIK;
         private Coroutine _actionRoutine;
         private Sequence _currentMoveSequence;
 
         private void Awake()
         {
             _animator = GetComponent<Animator>();
+            _scannerIK = GetComponent<StaticNpcScannerIK>();
         }
 
         private void Start()
@@ -70,6 +87,11 @@ namespace Domain.StaticNpc
             {
                 PlayAllActionsSequentially();
             }
+        }
+
+        private void OnDestroy()
+        {
+            StopActions();
         }
 
         /// <summary>
@@ -96,6 +118,50 @@ namespace Domain.StaticNpc
             else
             {
                 Debug.LogWarning($"{gameObject.name}: Action with ID '{actionId}' not found.");
+            }
+        }
+
+        /// <summary>
+        /// Executes a sequence of actions by their IDs, provided as a comma-separated string.
+        /// Useful for calling from UnityEvents.
+        /// </summary>
+        /// <param name="commaSeparatedIds">E.g. "stand-up,Move"</param>
+        public void PlayActionsByIdSequence(string commaSeparatedIds)
+        {
+            if (string.IsNullOrWhiteSpace(commaSeparatedIds))
+            {
+                Debug.LogWarning($"{gameObject.name}: PlayActionsByIdSequence called with empty string.");
+                return;
+            }
+
+            Debug.Log($"[{gameObject.name}] PlayActionsByIdSequence parsing: {commaSeparatedIds}");
+
+            string[] ids = commaSeparatedIds.Split(',');
+            List<StaticNpcAction> actionsToPlay = new List<StaticNpcAction>();
+
+            foreach (var id in ids)
+            {
+                string cleanId = id.Trim();
+                var action = actions.Find(a => a.actionId == cleanId);
+                if (action != null)
+                {
+                    actionsToPlay.Add(action);
+                }
+                else
+                {
+                    Debug.LogWarning($"{gameObject.name}: Action with ID '{cleanId}' not found in sequence.");
+                }
+            }
+
+            if (actionsToPlay.Count > 0)
+            {
+                Debug.Log($"[{gameObject.name}] Playing {actionsToPlay.Count} actions sequentially.");
+                StopActions();
+                _actionRoutine = StartCoroutine(ExecuteActionsRoutine(actionsToPlay));
+            }
+            else
+            {
+                Debug.LogWarning($"[{gameObject.name}] No valid actions were found to play for sequence: {commaSeparatedIds}");
             }
         }
 
@@ -164,14 +230,59 @@ namespace Domain.StaticNpc
 
         private IEnumerator ExecuteMove(StaticNpcAction action)
         {
-            if (action.targetTransform == null)
+            List<Transform> path = new List<Transform>();
+            if (action.movePath != null && action.movePath.Count > 0)
             {
-                Debug.LogWarning($"{gameObject.name}: Move action has no target transform.");
+                path.AddRange(action.movePath);
+            }
+            else if (action.targetTransform != null)
+            {
+                path.Add(action.targetTransform);
+            }
+
+            if (path.Count == 0)
+            {
+                Debug.LogWarning($"{gameObject.name}: Move action has no target transform or path.");
                 yield break;
             }
 
+            if (_animator != null && !string.IsNullOrEmpty(action.moveSpeedParameter))
+            {
+                _animator.SetFloat(action.moveSpeedParameter, action.moveSpeedValue);
+            }
+
+            if (_scannerIK != null)
+            {
+                _scannerIK.enabled = false;
+            }
+
             _currentMoveSequence = DOTween.Sequence();
-            _currentMoveSequence.Append(transform.DOMove(action.targetTransform.position, action.duration).SetEase(action.easeType));
+            _currentMoveSequence.SetLink(gameObject);
+            _currentMoveSequence.OnKill(() => ResetMoveAnimation(action));
+
+            // Setup Waypoints
+            Vector3[] waypoints = new Vector3[path.Count];
+            for (int i = 0; i < path.Count; i++)
+            {
+                waypoints[i] = path[i].position;
+            }
+
+            // DOPath will follow all points.
+            var pathTween = transform.DOPath(waypoints, action.moveBySpeed ? action.movementSpeed : action.duration, PathType.Linear)
+                .SetEase(action.easeType);
+                
+            if (action.moveBySpeed) 
+            {
+                pathTween.SetSpeedBased();
+            }
+
+            if (action.lookForwardWhileMoving)
+            {
+                // lookAhead between 0.001 and 1. A small value handles straight line segments well.
+                pathTween.SetLookAt(0.01f); 
+            }
+
+            _currentMoveSequence.Append(pathTween);
 
             if (action.waitForCompletion)
             {
@@ -188,6 +299,7 @@ namespace Domain.StaticNpc
             }
 
             _currentMoveSequence = DOTween.Sequence();
+            _currentMoveSequence.SetLink(gameObject);
             _currentMoveSequence.Append(transform.DORotate(action.targetTransform.rotation.eulerAngles, action.duration).SetEase(action.easeType));
 
             if (action.waitForCompletion)
@@ -210,6 +322,18 @@ namespace Domain.StaticNpc
                 {
                     _animator.SetTrigger(action.animationStateOrTriggerName);
                 }
+            }
+        }
+
+        private void ResetMoveAnimation(StaticNpcAction action)
+        {
+            if (_animator != null && !string.IsNullOrEmpty(action.moveSpeedParameter))
+            {
+                _animator.SetFloat(action.moveSpeedParameter, 0f);
+            }
+            if (_scannerIK != null)
+            {
+                _scannerIK.enabled = true;
             }
         }
     }
