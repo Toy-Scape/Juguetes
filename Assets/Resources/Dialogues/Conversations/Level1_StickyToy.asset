@@ -29,15 +29,21 @@ MonoBehaviour:
   - Character: {fileID: 11400000, guid: 42b78f4e58247f64fb0fc56d0c5d1796, type: 2}
     Key: level1-robotin-dialogue-2
     Text: 
-    Actions: []
+    Actions:
+    - timing: 0
+      action: {fileID: 11400000, guid: b83f99167c72f1e4588665569468c406, type: 2}
   - Character: {fileID: 11400000, guid: 42b78f4e58247f64fb0fc56d0c5d1796, type: 2}
     Key: level1-robotin-dialogue-3
     Text: 
-    Actions: []
+    Actions:
+    - timing: 0
+      action: {fileID: 11400000, guid: 0e989b32dbab85a428ffcb753bd04906, type: 2}
   - Character: {fileID: 11400000, guid: ec13e51ae93f9464ab66b050317043c6, type: 2}
     Key: level1-sticky-dialogue-3
     Text: 
-    Actions: []
+    Actions:
+    - timing: 0
+      action: {fileID: 11400000, guid: 64343814dc517354aa0ca2283c3fb145, type: 2}
   - Character: {fileID: 11400000, guid: 42b78f4e58247f64fb0fc56d0c5d1796, type: 2}
     Key: level1-robotin-dialogue-4
     Text: 
