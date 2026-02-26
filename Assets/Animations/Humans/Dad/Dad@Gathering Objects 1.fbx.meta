@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 85f9ce468b1a7d6438c0da22d179646c
+guid: de961953a6633a244b5c9f4f574323cc
 ModelImporter:
   serializedVersion: 24200
   internalIDToNameTable: []
@@ -37,15 +37,15 @@ ModelImporter:
       name: Gathering Objects
       takeName: mixamo.com
       internalID: -203655887218126122
-      firstFrame: 0
-      lastFrame: 105
+      firstFrame: 36
+      lastFrame: 86
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 0
+      loopTime: 1
       loopBlend: 0
       loopBlendOrientation: 1
       loopBlendPositionY: 1

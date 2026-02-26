@@ -423,7 +423,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1823611041586690541, guid: e58fb1ed033b32142b200c49586f89f0, type: 3}
       propertyPath: onPapersBlown.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
-      value: stand-up,Move
+      value: stand-up,Move,Gather
       objectReference: {fileID: 0}
     - target: {fileID: 1823611041586690541, guid: e58fb1ed033b32142b200c49586f89f0, type: 3}
       propertyPath: onPapersBlown.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
@@ -1808,7 +1808,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 898184063892498084, guid: 9bb397a1be7f66143b31e33ec4b8e18f, type: 3}
       propertyPath: actions.Array.size
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 898184063892498084, guid: 9bb397a1be7f66143b31e33ec4b8e18f, type: 3}
       propertyPath: playSequenceOnStart
@@ -1828,11 +1828,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 898184063892498084, guid: 9bb397a1be7f66143b31e33ec4b8e18f, type: 3}
       propertyPath: actions.Array.data[2].duration
-      value: 4
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 898184063892498084, guid: 9bb397a1be7f66143b31e33ec4b8e18f, type: 3}
       propertyPath: actions.Array.data[2].easeType
-      value: 10
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 898184063892498084, guid: 9bb397a1be7f66143b31e33ec4b8e18f, type: 3}
+      propertyPath: actions.Array.data[3].actionId
+      value: Gather
+      objectReference: {fileID: 0}
+    - target: {fileID: 898184063892498084, guid: 9bb397a1be7f66143b31e33ec4b8e18f, type: 3}
+      propertyPath: actions.Array.data[3].duration
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 898184063892498084, guid: 9bb397a1be7f66143b31e33ec4b8e18f, type: 3}
+      propertyPath: actions.Array.data[3].easeType
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 898184063892498084, guid: 9bb397a1be7f66143b31e33ec4b8e18f, type: 3}
       propertyPath: actions.Array.data[0].crossFade
@@ -1851,16 +1863,28 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 898184063892498084, guid: 9bb397a1be7f66143b31e33ec4b8e18f, type: 3}
+      propertyPath: actions.Array.data[3].actionType
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 898184063892498084, guid: 9bb397a1be7f66143b31e33ec4b8e18f, type: 3}
       propertyPath: actions.Array.data[2].moveBySpeed
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 898184063892498084, guid: 9bb397a1be7f66143b31e33ec4b8e18f, type: 3}
       propertyPath: actions.Array.data[2].movementSpeed
-      value: 1
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 898184063892498084, guid: 9bb397a1be7f66143b31e33ec4b8e18f, type: 3}
+      propertyPath: actions.Array.data[3].movementSpeed
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 898184063892498084, guid: 9bb397a1be7f66143b31e33ec4b8e18f, type: 3}
       propertyPath: actions.Array.data[2].moveSpeedValue
-      value: 1
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 898184063892498084, guid: 9bb397a1be7f66143b31e33ec4b8e18f, type: 3}
+      propertyPath: actions.Array.data[3].moveSpeedValue
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 898184063892498084, guid: 9bb397a1be7f66143b31e33ec4b8e18f, type: 3}
       propertyPath: actions.Array.data[2].targetTransform
@@ -1871,12 +1895,28 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 898184063892498084, guid: 9bb397a1be7f66143b31e33ec4b8e18f, type: 3}
+      propertyPath: actions.Array.data[3].waitForCompletion
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 898184063892498084, guid: 9bb397a1be7f66143b31e33ec4b8e18f, type: 3}
       propertyPath: actions.Array.data[2].moveSpeedParameter
       value: speed
       objectReference: {fileID: 0}
     - target: {fileID: 898184063892498084, guid: 9bb397a1be7f66143b31e33ec4b8e18f, type: 3}
+      propertyPath: actions.Array.data[3].moveSpeedParameter
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 898184063892498084, guid: 9bb397a1be7f66143b31e33ec4b8e18f, type: 3}
       propertyPath: actions.Array.data[2].movePath.Array.size
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 898184063892498084, guid: 9bb397a1be7f66143b31e33ec4b8e18f, type: 3}
+      propertyPath: actions.Array.data[3].movePath.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 898184063892498084, guid: 9bb397a1be7f66143b31e33ec4b8e18f, type: 3}
+      propertyPath: actions.Array.data[2].lookForwardWhileMoving
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 898184063892498084, guid: 9bb397a1be7f66143b31e33ec4b8e18f, type: 3}
       propertyPath: 'actions.Array.data[2].movePath.Array.data[0]'
@@ -1891,6 +1931,22 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1960234087}
     - target: {fileID: 898184063892498084, guid: 9bb397a1be7f66143b31e33ec4b8e18f, type: 3}
+      propertyPath: actions.Array.data[3].lookForwardWhileMoving
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 898184063892498084, guid: 9bb397a1be7f66143b31e33ec4b8e18f, type: 3}
+      propertyPath: 'actions.Array.data[3].movePath.Array.data[0]'
+      value: 
+      objectReference: {fileID: 1486396946}
+    - target: {fileID: 898184063892498084, guid: 9bb397a1be7f66143b31e33ec4b8e18f, type: 3}
+      propertyPath: 'actions.Array.data[3].movePath.Array.data[1]'
+      value: 
+      objectReference: {fileID: 1342201790}
+    - target: {fileID: 898184063892498084, guid: 9bb397a1be7f66143b31e33ec4b8e18f, type: 3}
+      propertyPath: 'actions.Array.data[3].movePath.Array.data[2]'
+      value: 
+      objectReference: {fileID: 1960234087}
+    - target: {fileID: 898184063892498084, guid: 9bb397a1be7f66143b31e33ec4b8e18f, type: 3}
       propertyPath: actions.Array.data[0].animationStateOrTriggerName
       value: Stand
       objectReference: {fileID: 0}
@@ -1900,7 +1956,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 898184063892498084, guid: 9bb397a1be7f66143b31e33ec4b8e18f, type: 3}
       propertyPath: actions.Array.data[2].animationStateOrTriggerName
-      value: Down
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 898184063892498084, guid: 9bb397a1be7f66143b31e33ec4b8e18f, type: 3}
+      propertyPath: actions.Array.data[3].animationStateOrTriggerName
+      value: Gather
       objectReference: {fileID: 0}
     - target: {fileID: 2474787825163022457, guid: 9bb397a1be7f66143b31e33ec4b8e18f, type: 3}
       propertyPath: m_Name
@@ -1994,6 +2054,19 @@ PrefabInstance:
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: 978ba0a5277e2b24d8a64bcc769e8ff5, type: 2}
+    - target: {fileID: 7264248710473001163, guid: 9bb397a1be7f66143b31e33ec4b8e18f, type: 3}
+      propertyPath: m_WarningMessage
+      value: "\nBinding warning: Some generic clip(s) animate transforms that are
+        already bound by a Humanoid avatar. These transforms can only be changed
+        by Humanoid clips.\n\tTransform 'metarig'\n\tTransform 'forearm.R'\n\tTransform
+        'shoulder.R'\n\tTransform 'thigh.L'\n\tTransform 'upper_arm.L'\n\tTransform
+        'spine.006'\n\tTransform 'shin.R'\n\tTransform 'spine.003'\n\tTransform 'metarig'\n\tTransform
+        'upper_arm.R'\n\tand more ...\n\tFrom animation clip 'Writing'"
+      objectReference: {fileID: 0}
+    - target: {fileID: 7264248710473001163, guid: 9bb397a1be7f66143b31e33ec4b8e18f, type: 3}
+      propertyPath: m_ApplyRootMotion
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8759714513443432560, guid: 9bb397a1be7f66143b31e33ec4b8e18f, type: 3}
       propertyPath: m_ApplyRootMotion
       value: 0

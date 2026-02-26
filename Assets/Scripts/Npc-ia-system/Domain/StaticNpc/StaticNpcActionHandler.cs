@@ -71,12 +71,14 @@ namespace Domain.StaticNpc
         public UnityEvent onSequenceComplete;
 
         private Animator _animator;
+        private StaticNpcScannerIK _scannerIK;
         private Coroutine _actionRoutine;
         private Sequence _currentMoveSequence;
 
         private void Awake()
         {
             _animator = GetComponent<Animator>();
+            _scannerIK = GetComponent<StaticNpcScannerIK>();
         }
 
         private void Start()
@@ -238,6 +240,11 @@ namespace Domain.StaticNpc
                 _animator.SetFloat(action.moveSpeedParameter, action.moveSpeedValue);
             }
 
+            if (_scannerIK != null)
+            {
+                _scannerIK.enabled = false;
+            }
+
             _currentMoveSequence = DOTween.Sequence();
             _currentMoveSequence.SetLink(gameObject);
             _currentMoveSequence.OnKill(() => ResetMoveAnimation(action));
@@ -312,6 +319,10 @@ namespace Domain.StaticNpc
             if (_animator != null && !string.IsNullOrEmpty(action.moveSpeedParameter))
             {
                 _animator.SetFloat(action.moveSpeedParameter, 0f);
+            }
+            if (_scannerIK != null)
+            {
+                _scannerIK.enabled = true;
             }
         }
     }
