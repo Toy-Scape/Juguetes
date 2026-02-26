@@ -1,4 +1,5 @@
 using InteractionSystem.Interfaces;
+using System;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
@@ -8,6 +9,9 @@ public class Grabbable : MonoBehaviour, IGrabbable
     [SerializeField] private ConditionSO[] conditions;
     [SerializeField] private Dialogue failureMessage;
     [SerializeField] private LayerMask collisionLayer = -1;
+
+    public Action OnObjectGrabbed = null;
+    public Action OnObjectReleased = null;
 
     public float MoveResistance => moveResistance;
 
@@ -55,6 +59,8 @@ public class Grabbable : MonoBehaviour, IGrabbable
         rb.isKinematic = true;
 
         isGrabbed = true;
+
+        OnObjectGrabbed?.Invoke();
     }
 
     public void StopGrab()
@@ -63,6 +69,7 @@ public class Grabbable : MonoBehaviour, IGrabbable
         rb.isKinematic = wasKinematic;
         if (!wasKinematic)
             rb.WakeUp();
+        OnObjectReleased?.Invoke();
     }
 
     public bool ValidateMovement(Vector3 translation)
