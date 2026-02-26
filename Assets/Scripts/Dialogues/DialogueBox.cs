@@ -49,6 +49,8 @@ public class DialogueBox : MonoBehaviour
     private GameObject player;
     private GameObject currentSpeaker;
 
+    [SerializeField] private GameObject npcToActivate;
+
     private HashSet<int> duringTriggeredLines = new HashSet<int>();
 
     public bool IsTyping { get; private set; }
@@ -222,6 +224,7 @@ public class DialogueBox : MonoBehaviour
 
         currentSpeaker = CharacterManager.Instance.GetModel(line.Character.CharacterId);
         var context = new DialogueContext(player, currentSpeaker);
+        context.NPCToActivate = npcToActivate;
 
         activeDialogue.TriggerActions(dialogueIndex, TriggerTiming.OnStart, context);
 
@@ -244,6 +247,7 @@ public class DialogueBox : MonoBehaviour
         IsTyping = false;
 
         var context = new DialogueContext(player, currentSpeaker);
+        context.NPCToActivate = npcToActivate;
         int currentLine = dialogueIndex - 1;
 
         if (!duringTriggeredLines.Contains(currentLine))

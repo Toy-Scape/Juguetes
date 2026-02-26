@@ -95,7 +95,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9abe945904ff58d44aa37fe49ab2f00d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WindAffected
-  windSensitivity: 1
+  windSensitivity: 3
   liftFactor: 1
   turbulence: 10
   hasBeenBlown: 0
