@@ -267,7 +267,7 @@ public class CameraManager : MonoBehaviour
 
     void ActivarCamaraAgachado(bool CrouchingState)
     {
-        Debug.Log($"Crouching: {CrouchingState}");
+        // Debug.Log($"Crouching: {CrouchingState}");
         if (CrouchingState)
         {
             generalCamera.Priority = 0;
@@ -276,6 +276,19 @@ public class CameraManager : MonoBehaviour
         }
         generalCamera.Priority = 10;
         crouchingCamera.Priority = 0;
+    }
+
+    /// <summary>
+    /// Resets all non-gameplay cameras to 0 and re-activates the correct gameplay camera.
+    /// Useful for respawns to guarantee we aren't stuck in a cinematic or dialogue camera.
+    /// </summary>
+    public void ResetCamerasToGameplay()
+    {
+        if (dialogueCamera != null) dialogueCamera.Priority = 0;
+        if (introTutorial != null) introTutorial.Priority = 0;
+        ActivarCamaraAgachado(this.CrouchingState);
+        UnlockCameraMovement();
+        LockCursor();
     }
 
 

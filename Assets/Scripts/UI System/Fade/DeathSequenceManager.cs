@@ -48,6 +48,20 @@ namespace UI.Fade
         {
             if (_deathCoroutine != null) return; // Prevent double trigger
             
+            // Instant priority 0 for the cinematic dolly camera as requested
+            var camController = FindFirstObjectByType<CinematicSystem.Infrastructure.CinemachineCameraController>();
+            if (camController != null)
+            {
+                camController.ResetCamera(true);
+            }
+            
+            // Also stop the cinematic player if it's active
+            var cinematicPlayer = FindFirstObjectByType<CinematicSystem.Application.CinematicPlayer>();
+            if (cinematicPlayer != null && cinematicPlayer.IsPlaying)
+            {
+                cinematicPlayer.Stop();
+            }
+            
             if (fadeImage == null || _fadeMaterial == null)
             {
                 Debug.LogError("DeathSequenceManager: Missing Image or Material reference! Falling back to instant respawn.");

@@ -16,6 +16,7 @@ public class CinemachineTrigger : MonoBehaviour
     public int activePriority = 20;
 
     private int originalPriority;
+    private static System.Collections.Generic.List<CinemachineTrigger> allTriggers = new System.Collections.Generic.List<CinemachineTrigger>();
 
     private void Start()
     {
@@ -23,6 +24,11 @@ public class CinemachineTrigger : MonoBehaviour
         if (targetCamera != null)
         {
             originalPriority = targetCamera.Priority;
+        }
+
+        if (!allTriggers.Contains(this))
+        {
+            allTriggers.Add(this);
         }
 
         // Asegurarse de que el collider funciona como un trigger
@@ -54,5 +60,24 @@ public class CinemachineTrigger : MonoBehaviour
     private bool IsHitInLayer(GameObject obj, LayerMask layerMask)
     {
         return (layerMask.value & (1 << obj.layer)) > 0;
+    }
+
+    private void OnDestroy()
+    {
+        if (allTriggers.Contains(this))
+        {
+            allTriggers.Remove(this);
+        }
+    }
+
+    public static void ResetAllTriggers()
+    {
+        foreach (var trigger in allTriggers)
+        {
+            if (trigger != null && trigger.targetCamera != null)
+            {
+                trigger.targetCamera.Priority = trigger.originalPriority;
+            }
+        }
     }
 }

@@ -70,6 +70,7 @@ namespace Domain.StaticNpc
                 if (_currentTarget != closestTarget)
                 {
                     // Newly spotted
+                    Debug.Log($"[StaticNpcBrain] Newly spotted target: {closestTarget.name}");
                     _currentTarget = closestTarget;
                     _detectionTimer = 0f;
                     _isFullyDetected = false;
@@ -84,10 +85,12 @@ namespace Domain.StaticNpc
 
                 if (!_isFullyDetected)
                 {
+                    // Debug.Log($"[StaticNpcBrain] Detecting... {_detectionTimer}/{detectionTime}");
                     onDetecting?.Invoke(_currentTarget);
 
                     if (_detectionTimer >= detectionTime)
                     {
+                        Debug.Log($"[StaticNpcBrain] Fully detected target: {_currentTarget.name}");
                         _isFullyDetected = true;
                         onTargetDetected?.Invoke(_currentTarget);
                     }
@@ -98,6 +101,7 @@ namespace Domain.StaticNpc
                 // Nobody in sight
                 if (_currentTarget != null)
                 {
+                    Debug.Log($"[StaticNpcBrain] Target lost: {_currentTarget.name}");
                     _currentTarget = null;
                     _detectionTimer = 0f;
                     _isFullyDetected = false;

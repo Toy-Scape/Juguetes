@@ -28,6 +28,23 @@ namespace CheckpointSystem
             {
                 characterController.enabled = true;
             }
+            
+            // Force Cinematic system to stop and release cameras
+            var cinematicPlayer = FindFirstObjectByType<CinematicSystem.Application.CinematicPlayer>();
+            if (cinematicPlayer != null && cinematicPlayer.IsPlaying)
+            {
+                cinematicPlayer.Stop();
+            }
+
+            // Force Camera Manager to reset to normal gameplay cameras
+            if (CameraManager.Instance != null)
+            {
+                CameraManager.Instance.ResetCamerasToGameplay();
+            }
+
+            // Force all CinemachineTriggers to reset their active status. This fixes cameras 
+            // staying at priority 1000 if the player is killed inside a trigger and respawns outside.
+            CinemachineTrigger.ResetAllTriggers();
 
             Debug.Log("Player Respawned at: " + position);
         }

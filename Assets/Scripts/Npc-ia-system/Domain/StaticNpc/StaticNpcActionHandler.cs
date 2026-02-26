@@ -128,7 +128,13 @@ namespace Domain.StaticNpc
         /// <param name="commaSeparatedIds">E.g. "stand-up,Move"</param>
         public void PlayActionsByIdSequence(string commaSeparatedIds)
         {
-            if (string.IsNullOrWhiteSpace(commaSeparatedIds)) return;
+            if (string.IsNullOrWhiteSpace(commaSeparatedIds))
+            {
+                Debug.LogWarning($"{gameObject.name}: PlayActionsByIdSequence called with empty string.");
+                return;
+            }
+
+            Debug.Log($"[{gameObject.name}] PlayActionsByIdSequence parsing: {commaSeparatedIds}");
 
             string[] ids = commaSeparatedIds.Split(',');
             List<StaticNpcAction> actionsToPlay = new List<StaticNpcAction>();
@@ -149,8 +155,13 @@ namespace Domain.StaticNpc
 
             if (actionsToPlay.Count > 0)
             {
+                Debug.Log($"[{gameObject.name}] Playing {actionsToPlay.Count} actions sequentially.");
                 StopActions();
                 _actionRoutine = StartCoroutine(ExecuteActionsRoutine(actionsToPlay));
+            }
+            else
+            {
+                Debug.LogWarning($"[{gameObject.name}] No valid actions were found to play for sequence: {commaSeparatedIds}");
             }
         }
 
