@@ -2445,6 +2445,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: StickyToy
       objectReference: {fileID: 0}
+    - target: {fileID: 3472105764762360682, guid: 3c2222a421e6e314bbc132aab862473b, type: 3}
+      propertyPath: m_IsKinematic
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3640413157374566799, guid: 3c2222a421e6e314bbc132aab862473b, type: 3}
       propertyPath: m_LocalPosition.x
       value: -49.27
@@ -79831,6 +79835,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Interaction_System.Interactables.VentilationGrateInteractable
   speakerNPC: {fileID: 1071543792}
   itemData: {fileID: 11400000, guid: 271dd0cc060c8374c8ed1b2a3d22ee62, type: 2}
+  NextLevelName: Level_01_Office
 --- !u!114 &1071543791
 MonoBehaviour:
   m_ObjectHideFlags: 0
