@@ -459,3 +459,13 @@ MonoBehaviour:
     english: Credits
     spanish: Creditos
     basque: Kredituak
+  - key: thought-item-missing-batteries
+    english: I need batteries to turn on the fan.
+    spanish: Necesito pilas para encender el ventilador.
+    basque: Haizagailua pizteko pilak behar ditut.
+  - key: thought-ventilation-level1
+    english: "I can\u2019t go back; I should keep going to find a way out of here."
+    spanish: "No puedo volver atr\xE1s, deber\xEDa continuar para encontrar una forma
+      de salir de aqu\xED."
+    basque: Ezin dut atzera egin; jarraitu behar dut hemendik irteteko moduren bat
+      aurkitzeko.

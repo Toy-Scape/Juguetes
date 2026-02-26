@@ -13,6 +13,7 @@ public class IngameCinematicTrigger : MonoBehaviour
         if (player != null)
         {
             player.Play(cinematic);
+            this.gameObject.SetActive(false);
         }
         else
         {

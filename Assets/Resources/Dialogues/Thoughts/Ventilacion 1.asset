@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 29b2a5239966e17419732012e75791f3, type: 3}
-  m_Name: Ventilacion
+  m_Name: Ventilacion 1
   m_EditorClassIdentifier: Assembly-CSharp::Dialogue
   Type: 1
   Lines:
-  - Character: {fileID: 0}
-    Key: thought-ventilacion
+  - Character: {fileID: 11400000, guid: 42b78f4e58247f64fb0fc56d0c5d1796, type: 2}
+    Key: thought-ventilation-level1
     Text: 
     Actions: []
   postDialogueInputDelay: 0

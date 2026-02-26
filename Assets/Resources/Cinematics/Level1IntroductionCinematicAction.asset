@@ -40,8 +40,8 @@ MonoBehaviour:
       data:
         waitForCompletion: 1
         holdAtEnd: 0
-        targetId: Suck Toy
-        lookAtId: Suck Toy
+        targetId: Sticky Toy
+        lookAtId: Sticky Toy
         offset: {x: 20, y: 5, z: 20}
         fov: 60
         duration: 5

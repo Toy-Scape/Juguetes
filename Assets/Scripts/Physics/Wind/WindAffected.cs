@@ -21,6 +21,7 @@ public class WindAffected : MonoBehaviour
 
     public virtual void ApplyWind(Vector3 direction, float force)
     {
+        rb.isKinematic = false;
         Vector3 finalForce = direction * force * windSensitivity;
         finalForce += Vector3.up * force * liftFactor;
 
