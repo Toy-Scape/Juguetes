@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 8661137466233752203}
   - component: {fileID: 8329072915159146251}
   - component: {fileID: 894164869094412770}
+  - component: {fileID: 4619066527252256093}
   m_Layer: 0
   m_Name: Ventilador
   m_TagString: Untagged
@@ -28,12 +29,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2480503105632018296}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 14.1, y: 0, z: -24.3}
-  m_LocalScale: {x: 10, y: 10, z: 10}
+  m_LocalScale: {x: 15.24, y: 15.24, z: 15.24}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 2808638930471969520}
+  - {fileID: 1497271539128820016}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &4366460334020729022
@@ -114,14 +116,58 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b8ce650b7b43944780838606cbe72f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WindSource
-  windForce: 5.94
-  maxDistance: 100
-  boxSize: {x: 9.83, y: 10, z: 63.7}
-  windOffset: {x: 0, y: 1.28, z: -28.4}
+  windForce: 6
+  maxDistance: 70
+  boxSize: {x: 9.83, y: 15.39, z: 63.7}
+  windOffset: {x: 0, y: 1.28, z: -29.4}
   obstacleMask:
     serializedVersion: 2
     m_Bits: 0
   showGizmos: 1
+--- !u!114 &4619066527252256093
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2480503105632018296}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac62303fdd140c544ac28304085a171a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  VentilatorCamera: {fileID: 0}
+--- !u!1 &6668176285367850713
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1497271539128820016}
+  m_Layer: 0
+  m_Name: Ventilator Camera Follow Target
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1497271539128820016
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6668176285367850713}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 238291711125716034}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &2409693276301952283
 PrefabInstance:
   m_ObjectHideFlags: 0
