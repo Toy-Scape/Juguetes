@@ -80,7 +80,7 @@ namespace UI.Fade
             float t = 0f;
             while (t < fadeDuration)
             {
-                t += Time.deltaTime;
+                t += Time.unscaledDeltaTime;
                 float normalizedTime = t / fadeDuration;
                 // Easing out sine
                 float radius = Mathf.Lerp(1f, 0f, Mathf.Sin(normalizedTime * Mathf.PI * 0.5f));
@@ -101,13 +101,13 @@ namespace UI.Fade
             }
 
             // 3. Wait in black screen
-            yield return new WaitForSeconds(blackScreenDuration);
+            yield return new WaitForSecondsRealtime(blackScreenDuration);
 
             // 4. Fade IN (Radius 0 -> 1)
             t = 0f;
             while (t < fadeDuration)
             {
-                t += Time.deltaTime;
+                t += Time.unscaledDeltaTime;
                 float normalizedTime = t / fadeDuration;
                 // Easing out sine
                 float radius = Mathf.Lerp(0f, 1f, Mathf.Sin(normalizedTime * Mathf.PI * 0.5f));
