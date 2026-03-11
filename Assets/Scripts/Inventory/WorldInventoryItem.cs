@@ -47,8 +47,14 @@ namespace Inventory
             }
 
             bool success = playerInventory.AddItem(itemData, quantity);
-            if (success)
+            if (success){
+                if (itemData.triggersBatteryEvent)
+                {
+                    GameEvents.OnBatteryCollected?.Invoke();
+                }
+
                 Destroy(gameObject);
+            }
         }
 
         public override bool IsInteractable ()

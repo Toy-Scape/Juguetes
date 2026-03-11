@@ -9,12 +9,28 @@ public class DialogueTrigger : MonoBehaviour
     {
         if (!other.CompareTag("Player")) return;
 
-        if (!dialogue)
-        {
-            return;
-        }
+        if (dialogue == null) return;
 
         DialogueBox.Instance.StartDialogue(dialogue);
-        this.gameObject.SetActive(false);
-    }    
+
+        gameObject.SetActive(false);
+    }
+
+    private void OnEnable()
+    {
+        GameEvents.OnBatteryCollected += DisableTrigger;
+    }
+
+    private void OnDisable()
+    {
+        GameEvents.OnBatteryCollected -= DisableTrigger;
+    }
+
+    private void DisableTrigger()
+    {
+        if (gameObject.activeSelf)
+        {
+            gameObject.SetActive(false);
+        }
+    }
 }

@@ -469,3 +469,19 @@ MonoBehaviour:
       de salir de aqu\xED."
     basque: Ezin dut atzera egin; jarraitu behar dut hemendik irteteko moduren bat
       aurkitzeko.
+  - key: sticky-call-1
+    english: Hey!
+    spanish: '!Oye!'
+    basque: Aizu!
+  - key: sticky-call-2
+    english: Up here!
+    spanish: '!Aqui arriba!'
+    basque: Hemen goian!
+  - key: sticky-call-3
+    english: I need your help. You have to get me down.
+    spanish: "Necesito tu ayuda. Tienes que bajarme de aqu\xED."
+    basque: Zure laguntza behar dut. Hemendik jaitsi behar nauzu.
+  - key: sticky-call-4
+    english: If it is helpful. I can see some batteries on the desk.
+    spanish: "Si te sirve de ayuda, desde aqu\xED arriba veo unas pilas en el escritorio."
+    basque: Lagungarria bada, pila batzuk ikusten ditut mahaian.

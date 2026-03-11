@@ -18,3 +18,4 @@ MonoBehaviour:
   maxStackSize: 1
   isLimb: 0
   limbSO: {fileID: 0}
+  triggersBatteryEvent: 1

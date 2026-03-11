@@ -50,6 +50,8 @@ namespace Inventory
         /// <summary>Indica si el ítem es una extremidad (limb)</summary>
         public bool IsLimb => isLimb;
 
+        public bool triggersBatteryEvent;
+
         private void OnValidate()
         {
             maxStackSize = Mathf.Max(MinStackSize, maxStackSize);
