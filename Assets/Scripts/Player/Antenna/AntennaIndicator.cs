@@ -1,4 +1,5 @@
 using UnityEngine;
+using Domain.StaticNpc;
 
 public class AntennaIndicator : MonoBehaviour
 {
@@ -10,18 +11,18 @@ public class AntennaIndicator : MonoBehaviour
     private float blinkSpeed;
     private Color emissionColor;
 
-    public Domain.NpcBrain npcBrain;
+    public StaticNpcBrain[] npcBrains;
     public float warningDistance = 15f;
+
+    private Transform playerRoot;
 
     void Start()
     {
-        // Cogemos el material SOLO de la bola
         ballMat = GetComponent<Renderer>().material;
 
-        if (npcBrain == null)
-        {
-             npcBrain = FindFirstObjectByType<Domain.NpcBrain>();
-        }
+        npcBrains = FindObjectsByType<StaticNpcBrain>(FindObjectsSortMode.None);
+
+        playerRoot = transform.root;
     }
 
     void Update()
@@ -33,26 +34,42 @@ public class AntennaIndicator : MonoBehaviour
 
     void CheckNpcStatus()
     {
-        if (npcBrain == null) return;
+        if (npcBrains == null || npcBrains.Length == 0) return;
 
-        // 1. Priority: Detected
-        // If the NPC is looking at THAT player object
-        if (npcBrain.CurrentTarget == this.transform || npcBrain.CurrentTarget == this.transform.parent || (npcBrain.CurrentTarget != null && npcBrain.CurrentTarget.root == this.transform.root))
+        bool warning = false;
+
+        foreach (var brain in npcBrains)
         {
-            SetState(AlertState.Detected);
-            return;
+            if (brain == null) continue;
+
+            Transform target = brain.CurrentTarget;
+
+            // 🔴 DETECTED
+            if (brain.IsFullyDetected && target != null && target.root == playerRoot)
+            {
+                SetState(AlertState.Detected);
+                return;
+            }
+
+            // 🟡 DETECTING
+            if (brain.IsDetecting && target != null && target.root == playerRoot)
+            {
+                warning = true;
+            }
+
+            // 🟡 DISTANCE
+            float distance = Vector3.Distance(transform.position, brain.transform.position);
+
+            if (distance <= warningDistance)
+            {
+                warning = true;
+            }
         }
 
-        // 2. Distance Check
-        float distance = Vector3.Distance(transform.position, npcBrain.transform.position);
-        if (distance <= warningDistance)
-        {
-             SetState(AlertState.Warning);
-        }
+        if (warning)
+            SetState(AlertState.Warning);
         else
-        {
-             SetState(AlertState.Safe);
-        }
+            SetState(AlertState.Safe);
     }
 
     void UpdateStateValues()
@@ -61,27 +78,42 @@ public class AntennaIndicator : MonoBehaviour
         {
             case AlertState.Safe:
                 emissionColor = Color.white;
-                blinkSpeed = 1f;   // Lento
+                blinkSpeed = 1f;
                 break;
 
             case AlertState.Warning:
                 emissionColor = Color.yellow;
-                blinkSpeed = 3f;   // Medio
+                blinkSpeed = 3f;
                 break;
 
             case AlertState.Detected:
                 emissionColor = Color.red;
-                blinkSpeed = 6f;   // Rápido
+                blinkSpeed = 6f;
                 break;
         }
     }
 
     void Blink()
     {
-        float intensity = Mathf.PingPong(Time.time * blinkSpeed, 1f);
+        float pulse = (Mathf.Sin(Time.time * blinkSpeed * Mathf.PI * 2f) + 1f) * 0.5f;
 
-        // Multiplicador alto para que active el Bloom
-        Color finalColor = emissionColor * Mathf.LinearToGammaSpace(intensity * 30f);
+        float minIntensity = 2f;
+        float maxIntensity = 25f;
+
+        if (currentState == AlertState.Warning)
+        {
+            minIntensity = 1f;
+            maxIntensity = 35f;
+        }
+        else if (currentState == AlertState.Detected)
+        {
+            minIntensity = 0.5f;
+            maxIntensity = 50f;
+        }
+
+        float intensity = Mathf.Lerp(minIntensity, maxIntensity, pulse);
+
+        Color finalColor = emissionColor * intensity;
 
         ballMat.SetColor("_EmissionColor", finalColor);
     }
