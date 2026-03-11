@@ -155,5 +155,9 @@ namespace Domain.StaticNpc
             }
             return closest;
         }
+
+        public Transform CurrentTarget => _currentTarget;
+        public bool IsFullyDetected => _isFullyDetected;
+        public bool IsDetecting => _currentTarget != null && !_isFullyDetected;
     }
 }
