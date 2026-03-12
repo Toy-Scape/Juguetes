@@ -36,4 +36,8 @@ public class WindAffected : MonoBehaviour
 
         rb.AddForce(finalForce, ForceMode.Force);
     }
+    public void ResetBlownState()
+    {
+        hasBeenBlown = false;
+    }
 }

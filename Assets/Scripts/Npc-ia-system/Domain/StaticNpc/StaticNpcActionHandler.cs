@@ -214,10 +214,10 @@ namespace Domain.StaticNpc
                     break;
                 case NpcActionType.PlayAnimation:
                     ExecuteAnimation(action);
+
                     if (action.waitForCompletion)
                     {
-                        // A small delay to ensure the animation states transition properly
-                        yield return new WaitForSeconds(0.1f);
+                        yield return WaitForAnimation(action.animationStateOrTriggerName);
                     }
                     break;
                 case NpcActionType.Wait:
@@ -305,6 +305,25 @@ namespace Domain.StaticNpc
             if (action.waitForCompletion)
             {
                 yield return _currentMoveSequence.WaitForCompletion();
+            }
+        }
+
+        IEnumerator WaitForAnimation(string stateName)
+        {
+            // Esperar a que el Animator entre en el estado
+            AnimatorStateInfo state = _animator.GetCurrentAnimatorStateInfo(0);
+
+            while (!state.IsName(stateName))
+            {
+                yield return null;
+                state = _animator.GetCurrentAnimatorStateInfo(0);
+            }
+
+            // Esperar a que termine
+            while (state.normalizedTime < 1f)
+            {
+                yield return null;
+                state = _animator.GetCurrentAnimatorStateInfo(0);
             }
         }
 
