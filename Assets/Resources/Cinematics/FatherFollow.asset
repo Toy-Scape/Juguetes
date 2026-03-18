@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe7d36f779e20324b841dfd80305c1d8, type: 3}
+  m_Name: FatherFollow
+  m_EditorClassIdentifier: Assembly-CSharp::CinematicSystem.Core.CinematicAsset
+  blockPlayerInput: 1
+  hideHUD: 1
+  restoreCameraInstantly: 0
+  actions:
+  - rid: 6426265404492480626
+  references:
+    version: 2
+    RefIds:
+    - rid: 6426265404492480626
+      type: {class: CameraShotAction, ns: CinematicSystem.Actions, asm: Assembly-CSharp}
+      data:
+        waitForCompletion: 1
+        holdAtEnd: 0
+        targetId: Father
+        lookAtId: Father
+        offset: {x: 0, y: 25, z: -10}
+        fov: 60
+        duration: 30
+        instant: 0
+        ignoreCollision: 1
+        useOrbit: 0
+        orbitSpeed: 1

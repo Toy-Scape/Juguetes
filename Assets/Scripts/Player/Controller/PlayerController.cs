@@ -604,4 +604,30 @@ public class PlayerController : MonoBehaviour
         if (rb == null)
             return;
     }
+
+    public void ResetAfterCinematic()
+    {
+        // Parar movimiento
+        Context.Velocity = Vector3.zero;
+        Context.MoveInput = Vector2.zero;
+
+        // Reset flags
+        Context.IsGrabbing = false;
+        Context.IsPicking = false;
+
+        // Reset animator
+        if (Animator != null)
+        {
+            Animator.SetFloat("Speed", 0);
+            Animator.SetBool("IsGrabbing", false);
+            Animator.SetBool("IsPicking", false);
+        }
+
+        // Forzar grounded
+        Context.IsGrounded = true;
+
+        // Reiniciar state machine
+        _currentState = _states.Grounded();
+        _currentState.EnterState();
+    }
 }

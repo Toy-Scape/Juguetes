@@ -21,6 +21,10 @@ namespace Domain.StaticNpc
         [Tooltip("A unique identifier for this action so it can be played individually.")]
         public string actionId;
 
+        [Header("Timing")]
+        [Tooltip("How long the action should block the sequence.")]
+        public float actionDuration = 1f;
+
         public NpcActionType actionType;
 
         [Header("Movement / Rotation")]
@@ -36,7 +40,6 @@ namespace Domain.StaticNpc
         public float movementSpeed = 3f;
         public float duration = 1f;
         public Ease easeType = Ease.Linear;
-        public bool waitForCompletion = true;
 
         [Header("Animator Control During Move")]
         [Tooltip("Float parameter Name to set on the Animator while moving (e.g. 'Speed'). Leave empty if not needed.")]
@@ -45,13 +48,13 @@ namespace Domain.StaticNpc
         public float moveSpeedValue = 1f;
 
         [Header("Animation")]
-        public string animationStateOrTriggerName;
+        public string triggerName;
+        public string stateName;
         [Tooltip("If true, uses CrossFade to transition. If false, uses SetTrigger.")]
         public bool crossFade = false;
         public float crossFadeDuration = 0.2f;
 
         [Header("Wait")]
-        public float waitTime = 1f;
 
         [Header("Events")]
         public UnityEvent onActionStart;
@@ -202,145 +205,93 @@ namespace Domain.StaticNpc
 
         private IEnumerator ExecuteSingleActionInstruction(StaticNpcAction action)
         {
+            Debug.Log("ACTION START: " + action.actionId);
+
             action.onActionStart?.Invoke();
 
             switch (action.actionType)
             {
                 case NpcActionType.Move:
-                    yield return ExecuteMove(action);
+                    StartMove(action);
                     break;
+
                 case NpcActionType.Rotate:
-                    yield return ExecuteRotate(action);
+                    StartRotate(action);
                     break;
+
                 case NpcActionType.PlayAnimation:
                     ExecuteAnimation(action);
-
-                    if (action.waitForCompletion)
-                    {
-                        yield return WaitForAnimation(action.animationStateOrTriggerName);
-                    }
                     break;
+
                 case NpcActionType.Wait:
-                    yield return new WaitForSeconds(action.waitTime);
                     break;
             }
+
+            yield return new WaitForSeconds(action.actionDuration);
+
+            ResetMoveAnimation(action);
 
             action.onActionComplete?.Invoke();
+
+            Debug.Log("ACTION END: " + action.actionId);
         }
 
-        private IEnumerator ExecuteMove(StaticNpcAction action)
+        private void StartMove(StaticNpcAction action)
         {
             List<Transform> path = new List<Transform>();
+
             if (action.movePath != null && action.movePath.Count > 0)
-            {
                 path.AddRange(action.movePath);
-            }
             else if (action.targetTransform != null)
-            {
                 path.Add(action.targetTransform);
-            }
 
             if (path.Count == 0)
-            {
-                Debug.LogWarning($"{gameObject.name}: Move action has no target transform or path.");
-                yield break;
-            }
+                return;
 
+            // 🔹 activar animación de caminar
             if (_animator != null && !string.IsNullOrEmpty(action.moveSpeedParameter))
             {
                 _animator.SetFloat(action.moveSpeedParameter, action.moveSpeedValue);
             }
 
-            if (_scannerIK != null)
-            {
-                _scannerIK.enabled = false;
-            }
-
-            _currentMoveSequence = DOTween.Sequence();
-            _currentMoveSequence.SetLink(gameObject);
-            _currentMoveSequence.OnKill(() => ResetMoveAnimation(action));
-
-            // Setup Waypoints
             Vector3[] waypoints = new Vector3[path.Count];
-            for (int i = 0; i < path.Count; i++)
-            {
-                waypoints[i] = path[i].position;
-            }
 
-            // DOPath will follow all points.
-            var pathTween = transform.DOPath(waypoints, action.moveBySpeed ? action.movementSpeed : action.duration, PathType.Linear)
-                .SetEase(action.easeType);
-                
-            if (action.moveBySpeed) 
-            {
-                pathTween.SetSpeedBased();
-            }
+            for (int i = 0; i < path.Count; i++)
+                waypoints[i] = path[i].position;
+
+            var tween = transform.DOPath(
+                waypoints,
+                action.moveBySpeed ? action.movementSpeed : action.duration,
+                PathType.Linear
+            ).SetEase(action.easeType);
+
+            if (action.moveBySpeed)
+                tween.SetSpeedBased();
 
             if (action.lookForwardWhileMoving)
-            {
-                // lookAhead between 0.001 and 1. A small value handles straight line segments well.
-                pathTween.SetLookAt(0.01f); 
-            }
-
-            _currentMoveSequence.Append(pathTween);
-
-            if (action.waitForCompletion)
-            {
-                yield return _currentMoveSequence.WaitForCompletion();
-            }
+                tween.SetLookAt(0.01f);
         }
-
-        private IEnumerator ExecuteRotate(StaticNpcAction action)
+        private void StartRotate(StaticNpcAction action)
         {
             if (action.targetTransform == null)
-            {
-                Debug.LogWarning($"{gameObject.name}: Rotate action has no target transform.");
-                yield break;
-            }
+                return;
 
-            _currentMoveSequence = DOTween.Sequence();
-            _currentMoveSequence.SetLink(gameObject);
-            _currentMoveSequence.Append(transform.DORotate(action.targetTransform.rotation.eulerAngles, action.duration).SetEase(action.easeType));
-
-            if (action.waitForCompletion)
-            {
-                yield return _currentMoveSequence.WaitForCompletion();
-            }
-        }
-
-        IEnumerator WaitForAnimation(string stateName)
-        {
-            // Esperar a que el Animator entre en el estado
-            AnimatorStateInfo state = _animator.GetCurrentAnimatorStateInfo(0);
-
-            while (!state.IsName(stateName))
-            {
-                yield return null;
-                state = _animator.GetCurrentAnimatorStateInfo(0);
-            }
-
-            // Esperar a que termine
-            while (state.normalizedTime < 1f)
-            {
-                yield return null;
-                state = _animator.GetCurrentAnimatorStateInfo(0);
-            }
+            transform.DORotate(
+                action.targetTransform.rotation.eulerAngles,
+                action.duration
+            ).SetEase(action.easeType);
         }
 
         private void ExecuteAnimation(StaticNpcAction action)
         {
             if (_animator == null) return;
 
-            if (!string.IsNullOrEmpty(action.animationStateOrTriggerName))
+            // limpiar triggers previos
+            _animator.ResetTrigger(action.triggerName);
+
+            if (!string.IsNullOrEmpty(action.triggerName))
             {
-                if (action.crossFade)
-                {
-                    _animator.CrossFade(action.animationStateOrTriggerName, action.crossFadeDuration);
-                }
-                else
-                {
-                    _animator.SetTrigger(action.animationStateOrTriggerName);
-                }
+                _animator.SetTrigger(action.triggerName);
             }
         }
 

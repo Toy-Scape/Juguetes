@@ -485,3 +485,7 @@ MonoBehaviour:
     english: If it is helpful. I can see some batteries on the desk.
     spanish: "Si te sirve de ayuda, desde aqu\xED arriba veo unas pilas en el escritorio."
     basque: Lagungarria bada, pila batzuk ikusten ditut mahaian.
+  - key: distraction-thought
+    english: I need a distraction.
+    spanish: "Tendr\xE9 que buscar alguna distracci\xF3n primero."
+    basque: Distrakzio bat behar dut.

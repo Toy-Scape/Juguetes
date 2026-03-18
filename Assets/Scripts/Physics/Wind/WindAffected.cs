@@ -28,13 +28,13 @@ public class WindAffected : MonoBehaviour
         if (turbulence > 0f)
             finalForce += UnityRandom.insideUnitSphere * turbulence;
 
+        rb.AddForce(finalForce, ForceMode.Impulse);
+
         if (!hasBeenBlown)
         {
             hasBeenBlown = true;
             OnBlown?.Invoke(this);
         }
-
-        rb.AddForce(finalForce, ForceMode.Force);
     }
     public void ResetBlownState()
     {
