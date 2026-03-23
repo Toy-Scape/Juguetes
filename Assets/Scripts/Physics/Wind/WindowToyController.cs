@@ -10,7 +10,7 @@ public class WindowToyController : MonoBehaviour
 
     public FatherNPCState fatherState;
     public StaticNpcActionHandler npcActions;
-
+    public StaticNpcActionHandler stickyActions;
     public CinematicAsset toyFallCinematic;
     ToyPickupController pickup;
     public GameObject player;
@@ -41,7 +41,13 @@ public class WindowToyController : MonoBehaviour
 
     void HandleBlown(WindAffected obj)
     {
-        if (fatherState.isDistracted) return;
+        if (fatherState.isDistracted)
+        {
+            stickyActions.PlayActionsByIdSequence(
+            "Fall, Impact, Roll, Lay"
+        );
+            return;
+        }
 
         if (toyEventTriggered) return;
 
@@ -58,6 +64,10 @@ public class WindowToyController : MonoBehaviour
 
         npcActions.PlayActionsByIdSequence(
             "stand-up, move-toy, gather-toy, stand-gather, place-toy, move-chair, sit-chair"
+        );
+
+        stickyActions.PlayActionsByIdSequence(
+            "Fall, Impact, Roll, Lay"
         );
     }
 
@@ -99,6 +109,9 @@ public class WindowToyController : MonoBehaviour
     {
         toyEventTriggered = false;
         wind.ResetBlownState();
+        stickyActions.PlayActionsByIdSequence(
+            "Idle"
+        );
     }
 
     public void PlayNeedDistractionThought()
