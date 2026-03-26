@@ -28,7 +28,7 @@ public class WindAffected : MonoBehaviour
         if (turbulence > 0f)
             finalForce += UnityRandom.insideUnitSphere * turbulence;
 
-        rb.AddForce(finalForce, ForceMode.Impulse);
+        rb.AddForce(finalForce, ForceMode.Force);
 
         if (!hasBeenBlown)
         {
