@@ -100,8 +100,8 @@ public class PlayerController : MonoBehaviour
         {
             if (!grabInteractor.CheckMove(movement))
             {
-                movement = Vector3.zero;
-                Context.Velocity = Vector3.zero;
+                movement = new Vector3(0, movement.y, 0);
+                Context.Velocity = new Vector3(0, Context.Velocity.y, 0);
             }
         }
 
@@ -116,6 +116,15 @@ public class PlayerController : MonoBehaviour
         Context.IsGrabbing = isGrabbing;
         Context.GrabTarget = target;
         _pushSpeedMultiplier = isGrabbing ? (1f / Mathf.Max(resistance, 1f)) : 1f;
+    }
+
+    public void ForceReleaseGrab()
+    {
+        if (grabInteractor != null && grabInteractor.IsGrabbing)
+        {
+            grabInteractor.ReleaseGrab();
+            SetGrabState(false, 1f);
+        }
     }
 
     public void SetPickState(bool isPicking)
