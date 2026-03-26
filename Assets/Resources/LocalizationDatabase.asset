@@ -395,13 +395,18 @@ MonoBehaviour:
     basque: Orain gogoratzen naizela, haizagailua mugitzeko erabili dituzun beso
       hoiek, ez dira Juanenak?
   - key: level1-sticky-dialogue-3
-    english: To escape? Then let me return the favor and take my arms. It will allow
-      you to reach places you couldn't before.
+    english: To escape? Then let me return the favor and take my arms.
     spanish: "\xBFPara escapar dices? En ese caso d\xE9jame devolverte el favor y
-      ten mis brazos. Te ayudar\xE1n a alcanzar sitios que antes no llegabas."
-    basque: Ihes egiteko? Orduan faborea bueltatuko dizut nire besoak ematen. Lehen
-      iristen ez zenitun lekutara igotzen lagunduko dizute.
+      ten mis brazos."
+    basque: Ihes egiteko? Orduan faborea bueltatuko dizut nire besoak ematen.
   - key: level1-sticky-dialogue-4
+    english: It will allow you to reach places you couldn't before. Also, you will
+      be able to escape from the same vent you came here.
+    spanish: "Con ellos podr\xE1s alcanzar zonas que antes no llegabas. Tambi\xE9n,
+      podr\xE1s escapar por el conducto por el que has llegado hasta aqu\xED."
+    basque: Lehen iristen ez zenitun lekutara igotzen lagunduko dizute. Gainera,
+      ihes egin dezakezu etorri zaren hoditik.
+  - key: level1-sticky-dialogue-5
     english: Don't worry, I'll be fine. If I'm lucky enough, I'll end up in the basement
       along Juan. But you have to keep going.
     spanish: "No te preocupes por m\xED, estar\xE9 bien. Si tengo la suficiente suerte

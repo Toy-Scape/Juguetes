@@ -19,14 +19,23 @@ public class WindSource : MonoBehaviour
             if (((1 << col.gameObject.layer) & obstacleMask) != 0)
                 continue;
 
-            WindAffected windObj = col.GetComponent<WindAffected>();
-            if (windObj != null)
-            {
-                float dist = Vector3.Distance(center, col.transform.position);
-                float distanceFactor = 1f - Mathf.Clamp01(dist / maxDistance);
+            float dist = Vector3.Distance(center, col.transform.position);
+            float distanceFactor = 1f - Mathf.Clamp01(dist / maxDistance);
+            Vector3 windDir = (col.transform.position - center).normalized;
 
-                Vector3 windDir = (col.transform.position - center).normalized;
-                windObj.ApplyWind(windDir, windForce * distanceFactor);
+            // 🔥 NUEVO: soportar SimpleFall
+            var simple = col.GetComponent<WindAffectedSimpleFall>();
+            if (simple != null)
+            {
+                simple.ApplyWind(windDir, windForce * distanceFactor);
+                continue;
+            }
+
+            // 🔹 antiguo
+            var normal = col.GetComponent<WindAffected>();
+            if (normal != null)
+            {
+                normal.ApplyWind(windDir, windForce * distanceFactor);
             }
         }
     }

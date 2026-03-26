@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d6b1daf4959ed14790c7e0eb77aa53a, type: 3}
   m_Name: TriggerStaticNpcAction
   m_EditorClassIdentifier: Assembly-CSharp::TriggerStaticNpcAction
-  actionIds: Move-mom,animation-mom
+  actionIds: '"Move-mom","animation-mom"'
   findHandlerInScene: 1

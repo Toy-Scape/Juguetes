@@ -20,13 +20,15 @@ public class WindAffectedSimpleFall : MonoBehaviour
 
     private Quaternion initialRotation;
     private Vector3 actualFallDirection;
+    Vector3 basePosition;
+    
 
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
 
         // 🔥 Guardamos la rotación correcta (de pie)
-        initialRotation = transform.rotation;
+        initialRotation = Quaternion.Euler(0f, transform.rotation.eulerAngles.y, 0f);
 
         // Dirección por defecto = vertical
         actualFallDirection = fallDirection.normalized;
@@ -38,8 +40,10 @@ public class WindAffectedSimpleFall : MonoBehaviour
         transform.rotation = initialRotation;
 
         if (isFalling && !hasLanded)
-        {
-            rb.linearVelocity = actualFallDirection * fallSpeed;
+{
+            Vector3 velocity = new Vector3(1f, -fallSpeed, 0f);
+
+            rb.linearVelocity = velocity;
             rb.angularVelocity = Vector3.zero;
         }
     }
@@ -53,23 +57,27 @@ public class WindAffectedSimpleFall : MonoBehaviour
 
         rb.isKinematic = false;
         rb.useGravity = false;
+
         rb.linearVelocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
 
         rb.constraints = RigidbodyConstraints.FreezeRotation;
+        rb.WakeUp();
 
-        // 🔥 FORZAR ROTACIÓN CORRECTA
         transform.rotation = initialRotation;
+        basePosition = transform.position;
 
-        // 🔹 Ajustamos la dirección: vertical + pequeño push hacia adelante
+        // 🔥 OFFSET AQUÍ (SOLO CUANDO EMPIEZA LA CAÍDA)
         if (useForwardOffset)
         {
-            actualFallDirection = (fallDirection + forwardOffset).normalized;
+            Vector3 offset =
+                transform.forward * forwardOffset.z +
+                transform.up * forwardOffset.y +
+                transform.right * forwardOffset.x;
+
+            transform.position = basePosition + offset;
         }
-        else
-        {
-            actualFallDirection = fallDirection.normalized;
-        }
+        actualFallDirection = Vector3.down;
 
         OnBlown?.Invoke(this);
     }
@@ -78,22 +86,33 @@ public class WindAffectedSimpleFall : MonoBehaviour
     {
         if (hasLanded) return;
 
-        if (collision.gameObject.CompareTag("Ground"))
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
         {
             Land();
         }
     }
 
-    void Land()
+   void Land()
     {
         hasLanded = true;
         isFalling = false;
 
         rb.linearVelocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
+
         rb.isKinematic = true;
+        rb.useGravity = false;
+
+        rb.constraints = RigidbodyConstraints.FreezeAll;
 
         transform.rotation = initialRotation;
+
+        actualFallDirection = Vector3.zero;
+
+        rb.Sleep();
+
+        // 🔥 CLAVE: convertirlo en objeto "estático real"
+        rb.interpolation = RigidbodyInterpolation.None;
     }
 
     public void ResetBlownState()
@@ -103,12 +122,17 @@ public class WindAffectedSimpleFall : MonoBehaviour
         hasLanded = false;
 
         rb.isKinematic = true;
+        rb.useGravity = false;
+
         rb.linearVelocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
 
+        rb.constraints = RigidbodyConstraints.FreezeAll;
+
         transform.rotation = initialRotation;
 
-        // 🔹 volver a caída vertical
         actualFallDirection = fallDirection.normalized;
+
+        rb.Sleep();
     }
 }

@@ -1,4 +1,5 @@
 using UnityEngine;
+using Domain.StaticNpc;
 
 public class ToyPickupController : MonoBehaviour
 {
@@ -7,14 +8,15 @@ public class ToyPickupController : MonoBehaviour
     Vector3 savedWindowPosition;
     Quaternion savedWindowRotation;
     bool hasSavedWindowPosition;
+    public StaticNpcActionHandler stickyActions;
 
     Rigidbody rb;
-    WindAffected wind;
+    WindAffectedSimpleFall wind;
 
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
-        wind = GetComponent<WindAffected>();
+        wind = GetComponent<WindAffectedSimpleFall>();
     }
 
     public void SaveWindowPose()
@@ -40,6 +42,10 @@ public class ToyPickupController : MonoBehaviour
     {
         rb.linearVelocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
+
+        stickyActions.PlayActionsByIdSequence(
+            "Idle"
+        );
 
         rb.isKinematic = true;
 

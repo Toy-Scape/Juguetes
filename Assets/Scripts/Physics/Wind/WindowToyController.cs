@@ -3,10 +3,10 @@ using Domain.StaticNpc;
 using CinematicSystem.Core;
 using CinematicSystem.Application;
 
-[RequireComponent(typeof(WindAffected))]
+[RequireComponent(typeof(WindAffectedSimpleFall))]
 public class WindowToyController : MonoBehaviour
 {
-    WindAffected wind;
+    WindAffectedSimpleFall windSimpleFall;
 
     public FatherNPCState fatherState;
     public StaticNpcActionHandler npcActions;
@@ -23,7 +23,7 @@ public class WindowToyController : MonoBehaviour
 
     void Awake()
     {
-        wind = GetComponent<WindAffected>();
+        windSimpleFall = GetComponent<WindAffectedSimpleFall>();
         pickup = GetComponent<ToyPickupController>();
         fanStartPos = fan.position;
         fanStartRot = fan.rotation;
@@ -31,15 +31,15 @@ public class WindowToyController : MonoBehaviour
 
     void OnEnable()
     {
-        wind.OnBlown += HandleBlown;
+        windSimpleFall.OnBlown += HandleBlown;
     }
 
     void OnDisable()
     {
-        wind.OnBlown -= HandleBlown;
+        windSimpleFall.OnBlown -= HandleBlown;
     }
 
-    void HandleBlown(WindAffected obj)
+    void HandleBlown(WindAffectedSimpleFall obj)
     {
         if (fatherState.isDistracted)
         {
@@ -63,7 +63,7 @@ public class WindowToyController : MonoBehaviour
         cinematicPlayer.Play(toyFallCinematic);
 
         npcActions.PlayActionsByIdSequence(
-            "stand-up, move-toy, gather-toy, stand-gather, place-toy, move-chair, sit-chair"
+            "stand-up, move-toy, gather-toy, place-toy, move-chair, sit-chair"
         );
 
         stickyActions.PlayActionsByIdSequence(
@@ -108,10 +108,7 @@ public class WindowToyController : MonoBehaviour
     public void ResetToyEvent()
     {
         toyEventTriggered = false;
-        wind.ResetBlownState();
-        stickyActions.PlayActionsByIdSequence(
-            "Idle"
-        );
+        windSimpleFall.ResetBlownState();
     }
 
     public void PlayNeedDistractionThought()
