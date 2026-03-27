@@ -494,3 +494,19 @@ MonoBehaviour:
     english: I need a distraction.
     spanish: "Tendr\xE9 que buscar alguna distracci\xF3n primero."
     basque: Distrakzio bat behar dut.
+  - key: mission-level1-description
+    english: Find a way to get the batteries and get back to the vent.
+    spanish: Encuentra una forma de obtener las pilas y volver al conducto.
+    basque: Aurkitu bateriak lortzeko eta hodira bueltatzeko moduren bat.
+  - key: mission-level1-objective-1
+    english: Batteries picked.
+    spanish: Pilas obtenidas.
+    basque: Bateriak lortutak.
+  - key: mission-level1-objective-2
+    english: Get back to the vent.
+    spanish: Volver al conducto.
+    basque: Hodira bueltatu.
+  - key: mission-level1-title
+    english: Defy gravity.
+    spanish: "Desaf\xEDa la gravedad."
+    basque: Desafiatu grabitateari.

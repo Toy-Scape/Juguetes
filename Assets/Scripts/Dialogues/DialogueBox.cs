@@ -50,7 +50,8 @@ public class DialogueBox : MonoBehaviour
     private GameObject currentSpeaker;
 
     [SerializeField] private GameObject npcToActivate;
-
+    [SerializeField] private GameObject killZoneToActivate;
+    [SerializeField] private GameObject stickyCheckpointToActivate;
     private HashSet<int> duringTriggeredLines = new HashSet<int>();
 
     public bool IsTyping { get; private set; }
@@ -225,6 +226,8 @@ public class DialogueBox : MonoBehaviour
         currentSpeaker = CharacterManager.Instance.GetModel(line.Character.CharacterId);
         var context = new DialogueContext(player, currentSpeaker);
         context.NPCToActivate = npcToActivate;
+        context.KillZoneToActivate = killZoneToActivate;
+        context.StickyCheckpointToActivate = stickyCheckpointToActivate;
 
         activeDialogue.TriggerActions(dialogueIndex, TriggerTiming.OnStart, context);
 
@@ -248,6 +251,8 @@ public class DialogueBox : MonoBehaviour
 
         var context = new DialogueContext(player, currentSpeaker);
         context.NPCToActivate = npcToActivate;
+        context.KillZoneToActivate = killZoneToActivate;
+        context.StickyCheckpointToActivate = stickyCheckpointToActivate;
         int currentLine = dialogueIndex - 1;
 
         if (!duringTriggeredLines.Contains(currentLine))

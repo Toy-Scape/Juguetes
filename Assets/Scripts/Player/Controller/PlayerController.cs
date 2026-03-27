@@ -616,6 +616,9 @@ public class PlayerController : MonoBehaviour
 
     public void ResetAfterCinematic()
     {
+        // Guardar skipstand
+        bool skipStandValue = Animator.GetBool("SkipStandUp");
+
         // Parar movimiento
         Context.Velocity = Vector3.zero;
         Context.MoveInput = Vector2.zero;
@@ -624,7 +627,7 @@ public class PlayerController : MonoBehaviour
         Context.IsGrabbing = false;
         Context.IsPicking = false;
 
-        // Reset animator
+        // Reset animator básico
         if (Animator != null)
         {
             Animator.SetFloat("Speed", 0);
@@ -638,5 +641,8 @@ public class PlayerController : MonoBehaviour
         // Reiniciar state machine
         _currentState = _states.Grounded();
         _currentState.EnterState();
+
+        // 🔥 Restaurar skipstand
+        Animator.SetBool("SkipStandUp", skipStandValue);
     }
 }

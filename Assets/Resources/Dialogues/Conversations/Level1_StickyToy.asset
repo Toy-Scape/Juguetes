@@ -54,6 +54,10 @@ MonoBehaviour:
       action: {fileID: 11400000, guid: abab08407526d594fba7eb7a88280427, type: 2}
     - timing: 0
       action: {fileID: 11400000, guid: 94587dff5e8c0ab40a4c7fb55cb32e12, type: 2}
+    - timing: 0
+      action: {fileID: 11400000, guid: e9126c0521e7d564c8d7fe3f558eaa01, type: 2}
+    - timing: 0
+      action: {fileID: 11400000, guid: ea71e8b843e35194dad69d431a30aefe, type: 2}
   - Character: {fileID: 11400000, guid: 42b78f4e58247f64fb0fc56d0c5d1796, type: 2}
     Key: level1-robotin-dialogue-4
     Text: 

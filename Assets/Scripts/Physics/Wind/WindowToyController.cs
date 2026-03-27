@@ -101,7 +101,9 @@ public class WindowToyController : MonoBehaviour
         var controller = player.GetComponent<PlayerController>();
         if (controller != null)
         {
+            controller.Animator.SetBool("SkipStandUp", true);
             controller.ResetAfterCinematic();
+            controller.Animator.SetBool("SkipStandUp", true);
         }
     }
 

@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d8695c9b8b802714eb29615082bd3726, type: 3}
+  m_Name: Level1Mission
+  m_EditorClassIdentifier: Assembly-CSharp::MissionSystem.Data.MissionDefinition
+  id: 3469b2e4-bf36-4286-a3f3-a3e552fd3032
+  title: mission-level1-title
+  description: mission-level1-description
+  objectives:
+  - {fileID: 11400000, guid: fbd7f982a12ba6d46bc0d01f78dae581, type: 2}
+  - {fileID: 11400000, guid: 3168437e028f2bc41810586b9f075817, type: 2}
