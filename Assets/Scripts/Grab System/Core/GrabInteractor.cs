@@ -51,6 +51,12 @@ public class GrabInteractor : MonoBehaviour
             var pickable = hit.GetComponentInParent<Pickable>();
             if (pickable != null)
             {
+                // Solo coger objetos si están delante del jugador
+                Vector3 dirToHit = hit.ClosestPoint(grabOrigin.position) - transform.position;
+                dirToHit.y = 0;
+                if (dirToHit.sqrMagnitude > 0.01f && Vector3.Dot(transform.forward, dirToHit.normalized) < 0f)
+                    continue;
+
                 float d = (hit.ClosestPoint(grabOrigin.position) - grabOrigin.position).sqrMagnitude;
                 if (d < closestDist)
                 {
@@ -169,6 +175,12 @@ public class GrabInteractor : MonoBehaviour
             var grabbable = hit.GetComponentInParent<Grabbable>();
             if (grabbable != null)
             {
+                // Solo coger objetos si están delante del jugador
+                Vector3 dirToHit = hit.ClosestPoint(grabOrigin.position) - transform.position;
+                dirToHit.y = 0;
+                if (dirToHit.sqrMagnitude > 0.01f && Vector3.Dot(transform.forward, dirToHit.normalized) < 0f)
+                    continue;
+
                 float d = (hit.ClosestPoint(grabOrigin.position) - grabOrigin.position).sqrMagnitude;
                 if (d < closestDist)
                 {
@@ -181,6 +193,9 @@ public class GrabInteractor : MonoBehaviour
 
         if (bestTarget == null) return false;
 
+        if (IsStandingOn(bestTarget))
+            return false;
+
         if (!bestTarget.CanBeGrabbed())
         {
             var failThought = bestTarget.GetFailThought();
@@ -192,6 +207,7 @@ public class GrabInteractor : MonoBehaviour
         StartGrab(bestTarget, bestPoint);
         return true;
     }
+
 
     public void ReleaseGrab()
     {
@@ -300,11 +316,45 @@ public class GrabInteractor : MonoBehaviour
         Vector3 targetPos = transform.TransformPoint(grabOffset);
         Quaternion targetRot = transform.rotation * grabRotationOffset;
 
-        if (currentGrabbable.CheckCollision(targetPos, targetRot))
-            return;
+        // We already checked collisions in CheckMove before allowing the player to move.
+        // If the player moved successfully, the box MUST follow them to stay synced.
 
         currentGrabbable.MoveTo(targetPos, targetRot);
     }
+
+    private bool IsStandingOn(Grabbable target)
+    {
+        if (characterController == null || target == null)
+            return false;
+
+        // Dimensiones de la cápsula bajo el jugador
+        float radius = characterController.radius * 0.9f;
+        
+        // Usar los limites exactos del collider para encontrar la planta de los pies
+        float bottom = characterController.bounds.min.y - 0.25f;
+        float top = characterController.bounds.min.y + 0.25f;
+
+        Vector3 center = characterController.bounds.center;
+        Vector3 p1 = new Vector3(center.x, bottom, center.z);
+        Vector3 p2 = new Vector3(center.x, top, center.z);
+
+        Collider[] hits = Physics.OverlapCapsule(
+            p1,
+            p2,
+            radius,
+            ~0,
+            QueryTriggerInteraction.Ignore
+        );
+
+        foreach (var h in hits)
+        {
+            if (h.GetComponentInParent<Grabbable>() == target)
+                return true;
+        }
+
+        return false;
+    }
+
 
     void OnDrawGizmosSelected()
     {

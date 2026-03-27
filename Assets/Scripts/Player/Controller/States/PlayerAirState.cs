@@ -10,6 +10,12 @@ namespace Assets.Scripts.PlayerController
         public override void EnterState()
         {
             _ctx.Context.IsGrounded = false;
+            
+            if (_ctx.Context.IsGrabbing)
+            {
+                _ctx.ForceReleaseGrab();
+            }
+
             InitializeSubState(); 
         }
 

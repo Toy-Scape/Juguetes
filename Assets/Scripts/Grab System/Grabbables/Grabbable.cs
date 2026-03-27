@@ -32,6 +32,12 @@ public class Grabbable : MonoBehaviour, IGrabbable
 
     public bool CanBeGrabbed()
     {
+        if (!rb.isKinematic && (rb.linearVelocity.sqrMagnitude > 0.05f || rb.angularVelocity.sqrMagnitude > 0.05f))
+        {
+            failureMessage = null;
+            return false;
+        }
+
         var provider = FindFirstObjectByType<PlayerConditionProvider>();
 
         foreach (var c in conditions)

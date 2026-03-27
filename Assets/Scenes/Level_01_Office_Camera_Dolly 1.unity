@@ -80236,7 +80236,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 894164869094412770, guid: 164c5ab4c0d7e964ab3f58c8827bd724, type: 3}
       propertyPath: windForce
-      value: 8
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 894164869094412770, guid: 164c5ab4c0d7e964ab3f58c8827bd724, type: 3}
       propertyPath: showGizmos
